@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { Trophy } from "lucide-react";
@@ -10,26 +10,28 @@ interface GameCardProps {
 
 export default function GameCard({ game }: GameCardProps) {
   return (
-    <Card className="overflow-hidden">
-      <div className="relative">
+    <Card className="overflow-hidden flex flex-col">
+      <div className="relative bg-black/5 p-4">
         <img
           src={game.imageUrl}
           alt={game.name}
-          className="w-full h-auto object-cover"
-          loading="lazy"
+          className="w-full h-[108px] object-contain"
         />
       </div>
-      <CardContent className="grid gap-4 pt-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Trophy className="h-5 w-5 text-yellow-500" />
-            <span className="font-mono text-lg">
-              {(game.currentHighScore || 0).toLocaleString()}
-            </span>
+      <CardContent className="grid gap-4 pt-6 flex-1">
+        <div className="flex flex-col gap-4">
+          <h3 className="text-lg font-semibold">{game.name}</h3>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Trophy className="h-5 w-5 text-yellow-500" />
+              <span className="font-mono text-lg">
+                {(game.currentHighScore || 0).toLocaleString()}
+              </span>
+            </div>
+            <Link href={`/leaderboard/${game.id}`}>
+              <Button variant="secondary">View Scores</Button>
+            </Link>
           </div>
-          <Link href={`/leaderboard/${game.id}`}>
-            <Button variant="secondary">View Scores</Button>
-          </Link>
         </div>
       </CardContent>
     </Card>
