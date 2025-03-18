@@ -11,23 +11,20 @@ interface GameCardProps {
 export default function GameCard({ game }: GameCardProps) {
   return (
     <Card className="overflow-hidden">
-      <div className="relative aspect-video">
+      <div className="relative">
         <img
           src={game.imageUrl}
           alt={game.name}
-          className="object-cover w-full h-full"
+          className="w-full h-auto object-cover"
+          loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
       </div>
-      <CardHeader className="relative -mt-20 bg-gradient-to-t from-background to-background/95">
-        <CardTitle className="text-2xl font-bold">{game.name}</CardTitle>
-      </CardHeader>
-      <CardContent className="grid gap-4">
+      <CardContent className="grid gap-4 pt-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Trophy className="h-5 w-5 text-yellow-500" />
             <span className="font-mono text-lg">
-              {game.currentHighScore.toLocaleString()}
+              {(game.currentHighScore || 0).toLocaleString()}
             </span>
           </div>
           <Link href={`/leaderboard/${game.id}`}>
