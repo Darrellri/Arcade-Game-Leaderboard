@@ -75,16 +75,7 @@ export default function Home() {
           <TableBody>
             {games?.map((game) => (
               <TableRow key={game.id}>
-                <TableCell className="flex items-center gap-4">
-                  <div className="bg-black/5 p-2 rounded">
-                    <img
-                      src={game.imageUrl}
-                      alt={game.name}
-                      className="w-32 h-9 object-contain"
-                    />
-                  </div>
-                  <span>{game.name}</span>
-                </TableCell>
+                <TableCell>{game.name}</TableCell>
                 <TableCell className="capitalize">{game.type}</TableCell>
                 <TableCell>{(game.currentHighScore || 0).toLocaleString()}</TableCell>
                 <TableCell className="text-right">
@@ -103,19 +94,10 @@ export default function Home() {
               key={game.id}
               className="flex items-center justify-between p-4 bg-card rounded-lg"
             >
-              <div className="flex items-center gap-4">
-                <div className="bg-black/5 p-2 rounded">
-                  <img
-                    src={game.imageUrl}
-                    alt={game.name}
-                    className="w-40 h-11 object-contain"
-                  />
-                </div>
-                <div>
-                  <div className="font-medium">{game.name}</div>
-                  <div className="text-sm text-muted-foreground capitalize">
-                    {game.type}
-                  </div>
+              <div>
+                <div className="font-medium">{game.name}</div>
+                <div className="text-sm text-muted-foreground capitalize">
+                  {game.type}
                 </div>
               </div>
               <div className="flex items-center gap-4">

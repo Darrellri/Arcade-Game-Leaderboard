@@ -11,13 +11,6 @@ interface GameCardProps {
 export default function GameCard({ game }: GameCardProps) {
   return (
     <Card className="overflow-hidden flex flex-col">
-      <div className="relative bg-black/5 p-4">
-        <img
-          src={game.imageUrl}
-          alt={game.name}
-          className="w-full h-[108px] object-contain"
-        />
-      </div>
       <CardContent className="grid gap-4 pt-6 flex-1">
         <div className="flex flex-col gap-4">
           <h3 className="text-lg font-semibold">{game.name}</h3>
