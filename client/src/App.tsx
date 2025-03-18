@@ -11,9 +11,8 @@ import NotFound from "@/pages/not-found";
 
 function Router() {
   return (
-    <div className="min-h-screen bg-background">
-      <NavMenu />
-      <main className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-background flex flex-col">
+      <main className="container mx-auto px-4 py-8 flex-grow pb-24 md:pb-8">
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/scan" component={Scan} />
@@ -22,6 +21,7 @@ function Router() {
           <Route component={NotFound} />
         </Switch>
       </main>
+      <NavMenu />
       <Toaster />
     </div>
   );
