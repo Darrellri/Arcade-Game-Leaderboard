@@ -41,18 +41,18 @@ export default function Home() {
         <h1 className="text-4xl font-bold tracking-tight">Arcade High Scores</h1>
         <div className="flex gap-2">
           <Button
-            variant={viewMode === "table" ? "default" : "outline"}
-            size="icon"
-            onClick={() => setViewMode("table")}
-          >
-            <TableIcon className="h-4 w-4" />
-          </Button>
-          <Button
             variant={viewMode === "grid" ? "default" : "outline"}
             size="icon"
             onClick={() => setViewMode("grid")}
           >
             <Grid2X2 className="h-4 w-4" />
+          </Button>
+          <Button
+            variant={viewMode === "table" ? "default" : "outline"}
+            size="icon"
+            onClick={() => setViewMode("table")}
+          >
+            <TableIcon className="h-4 w-4" />
           </Button>
           <Button
             variant={viewMode === "list" ? "default" : "outline"}
