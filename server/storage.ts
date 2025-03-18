@@ -5,7 +5,7 @@ export interface IStorage {
   getAllGames(): Promise<Game[]>;
   getGame(id: number): Promise<Game | undefined>;
   addGame(game: InsertGame): Promise<Game>;
-  updateGameHighScore(id: number, score: number): Promise<Game>;
+  updateGameHighScore(id: number, score: number, playerName: string): Promise<Game>;
 
   // Score operations
   getScoresByGame(gameId: number): Promise<Score[]>;
@@ -104,19 +104,23 @@ export class MemStorage implements IStorage {
     const newGame: Game = {
       ...game,
       id,
-      currentHighScore: 0
+      currentHighScore: 0,
+      topScorerName: "",
+      topScoreDate: new Date(0) // Initialize with epoch
     };
     this.games.set(id, newGame);
     return newGame;
   }
 
-  async updateGameHighScore(id: number, score: number): Promise<Game> {
+  async updateGameHighScore(id: number, score: number, playerName: string): Promise<Game> {
     const game = await this.getGame(id);
     if (!game) throw new Error("Game not found");
 
     const updatedGame: Game = {
       ...game,
-      currentHighScore: score
+      currentHighScore: score,
+      topScorerName: playerName,
+      topScoreDate: new Date()
     };
     this.games.set(id, updatedGame);
     return updatedGame;
@@ -140,7 +144,7 @@ export class MemStorage implements IStorage {
     // Update game's high score if necessary
     const game = await this.getGame(score.gameId);
     if (game && score.score > (game.currentHighScore || 0)) {
-      await this.updateGameHighScore(game.id, score.score);
+      await this.updateGameHighScore(game.id, score.score, score.playerName);
     }
 
     return newScore;

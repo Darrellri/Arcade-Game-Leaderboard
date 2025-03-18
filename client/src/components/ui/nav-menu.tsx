@@ -7,7 +7,7 @@ export default function NavMenu() {
 
   const links = [
     { href: "/", icon: Home, label: "Home" },
-    { href: "/scan", icon: QrCode, label: "Scan QR" },
+    { href: "/scan", icon: QrCode, label: "Scan High Score" },
   ];
 
   return (

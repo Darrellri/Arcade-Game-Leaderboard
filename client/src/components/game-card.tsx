@@ -15,11 +15,16 @@ export default function GameCard({ game }: GameCardProps) {
         <div className="flex flex-col gap-4">
           <h3 className="text-lg font-semibold">{game.name}</h3>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Trophy className="h-5 w-5 text-yellow-500" />
-              <span className="font-mono text-lg">
-                {(game.currentHighScore || 0).toLocaleString()}
-              </span>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2">
+                <Trophy className="h-5 w-5 text-yellow-500" />
+                <span className="font-mono text-lg">
+                  {(game.currentHighScore || 0).toLocaleString()}
+                </span>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                High Score by {game.topScorerName || 'No scores yet'}
+              </div>
             </div>
             <Link href={`/leaderboard/${game.id}`}>
               <Button variant="secondary">View Scores</Button>

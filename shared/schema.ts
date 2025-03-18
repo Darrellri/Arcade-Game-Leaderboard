@@ -8,6 +8,8 @@ export const games = pgTable("games", {
   imageUrl: text("image_url").notNull(),
   type: text("type").notNull(), // 'arcade' or 'pinball'
   currentHighScore: integer("current_high_score").default(0),
+  topScorerName: text("top_scorer_name"),
+  topScoreDate: timestamp("top_score_date"),
 });
 
 export const scores = pgTable("scores", {
@@ -24,7 +26,9 @@ export const scores = pgTable("scores", {
 
 export const insertGameSchema = createInsertSchema(games).omit({ 
   id: true,
-  currentHighScore: true 
+  currentHighScore: true,
+  topScorerName: true,
+  topScoreDate: true
 });
 
 export const insertScoreSchema = createInsertSchema(scores).omit({ 

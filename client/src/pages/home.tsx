@@ -4,7 +4,7 @@ import { Link } from "wouter";
 import GameCard from "@/components/game-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Grid2X2, List, TableIcon } from "lucide-react";
+import { Grid2X2, List, TableIcon, Clock } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { Game } from "@shared/schema";
 
@@ -69,6 +69,8 @@ export default function Home() {
               <TableHead>Game</TableHead>
               <TableHead>Type</TableHead>
               <TableHead>High Score</TableHead>
+              <TableHead>Top Player</TableHead>
+              <TableHead>Date & Time</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -78,6 +80,16 @@ export default function Home() {
                 <TableCell>{game.name}</TableCell>
                 <TableCell className="capitalize">{game.type}</TableCell>
                 <TableCell>{(game.currentHighScore || 0).toLocaleString()}</TableCell>
+                <TableCell>{game.topScorerName || 'No scores yet'}</TableCell>
+                <TableCell>
+                  {game.topScoreDate ? (
+                    <div className="flex items-center gap-2">
+                      <span>{new Date(game.topScoreDate).toLocaleDateString()}</span>
+                      <Clock className="h-4 w-4" />
+                      <span>{new Date(game.topScoreDate).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</span>
+                    </div>
+                  ) : '-'}
+                </TableCell>
                 <TableCell className="text-right">
                   <Button variant="secondary" asChild>
                     <Link href={`/leaderboard/${game.id}`}>View Scores</Link>
@@ -99,6 +111,16 @@ export default function Home() {
                 <div className="text-sm text-muted-foreground capitalize">
                   {game.type}
                 </div>
+                <div className="text-sm text-muted-foreground">
+                  Top Player: {game.topScorerName || 'No scores yet'}
+                </div>
+                {game.topScoreDate && (
+                  <div className="text-sm text-muted-foreground flex items-center gap-2 mt-1">
+                    <span>{new Date(game.topScoreDate).toLocaleDateString()}</span>
+                    <Clock className="h-3 w-3" />
+                    <span>{new Date(game.topScoreDate).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</span>
+                  </div>
+                )}
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-right">
