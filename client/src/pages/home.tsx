@@ -4,11 +4,19 @@ import { Link } from "wouter";
 import GameCard from "@/components/game-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Grid2X2, List, TableIcon, Clock } from "lucide-react";
+import { Grid2X2, List, TableIcon, Gamepad2, CircleDot } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { Game } from "@shared/schema";
 
 type ViewMode = "table" | "grid" | "list";
+
+function formatTime(date: Date) {
+  return date.toLocaleTimeString('en-US', { 
+    hour: 'numeric', 
+    minute: '2-digit', 
+    hour12: true 
+  }).toLowerCase().replace(' ', '');
+}
 
 export default function Home() {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
@@ -70,24 +78,31 @@ export default function Home() {
               <TableHead>Type</TableHead>
               <TableHead>High Score</TableHead>
               <TableHead>Top Player</TableHead>
-              <TableHead>Date & Time</TableHead>
+              <TableHead>Date</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {games?.map((game) => (
               <TableRow key={game.id}>
-                <TableCell>{game.name}</TableCell>
-                <TableCell className="capitalize">{game.type}</TableCell>
+                <TableCell className="uppercase">{game.name}</TableCell>
+                <TableCell>
+                  {game.type === 'pinball' ? (
+                    <CircleDot className="h-4 w-4 text-primary" />
+                  ) : (
+                    <Gamepad2 className="h-4 w-4 text-primary" />
+                  )}
+                </TableCell>
                 <TableCell>{(game.currentHighScore || 0).toLocaleString()}</TableCell>
                 <TableCell>{game.topScorerName || 'No scores yet'}</TableCell>
                 <TableCell>
                   {game.topScoreDate ? (
-                    <div className="flex items-center gap-2">
-                      <span>{new Date(game.topScoreDate).toLocaleDateString()}</span>
-                      <Clock className="h-4 w-4" />
-                      <span>{new Date(game.topScoreDate).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</span>
-                    </div>
+                    <span>
+                      {new Date(game.topScoreDate).toLocaleDateString()} 
+                      <span className="text-muted-foreground italic">
+                        ({formatTime(new Date(game.topScoreDate))})
+                      </span>
+                    </span>
                   ) : '-'}
                 </TableCell>
                 <TableCell className="text-right">
@@ -107,18 +122,23 @@ export default function Home() {
               className="flex items-center justify-between p-4 bg-card rounded-lg"
             >
               <div>
-                <div className="font-medium">{game.name}</div>
-                <div className="text-sm text-muted-foreground capitalize">
-                  {game.type}
+                <div className="flex items-center gap-2">
+                  {game.type === 'pinball' ? (
+                    <CircleDot className="h-4 w-4 text-primary" />
+                  ) : (
+                    <Gamepad2 className="h-4 w-4 text-primary" />
+                  )}
+                  <span className="font-medium uppercase">{game.name}</span>
                 </div>
                 <div className="text-sm text-muted-foreground">
                   Top Player: {game.topScorerName || 'No scores yet'}
                 </div>
                 {game.topScoreDate && (
-                  <div className="text-sm text-muted-foreground flex items-center gap-2 mt-1">
-                    <span>{new Date(game.topScoreDate).toLocaleDateString()}</span>
-                    <Clock className="h-3 w-3" />
-                    <span>{new Date(game.topScoreDate).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}</span>
+                  <div className="text-sm text-muted-foreground">
+                    {new Date(game.topScoreDate).toLocaleDateString()} 
+                    <span className="italic">
+                      ({formatTime(new Date(game.topScoreDate))})
+                    </span>
                   </div>
                 )}
               </div>
@@ -127,7 +147,7 @@ export default function Home() {
                   <div className="font-mono">
                     {(game.currentHighScore || 0).toLocaleString()}
                   </div>
-                  <div className="text-sm text-muted-foreground">High Score</div>
+                  <div className="text-sm text-muted-foreground">Top Score</div>
                 </div>
                 <Button variant="secondary" asChild>
                   <Link href={`/leaderboard/${game.id}`}>View Scores</Link>

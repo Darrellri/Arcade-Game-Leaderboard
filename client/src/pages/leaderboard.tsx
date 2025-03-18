@@ -26,6 +26,14 @@ type ViewMode = "table" | "grid" | "list";
 type SortField = "score" | "date" | "name";
 type SortOrder = "asc" | "desc";
 
+function formatTime(date: Date) {
+  return date.toLocaleTimeString('en-US', { 
+    hour: 'numeric', 
+    minute: '2-digit', 
+    hour12: true 
+  }).toLowerCase().replace(' ', '');
+}
+
 export default function Leaderboard() {
   const { gameId } = useParams();
   const id = parseInt(gameId || "0");
@@ -48,8 +56,8 @@ export default function Leaderboard() {
       return sortOrder === "desc" ? b.score - a.score : a.score - b.score;
     } else if (sortField === "date") {
       return sortOrder === "desc"
-        ? new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()
-        : new Date(a.submittedAt).getTime() - new Date(b.submittedAt).getTime();
+        ? new Date(b.submittedAt!).getTime() - new Date(a.submittedAt!).getTime()
+        : new Date(a.submittedAt!).getTime() - new Date(b.submittedAt!).getTime();
     } else {
       return sortOrder === "desc"
         ? b.playerName.localeCompare(a.playerName)
@@ -60,8 +68,8 @@ export default function Leaderboard() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-4xl font-bold tracking-tight">{game.name}</h1>
-        <p className="text-muted-foreground mt-2">High Scores</p>
+        <h1 className="text-4xl font-bold tracking-tight uppercase">{game.name}</h1>
+        <p className="text-muted-foreground mt-2">Top Scores</p>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
@@ -131,11 +139,14 @@ export default function Leaderboard() {
           <TableBody>
             {sortedScores.map((score, index) => (
               <TableRow key={score.id}>
-                <TableCell className="font-bold">{index + 1}</TableCell>
+                <TableCell className="font-bold">#{index + 1}</TableCell>
                 <TableCell>{score.playerName}</TableCell>
                 <TableCell>{score.score.toLocaleString()}</TableCell>
                 <TableCell>
                   {new Date(score.submittedAt!).toLocaleDateString()}
+                  <span className="text-muted-foreground italic ml-2">
+                    ({formatTime(new Date(score.submittedAt!))})
+                  </span>
                 </TableCell>
               </TableRow>
             ))}
@@ -153,6 +164,9 @@ export default function Leaderboard() {
                 </div>
                 <div className="text-sm text-muted-foreground mt-2">
                   {new Date(score.submittedAt!).toLocaleDateString()}
+                  <span className="italic ml-2">
+                    ({formatTime(new Date(score.submittedAt!))})
+                  </span>
                 </div>
               </CardContent>
             </Card>
@@ -171,6 +185,9 @@ export default function Leaderboard() {
                   <div className="font-medium">{score.playerName}</div>
                   <div className="text-sm text-muted-foreground">
                     {new Date(score.submittedAt!).toLocaleDateString()}
+                    <span className="italic ml-2">
+                      ({formatTime(new Date(score.submittedAt!))})
+                    </span>
                   </div>
                 </div>
               </div>

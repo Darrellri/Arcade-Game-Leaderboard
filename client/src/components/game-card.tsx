@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { Trophy } from "lucide-react";
+import { Trophy, Gamepad2, CircleDot } from "lucide-react";
 import type { Game } from "@shared/schema";
 
 interface GameCardProps {
@@ -13,7 +13,14 @@ export default function GameCard({ game }: GameCardProps) {
     <Card className="overflow-hidden flex flex-col">
       <CardContent className="grid gap-4 pt-6 flex-1">
         <div className="flex flex-col gap-4">
-          <h3 className="text-lg font-semibold">{game.name}</h3>
+          <div className="flex items-center gap-2">
+            {game.type === 'pinball' ? (
+              <CircleDot className="h-5 w-5 text-primary" />
+            ) : (
+              <Gamepad2 className="h-5 w-5 text-primary" />
+            )}
+            <h3 className="text-lg font-semibold uppercase">{game.name}</h3>
+          </div>
           <div className="flex items-center justify-between">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2">
@@ -23,7 +30,7 @@ export default function GameCard({ game }: GameCardProps) {
                 </span>
               </div>
               <div className="text-sm text-muted-foreground">
-                High Score by {game.topScorerName || 'No scores yet'}
+                Top Score by {game.topScorerName || 'No scores yet'}
               </div>
             </div>
             <Link href={`/leaderboard/${game.id}`}>
