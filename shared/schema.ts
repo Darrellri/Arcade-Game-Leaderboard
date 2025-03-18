@@ -24,6 +24,21 @@ export const scores = pgTable("scores", {
   submittedAt: timestamp("submitted_at").defaultNow(),
 });
 
+// Venue settings schema for admin interface
+export const venueSettingsSchema = z.object({
+  name: z.string().min(1, "Venue name is required"),
+  logoUrl: z.string().optional(),
+  address: z.string().optional(),
+  phone: z.string().optional(),
+  hours: z.string().optional(),
+  theme: z.object({
+    primary: z.string(),
+    variant: z.enum(["professional", "tint", "vibrant"]),
+    appearance: z.enum(["light", "dark", "system"]),
+    radius: z.number(),
+  }),
+});
+
 export const insertGameSchema = createInsertSchema(games).omit({ 
   id: true,
   currentHighScore: true,
@@ -44,3 +59,4 @@ export type Game = typeof games.$inferSelect;
 export type InsertGame = z.infer<typeof insertGameSchema>;
 export type Score = typeof scores.$inferSelect;
 export type InsertScore = z.infer<typeof insertScoreSchema>;
+export type VenueSettings = z.infer<typeof venueSettingsSchema>;

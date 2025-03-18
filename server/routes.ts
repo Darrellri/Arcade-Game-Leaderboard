@@ -1,10 +1,53 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertScoreSchema } from "@shared/schema";
+import { insertScoreSchema, venueSettingsSchema } from "@shared/schema";
 import { ZodError } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Get venue settings
+  app.get("/api/admin/settings", async (_req, res) => {
+    try {
+      const settings = await storage.getVenueSettings();
+      res.json(settings);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch venue settings" });
+    }
+  });
+
+  // Update venue settings
+  app.patch("/api/admin/settings", async (req, res) => {
+    try {
+      const settings = await storage.updateVenueSettings(req.body);
+      res.json(settings);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ 
+          message: "Invalid settings data",
+          errors: error.errors 
+        });
+      }
+      res.status(500).json({ message: "Failed to update venue settings" });
+    }
+  });
+
+  // Update game
+  app.patch("/api/games/:id", async (req, res) => {
+    try {
+      const gameId = parseInt(req.params.id);
+      const game = await storage.updateGame(gameId, req.body);
+      res.json(game);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ 
+          message: "Invalid game data",
+          errors: error.errors 
+        });
+      }
+      res.status(500).json({ message: "Failed to update game" });
+    }
+  });
+
   // Get all games
   app.get("/api/games", async (_req, res) => {
     try {

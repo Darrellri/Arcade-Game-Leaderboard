@@ -7,6 +7,7 @@ import Home from "@/pages/home";
 import Scan from "@/pages/scan";
 import SubmitScore from "@/pages/submit-score";
 import Leaderboard from "@/pages/leaderboard";
+import Admin from "@/pages/admin";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -18,6 +19,7 @@ function Router() {
           <Route path="/scan" component={Scan} />
           <Route path="/submit-score/:gameId" component={SubmitScore} />
           <Route path="/leaderboard/:gameId" component={Leaderboard} />
+          <Route path="/admin" component={Admin} />
           <Route component={NotFound} />
         </Switch>
       </main>

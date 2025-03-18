@@ -1,4 +1,4 @@
-import { Game, InsertGame, Score, InsertScore } from "@shared/schema";
+import { Game, InsertGame, Score, InsertScore, VenueSettings } from "@shared/schema";
 
 export interface IStorage {
   // Game operations
@@ -6,10 +6,15 @@ export interface IStorage {
   getGame(id: number): Promise<Game | undefined>;
   addGame(game: InsertGame): Promise<Game>;
   updateGameHighScore(id: number, score: number, playerName: string): Promise<Game>;
+  updateGame(id: number, game: Partial<Game>): Promise<Game>;
 
   // Score operations
   getScoresByGame(gameId: number): Promise<Score[]>;
   addScore(score: InsertScore): Promise<Score>;
+
+  // Venue settings operations
+  getVenueSettings(): Promise<VenueSettings>;
+  updateVenueSettings(settings: Partial<VenueSettings>): Promise<VenueSettings>;
 }
 
 export class MemStorage implements IStorage {
@@ -17,12 +22,24 @@ export class MemStorage implements IStorage {
   private scores: Map<number, Score>;
   private gameCurrentId: number;
   private scoreCurrentId: number;
+  private venueSettings: VenueSettings;
 
   constructor() {
     this.games = new Map();
     this.scores = new Map();
     this.gameCurrentId = 1;
     this.scoreCurrentId = 1;
+
+    // Initialize venue settings
+    this.venueSettings = {
+      name: "Winona Axe and Arcade",
+      theme: {
+        primary: "hsl(280, 100%, 50%)",
+        variant: "vibrant",
+        appearance: "dark",
+        radius: 0.75
+      }
+    };
 
     // Initialize with sample games
     const sampleGames: InsertGame[] = [
@@ -148,6 +165,30 @@ export class MemStorage implements IStorage {
     }
 
     return newScore;
+  }
+
+  async updateGame(id: number, gameUpdate: Partial<Game>): Promise<Game> {
+    const game = await this.getGame(id);
+    if (!game) throw new Error("Game not found");
+
+    const updatedGame: Game = {
+      ...game,
+      ...gameUpdate,
+    };
+    this.games.set(id, updatedGame);
+    return updatedGame;
+  }
+
+  async getVenueSettings(): Promise<VenueSettings> {
+    return this.venueSettings;
+  }
+
+  async updateVenueSettings(settings: Partial<VenueSettings>): Promise<VenueSettings> {
+    this.venueSettings = {
+      ...this.venueSettings,
+      ...settings,
+    };
+    return this.venueSettings;
   }
 }
 
