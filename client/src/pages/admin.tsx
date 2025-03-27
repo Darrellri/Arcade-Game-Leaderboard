@@ -356,11 +356,32 @@ export default function Admin() {
                     <button
                       onClick={async () => {
                         await handleThemeSwitch(index);
-                        // Apply theme immediately
-                        document.documentElement.style.setProperty('--primary', preset.primary);
+                        // Apply theme immediately with all required CSS variables
+                        
+                        // Convert HSL color to HSL components for CSS variables
+                        const parseHslColor = (hslColor: string) => {
+                          const match = hslColor.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
+                          if (match) {
+                            return { h: match[1], s: match[2], l: match[3] };
+                          }
+                          return { h: "0", s: "0", l: "0" };
+                        };
+                        
+                        const primaryColor = parseHslColor(preset.primary);
+                        
+                        // Set primary color and its components
+                        document.documentElement.style.setProperty('--primary', primaryColor.h + ' ' + primaryColor.s + '% ' + primaryColor.l + '%');
+                        
+                        // Set theme variant and appearance
                         document.documentElement.setAttribute('data-theme-variant', preset.variant);
                         document.documentElement.setAttribute('data-theme', preset.appearance);
                         document.documentElement.style.setProperty('--radius', `${preset.radius}rem`);
+                        
+                        // Force a refresh of the theme variables by toggling a class
+                        document.documentElement.classList.add('theme-refresh');
+                        setTimeout(() => {
+                          document.documentElement.classList.remove('theme-refresh');
+                        }, 10);
                       }}
                       className="w-full h-24 transition-transform hover:scale-105"
                       style={{

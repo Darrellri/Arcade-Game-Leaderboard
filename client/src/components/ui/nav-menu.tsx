@@ -1,9 +1,31 @@
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { Home, QrCode, Settings } from "lucide-react";
+import React from 'react'; // Import React for useState and useEffect
 
 export default function NavMenu() {
   const [location] = useLocation();
+  const [themeUpdate, setThemeUpdate] = React.useState(false); // Added state for theme update
+
+  React.useEffect(() => {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'data-theme' || 
+            mutation.attributeName === 'data-theme-variant' || 
+            mutation.attributeName === 'style') {
+          setThemeUpdate(prev => !prev);
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, { 
+      attributes: true,
+      attributeFilter: ['data-theme', 'data-theme-variant', 'style']
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
 
   const links = [
     { href: "/", icon: Home, label: "Home" },
