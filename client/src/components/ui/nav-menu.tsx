@@ -16,19 +16,21 @@ export default function NavMenu() {
       <div className="container mx-auto px-4">
         <div className="flex justify-around md:justify-start md:gap-4 py-2">
           {links.map(({ href, icon: Icon, label }) => (
-            <Link key={href} href={href}>
-              <a
-                className={cn(
-                  "flex flex-col items-center p-2 text-sm transition-colors",
-                  location === href
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-primary"
-                )}
-              >
-                <Icon className="h-6 w-6" />
-                <span className="mt-1">{label}</span>
-              </a>
-            </Link>
+            <div key={href}>
+              <Link href={href}>
+                <div
+                  className={cn(
+                    "flex flex-col items-center p-2 text-sm transition-colors cursor-pointer",
+                    location === href
+                      ? "text-primary"
+                      : "text-muted-foreground hover:text-primary"
+                  )}
+                >
+                  <Icon className="h-6 w-6" />
+                  <span className="mt-1">{label}</span>
+                </div>
+              </Link>
+            </div>
           ))}
         </div>
       </div>

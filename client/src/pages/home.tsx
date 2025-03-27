@@ -106,9 +106,11 @@ export default function Home() {
                   ) : '-'}
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button variant="secondary" asChild>
-                    <Link href={`/leaderboard/${game.id}`}>View Scores</Link>
-                  </Button>
+                  <Link href={`/leaderboard/${game.id}`}>
+                    <Button variant="secondary" className="cursor-pointer">
+                      View Scores
+                    </Button>
+                  </Link>
                 </TableCell>
               </TableRow>
             ))}
@@ -123,15 +125,14 @@ export default function Home() {
             >
               {/* Game image */}
               <div className="w-full md:w-1/3 flex justify-center items-center p-4 bg-muted/30">
-                <img 
-                  src={game.imageUrl} 
-                  alt={game.name}
-                  className="max-h-[100px] max-w-full object-contain"
-                  onError={(e) => {
-                    // Handle image loading errors
-                    (e.target as HTMLImageElement).style.display = 'none';
-                  }}
-                />
+                <div className="h-[100px] flex items-center justify-center w-full">
+                  <img 
+                    src={game.imageUrl} 
+                    alt={game.name}
+                    className="max-h-[100px] max-w-full object-contain"
+                    style={{ display: 'block' }}
+                  />
+                </div>
               </div>
               
               {/* Game info */}
@@ -164,9 +165,11 @@ export default function Home() {
                     </div>
                     <div className="text-sm text-muted-foreground">Top Score</div>
                   </div>
-                  <Button variant="secondary" asChild>
-                    <Link href={`/leaderboard/${game.id}`}>View Scores</Link>
-                  </Button>
+                  <Link href={`/leaderboard/${game.id}`}>
+                    <Button variant="secondary" className="cursor-pointer">
+                      View Scores
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>
