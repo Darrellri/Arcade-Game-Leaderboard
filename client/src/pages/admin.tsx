@@ -354,7 +354,14 @@ export default function Admin() {
                     }`}
                   >
                     <button
-                      onClick={() => handleThemeSwitch(index)}
+                      onClick={async () => {
+                        await handleThemeSwitch(index);
+                        // Apply theme immediately
+                        document.documentElement.style.setProperty('--primary', preset.primary);
+                        document.documentElement.setAttribute('data-theme-variant', preset.variant);
+                        document.documentElement.setAttribute('data-theme', preset.appearance);
+                        document.documentElement.style.setProperty('--radius', `${preset.radius}rem`);
+                      }}
                       className="w-full h-24 transition-transform hover:scale-105"
                       style={{
                         backgroundColor: preset.primary,
