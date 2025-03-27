@@ -144,10 +144,12 @@ export default function Home() {
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-right">
-                  <div className="font-mono">
-                    {(game.currentHighScore || 0).toLocaleString()}
+                  <div className="font-mono text-lg">
+                    #{1} - {(game.currentHighScore || 0).toLocaleString()}
                   </div>
-                  <div className="text-sm text-muted-foreground">Top Score</div>
+                  <div className="text-sm text-muted-foreground">
+                    {game.topScorerName ? `High Score by ${game.topScorerName}` : 'No scores yet'}
+                  </div>
                 </div>
                 <Button variant="secondary" asChild>
                   <Link href={`/leaderboard/${game.id}`}>View Scores</Link>
