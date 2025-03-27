@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800px" height="600px" viewBox="0 0 800 600" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Arcade Cabinet</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <!-- Arcade Cabinet Body -->
+        <path d="M300,100 L500,100 L550,200 L550,500 L250,500 L250,200 Z" fill="#4527A0"></path>
+        
+        <!-- Screen -->
+        <rect fill="#000000" x="280" y="130" width="240" height="200" rx="5"></rect>
+        <rect fill="#1A237E" x="290" y="140" width="220" height="180" rx="2"></rect>
+        
+        <!-- Game Elements -->
+        <rect fill="#FFFFFF" x="350" y="180" width="20" height="20"></rect>
+        <rect fill="#FF5252" x="390" y="220" width="20" height="20"></rect>
+        <rect fill="#FFEB3B" x="430" y="260" width="20" height="20"></rect>
+        
+        <!-- Control Panel -->
+        <path d="M280,330 L520,330 L520,420 L280,420 Z" fill="#311B92"></path>
+        
+        <!-- Joystick -->
+        <circle fill="#212121" cx="340" cy="375" r="25"></circle>
+        <circle fill="#616161" cx="340" cy="375" r="18"></circle>
+        <rect fill="#E0E0E0" x="336" y="350" width="8" height="25" rx="4"></rect>
+        
+        <!-- Buttons -->
+        <circle fill="#FF5252" cx="410" cy="375" r="15"></circle>
+        <circle fill="#2196F3" cx="450" cy="375" r="15"></circle>
+        <circle fill="#4CAF50" cx="490" cy="375" r="15"></circle>
+        
+        <!-- Coin Slot and Player Buttons -->
+        <rect fill="#212121" x="340" y="440" width="120" height="40" rx="5"></rect>
+        <circle fill="#FFEB3B" cx="370" cy="460" r="10"></circle>
+        <rect fill="#E0E0E0" x="400" y="450" width="40" height="20" rx="5"></rect>
+        
+        <!-- Marquee -->
+        <rect fill="#000000" x="270" y="60" width="260" height="40" rx="5"></rect>
+        <text font-family="Arial-BoldMT, Arial" font-size="24" font-weight="bold" fill="#FFFFFF" text-anchor="middle" x="400" y="88">
+            ARCADE
+        </text>
+    </g>
+</svg>

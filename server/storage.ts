@@ -57,32 +57,32 @@ export class MemStorage implements IStorage {
     const sampleGames: InsertGame[] = [
       {
         name: "X-Men Pinball",
-        imageUrl: "https://axeandarcade.com/wp-content/uploads/2024/03/xmen-marquee-792x214.jpg",
+        imageUrl: "/images/xmen-pinball.svg",
         type: "pinball"
       },
       {
         name: "Godzilla Pinball",
-        imageUrl: "https://axeandarcade.com/wp-content/uploads/2024/03/godzilla-marquee-792x214.jpg",
+        imageUrl: "/images/godzilla-pinball.svg",
         type: "pinball"
       },
       {
         name: "STAR WARS TRILOGY",
-        imageUrl: "https://axeandarcade.com/wp-content/uploads/2024/03/starwars-marquee-792x214.jpg",
+        imageUrl: "/images/arcade.svg",
         type: "arcade"
       },
       {
         name: "Asteroids",
-        imageUrl: "https://axeandarcade.com/wp-content/uploads/2024/03/asteroids-marquee-792x214.jpg",
+        imageUrl: "/images/arcade.svg",
         type: "arcade"
       },
       {
-        name: "Marble Madness",
-        imageUrl: "https://axeandarcade.com/wp-content/uploads/2024/03/marblemadness-marquee-792x214.jpg",
+        name: "PAC-MAN",
+        imageUrl: "/images/pacman-arcade.svg",
         type: "arcade"
       },
       {
-        name: "Big Buck Hunter Reloaded",
-        imageUrl: "https://axeandarcade.com/wp-content/uploads/2024/03/bigbuckhunter-marquee-792x214.jpg",
+        name: "Big Buck Hunter",
+        imageUrl: "/images/arcade.svg",
         type: "arcade"
       }
     ];
@@ -92,51 +92,51 @@ export class MemStorage implements IStorage {
     // Initialize with sample high scores from the last 4 weeks
     const sampleScores = [
       // X-Men Pinball scores (typically range from 1M to 10M)
-      { gameId: 1, playerName: "Mike S.", score: 8750000, phoneNumber: "+15551234567", imageUrl: "https://example.com/scores/1.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-15") },
-      { gameId: 1, playerName: "Sarah L.", score: 7250000, phoneNumber: "+15559876543", imageUrl: "https://example.com/scores/2.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-10") },
-      { gameId: 1, playerName: "John D.", score: 6500000, phoneNumber: "+15552345678", imageUrl: "https://example.com/scores/3.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-05") },
-      { gameId: 1, playerName: "Amy R.", score: 5980000, phoneNumber: "+15553456789", imageUrl: "https://example.com/scores/4.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-28") },
-      { gameId: 1, playerName: "David M.", score: 5750000, phoneNumber: "+15554567890", imageUrl: "https://example.com/scores/5.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-25") },
-      { gameId: 1, playerName: "Linda K.", score: 5250000, phoneNumber: "+15555678901", imageUrl: "https://example.com/scores/6.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-20") },
+      { gameId: 1, playerName: "Mike S.", score: 8750000, phoneNumber: "+15551234567", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-15") },
+      { gameId: 1, playerName: "Sarah L.", score: 7250000, phoneNumber: "+15559876543", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-10") },
+      { gameId: 1, playerName: "John D.", score: 6500000, phoneNumber: "+15552345678", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-05") },
+      { gameId: 1, playerName: "Amy R.", score: 5980000, phoneNumber: "+15553456789", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-28") },
+      { gameId: 1, playerName: "David M.", score: 5750000, phoneNumber: "+15554567890", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-25") },
+      { gameId: 1, playerName: "Linda K.", score: 5250000, phoneNumber: "+15555678901", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-20") },
 
       // Godzilla Pinball scores (typically range from 500K to 5M)
-      { gameId: 2, playerName: "Alex R.", score: 4250000, phoneNumber: "+15553456789", imageUrl: "https://example.com/scores/7.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-17") },
-      { gameId: 2, playerName: "Emma T.", score: 3750000, phoneNumber: "+15554567890", imageUrl: "https://example.com/scores/8.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-12") },
-      { gameId: 2, playerName: "Peter W.", score: 3250000, phoneNumber: "+15555678901", imageUrl: "https://example.com/scores/9.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-08") },
-      { gameId: 2, playerName: "Sophie B.", score: 2980000, phoneNumber: "+15556789012", imageUrl: "https://example.com/scores/10.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-03") },
-      { gameId: 2, playerName: "Mark L.", score: 2750000, phoneNumber: "+15557890123", imageUrl: "https://example.com/scores/11.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-27") },
-      { gameId: 2, playerName: "Rachel H.", score: 2500000, phoneNumber: "+15558901234", imageUrl: "https://example.com/scores/12.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-22") },
-      { gameId: 2, playerName: "Kevin P.", score: 2250000, phoneNumber: "+15559012345", imageUrl: "https://example.com/scores/13.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-18") },
+      { gameId: 2, playerName: "Alex R.", score: 4250000, phoneNumber: "+15553456789", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-17") },
+      { gameId: 2, playerName: "Emma T.", score: 3750000, phoneNumber: "+15554567890", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-12") },
+      { gameId: 2, playerName: "Peter W.", score: 3250000, phoneNumber: "+15555678901", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-08") },
+      { gameId: 2, playerName: "Sophie B.", score: 2980000, phoneNumber: "+15556789012", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-03") },
+      { gameId: 2, playerName: "Mark L.", score: 2750000, phoneNumber: "+15557890123", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-27") },
+      { gameId: 2, playerName: "Rachel H.", score: 2500000, phoneNumber: "+15558901234", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-22") },
+      { gameId: 2, playerName: "Kevin P.", score: 2250000, phoneNumber: "+15559012345", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-18") },
 
       // Star Wars Trilogy (typically range from 100K to 1M)
-      { gameId: 3, playerName: "Chris M.", score: 950000, phoneNumber: "+15555678901", imageUrl: "https://example.com/scores/14.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-16") },
-      { gameId: 3, playerName: "Lisa P.", score: 875000, phoneNumber: "+15556789012", imageUrl: "https://example.com/scores/15.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-08") },
-      { gameId: 3, playerName: "Brian S.", score: 820000, phoneNumber: "+15557890123", imageUrl: "https://example.com/scores/16.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-01") },
-      { gameId: 3, playerName: "Jessica F.", score: 780000, phoneNumber: "+15558901234", imageUrl: "https://example.com/scores/17.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-24") },
-      { gameId: 3, playerName: "Tom H.", score: 725000, phoneNumber: "+15559012345", imageUrl: "https://example.com/scores/18.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-19") },
-      { gameId: 3, playerName: "Nicole W.", score: 690000, phoneNumber: "+15550123456", imageUrl: "https://example.com/scores/19.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-15") },
+      { gameId: 3, playerName: "Chris M.", score: 950000, phoneNumber: "+15555678901", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-16") },
+      { gameId: 3, playerName: "Lisa P.", score: 875000, phoneNumber: "+15556789012", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-08") },
+      { gameId: 3, playerName: "Brian S.", score: 820000, phoneNumber: "+15557890123", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-01") },
+      { gameId: 3, playerName: "Jessica F.", score: 780000, phoneNumber: "+15558901234", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-24") },
+      { gameId: 3, playerName: "Tom H.", score: 725000, phoneNumber: "+15559012345", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-19") },
+      { gameId: 3, playerName: "Nicole W.", score: 690000, phoneNumber: "+15550123456", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-15") },
 
       // Asteroids (typically range from 50K to 250K)
-      { gameId: 4, playerName: "Dave K.", score: 225000, phoneNumber: "+15557890123", imageUrl: "https://example.com/scores/20.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-14") },
-      { gameId: 4, playerName: "Paul W.", score: 195000, phoneNumber: "+15558901234", imageUrl: "https://example.com/scores/21.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-07") },
-      { gameId: 4, playerName: "Anna J.", score: 180000, phoneNumber: "+15559012345", imageUrl: "https://example.com/scores/22.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-29") },
-      { gameId: 4, playerName: "George R.", score: 165000, phoneNumber: "+15550123456", imageUrl: "https://example.com/scores/23.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-22") },
-      { gameId: 4, playerName: "Michelle L.", score: 155000, phoneNumber: "+15551234567", imageUrl: "https://example.com/scores/24.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-15") },
+      { gameId: 4, playerName: "Dave K.", score: 225000, phoneNumber: "+15557890123", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-14") },
+      { gameId: 4, playerName: "Paul W.", score: 195000, phoneNumber: "+15558901234", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-07") },
+      { gameId: 4, playerName: "Anna J.", score: 180000, phoneNumber: "+15559012345", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-29") },
+      { gameId: 4, playerName: "George R.", score: 165000, phoneNumber: "+15550123456", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-22") },
+      { gameId: 4, playerName: "Michelle L.", score: 155000, phoneNumber: "+15551234567", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-15") },
 
-      // Marble Madness (typically range from 10K to 100K)
-      { gameId: 5, playerName: "Nina H.", score: 85000, phoneNumber: "+15559012345", imageUrl: "https://example.com/scores/25.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-13") },
-      { gameId: 5, playerName: "Tom B.", score: 72000, phoneNumber: "+15550123456", imageUrl: "https://example.com/scores/26.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-06") },
-      { gameId: 5, playerName: "Laura C.", score: 68000, phoneNumber: "+15551234567", imageUrl: "https://example.com/scores/27.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-28") },
-      { gameId: 5, playerName: "Steve M.", score: 65000, phoneNumber: "+15552345678", imageUrl: "https://example.com/scores/28.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-21") },
-      { gameId: 5, playerName: "Karen D.", score: 61000, phoneNumber: "+15553456789", imageUrl: "https://example.com/scores/29.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-14") },
+      // PAC-MAN (typically range from 10K to 100K)
+      { gameId: 5, playerName: "Nina H.", score: 85000, phoneNumber: "+15559012345", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-13") },
+      { gameId: 5, playerName: "Tom B.", score: 72000, phoneNumber: "+15550123456", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-06") },
+      { gameId: 5, playerName: "Laura C.", score: 68000, phoneNumber: "+15551234567", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-28") },
+      { gameId: 5, playerName: "Steve M.", score: 65000, phoneNumber: "+15552345678", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-21") },
+      { gameId: 5, playerName: "Karen D.", score: 61000, phoneNumber: "+15553456789", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-14") },
 
       // Big Buck Hunter (typically range from 5K to 50K)
-      { gameId: 6, playerName: "Ryan M.", score: 45000, phoneNumber: "+15551234567", imageUrl: "https://example.com/scores/30.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-18") },
-      { gameId: 6, playerName: "Kelly S.", score: 38000, phoneNumber: "+15552345678", imageUrl: "https://example.com/scores/31.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-09") },
-      { gameId: 6, playerName: "Eric P.", score: 35000, phoneNumber: "+15553456789", imageUrl: "https://example.com/scores/32.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-02") },
-      { gameId: 6, playerName: "Megan B.", score: 32000, phoneNumber: "+15554567890", imageUrl: "https://example.com/scores/33.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-24") },
-      { gameId: 6, playerName: "Jason T.", score: 30000, phoneNumber: "+15555678901", imageUrl: "https://example.com/scores/34.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-17") },
-      { gameId: 6, playerName: "Amanda R.", score: 28000, phoneNumber: "+15556789012", imageUrl: "https://example.com/scores/35.jpg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-10") }
+      { gameId: 6, playerName: "Ryan M.", score: 45000, phoneNumber: "+15551234567", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-18") },
+      { gameId: 6, playerName: "Kelly S.", score: 38000, phoneNumber: "+15552345678", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-09") },
+      { gameId: 6, playerName: "Eric P.", score: 35000, phoneNumber: "+15553456789", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-03-02") },
+      { gameId: 6, playerName: "Megan B.", score: 32000, phoneNumber: "+15554567890", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-24") },
+      { gameId: 6, playerName: "Jason T.", score: 30000, phoneNumber: "+15555678901", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-17") },
+      { gameId: 6, playerName: "Amanda R.", score: 28000, phoneNumber: "+15556789012", imageUrl: "/images/score.svg", latitude: 45.5231, longitude: -122.6765, submittedAt: new Date("2024-02-10") }
     ];
 
     sampleScores.forEach(score => this.addScore(score));

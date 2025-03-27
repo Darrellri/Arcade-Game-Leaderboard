@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800px" height="600px" viewBox="0 0 800 600" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>High Score Screenshot</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <!-- Background -->
+        <rect fill="#1A1A1A" x="0" y="0" width="800" height="600"></rect>
+        
+        <!-- Game Screen -->
+        <rect fill="#101010" x="100" y="50" width="600" height="400" rx="10"></rect>
+        
+        <!-- Game Elements -->
+        <circle fill="#FF5252" cx="300" cy="200" r="40" opacity="0.8"></circle>
+        <circle fill="#FFEB3B" cx="450" cy="150" r="30" opacity="0.8"></circle>
+        <circle fill="#4CAF50" cx="550" cy="250" r="35" opacity="0.8"></circle>
+        <circle fill="#2196F3" cx="200" cy="300" r="25" opacity="0.8"></circle>
+        
+        <!-- Player Character -->
+        <rect fill="#FFFFFF" x="380" y="320" width="40" height="40"></rect>
+        
+        <!-- Score Display -->
+        <rect fill="#212121" x="200" y="480" width="400" height="80" rx="10"></rect>
+        <text font-family="Monaco, monospace" font-size="48" font-weight="bold" fill="#FFFFFF" text-anchor="middle" x="400" y="535">
+            12,345,670
+        </text>
+        
+        <!-- Score Label -->
+        <text font-family="Arial-BoldMT, Arial" font-size="24" font-weight="bold" fill="#FFEB3B" text-anchor="middle" x="400" y="480">
+            HIGH SCORE
+        </text>
+    </g>
+</svg>

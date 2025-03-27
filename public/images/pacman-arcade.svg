@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800px" height="600px" viewBox="0 0 800 600" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Pac-Man Arcade</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <!-- Background -->
+        <rect fill="#000000" x="100" y="50" width="600" height="500" rx="20"></rect>
+        
+        <!-- Title -->
+        <text font-family="Impact, sans-serif" font-size="64" font-weight="bold" fill="#FFEB3B" text-anchor="middle" x="400" y="130">
+            PAC-MAN
+        </text>
+        <text font-family="Impact, sans-serif" font-size="48" font-weight="bold" fill="#FFFFFF" text-anchor="middle" x="400" y="180">
+            ARCADE
+        </text>
+        
+        <!-- Pac-Man -->
+        <path d="M350,250 A50,50 0 1,1 350,350 L350,300 Z" fill="#FFEB3B"></path>
+        
+        <!-- Ghosts -->
+        <path d="M450,250 A40,40 0 1,1 450,330 Q430,300 410,330 Q390,300 370,330 A40,40 0 1,1 370,250 Z" fill="#FF5252"></path>
+        <circle fill="#FFFFFF" cx="410" cy="280" r="10"></circle>
+        <circle fill="#FFFFFF" cx="450" cy="280" r="10"></circle>
+        <circle fill="#000000" cx="410" cy="280" r="5"></circle>
+        <circle fill="#000000" cx="450" cy="280" r="5"></circle>
+        
+        <!-- Dots -->
+        <circle fill="#FFFFFF" cx="300" cy="300" r="5"></circle>
+        <circle fill="#FFFFFF" cx="270" cy="300" r="5"></circle>
+        <circle fill="#FFFFFF" cx="240" cy="300" r="5"></circle>
+        <circle fill="#FFFFFF" cx="210" cy="300" r="5"></circle>
+        <circle fill="#FFFFFF" cx="180" cy="300" r="10"></circle>
+        
+        <!-- Maze Elements -->
+        <rect fill="#2196F3" x="150" y="240" width="500" height="10" rx="5"></rect>
+        <rect fill="#2196F3" x="150" y="350" width="500" height="10" rx="5"></rect>
+        <rect fill="#2196F3" x="150" y="240" width="10" height="120" rx="5"></rect>
+        <rect fill="#2196F3" x="640" y="240" width="10" height="120" rx="5"></rect>
+        
+        <!-- Arcade Controls -->
+        <rect fill="#424242" x="200" y="400" width="400" height="100" rx="10"></rect>
+        <circle fill="#212121" cx="250" cy="450" r="25"></circle>
+        <circle fill="#616161" cx="250" cy="450" r="18"></circle>
+        <circle fill="#FF5252" cx="350" cy="450" r="15"></circle>
+        <circle fill="#4CAF50" cx="400" cy="450" r="15"></circle>
+        <circle fill="#2196F3" cx="450" cy="450" r="15"></circle>
+        <circle fill="#FFEB3B" cx="500" cy="450" r="15"></circle>
+    </g>
+</svg>
