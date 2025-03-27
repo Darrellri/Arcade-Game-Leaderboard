@@ -1,11 +1,19 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { CircleDot, Gamepad2, Grid2X2, List, TableIcon } from "lucide-react";
 import { Link } from "wouter";
-import GameCard from "@/components/game-card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Grid2X2, List, TableIcon, Gamepad2, CircleDot } from "lucide-react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { GameCard } from "@/components/game-card";
 import type { Game } from "@shared/schema";
 
 type ViewMode = "table" | "grid" | "list";
