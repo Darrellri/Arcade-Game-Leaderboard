@@ -106,71 +106,52 @@ export default function Home() {
                   ) : '-'}
                 </TableCell>
                 <TableCell className="text-right">
-                  <Link href={`/leaderboard/${game.id}`}>
-                    <Button variant="secondary" className="cursor-pointer">
-                      View Scores
-                    </Button>
-                  </Link>
+                  <Button variant="secondary" asChild>
+                    <Link href={`/leaderboard/${game.id}`}>View Scores</Link>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-2">
           {games?.map((game) => (
             <div
               key={game.id}
-              className="flex flex-col md:flex-row bg-card rounded-lg overflow-hidden border"
+              className="flex items-center justify-between p-4 bg-card rounded-lg"
             >
-              {/* Game image */}
-              <div className="w-full md:w-1/3 flex justify-center items-center p-4 bg-muted/30">
-                <div className="h-[100px] flex items-center justify-center w-full">
-                  <img 
-                    src={game.imageUrl} 
-                    alt={game.name}
-                    className="max-h-[100px] max-w-full object-contain"
-                    style={{ display: 'block' }}
-                  />
-                </div>
-              </div>
-              
-              {/* Game info */}
-              <div className="flex-1 flex items-center justify-between p-4">
-                <div>
-                  <div className="flex items-center gap-2">
-                    {game.type === 'pinball' ? (
-                      <CircleDot className="h-4 w-4 text-primary" />
-                    ) : (
-                      <Gamepad2 className="h-4 w-4 text-primary" />
-                    )}
-                    <span className="font-medium uppercase">{game.name}</span>
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    Top Player: {game.topScorerName || 'No scores yet'}
-                  </div>
-                  {game.topScoreDate && (
-                    <div className="text-sm text-muted-foreground">
-                      {new Date(game.topScoreDate).toLocaleDateString()} 
-                      <span className="italic">
-                        ({formatTime(new Date(game.topScoreDate))})
-                      </span>
-                    </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  {game.type === 'pinball' ? (
+                    <CircleDot className="h-4 w-4 text-primary" />
+                  ) : (
+                    <Gamepad2 className="h-4 w-4 text-primary" />
                   )}
+                  <span className="font-medium uppercase">{game.name}</span>
                 </div>
-                <div className="flex flex-col md:flex-row items-end md:items-center gap-4">
-                  <div className="text-right">
-                    <div className="font-mono font-bold text-lg">
-                      {(game.currentHighScore || 0).toLocaleString()}
-                    </div>
-                    <div className="text-sm text-muted-foreground">Top Score</div>
+                <div className="text-sm text-muted-foreground">
+                  Top Player: {game.topScorerName || 'No scores yet'}
+                </div>
+                {game.topScoreDate && (
+                  <div className="text-sm text-muted-foreground">
+                    {new Date(game.topScoreDate).toLocaleDateString()} 
+                    <span className="italic">
+                      ({formatTime(new Date(game.topScoreDate))})
+                    </span>
                   </div>
-                  <Link href={`/leaderboard/${game.id}`}>
-                    <Button variant="secondary" className="cursor-pointer">
-                      View Scores
-                    </Button>
-                  </Link>
+                )}
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="text-right">
+                  <div className="font-mono">
+                    {(game.currentHighScore || 0).toLocaleString()}
+                  </div>
+                  <div className="text-sm text-muted-foreground">Top Score</div>
                 </div>
+                <Button variant="secondary" asChild>
+                  <Link href={`/leaderboard/${game.id}`}>View Scores</Link>
+                </Button>
               </div>
             </div>
           ))}
