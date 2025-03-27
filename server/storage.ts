@@ -143,7 +143,23 @@ export class MemStorage implements IStorage {
   }
 
   async getAllGames(): Promise<Game[]> {
-    return Array.from(this.games.values());
+    const gamesWithTopScores = await Promise.all(
+      Array.from(this.games.values()).map(async (game) => {
+        const scores = Array.from(this.scores.values()).filter(score => score.gameId === game.id);
+        const topScore = scores.reduce((max, score) =>
+          score.score > max.score ? score : max,
+          { score: 0, playerName: null, submittedAt: null }
+        );
+
+        return {
+          ...game,
+          currentHighScore: topScore.score,
+          topScorerName: topScore.playerName,
+          topScoreDate: topScore.submittedAt
+        };
+      })
+    );
+    return gamesWithTopScores;
   }
 
   async getGame(id: number): Promise<Game | undefined> {
@@ -156,8 +172,8 @@ export class MemStorage implements IStorage {
       ...game,
       id,
       currentHighScore: 0,
-      topScorerName: "",
-      topScoreDate: new Date(0) // Initialize with epoch
+      topScorerName: null,
+      topScoreDate: null
     };
     this.games.set(id, newGame);
     return newGame;
