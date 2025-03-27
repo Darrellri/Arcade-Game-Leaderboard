@@ -1,19 +1,11 @@
-
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { CircleDot, Gamepad2, Grid2X2, List, TableIcon } from "lucide-react";
 import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
+import GameCard from "@/components/game-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { GameCard } from "@/components/game-card";
+import { Button } from "@/components/ui/button";
+import { Grid2X2, List, TableIcon, Gamepad2, CircleDot } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { Game } from "@shared/schema";
 
 type ViewMode = "table" | "grid" | "list";
@@ -152,15 +144,10 @@ export default function Home() {
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-right">
-                  <div className="font-mono text-lg font-bold">
-                    #{1} - {(game.currentHighScore || 0).toLocaleString()}
+                  <div className="font-mono">
+                    {(game.currentHighScore || 0).toLocaleString()}
                   </div>
-                  <div className="text-sm">
-                    {game.topScorerName ? `High Score by ${game.topScorerName}` : 'No scores yet'}
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    {game.topScoreDate ? formatTime(new Date(game.topScoreDate)) : ''}
-                  </div>
+                  <div className="text-sm text-muted-foreground">Top Score</div>
                 </div>
                 <Button variant="secondary" asChild>
                   <Link href={`/leaderboard/${game.id}`}>View Scores</Link>

@@ -167,24 +167,14 @@ export class MemStorage implements IStorage {
     const game = await this.getGame(id);
     if (!game) throw new Error("Game not found");
 
-    const scores = await this.getScoresByGame(id);
-    // Find highest score
-    const highestScore = scores.reduce((max, current) => 
-      current.score > (max?.score || 0) ? current : max, 
-      scores[0]
-    );
-
-    if (highestScore) {
-      const updatedGame: Game = {
-        ...game,
-        currentHighScore: highestScore.score,
-        topScorerName: highestScore.playerName,
-        topScoreDate: highestScore.submittedAt
-      };
-      this.games.set(id, updatedGame);
-      return updatedGame;
-    }
-    return game;
+    const updatedGame: Game = {
+      ...game,
+      currentHighScore: score,
+      topScorerName: playerName,
+      topScoreDate: new Date()
+    };
+    this.games.set(id, updatedGame);
+    return updatedGame;
   }
 
   async getScoresByGame(gameId: number): Promise<Score[]> {
@@ -202,9 +192,11 @@ export class MemStorage implements IStorage {
     };
     this.scores.set(id, newScore);
 
-    // Get the highest score for this game
-    // Always update the game's high score after adding a new score
-    await this.updateGameHighScore(score.gameId, score.score, score.playerName);
+    // Update game's high score if necessary
+    const game = await this.getGame(score.gameId);
+    if (game && score.score > (game.currentHighScore || 0)) {
+      await this.updateGameHighScore(game.id, score.score, score.playerName);
+    }
 
     return newScore;
   }
