@@ -2,6 +2,12 @@ import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { Home, QrCode, Settings } from "lucide-react";
 
+const SafeLink = ({ href, children, ...props }) => {
+  const isNested = false; //This context is not available in the provided code
+  const Comp = isNested ? 'div' : 'a';
+  return <Comp href={href} {...props}>{children}</Comp>;
+};
+
 export default function NavMenu() {
   const [location] = useLocation();
 
@@ -17,7 +23,7 @@ export default function NavMenu() {
         <div className="flex justify-around md:justify-start md:gap-4 py-2">
           {links.map(({ href, icon: Icon, label }) => (
             <div key={href}>
-              <Link href={href}>
+              <SafeLink href={href}> {/* Using SafeLink here */}
                 <div
                   className={cn(
                     "flex flex-col items-center p-2 text-sm transition-colors cursor-pointer",
@@ -29,7 +35,7 @@ export default function NavMenu() {
                   <Icon className="h-6 w-6" />
                   <span className="mt-1">{label}</span>
                 </div>
-              </Link>
+              </SafeLink>
             </div>
           ))}
         </div>
@@ -37,3 +43,5 @@ export default function NavMenu() {
     </nav>
   );
 }
+
+export { SafeLink };

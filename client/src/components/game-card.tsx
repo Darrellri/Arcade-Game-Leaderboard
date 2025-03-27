@@ -42,3 +42,16 @@ export default function GameCard({ game }: GameCardProps) {
     </Card>
   );
 }
+import React from 'react';
+import { Card, CardContent, CardHeader } from './ui/card';
+
+export function GameCard({ name, imageUrl }: { name: string; imageUrl: string }) {
+  return (
+    <Card>
+      <CardHeader>{name}</CardHeader>
+      <CardContent>
+        <img src={imageUrl} alt={name} className="w-full h-auto" />
+      </CardContent>
+    </Card>
+  );
+}
