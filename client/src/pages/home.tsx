@@ -144,11 +144,14 @@ export default function Home() {
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-right">
-                  <div className="font-mono text-lg">
+                  <div className="font-mono text-lg font-bold">
                     #{1} - {(game.currentHighScore || 0).toLocaleString()}
                   </div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-sm">
                     {game.topScorerName ? `High Score by ${game.topScorerName}` : 'No scores yet'}
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    {game.topScoreDate ? formatTime(new Date(game.topScoreDate)) : ''}
                   </div>
                 </div>
                 <Button variant="secondary" asChild>

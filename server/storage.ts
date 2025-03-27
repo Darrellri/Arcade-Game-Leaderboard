@@ -168,7 +168,11 @@ export class MemStorage implements IStorage {
     if (!game) throw new Error("Game not found");
 
     const scores = await this.getScoresByGame(id);
-    const highestScore = scores[0]; // Scores are already sorted in descending order
+    // Find highest score
+    const highestScore = scores.reduce((max, current) => 
+      current.score > (max?.score || 0) ? current : max, 
+      scores[0]
+    );
 
     if (highestScore) {
       const updatedGame: Game = {
