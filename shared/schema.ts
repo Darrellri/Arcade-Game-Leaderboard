@@ -37,6 +37,13 @@ export const venueSettingsSchema = z.object({
     appearance: z.enum(["light", "dark", "system"]),
     radius: z.number(),
   }),
+  themePresets: z.array(z.object({
+    name: z.string(),
+    primary: z.string(),
+    variant: z.enum(["professional", "tint", "vibrant"]),
+    appearance: z.enum(["light", "dark", "system"]),
+    radius: z.number(),
+  })).optional(),
 });
 
 export const insertGameSchema = createInsertSchema(games).omit({ 
