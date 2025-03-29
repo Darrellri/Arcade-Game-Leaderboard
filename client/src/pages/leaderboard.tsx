@@ -37,7 +37,7 @@ function formatTime(date: Date) {
 export default function Leaderboard() {
   const { gameId } = useParams();
   const id = parseInt(gameId || "0");
-  const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [sortField, setSortField] = useState<SortField>("score");
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
 

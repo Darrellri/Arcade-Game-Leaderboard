@@ -174,32 +174,11 @@ export default function Admin() {
         <p className="text-muted-foreground mt-2">Manage your venue settings</p>
       </div>
 
-      {/* Quick Theme Switcher */}
-      {settings?.themePresets && (
-        <div className="fixed bottom-20 right-4 z-50 bg-background border rounded-lg shadow-lg p-2">
-          <div className="flex flex-col gap-2">
-            <div className="text-xs font-medium text-center mb-1">Theme</div>
-            {settings.themePresets.map((preset, index) => (
-              <button
-                key={preset.name}
-                onClick={() => handleThemeSwitch(index)}
-                className={`w-8 h-8 rounded-full border transition-all ${
-                  selectedScheme === index
-                    ? "ring-2 ring-primary ring-offset-2 border-primary"
-                    : "border-border hover:border-primary"
-                }`}
-                style={{ backgroundColor: preset.primary }}
-                title={preset.name}
-              />
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Theme Switcher removed from here */}
 
       <Tabs defaultValue="venue">
         <TabsList>
           <TabsTrigger value="venue">Venue Details</TabsTrigger>
-          <TabsTrigger value="appearance">Theme Settings</TabsTrigger>
           <TabsTrigger value="games">Game Management</TabsTrigger>
         </TabsList>
 
@@ -331,78 +310,7 @@ export default function Admin() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="appearance" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Palette className="h-5 w-5" />
-                <span>Color Schemes</span>
-              </CardTitle>
-              <CardDescription>
-                Choose from predefined color schemes for your arcade high score platform
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-                {settings?.themePresets?.map((preset, index) => (
-                  <div 
-                    key={preset.name}
-                    className={`rounded-lg border overflow-hidden transition-all ${
-                      selectedScheme === index
-                        ? "ring-2 ring-primary ring-offset-2"
-                        : "hover:border-primary/50"
-                    }`}
-                  >
-                    <button
-                      onClick={async () => {
-                        await handleThemeSwitch(index);
-                        // Apply theme immediately with all required CSS variables
-                        
-                        // Convert HSL color to HSL components for CSS variables
-                        const parseHslColor = (hslColor: string) => {
-                          const match = hslColor.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/);
-                          if (match) {
-                            return { h: match[1], s: match[2], l: match[3] };
-                          }
-                          return { h: "0", s: "0", l: "0" };
-                        };
-                        
-                        const primaryColor = parseHslColor(preset.primary);
-                        
-                        // Set primary color and its components
-                        document.documentElement.style.setProperty('--primary', primaryColor.h + ' ' + primaryColor.s + '% ' + primaryColor.l + '%');
-                        
-                        // Set theme variant and appearance
-                        document.documentElement.setAttribute('data-theme-variant', preset.variant);
-                        document.documentElement.setAttribute('data-theme', preset.appearance);
-                        document.documentElement.style.setProperty('--radius', `${preset.radius}rem`);
-                        
-                        // Force a refresh of the theme variables by toggling a class
-                        document.documentElement.classList.add('theme-refresh');
-                        setTimeout(() => {
-                          document.documentElement.classList.remove('theme-refresh');
-                        }, 10);
-                      }}
-                      className="w-full h-24 transition-transform hover:scale-105"
-                      style={{
-                        backgroundColor: preset.primary,
-                      }}
-                    />
-                    <div className="p-2 text-center">
-                      <div className="text-sm font-medium">{preset.name}</div>
-                      <div className="text-xs text-muted-foreground capitalize">{preset.variant}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-            <CardFooter>
-              <div className="text-sm text-muted-foreground">
-                These themes will be applied immediately to the entire application.
-              </div>
-            </CardFooter>
-          </Card>
-        </TabsContent>
+        {/* Theme Settings tab removed */}
 
         <TabsContent value="games" className="space-y-4">
           <Card>
@@ -416,6 +324,31 @@ export default function Admin() {
               </CardDescription>
             </CardHeader>
             <CardContent>
+              {/* Horizontal Theme Switcher */}
+              {settings?.themePresets && (
+                <div className="mb-6">
+                  <div className="text-sm font-medium mb-2 flex items-center gap-2">
+                    <Palette className="h-4 w-4" />
+                    <span>Theme Switcher</span>
+                  </div>
+                  <div className="flex gap-2 flex-wrap">
+                    {settings.themePresets.map((preset, index) => (
+                      <button
+                        key={preset.name}
+                        onClick={() => handleThemeSwitch(index)}
+                        className={`w-10 h-10 rounded-full border transition-all ${
+                          selectedScheme === index
+                            ? "ring-2 ring-primary ring-offset-2 border-primary"
+                            : "border-border hover:border-primary"
+                        }`}
+                        style={{ backgroundColor: preset.primary }}
+                        title={preset.name}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+              
               {gamesLoading ? (
                 <div>Loading games...</div>
               ) : (

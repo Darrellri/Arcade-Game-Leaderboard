@@ -19,7 +19,7 @@ function formatTime(date: Date) {
 }
 
 export default function Home() {
-  const [viewMode, setViewMode] = useState<ViewMode>("table");
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
 
   const { data: games, isLoading } = useQuery<Game[]>({
     queryKey: ["/api/games"],
@@ -77,7 +77,7 @@ export default function Home() {
               <TableHead>Game</TableHead>
               <TableHead>Type</TableHead>
               <TableHead>High Score</TableHead>
-              <TableHead>Top Player</TableHead>
+              <TableHead>Top Score by</TableHead>
               <TableHead>Date</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
@@ -131,7 +131,7 @@ export default function Home() {
                   <span className="font-medium uppercase">{game.name}</span>
                 </div>
                 <div className="text-sm text-muted-foreground">
-                  Top Player: {game.topScorerName || 'No scores yet'}
+                  Top Score by: {game.topScorerName || 'No scores yet'}
                 </div>
                 {game.topScoreDate && (
                   <div className="text-sm text-muted-foreground">
