@@ -10,12 +10,23 @@ import type { Game } from "@shared/schema";
 
 type ViewMode = "table" | "grid" | "list";
 
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+
 function formatTime(date: Date) {
-  return date.toLocaleTimeString('en-US', { 
+  const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
+  const time = date.toLocaleTimeString('en-US', { 
     hour: 'numeric', 
     minute: '2-digit', 
     hour12: true 
   }).toLowerCase().replace(' ', '');
+  
+  return `${dayName}, ${time}`;
 }
 
 export default function Home() {
@@ -38,7 +49,7 @@ export default function Home() {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold tracking-tight">Arcade High Scores</h1>
+        <h1 className="text-4xl font-bold tracking-tight">Arcade Top Scores</h1>
         <div className="flex gap-2">
           <Button
             variant={viewMode === "table" ? "default" : "outline"}
@@ -76,7 +87,7 @@ export default function Home() {
             <TableRow>
               <TableHead>Game</TableHead>
               <TableHead>Type</TableHead>
-              <TableHead>High Score</TableHead>
+              <TableHead>Top Score</TableHead>
               <TableHead>Top Score by</TableHead>
               <TableHead>Date</TableHead>
               <TableHead className="text-right">Action</TableHead>
@@ -98,7 +109,7 @@ export default function Home() {
                 <TableCell>
                   {game.topScoreDate ? (
                     <span>
-                      {new Date(game.topScoreDate).toLocaleDateString()} 
+                      {formatDate(new Date(game.topScoreDate))} 
                       <span className="text-muted-foreground italic">
                         ({formatTime(new Date(game.topScoreDate))})
                       </span>
@@ -135,7 +146,7 @@ export default function Home() {
                 </div>
                 {game.topScoreDate && (
                   <div className="text-sm text-muted-foreground">
-                    {new Date(game.topScoreDate).toLocaleDateString()} 
+                    {formatDate(new Date(game.topScoreDate))} 
                     <span className="italic">
                       ({formatTime(new Date(game.topScoreDate))})
                     </span>

@@ -26,12 +26,23 @@ type ViewMode = "table" | "grid" | "list";
 type SortField = "score" | "date" | "name";
 type SortOrder = "asc" | "desc";
 
+function formatDate(date: Date) {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+
 function formatTime(date: Date) {
-  return date.toLocaleTimeString('en-US', { 
+  const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
+  const time = date.toLocaleTimeString('en-US', { 
     hour: 'numeric', 
     minute: '2-digit', 
     hour12: true 
   }).toLowerCase().replace(' ', '');
+  
+  return `${dayName}, ${time}`;
 }
 
 export default function Leaderboard() {
@@ -143,7 +154,7 @@ export default function Leaderboard() {
                 <TableCell>{score.playerName}</TableCell>
                 <TableCell>{score.score.toLocaleString()}</TableCell>
                 <TableCell>
-                  {new Date(score.submittedAt!).toLocaleDateString()}
+                  {formatDate(new Date(score.submittedAt!))}
                   <span className="text-muted-foreground italic ml-2">
                     ({formatTime(new Date(score.submittedAt!))})
                   </span>
@@ -163,7 +174,7 @@ export default function Leaderboard() {
                   {score.score.toLocaleString()}
                 </div>
                 <div className="text-sm text-muted-foreground mt-2">
-                  {new Date(score.submittedAt!).toLocaleDateString()}
+                  {formatDate(new Date(score.submittedAt!))}
                   <span className="italic ml-2">
                     ({formatTime(new Date(score.submittedAt!))})
                   </span>
@@ -184,7 +195,7 @@ export default function Leaderboard() {
                 <div>
                   <div className="font-medium">{score.playerName}</div>
                   <div className="text-sm text-muted-foreground">
-                    {new Date(score.submittedAt!).toLocaleDateString()}
+                    {formatDate(new Date(score.submittedAt!))}
                     <span className="italic ml-2">
                       ({formatTime(new Date(score.submittedAt!))})
                     </span>

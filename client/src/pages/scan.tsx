@@ -10,7 +10,7 @@ export default function Scan() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-4xl font-bold tracking-tight">Scan Game QR Code</h1>
+      <h1 className="text-4xl font-bold tracking-tight">Scan Top Score</h1>
       <div className="max-w-md mx-auto">
         <QRScanner onScan={handleScan} />
       </div>

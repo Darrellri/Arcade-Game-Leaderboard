@@ -9,7 +9,7 @@ export default function SubmitScore() {
   const { gameId } = useParams();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const id = parseInt(gameId);
+  const id = parseInt(gameId || "0");
 
   const { data: game } = useQuery<Game>({
     queryKey: [`/api/games/${id}`],
@@ -23,7 +23,7 @@ export default function SubmitScore() {
     onSuccess: () => {
       toast({
         title: "Score Submitted",
-        description: "Your high score has been recorded!",
+        description: "Your top score has been recorded!",
       });
       setLocation(`/leaderboard/${id}`);
     },
@@ -43,7 +43,7 @@ export default function SubmitScore() {
       <h1 className="text-4xl font-bold tracking-tight">Submit Score</h1>
       <h2 className="text-2xl">{game.name}</h2>
       <p className="text-muted-foreground">
-        Current High Score: {game.currentHighScore.toLocaleString()}
+        Current Top Score: {(game.currentHighScore || 0).toLocaleString()}
       </p>
       <ScoreForm
         gameId={id}
