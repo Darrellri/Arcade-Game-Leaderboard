@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Grid2X2, List, TableIcon } from "lucide-react";
 import { useState } from "react";
 import type { Game, Score } from "@shared/schema";
+import ShareScore from "@/components/share-score";
 
 type ViewMode = "table" | "grid" | "list";
 type SortField = "score" | "date" | "name";
@@ -145,6 +146,7 @@ export default function Leaderboard() {
               <TableHead>Player</TableHead>
               <TableHead>Score</TableHead>
               <TableHead>Date</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -158,6 +160,9 @@ export default function Leaderboard() {
                   <span className="text-muted-foreground italic ml-2">
                     ({formatTime(new Date(score.submittedAt!))})
                   </span>
+                </TableCell>
+                <TableCell className="text-right">
+                  <ShareScore game={game} score={score} size="sm" variant="outline" />
                 </TableCell>
               </TableRow>
             ))}
@@ -178,6 +183,9 @@ export default function Leaderboard() {
                   <span className="italic ml-2">
                     ({formatTime(new Date(score.submittedAt!))})
                   </span>
+                </div>
+                <div className="mt-4">
+                  <ShareScore game={game} score={score} variant="outline" />
                 </div>
               </CardContent>
             </Card>
@@ -202,8 +210,11 @@ export default function Leaderboard() {
                   </div>
                 </div>
               </div>
-              <div className="text-xl font-mono">
-                {score.score.toLocaleString()}
+              <div className="flex items-center gap-3">
+                <div className="text-xl font-mono">
+                  {score.score.toLocaleString()}
+                </div>
+                <ShareScore game={game} score={score} size="sm" variant="outline" />
               </div>
             </div>
           ))}

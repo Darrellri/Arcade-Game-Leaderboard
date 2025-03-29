@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { Trophy, Gamepad2, CircleDot, Calendar } from "lucide-react";
 import type { Game } from "@shared/schema";
+import ShareScore from "@/components/share-score";
 
 function formatDate(date: Date) {
   return date.toLocaleDateString('en-US', {
@@ -63,9 +64,12 @@ export default function GameCard({ game }: GameCardProps) {
                 </div>
               )}
             </div>
-            <Link href={`/leaderboard/${game.id}`}>
-              <Button variant="secondary">View Scores</Button>
-            </Link>
+            <div className="flex gap-2">
+              <ShareScore game={game} variant="outline" />
+              <Link href={`/leaderboard/${game.id}`}>
+                <Button variant="secondary">View Scores</Button>
+              </Link>
+            </div>
           </div>
         </div>
       </CardContent>

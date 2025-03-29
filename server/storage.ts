@@ -231,7 +231,9 @@ export class MemStorage implements IStorage {
     // Update game's high score if necessary
     const game = await this.getGame(score.gameId);
     if (game && score.score > (game.currentHighScore || 0)) {
-      await this.updateGameHighScore(game.id, score.score, score.playerName, newScore.submittedAt);
+      // Ensure we have a defined Date object
+      const scoreDate = newScore.submittedAt instanceof Date ? newScore.submittedAt : new Date();
+      await this.updateGameHighScore(game.id, score.score, score.playerName, scoreDate);
     }
 
     return newScore;
