@@ -54,12 +54,12 @@ export const insertGameSchema = createInsertSchema(games).omit({
 });
 
 export const insertScoreSchema = createInsertSchema(scores).omit({ 
-  id: true,
-  submittedAt: true 
+  id: true 
 }).extend({
   phoneNumber: z.string().regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number"),
   latitude: z.number().min(-90).max(90),
   longitude: z.number().min(-180).max(180),
+  submittedAt: z.date().optional(),
 });
 
 export type Game = typeof games.$inferSelect;

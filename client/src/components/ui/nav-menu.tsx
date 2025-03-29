@@ -39,7 +39,7 @@ export default function NavMenu() {
         <div className="flex justify-around md:justify-start md:gap-4 py-2">
           {links.map(({ href, icon: Icon, label }) => (
             <Link key={href} href={href}>
-              <a
+              <div
                 className={cn(
                   "flex flex-col items-center p-2 text-sm transition-colors",
                   location === href
@@ -49,7 +49,7 @@ export default function NavMenu() {
               >
                 <Icon className="h-6 w-6" />
                 <span className="mt-1">{label}</span>
-              </a>
+              </div>
             </Link>
           ))}
         </div>

@@ -143,37 +143,42 @@ export class MemStorage implements IStorage {
       { gameId: 6, playerName: "Amanda R.", score: 98740, phoneNumber: "+15556789012", imageUrl: "https://example.com/scores/35.jpg", latitude: 44.0507, longitude: -91.6393, submittedAt: new Date("2025-01-18T13:15:00") }, // Saturday
     ];
 
-    sampleScores.forEach(score => this.addScore(score));
+    // Group scores by game to find the highest score for each game
+    const gameHighScores = new Map<number, {score: number, playerName: string, date: Date}>();
+    
+    // Find the highest score for each game
+    sampleScores.forEach(score => {
+      const currentHighScore = gameHighScores.get(score.gameId);
+      if (!currentHighScore || score.score > currentHighScore.score) {
+        gameHighScores.set(score.gameId, {
+          score: score.score,
+          playerName: score.playerName,
+          date: score.submittedAt
+        });
+      }
+    });
+    
+    // Initialize with sample high scores while preserving their original dates
+    sampleScores.forEach(score => {
+      // Save the original submittedAt date
+      const originalDate = score.submittedAt;
+      
+      // Add the score while keeping its original date
+      this.addScore({
+        ...score,
+        submittedAt: originalDate
+      });
+    });
+    
+    // Set the highest scores for each game with their correct dates
+    gameHighScores.forEach((highScore, gameId) => {
+      this.updateGameHighScore(gameId, highScore.score, highScore.playerName, highScore.date);
+    });
   }
 
   async getAllGames(): Promise<Game[]> {
-    const gamesWithTopScores = await Promise.all(
-      Array.from(this.games.values()).map(async (game) => {
-        const scores = Array.from(this.scores.values()).filter(score => score.gameId === game.id);
-        
-        if (scores.length === 0) {
-          return {
-            ...game,
-            currentHighScore: 0,
-            topScorerName: null,
-            topScoreDate: null
-          };
-        }
-
-        // Using a proper type and initial value to avoid TypeScript errors
-        const topScore = scores.reduce((max, score) => 
-          score.score > max.score ? score : max, scores[0]
-        );
-
-        return {
-          ...game,
-          currentHighScore: topScore.score,
-          topScorerName: topScore.playerName,
-          topScoreDate: topScore.submittedAt
-        };
-      })
-    );
-    return gamesWithTopScores;
+    // Just return the games as they are, their high scores are already updated
+    return Array.from(this.games.values());
   }
 
   async getGame(id: number): Promise<Game | undefined> {
@@ -193,7 +198,7 @@ export class MemStorage implements IStorage {
     return newGame;
   }
 
-  async updateGameHighScore(id: number, score: number, playerName: string): Promise<Game> {
+  async updateGameHighScore(id: number, score: number, playerName: string, date?: Date): Promise<Game> {
     const game = await this.getGame(id);
     if (!game) throw new Error("Game not found");
 
@@ -201,7 +206,7 @@ export class MemStorage implements IStorage {
       ...game,
       currentHighScore: score,
       topScorerName: playerName,
-      topScoreDate: new Date()
+      topScoreDate: date || new Date()
     };
     this.games.set(id, updatedGame);
     return updatedGame;
@@ -218,14 +223,15 @@ export class MemStorage implements IStorage {
     const newScore: Score = {
       ...score,
       id,
-      submittedAt: new Date()
+      // Only use current date if submittedAt is not already provided
+      submittedAt: score.submittedAt || new Date()
     };
     this.scores.set(id, newScore);
 
     // Update game's high score if necessary
     const game = await this.getGame(score.gameId);
     if (game && score.score > (game.currentHighScore || 0)) {
-      await this.updateGameHighScore(game.id, score.score, score.playerName);
+      await this.updateGameHighScore(game.id, score.score, score.playerName, newScore.submittedAt);
     }
 
     return newScore;
