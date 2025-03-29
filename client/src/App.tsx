@@ -9,6 +9,7 @@ import SubmitScore from "@/pages/submit-score";
 import Leaderboard from "@/pages/leaderboard";
 import Admin from "@/pages/admin";
 import NotFound from "@/pages/not-found";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 function Router() {
   return (
@@ -32,7 +33,9 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router />
+      <ThemeProvider>
+        <Router />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

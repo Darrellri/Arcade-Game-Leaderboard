@@ -40,16 +40,14 @@ export class MemStorage implements IStorage {
         radius: 0.75
       },
       themePresets: [
-        { name: "Purple Glow", primary: "hsl(280, 100%, 50%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
-        { name: "Ocean Blue", primary: "hsl(210, 100%, 50%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
-        { name: "Forest Green", primary: "hsl(150, 100%, 40%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
-        { name: "Sunset Orange", primary: "hsl(20, 100%, 50%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
-        { name: "Berry Red", primary: "hsl(350, 100%, 50%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
-        { name: "Professional Blue", primary: "hsl(220, 70%, 50%)", variant: "professional", appearance: "dark", radius: 0.75 },
-        { name: "Professional Green", primary: "hsl(160, 70%, 40%)", variant: "professional", appearance: "dark", radius: 0.75 },
-        { name: "Professional Purple", primary: "hsl(270, 70%, 50%)", variant: "professional", appearance: "dark", radius: 0.75 },
-        { name: "Soft Teal", primary: "hsl(180, 70%, 50%)", variant: "tint", appearance: "light", radius: 0.75 },
-        { name: "Soft Rose", primary: "hsl(330, 70%, 50%)", variant: "tint", appearance: "light", radius: 0.75 }
+        { name: "Arcade Purple", primary: "hsl(280, 100%, 50%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
+        { name: "Neon Blue", primary: "hsl(210, 100%, 50%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
+        { name: "Electric Green", primary: "hsl(140, 100%, 45%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
+        { name: "Hot Pink", primary: "hsl(330, 100%, 50%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
+        { name: "Cyber Yellow", primary: "hsl(50, 100%, 50%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
+        { name: "Crimson Red", primary: "hsl(0, 100%, 50%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
+        { name: "Turquoise", primary: "hsl(175, 80%, 40%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
+        { name: "Magenta", primary: "hsl(300, 100%, 45%)", variant: "vibrant", appearance: "dark", radius: 0.75 }
       ]
     };
 

@@ -34,9 +34,11 @@ import { venueSettingsSchema, type VenueSettings, type Game } from "@shared/sche
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Palette, Upload, Gamepad2, CircleDot, Image } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function Admin() {
   const { toast } = useToast();
+  const { updateTheme } = useTheme();
   const [selectedScheme, setSelectedScheme] = useState<number | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
 
@@ -133,7 +135,15 @@ export default function Admin() {
     const newTheme = settings.themePresets[index];
     setSelectedScheme(index);
     
-    // Update the theme in storage
+    // Update the theme object for real-time UI changes
+    updateTheme({
+      primary: newTheme.primary,
+      variant: newTheme.variant,
+      appearance: newTheme.appearance,
+      radius: newTheme.radius
+    });
+    
+    // Also update the theme in storage
     updateSettings.mutate({ 
       theme: {
         primary: newTheme.primary,
