@@ -64,11 +64,13 @@ export default function GameCard({ game }: GameCardProps) {
                 </div>
               )}
             </div>
-            <div className="flex gap-2">
-              <ShareScore game={game} variant="outline" />
+            <div className="flex flex-col gap-2 mt-2">
               <Link href={`/leaderboard/${game.id}`}>
-                <Button variant="secondary">View Scores</Button>
+                <Button variant="secondary" className="w-full">View Scores</Button>
               </Link>
+              <div className="flex justify-end">
+                <ShareScore game={game} variant="ghost" size="sm" />
+              </div>
             </div>
           </div>
         </div>
