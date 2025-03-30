@@ -16,15 +16,9 @@ import {
 import { Gamepad2, Grid2X2, List, CircleDot } from "lucide-react";
 import { TrophyIcon } from "../components/trophy-icon";
 
-type ViewMode = "table" | "grid" | "list";
+import { formatDate } from "@/lib/formatters";
 
-function formatDate(date: Date) {
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-}
+type ViewMode = "table" | "grid" | "list";
 
 function formatTime(date: Date) {
   const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });

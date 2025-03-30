@@ -24,15 +24,9 @@ import type { Game, Score } from "@shared/schema";
 import ShareScore from "@/components/share-score";
 import { TrophyIcon } from "../components/trophy-icon"; // Added import
 
-type ViewMode = "table" | "grid" | "list";
+import { formatDate } from "@/lib/formatters";
 
-function formatDate(date: Date) {
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
-}
+type ViewMode = "table" | "grid" | "list";
 
 function formatTime(date: Date) {
   const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
