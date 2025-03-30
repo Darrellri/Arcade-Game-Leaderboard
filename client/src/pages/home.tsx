@@ -1,12 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "wouter";
-import GameCard from "@/components/game-card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import { Grid2X2, List, TableIcon, Gamepad2, CircleDot } from "lucide-react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import type { Game } from "@shared/schema";
+import { Game } from "@shared/schema";
+import { apiURL } from "../lib/api";
+import { formatDate, formatTime } from "../lib/format";
+import { Button } from "../components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../components/ui/table";
+import { Gamepad2, Grid2X2, List, CircleDot } from "lucide-react";
+import { TrophyIcon } from "../components/trophy-icon";
 
 type ViewMode = "table" | "grid" | "list";
 
@@ -46,6 +54,23 @@ export default function Home() {
     );
   }
 
+  //Process games data to find the highest score for each game.
+  const processedGames = games.map(game => {
+    const scores = game.scores || [];
+    if (scores.length === 0) return {...game, topScore: 0, topScorerName: 'No scores yet', topScoreDate: null};
+
+    const highestScore = scores.reduce((max, score) => Math.max(max, score.score), 0);
+    const topScoreEntry = scores.find(score => score.score === highestScore);
+
+    return {
+      ...game,
+      topScore: highestScore,
+      topScorerName: topScoreEntry?.playerName || 'No scores yet',
+      topScoreDate: topScoreEntry?.date
+    };
+  });
+
+
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
@@ -77,7 +102,7 @@ export default function Home() {
 
       {viewMode === "grid" ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {games?.map((game) => (
+          {processedGames?.map((game) => (
             <GameCard key={game.id} game={game} />
           ))}
         </div>
@@ -85,18 +110,15 @@ export default function Home() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-[100px]">Type</TableHead>
               <TableHead>Game</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Top Score</TableHead>
-              <TableHead>Top Score by</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead className="text-right">Action</TableHead>
+              <TableHead className="text-right">Top Score</TableHead>
+              <TableHead className="text-right w-[100px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {games?.map((game) => (
+            {processedGames?.map((game) => (
               <TableRow key={game.id}>
-                <TableCell className="uppercase">{game.name}</TableCell>
                 <TableCell>
                   {game.type === 'pinball' ? (
                     <CircleDot className="h-4 w-4 text-primary" />
@@ -104,6 +126,7 @@ export default function Home() {
                     <Gamepad2 className="h-4 w-4 text-primary" />
                   )}
                 </TableCell>
+                <TableCell className="uppercase">{game.name}</TableCell>
                 <TableCell>
                   <div className="flex items-center justify-end gap-2">
                     <div className="inline-flex items-center justify-center p-1 bg-yellow-500/20 text-yellow-500 rounded-full">
@@ -120,7 +143,7 @@ export default function Home() {
                       </svg>
                     </div>
                     <span className="font-mono text-yellow-500 font-bold">
-                      {(game.currentHighScore || 0).toLocaleString()}
+                      {(game.topScore || 0).toLocaleString()}
                     </span>
                   </div>
                 </TableCell>
@@ -146,7 +169,7 @@ export default function Home() {
         </Table>
       ) : (
         <div className="space-y-2">
-          {games?.map((game) => (
+          {processedGames?.map((game) => (
             <div
               key={game.id}
               className="flex items-center justify-between p-4 bg-card rounded-lg"
@@ -175,7 +198,7 @@ export default function Home() {
               <div className="flex items-center gap-4">
                 <div className="text-right">
                   <div className="font-mono">
-                    {(game.currentHighScore || 0).toLocaleString()}
+                    {(game.topScore || 0).toLocaleString()}
                   </div>
                   <div className="text-sm text-muted-foreground">Top Score</div>
                 </div>

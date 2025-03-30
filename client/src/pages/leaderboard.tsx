@@ -22,6 +22,7 @@ import { Grid2X2, List, TableIcon } from "lucide-react";
 import { useState } from "react";
 import type { Game, Score } from "@shared/schema";
 import ShareScore from "@/components/share-score";
+import { TrophyIcon } from "../components/trophy-icon"; // Added import
 
 type ViewMode = "table" | "grid" | "list";
 
@@ -40,7 +41,7 @@ function formatTime(date: Date) {
     minute: '2-digit', 
     hour12: true 
   }).toLowerCase().replace(' ', '');
-  
+
   return `${dayName}, ${time}`;
 }
 
@@ -246,7 +247,8 @@ export default function Leaderboard() {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="text-xl font-mono">
+                <div className="text-xl font-mono flex items-center gap-1"> {/* Added trophy icon */}
+                  {index === 0 && <TrophyIcon size={20} />}
                   {score.score.toLocaleString()}
                 </div>
                 <ShareScore game={game} score={score} size="sm" variant="outline" />
