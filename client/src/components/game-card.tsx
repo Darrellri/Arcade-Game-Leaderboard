@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { Trophy, Gamepad2, CircleDot, Calendar } from "lucide-react";
 import type { Game } from "@shared/schema";
 import ShareScore from "@/components/share-score";
+import GameMarquee from "@/components/game-marquee";
 
 import { formatDate, formatTime } from "@/lib/formatters";
 
@@ -14,6 +15,7 @@ interface GameCardProps {
 export default function GameCard({ game }: GameCardProps) {
   return (
     <Card className="overflow-hidden flex flex-col">
+      <GameMarquee game={game} />
       <CardContent className="grid gap-4 pt-6 flex-1">
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2">

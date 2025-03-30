@@ -16,6 +16,7 @@ import {
 import { Gamepad2, Grid2X2, List, CircleDot, Table as TableIcon } from "lucide-react";
 
 import { formatDate, formatTime } from "@/lib/formatters";
+import { MARQUEE_IMAGES } from "@/components/game-marquee";
 
 type ViewMode = "table" | "grid" | "list";
 
@@ -90,6 +91,8 @@ export default function Home() {
               <TableHead className="w-[100px]">Type</TableHead>
               <TableHead>Game</TableHead>
               <TableHead className="text-right">Top Score</TableHead>
+              <TableHead>Player</TableHead>
+              <TableHead>Date</TableHead>
               <TableHead className="text-right w-[100px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -103,7 +106,22 @@ export default function Home() {
                     <Gamepad2 className="h-4 w-4 text-primary" />
                   )}
                 </TableCell>
-                <TableCell className="uppercase">{game.name}</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-3">
+                    <div className="w-[90px] h-[24px] relative overflow-hidden rounded">
+                      <div className="absolute inset-0 bg-black/50"></div>
+                      <img 
+                        src={
+                          MARQUEE_IMAGES[game.name] ||
+                          "https://drive.google.com/uc?export=view&id=16M3SJLpFQKxO1wEI36V_UMEFFGBqR4Ta"
+                        }
+                        alt={game.name}
+                        className="w-full h-full object-cover opacity-70"
+                      />
+                    </div>
+                    <span className="uppercase font-medium">{game.name}</span>
+                  </div>
+                </TableCell>
                 <TableCell>
                   <div className="flex items-center justify-end gap-2">
                     <div className="inline-flex items-center justify-center p-1 bg-yellow-500/20 text-yellow-500 rounded-full">
@@ -152,13 +170,23 @@ export default function Home() {
               className="flex items-center justify-between p-4 bg-card rounded-lg"
             >
               <div>
-                <div className="flex items-center gap-2">
-                  {game.type === 'pinball' ? (
-                    <CircleDot className="h-4 w-4 text-primary" />
-                  ) : (
-                    <Gamepad2 className="h-4 w-4 text-primary" />
-                  )}
-                  <span className="font-medium uppercase">{game.name}</span>
+                <div className="flex items-center gap-3">
+                  <div className="w-[80px] h-[21px] relative overflow-hidden rounded flex-shrink-0">
+                    <div className="absolute inset-0 bg-black/50"></div>
+                    <img 
+                      src={MARQUEE_IMAGES[game.name] || "https://drive.google.com/uc?export=view&id=16M3SJLpFQKxO1wEI36V_UMEFFGBqR4Ta"}
+                      alt={game.name}
+                      className="w-full h-full object-cover opacity-70"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {game.type === 'pinball' ? (
+                      <CircleDot className="h-4 w-4 text-primary" />
+                    ) : (
+                      <Gamepad2 className="h-4 w-4 text-primary" />
+                    )}
+                    <span className="font-medium uppercase">{game.name}</span>
+                  </div>
                 </div>
                 <div className="text-sm text-muted-foreground">
                   Top Score by: {game.topScorerName || 'No scores yet'}
