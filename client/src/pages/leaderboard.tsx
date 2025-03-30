@@ -25,7 +25,7 @@ import ShareScore from "@/components/share-score";
 import { TrophyIcon } from "@/components/trophy-icon";
 
 import { formatDate, formatTime } from "@/lib/formatters";
-import { MARQUEE_IMAGES } from "@/components/game-marquee";
+import GameMarquee from "@/components/game-marquee";
 
 type ViewMode = "table" | "grid" | "list";
 
@@ -51,12 +51,8 @@ export default function Leaderboard() {
   return (
     <div className="space-y-8">
       {/* Game Marquee Display */}
-      <div className="w-full h-[214px] relative overflow-hidden rounded-lg mb-6">
-        <img 
-          src={MARQUEE_IMAGES[game.name] || "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-arcade.jpg"}
-          alt={`${game.name} marquee`}
-          className="w-full h-full object-cover"
-        />
+      <div className="relative mb-6">
+        <GameMarquee game={game} className="rounded-lg" />
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
           <div className="flex justify-between items-center">
             <div>
