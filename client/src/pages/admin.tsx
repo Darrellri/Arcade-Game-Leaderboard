@@ -33,13 +33,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { venueSettingsSchema, type VenueSettings, type Game } from "@shared/schema";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Palette, Upload, Gamepad2, CircleDot, Image } from "lucide-react";
-import { useTheme } from "../contexts/ThemeContext";
+import { Gamepad2, CircleDot, Image } from "lucide-react";
 
 export default function Admin() {
   const { toast } = useToast();
-  const { updateTheme } = useTheme();
-  const [selectedScheme, setSelectedScheme] = useState<number | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
 
   // Fetch venue settings
@@ -71,16 +68,7 @@ export default function Admin() {
     if (settings) {
       form.reset(settings);
       setLogoPreview(settings.logoUrl || null);
-      
-      // Find the current theme in presets
-      if (settings.themePresets) {
-        const currentThemeIndex = settings.themePresets.findIndex(
-          preset => preset.primary === settings.theme.primary && preset.variant === settings.theme.variant
-        );
-        if (currentThemeIndex !== -1) {
-          setSelectedScheme(currentThemeIndex);
-        }
-      }
+      // Theme functionality removed
     }
   }, [settings, form]);
 
@@ -128,31 +116,7 @@ export default function Admin() {
     },
   });
 
-  // Handle theme switching
-  const handleThemeSwitch = (index: number) => {
-    if (!settings?.themePresets) return;
-    
-    const newTheme = settings.themePresets[index];
-    setSelectedScheme(index);
-    
-    // Update the theme object for real-time UI changes
-    updateTheme({
-      primary: newTheme.primary,
-      variant: newTheme.variant,
-      appearance: newTheme.appearance,
-      radius: newTheme.radius
-    });
-    
-    // Also update the theme in storage
-    updateSettings.mutate({ 
-      theme: {
-        primary: newTheme.primary,
-        variant: newTheme.variant,
-        appearance: newTheme.appearance,
-        radius: newTheme.radius
-      } 
-    });
-  };
+  // Theme switching functionality removed
 
   // Handle logo URL change
   const handleLogoUrlChange = (url: string) => {
@@ -334,30 +298,7 @@ export default function Admin() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {/* Horizontal Theme Switcher */}
-              {settings?.themePresets && (
-                <div className="mb-6">
-                  <div className="text-sm font-medium mb-2 flex items-center gap-2">
-                    <Palette className="h-4 w-4" />
-                    <span>Theme Switcher</span>
-                  </div>
-                  <div className="flex gap-2 flex-wrap">
-                    {settings.themePresets.map((preset, index) => (
-                      <button
-                        key={preset.name}
-                        onClick={() => handleThemeSwitch(index)}
-                        className={`w-10 h-10 rounded-full border transition-all ${
-                          selectedScheme === index
-                            ? "ring-2 ring-primary ring-offset-2 border-primary"
-                            : "border-border hover:border-primary"
-                        }`}
-                        style={{ backgroundColor: preset.primary }}
-                        title={preset.name}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
+              {/* Theme Switcher removed to improve stability */}
               
               {gamesLoading ? (
                 <div>Loading games...</div>
