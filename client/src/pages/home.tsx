@@ -5,7 +5,7 @@ import GameCard from "@/components/game-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Grid2X2, List, TableIcon, Gamepad2, CircleDot } from "lucide-react";
-import { Table, TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { Game } from "@shared/schema";
 
 type ViewMode = "table" | "grid" | "list";
