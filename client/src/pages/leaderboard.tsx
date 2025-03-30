@@ -126,9 +126,32 @@ export default function Leaderboard() {
           <TableBody>
             {sortedScores.map((score, index) => (
               <TableRow key={score.id}>
-                <TableCell className="font-bold">#{index + 1}</TableCell>
+                <TableCell className="font-bold">
+                  {index === 0 ? (
+                    <div className="flex items-center gap-2">
+                      <span className="inline-flex items-center justify-center p-1 bg-yellow-500/20 text-yellow-500 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500">
+                          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                          <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                          <path d="M4 22h16"></path>
+                          <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                          <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                          <path d="M9 2v7.5"></path>
+                          <path d="M15 2v7.5"></path>
+                          <path d="M12 2v10"></path>
+                          <path d="M12 12a4 4 0 0 0 4-4V6H8v2a4 4 0 0 0 4 4Z"></path>
+                        </svg>
+                      </span>
+                      <span>CHAMPION</span>
+                    </div>
+                  ) : (
+                    `#${index + 1}`
+                  )}
+                </TableCell>
                 <TableCell>{score.playerName}</TableCell>
-                <TableCell>{score.score.toLocaleString()}</TableCell>
+                <TableCell className={index === 0 ? "font-bold text-yellow-500" : ""}>
+                  {score.score.toLocaleString()}
+                </TableCell>
                 <TableCell>
                   {formatDate(new Date(score.submittedAt!))}
                   <span className="text-muted-foreground italic ml-2">
@@ -145,11 +168,30 @@ export default function Leaderboard() {
       ) : viewMode === "grid" ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {sortedScores.map((score, index) => (
-            <Card key={score.id}>
+            <Card key={score.id} className={index === 0 ? "border-2 border-yellow-500" : ""}>
               <CardContent className="pt-6">
-                <div className="text-2xl font-bold mb-2">#{index + 1}</div>
+                {index === 0 ? (
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="inline-flex items-center justify-center p-1.5 bg-yellow-500/20 text-yellow-500 rounded-full">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500">
+                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                        <path d="M4 22h16"></path>
+                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                        <path d="M9 2v7.5"></path>
+                        <path d="M15 2v7.5"></path>
+                        <path d="M12 2v10"></path>
+                        <path d="M12 12a4 4 0 0 0 4-4V6H8v2a4 4 0 0 0 4 4Z"></path>
+                      </svg>
+                    </div>
+                    <div className="text-2xl font-bold text-yellow-500">CHAMPION</div>
+                  </div>
+                ) : (
+                  <div className="text-2xl font-bold mb-2">#{index + 1}</div>
+                )}
                 <div className="text-xl">{score.playerName}</div>
-                <div className="text-3xl font-mono mt-2">
+                <div className={`text-3xl font-mono mt-2 ${index === 0 ? "text-yellow-500" : ""}`}>
                   {score.score.toLocaleString()}
                 </div>
                 <div className="text-sm text-muted-foreground mt-2">
@@ -173,9 +215,28 @@ export default function Leaderboard() {
               className="flex items-center justify-between p-4 bg-card rounded-lg"
             >
               <div className="flex items-center gap-4">
-                <div className="text-xl font-bold">#{index + 1}</div>
+                {index === 0 ? (
+                  <div className="flex items-center gap-2">
+                    <div className="inline-flex items-center justify-center p-1 bg-yellow-500/20 text-yellow-500 rounded-full">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500">
+                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                        <path d="M4 22h16"></path>
+                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                        <path d="M9 2v7.5"></path>
+                        <path d="M15 2v7.5"></path>
+                        <path d="M12 2v10"></path>
+                        <path d="M12 12a4 4 0 0 0 4-4V6H8v2a4 4 0 0 0 4 4Z"></path>
+                      </svg>
+                    </div>
+                    <span className="text-xl font-bold text-yellow-500">CHAMPION</span>
+                  </div>
+                ) : (
+                  <div className="text-xl font-bold">#{index + 1}</div>
+                )}
                 <div>
-                  <div className="font-medium">{score.playerName}</div>
+                  <div className={`font-medium ${index === 0 ? "text-yellow-500" : ""}`}>{score.playerName}</div>
                   <div className="text-sm text-muted-foreground">
                     {formatDate(new Date(score.submittedAt!))}
                     <span className="italic ml-2">

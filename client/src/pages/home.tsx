@@ -5,7 +5,7 @@ import GameCard from "@/components/game-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Grid2X2, List, TableIcon, Gamepad2, CircleDot } from "lucide-react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@/components/ui/table";
 import type { Game } from "@shared/schema";
 
 type ViewMode = "table" | "grid" | "list";
@@ -25,7 +25,7 @@ function formatTime(date: Date) {
     minute: '2-digit', 
     hour12: true 
   }).toLowerCase().replace(' ', '');
-  
+
   return `${dayName}, ${time}`;
 }
 
@@ -104,7 +104,26 @@ export default function Home() {
                     <Gamepad2 className="h-4 w-4 text-primary" />
                   )}
                 </TableCell>
-                <TableCell>{(game.currentHighScore || 0).toLocaleString()}</TableCell>
+                <TableCell>
+                  <div className="flex items-center justify-end gap-2">
+                    <div className="inline-flex items-center justify-center p-1 bg-yellow-500/20 text-yellow-500 rounded-full">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                        <path d="M4 22h16"></path>
+                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                        <path d="M9 2v7.5"></path>
+                        <path d="M15 2v7.5"></path>
+                        <path d="M12 2v10"></path>
+                        <path d="M12 12a4 4 0 0 0 4-4V6H8v2a4 4 0 0 0 4 4Z"></path>
+                      </svg>
+                    </div>
+                    <span className="font-mono text-yellow-500 font-bold">
+                      {(game.currentHighScore || 0).toLocaleString()}
+                    </span>
+                  </div>
+                </TableCell>
                 <TableCell>{game.topScorerName || 'No scores yet'}</TableCell>
                 <TableCell>
                   {game.topScoreDate ? (
