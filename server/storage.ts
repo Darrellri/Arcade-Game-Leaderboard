@@ -51,36 +51,36 @@ export class MemStorage implements IStorage {
       ]
     };
 
-    // Initialize with sample games
+    // Initialize with sample games using local images
     const sampleGames: InsertGame[] = [
       {
         name: "X-Men Pinball",
-        imageUrl: "https://axeandarcade.com/wp-content/uploads/2024/03/xmen-marquee-792x214.jpg",
+        imageUrl: "/images/marquees/xmen.svg",
         type: "pinball"
       },
       {
         name: "Godzilla Pinball",
-        imageUrl: "https://axeandarcade.com/wp-content/uploads/2024/03/godzilla-marquee-792x214.jpg",
+        imageUrl: "/images/marquees/godzilla.jpg",
         type: "pinball"
       },
       {
         name: "STAR WARS TRILOGY",
-        imageUrl: "https://axeandarcade.com/wp-content/uploads/2024/03/starwars-marquee-792x214.jpg",
+        imageUrl: "/images/marquees/starwars.svg",
         type: "arcade"
       },
       {
         name: "Asteroids",
-        imageUrl: "https://axeandarcade.com/wp-content/uploads/2024/03/asteroids-marquee-792x214.jpg",
+        imageUrl: "/images/marquees/asteroids.svg",
         type: "arcade"
       },
       {
         name: "Marble Madness",
-        imageUrl: "https://axeandarcade.com/wp-content/uploads/2024/03/marblemadness-marquee-792x214.jpg",
+        imageUrl: "/images/marquees/marblemadness.svg",
         type: "arcade"
       },
       {
         name: "Big Buck Hunter Reloaded",
-        imageUrl: "https://axeandarcade.com/wp-content/uploads/2024/03/bigbuckhunter-marquee-792x214.jpg",
+        imageUrl: "/images/marquees/bigbuckhunter.svg",
         type: "arcade"
       }
     ];
