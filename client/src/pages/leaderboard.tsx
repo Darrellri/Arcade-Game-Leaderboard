@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "wouter";
+import { useParams, Link } from "wouter";
 import {
   Table,
   TableBody,
@@ -65,9 +65,21 @@ export default function Leaderboard() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-4xl font-bold tracking-tight uppercase">{game.name}</h1>
-        <p className="text-muted-foreground mt-2">Top Scores</p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-4xl font-bold tracking-tight uppercase">{game.name}</h1>
+          <p className="text-muted-foreground mt-2">Top Scores</p>
+        </div>
+        <Button variant="outline" asChild>
+          <Link href="/">
+            <span className="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                <path d="m15 18-6-6 6-6"/>
+              </svg>
+              Back
+            </span>
+          </Link>
+        </Button>
       </div>
 
       <div className="flex gap-2 mb-4">
