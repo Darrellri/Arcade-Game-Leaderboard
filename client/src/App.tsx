@@ -9,9 +9,12 @@ import SubmitScore from "@/pages/submit-score";
 import Leaderboard from "@/pages/leaderboard";
 import Admin from "@/pages/admin";
 import NotFound from "@/pages/not-found";
-import { ThemeProvider } from "./contexts/ThemeContext";
+import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 
 function Router() {
+  // Force the router to re-render when theme changes
+  const { theme } = useTheme();
+  
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <main className="container mx-auto px-4 py-8 flex-grow pb-24 md:pb-8">

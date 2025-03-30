@@ -34,7 +34,7 @@ import { venueSettingsSchema, type VenueSettings, type Game } from "@shared/sche
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Palette, Upload, Gamepad2, CircleDot, Image } from "lucide-react";
-import { useTheme } from "@/contexts/ThemeContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 export default function Admin() {
   const { toast } = useToast();
