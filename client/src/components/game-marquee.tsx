@@ -9,7 +9,7 @@ interface GameMarqueeProps {
 // Map of game names to their marquee image URLs
 export const MARQUEE_IMAGES: Record<string, string> = {
   "X-Men Pinball": "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/xmen.jpg",
-  "Godzilla": "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/godzilla.jpg",
+  "Godzilla": "/images/godzilla.jpg",
   "Star Wars": "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/starwars.jpg",
   "Asteroids": "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/asteroids.jpg",
   // Fallback images for other games
