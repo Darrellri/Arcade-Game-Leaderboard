@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "wouter";
 import { Game } from "@shared/schema";
-import { apiURL } from "../lib/api";
-import { formatDate, formatTime } from "../lib/format";
-import { Button } from "../components/ui/button";
+import { Button } from "@/components/ui/button";
+import GameCard from "@/components/game-card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -12,24 +12,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../components/ui/table";
-import { Gamepad2, Grid2X2, List, CircleDot } from "lucide-react";
-import { TrophyIcon } from "../components/trophy-icon";
+} from "@/components/ui/table";
+import { Gamepad2, Grid2X2, List, CircleDot, Table as TableIcon } from "lucide-react";
 
-import { formatDate } from "@/lib/formatters";
+import { formatDate, formatTime } from "@/lib/formatters";
 
 type ViewMode = "table" | "grid" | "list";
-
-function formatTime(date: Date) {
-  const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
-  const time = date.toLocaleTimeString('en-US', { 
-    hour: 'numeric', 
-    minute: '2-digit', 
-    hour12: true 
-  }).toLowerCase().replace(' ', '');
-
-  return `${dayName}, ${time}`;
-}
 
 export default function Home() {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
@@ -48,21 +36,16 @@ export default function Home() {
     );
   }
 
-  //Process games data to find the highest score for each game.
-  const processedGames = games.map(game => {
-    const scores = game.scores || [];
-    if (scores.length === 0) return {...game, topScore: 0, topScorerName: 'No scores yet', topScoreDate: null};
-
-    const highestScore = scores.reduce((max, score) => Math.max(max, score.score), 0);
-    const topScoreEntry = scores.find(score => score.score === highestScore);
-
+  // Process games data to determine the top scores
+  const processedGames = games?.map(game => {
+    // Game already contains the information we need
     return {
       ...game,
-      topScore: highestScore,
-      topScorerName: topScoreEntry?.playerName || 'No scores yet',
-      topScoreDate: topScoreEntry?.date
+      topScore: game.currentHighScore || 0,
+      topScorerName: game.topScorerName || 'No scores yet',
+      topScoreDate: game.topScoreDate
     };
-  });
+  }) || [];
 
 
   return (

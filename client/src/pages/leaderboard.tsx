@@ -22,22 +22,11 @@ import { Grid2X2, List, TableIcon } from "lucide-react";
 import { useState } from "react";
 import type { Game, Score } from "@shared/schema";
 import ShareScore from "@/components/share-score";
-import { TrophyIcon } from "../components/trophy-icon"; // Added import
+import { TrophyIcon } from "@/components/trophy-icon";
 
-import { formatDate } from "@/lib/formatters";
+import { formatDate, formatTime } from "@/lib/formatters";
 
 type ViewMode = "table" | "grid" | "list";
-
-function formatTime(date: Date) {
-  const dayName = date.toLocaleDateString('en-US', { weekday: 'long' });
-  const time = date.toLocaleTimeString('en-US', { 
-    hour: 'numeric', 
-    minute: '2-digit', 
-    hour12: true 
-  }).toLowerCase().replace(' ', '');
-
-  return `${dayName}, ${time}`;
-}
 
 export default function Leaderboard() {
   const { gameId } = useParams();
