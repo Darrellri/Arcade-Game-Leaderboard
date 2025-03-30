@@ -8,16 +8,18 @@ interface GameMarqueeProps {
 
 // Map of game names to their marquee image URLs
 export const MARQUEE_IMAGES: Record<string, string> = {
-  "X-Men Pinball": "https://drive.google.com/uc?export=view&id=16M3SJLpFQKxO1wEI36V_UMEFFGBqR4Ta",
-  "Godzilla": "https://drive.google.com/uc?export=view&id=1H7DFE_zJfRJMHdUMcI_RqVcL1lTEkfT-",
-  "Star Wars": "https://drive.google.com/uc?export=view&id=12IwHpaxe9JyHJCQlHu8nj4I91gQQrN0H",
-  "NASCAR": "https://drive.google.com/uc?export=view&id=1QMiWx9vNhJbevLo2QxpLXZWndkSixbVk",
-  "The Simpsons": "https://drive.google.com/uc?export=view&id=1WbQf8N-OA7I66V5RgxWGTwjgLrXGEDZ3",
-  "Addams Family": "https://drive.google.com/uc?export=view&id=1qVt6A1I_iCatgLVEZ6GbfV-wnJffS-0y",
-  "Mortal Kombat": "https://drive.google.com/uc?export=view&id=1QvC5zdUcmI_lJppnj-uUAM_G1P9OEj-1",
-  "NBA Jam": "https://drive.google.com/uc?export=view&id=1mZUwO0WuRmQpHgzjxEzKwFwUDJcwFqn0",
-  "Terminator 2": "https://drive.google.com/uc?export=view&id=1JU_A4nTJNGp9cXbUDdoxnVSNQbLRd5vF",
-  "Ms. Pac-Man": "https://drive.google.com/uc?export=view&id=1ZbQ-H8f9vF-S-8CAVXKSIpxMoUwO7RB3",
+  "X-Men Pinball": "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/xmen.jpg",
+  "Godzilla": "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/godzilla.jpg",
+  "Star Wars": "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/starwars.jpg",
+  "Asteroids": "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/asteroids.jpg",
+  // Fallback images for other games
+  "NASCAR": "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-pinball.jpg",
+  "The Simpsons": "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-pinball.jpg",
+  "Addams Family": "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-pinball.jpg",
+  "Mortal Kombat": "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-arcade.jpg",
+  "NBA Jam": "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-arcade.jpg",
+  "Terminator 2": "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-arcade.jpg",
+  "Ms. Pac-Man": "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-arcade.jpg",
 };
 
 export default function GameMarquee({ game, className }: GameMarqueeProps) {

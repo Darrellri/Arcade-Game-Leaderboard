@@ -113,7 +113,7 @@ export default function Home() {
                       <img 
                         src={
                           MARQUEE_IMAGES[game.name] ||
-                          "https://drive.google.com/uc?export=view&id=16M3SJLpFQKxO1wEI36V_UMEFFGBqR4Ta"
+                          "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-arcade.jpg"
                         }
                         alt={game.name}
                         className="w-full h-full object-cover opacity-70"
@@ -174,7 +174,7 @@ export default function Home() {
                   <div className="w-[80px] h-[21px] relative overflow-hidden rounded flex-shrink-0">
                     <div className="absolute inset-0 bg-black/50"></div>
                     <img 
-                      src={MARQUEE_IMAGES[game.name] || "https://drive.google.com/uc?export=view&id=16M3SJLpFQKxO1wEI36V_UMEFFGBqR4Ta"}
+                      src={MARQUEE_IMAGES[game.name] || "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-arcade.jpg"}
                       alt={game.name}
                       className="w-full h-full object-cover opacity-70"
                     />

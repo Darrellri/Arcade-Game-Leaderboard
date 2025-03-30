@@ -53,7 +53,7 @@ export default function Leaderboard() {
       {/* Game Marquee Display */}
       <div className="w-full h-[214px] relative overflow-hidden rounded-lg mb-6">
         <img 
-          src={MARQUEE_IMAGES[game.name] || "https://drive.google.com/uc?export=view&id=16M3SJLpFQKxO1wEI36V_UMEFFGBqR4Ta"}
+          src={MARQUEE_IMAGES[game.name] || "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-arcade.jpg"}
           alt={`${game.name} marquee`}
           className="w-full h-full object-cover"
         />
