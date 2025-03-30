@@ -1,20 +1,16 @@
 import { useState, useEffect } from 'react';
 import type { Game } from '@shared/schema';
 
-// Create a map of game names to their image URLs
+// Get the game image URL from the game object
 function useGameImage(game: Game) {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   
   useEffect(() => {
     if (!game) return;
     
-    const gameImages: Record<string, string> = {
-      "Godzilla": "/images/marquees/godzilla.jpg",
-    };
-    
-    // If we have a custom image for this game, use it
-    if (gameImages[game.name]) {
-      setImageUrl(gameImages[game.name]);
+    // Use the imageUrl directly from the game object if available
+    if (game.imageUrl) {
+      setImageUrl(game.imageUrl);
     } else {
       // Otherwise use a fallback based on game type
       if (game.type === 'pinball') {

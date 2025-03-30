@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
 import { Game } from "@shared/schema";
-import { useGameImage } from "@/hooks/use-game-images";
 
 interface GameMarqueeProps {
   game: Game;
@@ -8,8 +7,8 @@ interface GameMarqueeProps {
 }
 
 export default function GameMarquee({ game, className }: GameMarqueeProps) {
-  // Use our hook to get the image URL
-  const imageUrl = useGameImage(game);
+  // Use the imageUrl directly from the game object
+  const imageUrl = game.imageUrl;
   
   if (imageUrl) {
     return (

@@ -25,7 +25,6 @@ import ShareScore from "@/components/share-score";
 import { TrophyIcon } from "@/components/trophy-icon";
 
 import { formatDate, formatTime } from "@/lib/formatters";
-import GameMarquee from "@/components/game-marquee";
 
 type ViewMode = "table" | "grid" | "list";
 
@@ -52,7 +51,21 @@ export default function Leaderboard() {
     <div className="space-y-8">
       {/* Game Marquee Display */}
       <div className="relative mb-6">
-        <GameMarquee game={game} className="rounded-lg" />
+        <div className="w-full h-[214px] relative overflow-hidden rounded-lg">
+          {game.imageUrl ? (
+            <img 
+              src={game.imageUrl} 
+              alt={`${game.name} marquee`}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40">
+              <h2 className="text-3xl md:text-4xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
+                {game.name}
+              </h2>
+            </div>
+          )}
+        </div>
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
           <div className="flex justify-between items-center">
             <div>

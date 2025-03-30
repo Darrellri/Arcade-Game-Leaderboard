@@ -16,7 +16,6 @@ import {
 import { Gamepad2, Grid2X2, List, CircleDot, Table as TableIcon } from "lucide-react";
 
 import { formatDate, formatTime } from "@/lib/formatters";
-import GameMarquee from "@/components/game-marquee";
 
 type ViewMode = "table" | "grid" | "list";
 
@@ -109,9 +108,13 @@ export default function Home() {
                 <TableCell>
                   <div className="flex items-center gap-3">
                     <div className="w-[90px] h-[24px] relative overflow-hidden rounded">
-                      <GameMarquee 
-                        game={game} 
-                        className="absolute inset-0 opacity-70"
+                      <div className="absolute inset-0 bg-black/50"></div>
+                      <img 
+                        src={game.imageUrl || (game.type === 'pinball' 
+                          ? "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-pinball.jpg"
+                          : "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-arcade.jpg")}
+                        alt={game.name}
+                        className="w-full h-full object-cover opacity-70"
                       />
                     </div>
                     <span className="uppercase font-medium">{game.name}</span>
@@ -167,9 +170,13 @@ export default function Home() {
               <div>
                 <div className="flex items-center gap-3">
                   <div className="w-[80px] h-[21px] relative overflow-hidden rounded flex-shrink-0">
-                    <GameMarquee 
-                      game={game} 
-                      className="absolute inset-0 opacity-70"
+                    <div className="absolute inset-0 bg-black/50"></div>
+                    <img 
+                      src={game.imageUrl || (game.type === 'pinball' 
+                        ? "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-pinball.jpg"
+                        : "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-arcade.jpg")}
+                      alt={game.name}
+                      className="w-full h-full object-cover opacity-70"
                     />
                   </div>
                   <div className="flex items-center gap-2">
