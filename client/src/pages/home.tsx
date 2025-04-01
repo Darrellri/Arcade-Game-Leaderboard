@@ -43,7 +43,7 @@ export default function Home() {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold tracking-tight">Arcade Top Scores</h1>
+        <h1 className="text-4xl font-bold tracking-tight border-2 border-primary/60 rounded-[15px] p-3">Arcade Top Scores</h1> {/* Added styling here */}
         <div className="flex gap-2">
           <Button
             variant={viewMode === "grid" ? "default" : "outline"}

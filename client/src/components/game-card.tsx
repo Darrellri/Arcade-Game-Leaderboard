@@ -31,7 +31,7 @@ export default function GameCard({ game }: GameCardProps) {
               "w-full h-full flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40 rounded-t-lg"
             )}
           >
-            <h2 className="text-2xl md:text-3xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground border-2 border-primary/60 rounded-[15px] p-2">
               {game.name}
             </h2>
           </div>
@@ -46,7 +46,9 @@ export default function GameCard({ game }: GameCardProps) {
               ) : (
                 <Gamepad2 className="h-5 w-5 text-primary flex-shrink-0" />
               )}
-              <h3 className="text-lg font-semibold uppercase truncate">{game.name}</h3>
+              <h3 className="text-lg font-semibold uppercase truncate border-2 border-primary/60 rounded-[15px] p-2">
+                {game.name}
+              </h3>
             </div>
             {game.subtitle && <p className="text-sm text-muted-foreground ml-7">{game.subtitle}</p>}
           </div>
