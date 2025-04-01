@@ -112,7 +112,7 @@ export default function Home() {
                       <img 
                         src={game.imageUrl}
                         alt={game.name}
-                        className="w-full h-full object-contain"
+                        className="w-auto h-full max-w-full object-contain"
                       />
                     </div>
                     <span className="uppercase font-medium truncate max-w-[200px]">{game.name}</span>
@@ -172,7 +172,7 @@ export default function Home() {
                     <img 
                       src={game.imageUrl}
                       alt={game.name}
-                      className="w-full h-full object-contain"
+                      className="w-auto h-full max-w-full object-contain"
                     />
                   </div>
                   <div className="flex items-center gap-2">

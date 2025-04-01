@@ -51,15 +51,17 @@ export default function Leaderboard() {
     <div className="space-y-8">
       {/* Game Marquee Display */}
       <div className="relative mb-6">
-        <div className="w-full h-[200px] relative overflow-hidden rounded-lg">
+        <div className="w-full h-[180px] relative overflow-hidden rounded-lg">
           {game.imageUrl ? (
-            <img 
-              src={game.imageUrl} 
-              alt={`${game.name} marquee`}
-              className="w-full h-full object-contain bg-black"
-            />
+            <div className="w-full h-full bg-black rounded-lg flex items-center justify-center">
+              <img 
+                src={game.imageUrl} 
+                alt={`${game.name} marquee`}
+                className="w-auto h-full max-w-full object-contain"
+              />
+            </div>
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40">
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40 rounded-lg">
               <h2 className="text-2xl md:text-3xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
                 {game.name}
               </h2>
