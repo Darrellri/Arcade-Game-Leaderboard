@@ -83,25 +83,34 @@ export default function ShareScore({
         <Button 
           variant={variant} 
           size={size} 
-          className={className}
+          className={`${className} font-medium transition-all duration-200`}
           disabled={isLoading}
         >
-          <Share2 className="h-4 w-4 mr-2" />
-          Share
+          <Share2 className="h-4 w-4 mr-2 text-primary" />
+          Share Score
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuItem onClick={shareToFacebook}>
-          <Facebook className="h-4 w-4 mr-2" />
-          Facebook
+      <DropdownMenuContent className="w-48 p-1 rounded-md shadow-lg">
+        <DropdownMenuItem 
+          onClick={shareToFacebook} 
+          className="flex items-center p-2 cursor-pointer transition-colors hover:bg-secondary rounded-sm"
+        >
+          <Facebook className="h-4 w-4 mr-2 text-blue-600" />
+          <span className="font-medium">Facebook</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={shareToTwitter}>
-          <Twitter className="h-4 w-4 mr-2" />
-          Twitter
+        <DropdownMenuItem 
+          onClick={shareToTwitter} 
+          className="flex items-center p-2 cursor-pointer transition-colors hover:bg-secondary rounded-sm"
+        >
+          <Twitter className="h-4 w-4 mr-2 text-sky-500" />
+          <span className="font-medium">Twitter</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={copyToClipboard}>
-          <LinkIcon className="h-4 w-4 mr-2" />
-          Copy Link
+        <DropdownMenuItem 
+          onClick={copyToClipboard} 
+          className="flex items-center p-2 cursor-pointer transition-colors hover:bg-secondary rounded-sm"
+        >
+          <LinkIcon className="h-4 w-4 mr-2 text-primary" />
+          <span className="font-medium">Copy Link</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

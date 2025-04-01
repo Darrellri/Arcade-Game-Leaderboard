@@ -42,25 +42,28 @@ export default function Home() {
 
   return (
     <div className="space-y-8">
-      <div className="section-header flex items-center justify-between">
+      <div className="section-header px-4 py-3 flex items-center justify-between rounded-lg mb-4">
         <h1 className="text-4xl font-bold tracking-tight">Arcade Top Scores</h1>
-        <div className="flex gap-2">
-          <Button
-            variant={viewMode === "grid" ? "default" : "outline"}
-            size="icon"
-            onClick={() => setViewMode("grid")}
-            className="transition-all duration-200"
-          >
-            <Grid2X2 className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={viewMode === "list" ? "default" : "outline"}
-            size="icon"
-            onClick={() => setViewMode("list")}
-            className="transition-all duration-200"
-          >
-            <List className="h-4 w-4" />
-          </Button>
+        <div className="flex items-center gap-4">
+          <div className="font-medium hidden md:block">View Mode</div>
+          <div className="flex gap-2">
+            <Button
+              variant={viewMode === "grid" ? "default" : "outline"}
+              size="icon"
+              onClick={() => setViewMode("grid")}
+              className="shadow-sm hover:shadow-md transition-all duration-200"
+            >
+              <Grid2X2 className="h-4 w-4" />
+            </Button>
+            <Button
+              variant={viewMode === "list" ? "default" : "outline"}
+              size="icon"
+              onClick={() => setViewMode("list")}
+              className="shadow-sm hover:shadow-md transition-all duration-200"
+            >
+              <List className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -120,8 +123,21 @@ export default function Home() {
                   </div>
                   <div className="subtitle text-right">Top Score</div>
                 </div>
-                <Button variant="secondary" asChild className="transition-colors hover:bg-secondary/90">
-                  <Link href={`/leaderboard/${game.id}`}>View Scores</Link>
+                <Button 
+                  variant="secondary" 
+                  asChild 
+                  className="shadow-sm hover:shadow-md font-medium transition-colors hover:bg-secondary/90"
+                >
+                  <Link href={`/leaderboard/${game.id}`}>
+                    <span className="flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                        <rect width="18" height="18" x="3" y="3" rx="2" />
+                        <path d="M3 9h18" />
+                        <path d="M9 21V9" />
+                      </svg>
+                      View Scores
+                    </span>
+                  </Link>
                 </Button>
               </div>
             </div>

@@ -60,13 +60,17 @@ export default function Leaderboard() {
               {game.subtitle && <p className="text-white/90 mt-1 drop-shadow-sm">{game.subtitle}</p>}
               <p className="text-white/90 mt-1 font-medium drop-shadow-sm">Top Scores</p>
             </div>
-            <Button variant="outline" asChild className="bg-white/10 hover:bg-white/30 border-white/20 text-white transition-colors duration-300">
+            <Button 
+              variant="outline" 
+              asChild 
+              className="bg-white/10 hover:bg-white/30 border-white/20 text-white transition-colors duration-300 shadow-md hover:shadow-lg font-medium"
+            >
               <Link href="/">
                 <span className="flex items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
                     <path d="m15 18-6-6 6-6"/>
                   </svg>
-                  Back
+                  Back to Games
                 </span>
               </Link>
             </Button>
@@ -74,23 +78,28 @@ export default function Leaderboard() {
         </div>
       </div>
 
-      <div className="section-header px-4 py-3 flex gap-2 rounded-lg mb-4">
-        <Button
-          variant={viewMode === "grid" ? "default" : "outline"}
-          size="icon"
-          onClick={() => setViewMode("grid")}
-          className="transition-all duration-200"
-        >
-          <Grid2X2 className="h-4 w-4" />
-        </Button>
-        <Button
-          variant={viewMode === "list" ? "default" : "outline"}
-          size="icon"
-          onClick={() => setViewMode("list")}
-          className="transition-all duration-200"
-        >
-          <List className="h-4 w-4" />
-        </Button>
+      <div className="section-header px-4 py-3 flex items-center justify-between rounded-lg mb-4">
+        <div className="font-medium text-lg">
+          View Mode
+        </div>
+        <div className="flex gap-2">
+          <Button
+            variant={viewMode === "grid" ? "default" : "outline"}
+            size="icon"
+            onClick={() => setViewMode("grid")}
+            className="shadow-sm hover:shadow-md transition-all duration-200"
+          >
+            <Grid2X2 className="h-4 w-4" />
+          </Button>
+          <Button
+            variant={viewMode === "list" ? "default" : "outline"}
+            size="icon"
+            onClick={() => setViewMode("list")}
+            className="shadow-sm hover:shadow-md transition-all duration-200"
+          >
+            <List className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
       {isLoading ? (
@@ -143,7 +152,9 @@ export default function Leaderboard() {
                   </span>
                 </div>
                 <div className="mt-4">
-                  <ShareScore game={game} score={score} variant="outline" className="w-full" />
+                  <Button variant="secondary" className="w-full font-medium shadow-sm hover:shadow-md mb-2">
+                    <ShareScore game={game} score={score} variant="secondary" className="w-full" />
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -195,13 +206,19 @@ export default function Leaderboard() {
                 <div className={`text-xl score-display flex items-center gap-1 ${index === 0 ? "champion-badge" : ""}`}>
                   {score.score.toLocaleString()}
                 </div>
-                <ShareScore 
-                  game={game} 
-                  score={score} 
+                <Button 
+                  variant="secondary" 
                   size="sm" 
-                  variant="outline" 
-                  className="transition-colors hover:bg-secondary/90"
-                />
+                  className="shadow-sm hover:shadow-md font-medium"
+                >
+                  <ShareScore 
+                    game={game} 
+                    score={score} 
+                    size="sm" 
+                    variant="secondary" 
+                    className="w-full"
+                  />
+                </Button>
               </div>
             </div>
           ))}

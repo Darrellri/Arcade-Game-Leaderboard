@@ -73,13 +73,22 @@ export default function GameCard({ game }: GameCardProps) {
                 </div>
               )}
             </div>
-            <div className="flex flex-col gap-2 mt-2">
-              <Link href={`/leaderboard/${game.id}`}>
-                <Button variant="secondary" className="w-full hover:bg-secondary/90 transition-colors">View Scores</Button>
+            <div className="flex flex-col gap-2 mt-4">
+              <Link href={`/leaderboard/${game.id}`} className="w-full">
+                <Button variant="secondary" className="w-full font-medium hover:bg-secondary/90 transition-colors shadow-sm hover:shadow-md">
+                  <span className="flex items-center gap-2 justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                      <rect width="18" height="18" x="3" y="3" rx="2" />
+                      <path d="M3 9h18" />
+                      <path d="M9 21V9" />
+                    </svg>
+                    View Scores
+                  </span>
+                </Button>
               </Link>
-              <div className="flex justify-end">
-                <ShareScore game={game} variant="ghost" size="sm" />
-              </div>
+              <Button className="w-full font-medium shadow-sm hover:shadow-md" variant="outline">
+                <ShareScore game={game} variant="ghost" size="sm" className="w-full" />
+              </Button>
             </div>
           </div>
         </div>
