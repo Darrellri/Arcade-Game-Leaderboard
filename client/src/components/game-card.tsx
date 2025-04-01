@@ -40,15 +40,10 @@ export default function GameCard({ game }: GameCardProps) {
       <CardContent className="grid gap-4 pt-6 flex-1">
         <div className="flex flex-col gap-4">
           <div>
-            <div className="flex items-center gap-2">
-              {game.type === 'pinball' ? (
-                <CircleDot className="h-5 w-5 text-primary flex-shrink-0" />
-              ) : (
-                <Gamepad2 className="h-5 w-5 text-primary flex-shrink-0" />
-              )}
+            <div className="flex items-center">
               <h3 className="text-lg font-semibold uppercase truncate">{game.name}</h3>
             </div>
-            {game.subtitle && <p className="text-sm text-muted-foreground ml-7">{game.subtitle}</p>}
+            {game.subtitle && <p className="text-sm text-muted-foreground">{game.subtitle}</p>}
           </div>
           <div className="flex items-center justify-between">
             <div className="flex flex-col gap-1">

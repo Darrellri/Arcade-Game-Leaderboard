@@ -86,15 +86,10 @@ export default function Home() {
                     />
                   </div>
                   <div>
-                    <div className="flex items-center gap-2">
-                      {game.type === 'pinball' ? (
-                        <CircleDot className="h-4 w-4 text-primary flex-shrink-0" />
-                      ) : (
-                        <Gamepad2 className="h-4 w-4 text-primary flex-shrink-0" />
-                      )}
+                    <div className="flex items-center">
                       <span className="font-medium uppercase truncate max-w-[180px]">{game.name}</span>
                     </div>
-                    {game.subtitle && <span className="text-xs text-muted-foreground ml-6">{game.subtitle}</span>}
+                    {game.subtitle && <span className="text-xs text-muted-foreground">{game.subtitle}</span>}
                   </div>
                 </div>
                 <div className="text-sm text-muted-foreground">
