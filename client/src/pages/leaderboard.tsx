@@ -51,16 +51,16 @@ export default function Leaderboard() {
     <div className="space-y-8">
       {/* Game Marquee Display */}
       <div className="relative mb-6">
-        <div className="w-full h-[214px] relative overflow-hidden rounded-lg">
+        <div className="w-full h-[200px] relative overflow-hidden rounded-lg">
           {game.imageUrl ? (
             <img 
               src={game.imageUrl} 
               alt={`${game.name} marquee`}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain bg-black"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
+              <h2 className="text-2xl md:text-3xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
                 {game.name}
               </h2>
             </div>
@@ -69,7 +69,7 @@ export default function Leaderboard() {
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-4xl font-bold tracking-tight uppercase text-white">{game.name}</h1>
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight uppercase text-white truncate max-w-[80%]">{game.name}</h1>
               <p className="text-white/80 mt-2">Top Scores</p>
             </div>
             <Button variant="outline" asChild className="bg-white/10 hover:bg-white/20 border-white/20 text-white">

@@ -16,12 +16,12 @@ export default function GameCard({ game }: GameCardProps) {
   return (
     <Card className="overflow-hidden flex flex-col">
       {/* Game Marquee Image */}
-      <div className="w-full h-[214px] relative overflow-hidden">
+      <div className="w-full h-[200px] relative overflow-hidden">
         {game.imageUrl ? (
           <img 
             src={game.imageUrl} 
             alt={`${game.name} marquee`}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain bg-black"
           />
         ) : (
           <div 
@@ -29,7 +29,7 @@ export default function GameCard({ game }: GameCardProps) {
               "w-full h-full flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40"
             )}
           >
-            <h2 className="text-3xl md:text-4xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
               {game.name}
             </h2>
           </div>
@@ -39,11 +39,11 @@ export default function GameCard({ game }: GameCardProps) {
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
             {game.type === 'pinball' ? (
-              <CircleDot className="h-5 w-5 text-primary" />
+              <CircleDot className="h-5 w-5 text-primary flex-shrink-0" />
             ) : (
-              <Gamepad2 className="h-5 w-5 text-primary" />
+              <Gamepad2 className="h-5 w-5 text-primary flex-shrink-0" />
             )}
-            <h3 className="text-lg font-semibold uppercase">{game.name}</h3>
+            <h3 className="text-lg font-semibold uppercase truncate">{game.name}</h3>
           </div>
           <div className="flex items-center justify-between">
             <div className="flex flex-col gap-1">

@@ -108,16 +108,14 @@ export default function Home() {
                 <TableCell>
                   <div className="flex items-center gap-3">
                     <div className="w-[90px] h-[24px] relative overflow-hidden rounded">
-                      <div className="absolute inset-0 bg-black/50"></div>
+                      <div className="absolute inset-0 bg-black"></div>
                       <img 
-                        src={game.imageUrl || (game.type === 'pinball' 
-                          ? "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-pinball.jpg"
-                          : "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-arcade.jpg")}
+                        src={game.imageUrl}
                         alt={game.name}
-                        className="w-full h-full object-cover opacity-70"
+                        className="w-full h-full object-contain"
                       />
                     </div>
-                    <span className="uppercase font-medium">{game.name}</span>
+                    <span className="uppercase font-medium truncate max-w-[200px]">{game.name}</span>
                   </div>
                 </TableCell>
                 <TableCell>
@@ -170,22 +168,20 @@ export default function Home() {
               <div>
                 <div className="flex items-center gap-3">
                   <div className="w-[80px] h-[21px] relative overflow-hidden rounded flex-shrink-0">
-                    <div className="absolute inset-0 bg-black/50"></div>
+                    <div className="absolute inset-0 bg-black"></div>
                     <img 
-                      src={game.imageUrl || (game.type === 'pinball' 
-                        ? "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-pinball.jpg"
-                        : "https://raw.githubusercontent.com/replit-community/arcade-assets/main/marquees/generic-arcade.jpg")}
+                      src={game.imageUrl}
                       alt={game.name}
-                      className="w-full h-full object-cover opacity-70"
+                      className="w-full h-full object-contain"
                     />
                   </div>
                   <div className="flex items-center gap-2">
                     {game.type === 'pinball' ? (
-                      <CircleDot className="h-4 w-4 text-primary" />
+                      <CircleDot className="h-4 w-4 text-primary flex-shrink-0" />
                     ) : (
-                      <Gamepad2 className="h-4 w-4 text-primary" />
+                      <Gamepad2 className="h-4 w-4 text-primary flex-shrink-0" />
                     )}
-                    <span className="font-medium uppercase">{game.name}</span>
+                    <span className="font-medium uppercase truncate max-w-[180px]">{game.name}</span>
                   </div>
                 </div>
                 <div className="text-sm text-muted-foreground">

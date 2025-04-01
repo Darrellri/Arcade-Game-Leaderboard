@@ -12,11 +12,11 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
   
   if (imageUrl) {
     return (
-      <div className={cn("w-full h-[214px] relative overflow-hidden rounded-t-lg", className)}>
+      <div className={cn("w-full h-[200px] relative overflow-hidden rounded-t-lg", className)}>
         <img 
           src={imageUrl} 
           alt={`${game.name} marquee`}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain bg-black"
         />
       </div>
     );
@@ -26,11 +26,11 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
   return (
     <div 
       className={cn(
-        "w-full h-[214px] flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40 rounded-t-lg",
+        "w-full h-[200px] flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40 rounded-t-lg",
         className
       )}
     >
-      <h2 className="text-3xl md:text-4xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
+      <h2 className="text-2xl md:text-3xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
         {game.name}
       </h2>
     </div>
