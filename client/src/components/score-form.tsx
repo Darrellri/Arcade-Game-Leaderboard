@@ -74,72 +74,90 @@ export default function ScoreForm({
   });
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="playerName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Player Name</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <Card className="shadow-md hover:shadow-lg transition-all duration-300 p-6">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="playerName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-medium">Player Name</FormLabel>
+                <FormControl>
+                  <Input 
+                    {...field} 
+                    className="transition-all duration-200 focus:border-primary/70 focus:ring-primary/30"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="score"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Score</FormLabel>
-              <FormControl>
-                <Input
-                  type="number"
-                  {...field}
-                  onChange={(e) => field.onChange(parseInt(e.target.value))}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="score"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-medium">Score</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    {...field}
+                    onChange={(e) => field.onChange(parseInt(e.target.value))}
+                    className="font-mono transition-all duration-200 focus:border-primary/70 focus:ring-primary/30"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="phoneNumber"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Phone Number</FormLabel>
-              <FormControl>
-                <Input type="tel" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-medium">Phone Number</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="tel" 
+                    {...field}
+                    className="transition-all duration-200 focus:border-primary/70 focus:ring-primary/30"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="imageUrl"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Score Image URL</FormLabel>
-              <FormControl>
-                <Input type="url" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="imageUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-medium">Score Image URL</FormLabel>
+                <FormControl>
+                  <Input 
+                    type="url" 
+                    {...field}
+                    className="transition-all duration-200 focus:border-primary/70 focus:ring-primary/30" 
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Submitting..." : "Submit Score"}
-        </Button>
-      </form>
-    </Form>
+          <Button 
+            type="submit" 
+            disabled={isSubmitting}
+            className="w-full font-semibold py-6 transition-colors hover:bg-primary/90"
+          >
+            {isSubmitting ? "Submitting..." : "Submit Score"}
+          </Button>
+        </form>
+      </Form>
+    </Card>
   );
 }

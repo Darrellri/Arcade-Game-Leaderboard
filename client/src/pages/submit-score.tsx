@@ -4,6 +4,7 @@ import { useToast } from "@/hooks/use-toast";
 import ScoreForm from "@/components/score-form";
 import { apiRequest } from "@/lib/queryClient";
 import type { Game, InsertScore, Score } from "@shared/schema";
+import { Trophy } from "lucide-react";
 
 export default function SubmitScore() {
   const { gameId } = useParams();
@@ -41,29 +42,38 @@ export default function SubmitScore() {
   return (
     <div className="space-y-8 max-w-md mx-auto">
       {/* Game Marquee Display */}
-      <div className="w-full h-[180px] relative overflow-hidden rounded-lg">
-        {game.imageUrl ? (
-          <div className="w-full h-full bg-black rounded-lg flex items-center justify-center">
-            <img 
-              src={game.imageUrl} 
-              alt={`${game.name} marquee`}
-              className="w-auto h-full max-w-full object-contain"
-            />
-          </div>
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40 rounded-lg">
-            <h2 className="text-2xl md:text-3xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
-              {game.name}
-            </h2>
-          </div>
-        )}
+      <div className="relative mb-6 shadow-md rounded-lg overflow-hidden">
+        <div className="w-full h-[200px] relative overflow-hidden">
+          {game.imageUrl ? (
+            <div className="w-full h-full bg-black rounded-t-lg flex items-center justify-center">
+              <img 
+                src={game.imageUrl} 
+                alt={`${game.name} marquee`}
+                className="w-auto h-full max-w-full object-contain transition-transform duration-700 hover:scale-105"
+              />
+            </div>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40 rounded-t-lg">
+              <h2 className="text-2xl md:text-3xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
+                {game.name}
+              </h2>
+            </div>
+          )}
+        </div>
       </div>
       
-      <h1 className="text-3xl font-bold tracking-tight uppercase">{game.name}</h1>
-      {game.subtitle && <p className="text-muted-foreground">{game.subtitle}</p>}
-      <p className="text-muted-foreground mt-2">
-        Current Top Score: <span className="font-mono font-bold">{(game.currentHighScore || 0).toLocaleString()}</span>
-      </p>
+      <div className="section-header px-6 py-4 rounded-lg mb-6">
+        <h1 className="text-3xl font-bold tracking-tight uppercase drop-shadow-sm">{game.name}</h1>
+        {game.subtitle && <p className="subtitle text-muted-foreground">{game.subtitle}</p>}
+        <div className="flex items-center gap-2 mt-3">
+          <div className="champion-icon p-1">
+            <Trophy className="h-5 w-5" />
+          </div>
+          <p className="subtitle mt-0 flex items-center gap-2">
+            Current Top Score: <span className="score-display font-bold text-lg champion-badge">{(game.currentHighScore || 0).toLocaleString()}</span>
+          </p>
+        </div>
+      </div>
       <ScoreForm
         gameId={id}
         onSubmit={(data) => submitScore.mutate(data)}

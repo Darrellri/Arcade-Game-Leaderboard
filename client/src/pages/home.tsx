@@ -5,7 +5,7 @@ import { Game } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import GameCard from "@/components/game-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Gamepad2, Grid2X2, List, CircleDot } from "lucide-react";
+import { Gamepad2, Grid2X2, List, CircleDot, Trophy } from "lucide-react";
 
 import { formatDate, formatTime } from "@/lib/formatters";
 
@@ -42,13 +42,14 @@ export default function Home() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="section-header flex items-center justify-between">
         <h1 className="text-4xl font-bold tracking-tight">Arcade Top Scores</h1>
         <div className="flex gap-2">
           <Button
             variant={viewMode === "grid" ? "default" : "outline"}
             size="icon"
             onClick={() => setViewMode("grid")}
+            className="transition-all duration-200"
           >
             <Grid2X2 className="h-4 w-4" />
           </Button>
@@ -56,6 +57,7 @@ export default function Home() {
             variant={viewMode === "list" ? "default" : "outline"}
             size="icon"
             onClick={() => setViewMode("list")}
+            className="transition-all duration-200"
           >
             <List className="h-4 w-4" />
           </Button>
@@ -69,30 +71,34 @@ export default function Home() {
           ))}
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-3">
           {processedGames?.map((game) => (
             <div
               key={game.id}
-              className="flex items-center justify-between p-4 bg-card rounded-lg"
+              className="list-item flex items-center justify-between p-4 bg-card rounded-lg shadow-sm hover:shadow-md"
             >
               <div>
                 <div className="flex items-center gap-3">
-                  <div className="w-[80px] h-[21px] relative overflow-hidden rounded flex-shrink-0">
-                    <div className="absolute inset-0 bg-black"></div>
+                  <div className="w-[80px] h-[21px] relative overflow-hidden rounded flex-shrink-0 bg-black">
                     <img 
                       src={game.imageUrl}
                       alt={game.name}
-                      className="w-auto h-full max-w-full object-contain"
+                      className="w-auto h-full max-w-full object-contain opacity-100 hover:opacity-90 transition-opacity"
                     />
                   </div>
                   <div>
-                    <div className="flex items-center">
+                    <div className="flex items-center gap-2">
+                      {game.type === 'pinball' ? (
+                        <CircleDot className="h-4 w-4 game-type-icon" />
+                      ) : (
+                        <Gamepad2 className="h-4 w-4 game-type-icon" />
+                      )}
                       <span className="font-medium uppercase truncate max-w-[180px]">{game.name}</span>
                     </div>
-                    {game.subtitle && <span className="text-xs text-muted-foreground">{game.subtitle}</span>}
+                    {game.subtitle && <span className="subtitle block">{game.subtitle}</span>}
                   </div>
                 </div>
-                <div className="text-sm text-muted-foreground">
+                <div className="subtitle mt-2">
                   Top Score by: {game.topScorerName || 'No scores yet'}
                 </div>
                 {game.topScoreDate && (
@@ -106,12 +112,15 @@ export default function Home() {
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-right">
-                  <div className="font-mono">
-                    {(game.topScore || 0).toLocaleString()}
+                  <div className="flex items-center gap-2 justify-end">
+                    <Trophy className="h-4 w-4 champion-badge" />
+                    <div className="score-display text-lg champion-badge">
+                      {(game.topScore || 0).toLocaleString()}
+                    </div>
                   </div>
-                  <div className="text-sm text-muted-foreground">Top Score</div>
+                  <div className="subtitle text-right">Top Score</div>
                 </div>
-                <Button variant="secondary" asChild>
+                <Button variant="secondary" asChild className="transition-colors hover:bg-secondary/90">
                   <Link href={`/leaderboard/${game.id}`}>View Scores</Link>
                 </Button>
               </div>

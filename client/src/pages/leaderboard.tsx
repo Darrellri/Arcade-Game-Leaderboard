@@ -35,32 +35,32 @@ export default function Leaderboard() {
   return (
     <div className="space-y-8">
       {/* Game Marquee Display */}
-      <div className="relative mb-6">
-        <div className="w-full h-[180px] relative overflow-hidden rounded-lg">
+      <div className="relative mb-6 shadow-md rounded-lg overflow-hidden">
+        <div className="w-full h-[200px] relative overflow-hidden">
           {game.imageUrl ? (
-            <div className="w-full h-full bg-black rounded-lg flex items-center justify-center">
+            <div className="w-full h-full bg-black rounded-t-lg flex items-center justify-center">
               <img 
                 src={game.imageUrl} 
                 alt={`${game.name} marquee`}
-                className="w-auto h-full max-w-full object-contain"
+                className="w-auto h-full max-w-full object-contain transition-transform duration-700 hover:scale-105"
               />
             </div>
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40 rounded-lg">
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40 rounded-t-lg">
               <h2 className="text-2xl md:text-3xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
                 {game.name}
               </h2>
             </div>
           )}
         </div>
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tight uppercase text-white truncate max-w-[80%]">{game.name}</h1>
-              <p className="text-white/80 mt-1">{game.subtitle}</p>
-              <p className="text-white/80 mt-1">Top Scores</p>
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight uppercase text-white truncate max-w-[80%] drop-shadow-md">{game.name}</h1>
+              {game.subtitle && <p className="text-white/90 mt-1 drop-shadow-sm">{game.subtitle}</p>}
+              <p className="text-white/90 mt-1 font-medium drop-shadow-sm">Top Scores</p>
             </div>
-            <Button variant="outline" asChild className="bg-white/10 hover:bg-white/20 border-white/20 text-white">
+            <Button variant="outline" asChild className="bg-white/10 hover:bg-white/30 border-white/20 text-white transition-colors duration-300">
               <Link href="/">
                 <span className="flex items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
@@ -74,11 +74,12 @@ export default function Leaderboard() {
         </div>
       </div>
 
-      <div className="flex gap-2 mb-4">
+      <div className="section-header px-4 py-3 flex gap-2 rounded-lg mb-4">
         <Button
           variant={viewMode === "grid" ? "default" : "outline"}
           size="icon"
           onClick={() => setViewMode("grid")}
+          className="transition-all duration-200"
         >
           <Grid2X2 className="h-4 w-4" />
         </Button>
@@ -86,6 +87,7 @@ export default function Leaderboard() {
           variant={viewMode === "list" ? "default" : "outline"}
           size="icon"
           onClick={() => setViewMode("list")}
+          className="transition-all duration-200"
         >
           <List className="h-4 w-4" />
         </Button>
@@ -100,12 +102,15 @@ export default function Leaderboard() {
       ) : viewMode === "grid" ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {sortedScores.map((score, index) => (
-            <Card key={score.id} className={index === 0 ? "border-2 border-yellow-500" : ""}>
-              <CardContent className="pt-6">
+            <Card 
+              key={score.id} 
+              className={`shadow-md hover:shadow-lg transition-all duration-300 ${index === 0 ? "border-2 border-yellow-500" : ""}`}
+            >
+              <CardContent className="pt-6 card-content">
                 {index === 0 ? (
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="inline-flex items-center justify-center p-1.5 bg-yellow-500/20 text-yellow-500 rounded-full">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500">
+                    <div className="champion-icon p-1.5">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
                         <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
                         <path d="M4 22h16"></path>
@@ -117,40 +122,45 @@ export default function Leaderboard() {
                         <path d="M12 12a4 4 0 0 0 4-4V6H8v2a4 4 0 0 0 4 4Z"></path>
                       </svg>
                     </div>
-                    <div className="text-2xl font-bold text-yellow-500">CHAMPION</div>
+                    <div className="text-2xl font-bold champion-badge">CHAMPION</div>
                   </div>
                 ) : (
-                  <div className="text-2xl font-bold mb-2">#{index + 1}</div>
+                  <div className="text-2xl font-bold mb-2 flex items-center gap-2">
+                    <span className="bg-secondary/50 size-8 rounded-full flex items-center justify-center">
+                      {index + 1}
+                    </span>
+                    <span>Rank</span>
+                  </div>
                 )}
-                <div className="text-xl">{score.playerName}</div>
-                <div className={`text-3xl font-mono mt-2 ${index === 0 ? "text-yellow-500" : ""}`}>
+                <div className="text-xl font-medium">{score.playerName}</div>
+                <div className={`text-3xl score-display mt-2 ${index === 0 ? "champion-badge" : ""}`}>
                   {score.score.toLocaleString()}
                 </div>
-                <div className="text-sm text-muted-foreground mt-2">
+                <div className="subtitle mt-2">
                   {formatDate(new Date(score.submittedAt!))}
                   <span className="italic ml-2">
                     ({formatTime(new Date(score.submittedAt!))})
                   </span>
                 </div>
                 <div className="mt-4">
-                  <ShareScore game={game} score={score} variant="outline" />
+                  <ShareScore game={game} score={score} variant="outline" className="w-full" />
                 </div>
               </CardContent>
             </Card>
           ))}
         </div>
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-3">
           {sortedScores.map((score, index) => (
             <div
               key={score.id}
-              className="flex items-center justify-between p-4 bg-card rounded-lg"
+              className="list-item flex items-center justify-between p-4 bg-card rounded-lg shadow-sm hover:shadow-md transition-all duration-300"
             >
               <div className="flex items-center gap-4">
                 {index === 0 ? (
                   <div className="flex items-center gap-2">
-                    <div className="inline-flex items-center justify-center p-1 bg-yellow-500/20 text-yellow-500 rounded-full">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500">
+                    <div className="champion-icon p-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
                         <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
                         <path d="M4 22h16"></path>
@@ -162,14 +172,18 @@ export default function Leaderboard() {
                         <path d="M12 12a4 4 0 0 0 4-4V6H8v2a4 4 0 0 0 4 4Z"></path>
                       </svg>
                     </div>
-                    <span className="text-xl font-bold text-yellow-500">CHAMPION</span>
+                    <span className="text-xl font-bold champion-badge">CHAMPION</span>
                   </div>
                 ) : (
-                  <div className="text-xl font-bold">#{index + 1}</div>
+                  <div className="flex items-center gap-2">
+                    <div className="bg-secondary/50 size-8 rounded-full flex items-center justify-center">
+                      {index + 1}
+                    </div>
+                  </div>
                 )}
                 <div>
-                  <div className={`font-medium ${index === 0 ? "text-yellow-500" : ""}`}>{score.playerName}</div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className={`font-medium text-lg ${index === 0 ? "champion-badge" : ""}`}>{score.playerName}</div>
+                  <div className="subtitle">
                     {formatDate(new Date(score.submittedAt!))}
                     <span className="italic ml-2">
                       ({formatTime(new Date(score.submittedAt!))})
@@ -178,11 +192,16 @@ export default function Leaderboard() {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="text-xl font-mono flex items-center gap-1"> {/* Added trophy icon */}
-                  {index === 0 && <TrophyIcon size={20} />}
+                <div className={`text-xl score-display flex items-center gap-1 ${index === 0 ? "champion-badge" : ""}`}>
                   {score.score.toLocaleString()}
                 </div>
-                <ShareScore game={game} score={score} size="sm" variant="outline" />
+                <ShareScore 
+                  game={game} 
+                  score={score} 
+                  size="sm" 
+                  variant="outline" 
+                  className="transition-colors hover:bg-secondary/90"
+                />
               </div>
             </div>
           ))}

@@ -84,7 +84,10 @@ export default function QRScanner({ onScan }: QRScannerProps) {
     <Card className="overflow-hidden">
       {showManualEntry ? (
         <CardContent className="p-6 space-y-4">
-          <h3 className="text-lg font-medium">Enter Game ID</h3>
+          <h3 className="text-lg font-medium flex items-center">
+            <Keyboard className="h-5 w-5 mr-2 game-type-icon" />
+            Enter Game ID
+          </h3>
           <div className="flex gap-2">
             <Input 
               type="number" 
@@ -96,29 +99,36 @@ export default function QRScanner({ onScan }: QRScannerProps) {
                   handleSubmitManualEntry();
                 }
               }}
+              className="transition-all duration-200 focus:border-primary/70 focus:ring-primary/30 font-mono"
             />
-            <Button onClick={handleSubmitManualEntry}>
+            <Button 
+              onClick={handleSubmitManualEntry}
+              className="transition-colors hover:bg-primary/90"
+            >
               <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
         </CardContent>
       ) : (
-        <video ref={videoRef} className="w-full aspect-square object-cover" />
+        <div className="relative">
+          <video ref={videoRef} className="w-full aspect-square object-cover" />
+          <div className="absolute inset-0 pointer-events-none border-4 border-dashed border-primary/30 m-8 rounded-lg"></div>
+        </div>
       )}
       <CardFooter className="bg-card p-4 border-t">
         <Button 
           variant="outline" 
-          className="w-full" 
+          className="w-full transition-all duration-200 hover:bg-secondary/80" 
           onClick={handleManualEntry}
         >
           {showManualEntry ? (
             <>
-              <Camera className="h-4 w-4 mr-2" />
+              <Camera className="h-4 w-4 mr-2 text-primary" />
               Switch to Camera
             </>
           ) : (
             <>
-              <Keyboard className="h-4 w-4 mr-2" />
+              <Keyboard className="h-4 w-4 mr-2 text-primary" />
               Manual Entry
             </>
           )}

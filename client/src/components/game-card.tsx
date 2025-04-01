@@ -14,21 +14,19 @@ interface GameCardProps {
 
 export default function GameCard({ game }: GameCardProps) {
   return (
-    <Card className="overflow-hidden flex flex-col">
+    <Card className="overflow-hidden flex flex-col shadow-md hover:shadow-lg transition-all duration-300">
       {/* Game Marquee Image */}
-      <div className="w-full h-[180px] relative overflow-hidden rounded-t-lg">
+      <div className="image-container">
         {game.imageUrl ? (
-          <div className="w-full h-full bg-black rounded-t-lg flex items-center justify-center">
-            <img 
-              src={game.imageUrl} 
-              alt={`${game.name} marquee`}
-              className="w-auto h-full max-w-full object-contain"
-            />
-          </div>
+          <img 
+            src={game.imageUrl} 
+            alt={`${game.name} marquee`}
+            className="opacity-100 hover:opacity-90 transition-opacity"
+          />
         ) : (
           <div 
             className={cn(
-              "w-full h-full flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40 rounded-t-lg"
+              "w-full h-full flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40"
             )}
           >
             <h2 className="text-2xl md:text-3xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
@@ -37,23 +35,30 @@ export default function GameCard({ game }: GameCardProps) {
           </div>
         )}
       </div>
-      <CardContent className="grid gap-4 pt-6 flex-1">
+      <CardContent className="grid gap-4 pt-6 flex-1 card-content">
         <div className="flex flex-col gap-4">
           <div>
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
+              {game.type === 'pinball' ? (
+                <CircleDot className="h-5 w-5 game-type-icon" />
+              ) : (
+                <Gamepad2 className="h-5 w-5 game-type-icon" />
+              )}
               <h3 className="text-lg font-semibold uppercase truncate">{game.name}</h3>
             </div>
-            {game.subtitle && <p className="text-sm text-muted-foreground">{game.subtitle}</p>}
+            {game.subtitle && <p className="subtitle ml-7">{game.subtitle}</p>}
           </div>
           <div className="flex items-center justify-between">
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-2">
-                <Trophy className="h-5 w-5 text-yellow-500" />
-                <span className="font-mono text-lg">
+                <div className="champion-icon">
+                  <Trophy className="h-5 w-5" />
+                </div>
+                <span className="score-display text-lg champion-badge">
                   {(game.currentHighScore || 0).toLocaleString()}
                 </span>
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="subtitle">
                 Top Score by {game.topScorerName || 'No scores yet'}
               </div>
               {game.topScoreDate && (
@@ -70,7 +75,7 @@ export default function GameCard({ game }: GameCardProps) {
             </div>
             <div className="flex flex-col gap-2 mt-2">
               <Link href={`/leaderboard/${game.id}`}>
-                <Button variant="secondary" className="w-full">View Scores</Button>
+                <Button variant="secondary" className="w-full hover:bg-secondary/90 transition-colors">View Scores</Button>
               </Link>
               <div className="flex justify-end">
                 <ShareScore game={game} variant="ghost" size="sm" />

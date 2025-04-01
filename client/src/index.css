@@ -14,6 +14,8 @@
     --primary-lightness: 50%;
     --primary: var(--primary-hue) var(--primary-saturation) var(--primary-lightness);
     
+    --champion-color: 40 100% 50%;
+    
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -64,18 +66,80 @@
     @apply font-sans antialiased bg-background text-foreground;
   }
   
-  /* Enhanced button styling with primary color */
-  .btn-primary, .button-primary {
-    background-color: hsl(var(--primary));
-    color: hsl(var(--primary-foreground));
+  /* Consistent card styling with shadows */
+  .card {
+    @apply shadow-md transition-all duration-300 hover:shadow-lg;
+    border-radius: var(--radius);
   }
   
-  /* Game cards with theme color accents */
-  .game-card {
-    border-color: hsl(var(--primary) / 0.2);
+  /* Image container standardization */
+  .image-container {
+    @apply bg-black relative overflow-hidden flex items-center justify-center;
+    border-radius: var(--radius) var(--radius) 0 0;
+    height: 180px;
+    transition: all 0.3s ease;
   }
   
-  .game-card:hover {
-    box-shadow: 0 0 15px hsl(var(--primary) / 0.5);
+  .image-container img {
+    @apply w-auto h-full max-w-full object-contain transition-opacity duration-300;
+  }
+  
+  /* Champion/top score styling */
+  .champion-badge {
+    @apply font-bold;
+    color: hsl(var(--champion-color));
+  }
+  
+  .champion-icon {
+    color: hsl(var(--champion-color));
+    background-color: hsl(var(--champion-color) / 0.2);
+    @apply rounded-full inline-flex items-center justify-center p-1;
+  }
+  
+  /* Enhanced typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+    line-height: 1.2;
+  }
+  
+  .subtitle {
+    @apply text-muted-foreground text-sm mt-1;
+  }
+  
+  /* Custom game section headers */
+  .section-header {
+    background: linear-gradient(to right, hsl(var(--primary) / 0.1), transparent);
+    @apply p-4 rounded-lg mb-6;
+  }
+  
+  /* List view enhancements */
+  .list-item {
+    @apply transition-all duration-200 hover:bg-accent/50;
+    border-radius: var(--radius);
+  }
+  
+  /* Game type icons */
+  .game-type-icon {
+    @apply text-primary flex-shrink-0;
+  }
+  
+  /* Score display */
+  .score-display {
+    @apply font-mono;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 640px) {
+    .image-container {
+      height: 140px;
+    }
+    
+    .card-content {
+      @apply p-3;
+    }
+    
+    .list-item {
+      @apply p-3;
+    }
   }
 }
