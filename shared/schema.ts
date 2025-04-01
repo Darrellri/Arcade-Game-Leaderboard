@@ -5,6 +5,7 @@ import { z } from "zod";
 export const games = pgTable("games", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
+  subtitle: text("subtitle"),
   imageUrl: text("image_url").notNull(),
   type: text("type").notNull(), // 'arcade' or 'pinball'
   currentHighScore: integer("current_high_score").default(0),

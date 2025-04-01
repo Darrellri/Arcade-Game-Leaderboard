@@ -1,24 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link } from "wouter";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Grid2X2, List, TableIcon } from "lucide-react";
+import { Grid2X2, List } from "lucide-react";
 import { useState } from "react";
 import type { Game, Score } from "@shared/schema";
 import ShareScore from "@/components/share-score";
@@ -26,7 +11,7 @@ import { TrophyIcon } from "@/components/trophy-icon";
 
 import { formatDate, formatTime } from "@/lib/formatters";
 
-type ViewMode = "table" | "grid" | "list";
+type ViewMode = "grid" | "list";
 
 export default function Leaderboard() {
   const { gameId } = useParams();
@@ -72,7 +57,8 @@ export default function Leaderboard() {
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold tracking-tight uppercase text-white truncate max-w-[80%]">{game.name}</h1>
-              <p className="text-white/80 mt-2">Top Scores</p>
+              <p className="text-white/80 mt-1">{game.subtitle}</p>
+              <p className="text-white/80 mt-1">Top Scores</p>
             </div>
             <Button variant="outline" asChild className="bg-white/10 hover:bg-white/20 border-white/20 text-white">
               <Link href="/">
@@ -89,13 +75,6 @@ export default function Leaderboard() {
       </div>
 
       <div className="flex gap-2 mb-4">
-        <Button
-          variant={viewMode === "table" ? "default" : "outline"}
-          size="icon"
-          onClick={() => setViewMode("table")}
-        >
-          <TableIcon className="h-4 w-4" />
-        </Button>
         <Button
           variant={viewMode === "grid" ? "default" : "outline"}
           size="icon"
@@ -118,59 +97,6 @@ export default function Leaderboard() {
             <Skeleton key={i} className="h-16" />
           ))}
         </div>
-      ) : viewMode === "table" ? (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Rank</TableHead>
-              <TableHead>Player</TableHead>
-              <TableHead>Score</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {sortedScores.map((score, index) => (
-              <TableRow key={score.id}>
-                <TableCell className="font-bold">
-                  {index === 0 ? (
-                    <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center justify-center p-1 bg-yellow-500/20 text-yellow-500 rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500">
-                          <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-                          <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-                          <path d="M4 22h16"></path>
-                          <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-                          <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
-                          <path d="M9 2v7.5"></path>
-                          <path d="M15 2v7.5"></path>
-                          <path d="M12 2v10"></path>
-                          <path d="M12 12a4 4 0 0 0 4-4V6H8v2a4 4 0 0 0 4 4Z"></path>
-                        </svg>
-                      </span>
-                      <span>CHAMPION</span>
-                    </div>
-                  ) : (
-                    `#${index + 1}`
-                  )}
-                </TableCell>
-                <TableCell>{score.playerName}</TableCell>
-                <TableCell className={index === 0 ? "font-bold text-yellow-500" : ""}>
-                  {score.score.toLocaleString()}
-                </TableCell>
-                <TableCell>
-                  {formatDate(new Date(score.submittedAt!))}
-                  <span className="text-muted-foreground italic ml-2">
-                    ({formatTime(new Date(score.submittedAt!))})
-                  </span>
-                </TableCell>
-                <TableCell className="text-right">
-                  <ShareScore game={game} score={score} size="sm" variant="outline" />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
       ) : viewMode === "grid" ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {sortedScores.map((score, index) => (

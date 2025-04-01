@@ -55,31 +55,37 @@ export class MemStorage implements IStorage {
     const sampleGames: InsertGame[] = [
       {
         name: "X-Men Pinball",
+        subtitle: "Stern Pinball - 2012",
         imageUrl: "/images/marquees/xmen.svg",
         type: "pinball"
       },
       {
         name: "Godzilla Pinball",
+        subtitle: "Stern Pinball - 2021",
         imageUrl: "/images/marquees/godzilla.jpg",
         type: "pinball"
       },
       {
         name: "STAR WARS TRILOGY",
+        subtitle: "Sega - 1998",
         imageUrl: "/images/marquees/starwars.svg",
         type: "arcade"
       },
       {
         name: "Asteroids",
+        subtitle: "Atari - 1979",
         imageUrl: "/images/marquees/asteroids.svg",
         type: "arcade"
       },
       {
         name: "Marble Madness",
+        subtitle: "Atari Games - 1984",
         imageUrl: "/images/marquees/marblemadness.svg",
         type: "arcade"
       },
       {
         name: "Big Buck Hunter Reloaded",
+        subtitle: "Raw Thrills - 2019",
         imageUrl: "/images/marquees/bigbuckhunter.svg",
         type: "arcade"
       }
@@ -188,6 +194,7 @@ export class MemStorage implements IStorage {
     const newGame: Game = {
       ...game,
       id,
+      subtitle: game.subtitle || null,
       currentHighScore: 0,
       topScorerName: null,
       topScoreDate: null

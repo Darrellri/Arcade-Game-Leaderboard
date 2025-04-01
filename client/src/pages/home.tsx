@@ -5,19 +5,11 @@ import { Game } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import GameCard from "@/components/game-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Gamepad2, Grid2X2, List, CircleDot, Table as TableIcon } from "lucide-react";
+import { Gamepad2, Grid2X2, List, CircleDot } from "lucide-react";
 
 import { formatDate, formatTime } from "@/lib/formatters";
 
-type ViewMode = "table" | "grid" | "list";
+type ViewMode = "grid" | "list";
 
 export default function Home() {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
@@ -54,13 +46,6 @@ export default function Home() {
         <h1 className="text-4xl font-bold tracking-tight">Arcade Top Scores</h1>
         <div className="flex gap-2">
           <Button
-            variant={viewMode === "table" ? "default" : "outline"}
-            size="icon"
-            onClick={() => setViewMode("table")}
-          >
-            <TableIcon className="h-4 w-4" />
-          </Button>
-          <Button
             variant={viewMode === "grid" ? "default" : "outline"}
             size="icon"
             onClick={() => setViewMode("grid")}
@@ -83,81 +68,6 @@ export default function Home() {
             <GameCard key={game.id} game={game} />
           ))}
         </div>
-      ) : viewMode === "table" ? (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Type</TableHead>
-              <TableHead>Game</TableHead>
-              <TableHead className="text-right">Top Score</TableHead>
-              <TableHead>Player</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead className="text-right w-[100px]">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {processedGames?.map((game) => (
-              <TableRow key={game.id}>
-                <TableCell>
-                  {game.type === 'pinball' ? (
-                    <CircleDot className="h-4 w-4 text-primary" />
-                  ) : (
-                    <Gamepad2 className="h-4 w-4 text-primary" />
-                  )}
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-3">
-                    <div className="w-[90px] h-[24px] relative overflow-hidden rounded">
-                      <div className="absolute inset-0 bg-black"></div>
-                      <img 
-                        src={game.imageUrl}
-                        alt={game.name}
-                        className="w-auto h-full max-w-full object-contain"
-                      />
-                    </div>
-                    <span className="uppercase font-medium truncate max-w-[200px]">{game.name}</span>
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center justify-end gap-2">
-                    <div className="inline-flex items-center justify-center p-1 bg-yellow-500/20 text-yellow-500 rounded-full">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-                        <path d="M4 22h16"></path>
-                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-                        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
-                        <path d="M9 2v7.5"></path>
-                        <path d="M15 2v7.5"></path>
-                        <path d="M12 2v10"></path>
-                        <path d="M12 12a4 4 0 0 0 4-4V6H8v2a4 4 0 0 0 4 4Z"></path>
-                      </svg>
-                    </div>
-                    <span className="font-mono text-yellow-500 font-bold">
-                      {(game.topScore || 0).toLocaleString()}
-                    </span>
-                  </div>
-                </TableCell>
-                <TableCell>{game.topScorerName || 'No scores yet'}</TableCell>
-                <TableCell>
-                  {game.topScoreDate ? (
-                    <span>
-                      {formatDate(new Date(game.topScoreDate))} 
-                      <span className="text-muted-foreground italic">
-                        ({formatTime(new Date(game.topScoreDate))})
-                      </span>
-                    </span>
-                  ) : '-'}
-                </TableCell>
-                <TableCell className="text-right">
-                  <Button variant="secondary" asChild>
-                    <Link href={`/leaderboard/${game.id}`}>View Scores</Link>
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
       ) : (
         <div className="space-y-2">
           {processedGames?.map((game) => (
@@ -175,13 +85,16 @@ export default function Home() {
                       className="w-auto h-full max-w-full object-contain"
                     />
                   </div>
-                  <div className="flex items-center gap-2">
-                    {game.type === 'pinball' ? (
-                      <CircleDot className="h-4 w-4 text-primary flex-shrink-0" />
-                    ) : (
-                      <Gamepad2 className="h-4 w-4 text-primary flex-shrink-0" />
-                    )}
-                    <span className="font-medium uppercase truncate max-w-[180px]">{game.name}</span>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      {game.type === 'pinball' ? (
+                        <CircleDot className="h-4 w-4 text-primary flex-shrink-0" />
+                      ) : (
+                        <Gamepad2 className="h-4 w-4 text-primary flex-shrink-0" />
+                      )}
+                      <span className="font-medium uppercase truncate max-w-[180px]">{game.name}</span>
+                    </div>
+                    {game.subtitle && <span className="text-xs text-muted-foreground ml-6">{game.subtitle}</span>}
                   </div>
                 </div>
                 <div className="text-sm text-muted-foreground">
