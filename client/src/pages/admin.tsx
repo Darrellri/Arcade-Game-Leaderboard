@@ -153,6 +153,7 @@ export default function Admin() {
       <Tabs defaultValue="venue">
         <TabsList>
           <TabsTrigger value="venue">Venue Details</TabsTrigger>
+          <TabsTrigger value="themes">Theme Settings</TabsTrigger>
           <TabsTrigger value="games">Game Management</TabsTrigger>
         </TabsList>
 
@@ -284,7 +285,128 @@ export default function Admin() {
           </Card>
         </TabsContent>
 
-        {/* Theme Settings tab removed */}
+        <TabsContent value="themes" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+                  <path d="M4 3h16a2 2 0 0 1 2 2v6a10 10 0 0 1-10 10A10 10 0 0 1 2 11V5a2 2 0 0 1 2-2z"></path>
+                  <path d="M8 10h.01"></path>
+                  <path d="M12 10h.01"></path>
+                  <path d="M16 10h.01"></path>
+                </svg>
+                <span>Color Schemes</span>
+              </CardTitle>
+              <CardDescription>
+                Choose from six different color schemes for your arcade leaderboard
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {settings?.themePresets?.slice(0, 6).map((preset, index) => (
+                  <Card 
+                    key={index} 
+                    className={`
+                      overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300
+                      ${settings.theme.primary === preset.primary ? 'ring-2 ring-primary border-primary' : ''}
+                    `}
+                    onClick={() => {
+                      const newSettings = {
+                        ...settings,
+                        theme: preset
+                      };
+                      updateSettings.mutate(newSettings);
+                    }}
+                  >
+                    <div 
+                      className="h-16 w-full" 
+                      style={{ 
+                        background: `linear-gradient(45deg, ${preset.primary} 0%, ${preset.primary}aa 100%)` 
+                      }}
+                    >
+                      {settings.theme.primary === preset.primary && (
+                        <div className="flex justify-end p-2">
+                          <div className="bg-white text-primary text-xs font-bold px-2 py-1 rounded-full">
+                            ACTIVE
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <CardContent className="p-4">
+                      <div className="font-medium text-lg mb-2">{preset.name}</div>
+                      <div className="flex gap-2 flex-wrap">
+                        <div 
+                          className="size-8 rounded-full shadow-sm" 
+                          style={{ backgroundColor: preset.primary }}
+                        ></div>
+                        <div 
+                          className="size-8 rounded-md shadow-sm" 
+                          style={{ backgroundColor: preset.primary }}
+                        ></div>
+                        <Button 
+                          size="sm" 
+                          className="px-3 ml-auto"
+                          style={{ 
+                            backgroundColor: settings.theme.primary === preset.primary ? '#666' : preset.primary,
+                            color: 'white'
+                          }}
+                        >
+                          Apply
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              <div className="mt-8 p-6 bg-card rounded-lg border shadow-md">
+                <div className="text-lg font-medium mb-4">Theme Preview</div>
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <div className="font-medium mb-2">Buttons</div>
+                      <div className="flex flex-wrap gap-2">
+                        <Button>Primary</Button>
+                        <Button variant="secondary">Secondary</Button>
+                        <Button variant="outline">Outline</Button>
+                        <Button variant="ghost">Ghost</Button>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="font-medium mb-2">UI Elements</div>
+                      <div className="space-y-2">
+                        <Input placeholder="Text input" className="max-w-[250px]" />
+                        <div className="flex items-center gap-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="champion-icon">
+                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                            <path d="M4 22h16"></path>
+                            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                            <path d="M9 2v7.5"></path>
+                            <path d="M15 2v7.5"></path>
+                            <path d="M12 2v10"></path>
+                            <path d="M12 12a4 4 0 0 0 4-4V6H8v2a4 4 0 0 0 4 4Z"></path>
+                          </svg>
+                          <span className="champion-badge">Champion Score</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="pt-4 border-t">
+                    <div className="font-medium mb-2">Color Palette</div>
+                    <div className="flex flex-wrap gap-2">
+                      <div className="h-8 w-20 rounded-md bg-primary flex items-center justify-center text-xs text-white font-medium">Primary</div>
+                      <div className="h-8 w-20 rounded-md bg-secondary flex items-center justify-center text-xs text-secondary-foreground font-medium">Secondary</div>
+                      <div className="h-8 w-20 rounded-md bg-muted flex items-center justify-center text-xs text-muted-foreground font-medium">Muted</div>
+                      <div className="h-8 w-20 rounded-md bg-accent flex items-center justify-center text-xs text-accent-foreground font-medium">Accent</div>
+                      <div className="h-8 w-20 rounded-md border flex items-center justify-center text-xs font-medium">Border</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="games" className="space-y-4">
           <Card>
