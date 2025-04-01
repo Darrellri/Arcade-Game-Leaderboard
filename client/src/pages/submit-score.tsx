@@ -58,8 +58,8 @@ export default function SubmitScore() {
           </div>
         )}
       </div>
-
-      <h1 className="text-3xl font-bold tracking-tight uppercase border-2 border-primary/60 rounded-[15px] p-3 inline-block">{game.name}</h1>
+      
+      <h1 className="text-3xl font-bold tracking-tight uppercase">{game.name}</h1>
       {game.subtitle && <p className="text-muted-foreground">{game.subtitle}</p>}
       <p className="text-muted-foreground mt-2">
         Current Top Score: <span className="font-mono font-bold">{(game.currentHighScore || 0).toLocaleString()}</span>

@@ -47,7 +47,7 @@ export default function Leaderboard() {
             </div>
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40 rounded-lg">
-              <h2 className="text-2xl md:text-3xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground border-2 border-primary/60 rounded-[15px] p-3 inline-block">
+              <h2 className="text-2xl md:text-3xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
                 {game.name}
               </h2>
             </div>
@@ -56,11 +56,9 @@ export default function Leaderboard() {
         <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tight uppercase text-white truncate max-w-[80%] border-2 border-white/60 rounded-[15px] p-3 inline-block">
-                {game.name}
-              </h1>
+              <h1 className="text-2xl md:text-3xl font-bold tracking-tight uppercase text-white truncate max-w-[80%]">{game.name}</h1>
               <p className="text-white/80 mt-1">{game.subtitle}</p>
-              <p className="text-white/80 mt-1 border-2 border-white/60 rounded-[15px] p-3 inline-block">Top Scores</p>
+              <p className="text-white/80 mt-1">Top Scores</p>
             </div>
             <Button variant="outline" asChild className="bg-white/10 hover:bg-white/20 border-white/20 text-white">
               <Link href="/">
@@ -119,10 +117,10 @@ export default function Leaderboard() {
                         <path d="M12 12a4 4 0 0 0 4-4V6H8v2a4 4 0 0 0 4 4Z"></path>
                       </svg>
                     </div>
-                    <div className="text-2xl font-bold text-yellow-500 border-2 border-yellow-500 rounded-[15px] p-3 inline-block">CHAMPION</div>
+                    <div className="text-2xl font-bold text-yellow-500">CHAMPION</div>
                   </div>
                 ) : (
-                  <div className="text-2xl font-bold mb-2 border-2 border-gray-500 rounded-[15px] p-3 inline-block">#{index + 1}</div>
+                  <div className="text-2xl font-bold mb-2">#{index + 1}</div>
                 )}
                 <div className="text-xl">{score.playerName}</div>
                 <div className={`text-3xl font-mono mt-2 ${index === 0 ? "text-yellow-500" : ""}`}>
@@ -164,10 +162,10 @@ export default function Leaderboard() {
                         <path d="M12 12a4 4 0 0 0 4-4V6H8v2a4 4 0 0 0 4 4Z"></path>
                       </svg>
                     </div>
-                    <span className="text-xl font-bold text-yellow-500 border-2 border-yellow-500 rounded-[15px] p-3 inline-block">CHAMPION</span>
+                    <span className="text-xl font-bold text-yellow-500">CHAMPION</span>
                   </div>
                 ) : (
-                  <div className="text-xl font-bold border-2 border-gray-500 rounded-[15px] p-3 inline-block">#{index + 1}</div>
+                  <div className="text-xl font-bold">#{index + 1}</div>
                 )}
                 <div>
                   <div className={`font-medium ${index === 0 ? "text-yellow-500" : ""}`}>{score.playerName}</div>
