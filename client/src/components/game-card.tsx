@@ -22,7 +22,7 @@ export default function GameCard({ game }: GameCardProps) {
             ) : (
               <Gamepad2 className="h-4 w-4 game-type-icon" />
             )}
-            <h3 className="text-lg font-bold tracking-wide uppercase text-primary drop-shadow-sm letter-spacing-wide">{game.name}</h3>
+            <h3 className="text-lg font-bold tracking-wide uppercase text-primary letter-spacing-wide text-outline">{game.name}</h3>
           </div>
           {game.subtitle && <p className="subtitle tracking-wider">{game.subtitle}</p>}
 
