@@ -42,16 +42,16 @@ export default function Home() {
 
   return (
     <div className="space-y-8">
-      <div className="section-header px-4 py-3 flex items-center justify-between rounded-lg mb-4 bg-gradient-to-r from-primary-100 to-transparent">
-        <h1 className="text-4xl font-bold tracking-tight text-primary-700">Arcade Top Scores</h1>
+      <div className="section-header px-4 py-3 flex items-center justify-between rounded-lg mb-4 w-full">
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Arcade Top Scores</h1>
         <div className="flex items-center gap-4">
-          <div className="font-medium hidden md:block text-primary-600">View Mode</div>
+          <div className="font-medium hidden md:block text-muted-foreground">View Mode</div>
           <div className="flex gap-2">
             <Button
               variant={viewMode === "grid" ? "default" : "outline"}
               size="icon"
               onClick={() => setViewMode("grid")}
-              className={`shadow-sm hover:shadow-md transition-all duration-200 ${viewMode === "grid" ? "bg-primary-500 hover:bg-primary-600" : "border-primary-200 text-primary-700"}`}
+              className="shadow-sm hover:shadow-md transition-all duration-200"
             >
               <Grid2X2 className="h-4 w-4" />
             </Button>
@@ -59,12 +59,25 @@ export default function Home() {
               variant={viewMode === "list" ? "default" : "outline"}
               size="icon"
               onClick={() => setViewMode("list")}
-              className={`shadow-sm hover:shadow-md transition-all duration-200 ${viewMode === "list" ? "bg-primary-500 hover:bg-primary-600" : "border-primary-200 text-primary-700"}`}
+              className="shadow-sm hover:shadow-md transition-all duration-200"
             >
               <List className="h-4 w-4" />
             </Button>
           </div>
         </div>
+      </div>
+      
+      {/* Navigation buttons at the top */}
+      <div className="flex space-x-2 mb-6">
+        <Button variant="outline" asChild className="flex-1">
+          <Link href="/">Home</Link>
+        </Button>
+        <Button variant="outline" asChild className="flex-1">
+          <Link href="/scan">Scan</Link>
+        </Button>
+        <Button variant="outline" asChild className="flex-1">
+          <Link href="/admin">Admin</Link>
+        </Button>
       </div>
 
       {viewMode === "grid" ? (
@@ -74,46 +87,46 @@ export default function Home() {
           ))}
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-3 w-full">
           {processedGames?.map((game) => (
-            <Link href={`/leaderboard/${game.id}`} key={game.id} className="block">
+            <Link href={`/leaderboard/${game.id}`} key={game.id} className="block w-full">
               <div
-                className="list-item flex items-center justify-between p-4 bg-card rounded-lg shadow-sm hover:shadow-md hover:bg-card/90 cursor-pointer transition-all duration-200"
+                className="list-item flex items-center justify-between p-4 bg-card rounded-lg shadow-sm hover:shadow-md hover:bg-card/90 cursor-pointer transition-all duration-200 w-full"
               >
-                <div>
+                <div className="flex-grow">
                   <div className="flex items-center gap-3">
-                    <div className="w-[80px] h-[21px] relative overflow-hidden rounded flex-shrink-0 bg-black">
+                    <div className="w-[120px] h-[40px] relative overflow-hidden rounded flex-shrink-0 bg-black">
                       <img 
                         src={game.imageUrl}
                         alt={game.name}
-                        className="w-auto h-full max-w-full object-contain opacity-100 hover:opacity-90 transition-opacity"
+                        className="w-full h-full object-cover opacity-100 hover:opacity-90 transition-opacity"
                       />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
                         {game.type === 'pinball' ? (
-                          <CircleDot className="h-4 w-4 text-primary-400" />
+                          <CircleDot className="h-4 w-4 text-primary" />
                         ) : (
-                          <Gamepad2 className="h-4 w-4 text-primary-400" />
+                          <Gamepad2 className="h-4 w-4 text-primary" />
                         )}
-                        <span className="font-medium uppercase truncate max-w-[180px] text-primary-600">{game.name}</span>
+                        <span className="font-bold uppercase tracking-wide letter-spacing-wide text-outline text-foreground">{game.name}</span>
                       </div>
-                      {game.subtitle && <span className="subtitle block text-primary-300">{game.subtitle}</span>}
+                      {game.subtitle && <span className="subtitle block tracking-wider">{game.subtitle}</span>}
                     </div>
                   </div>
-                  <div className="subtitle mt-2 text-primary-300">
+                  <div className="subtitle mt-2">
                     Top Score by: {game.topScorerName || 'No scores yet'}
                   </div>
                   {game.topScoreDate && (
-                    <div className="text-sm text-primary-200">
+                    <div className="text-sm text-muted-foreground">
                       {formatDate(new Date(game.topScoreDate))} 
-                      <span className="italic">
+                      <span className="italic ml-1">
                         ({formatTime(new Date(game.topScoreDate))})
                       </span>
                     </div>
                   )}
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 flex-shrink-0">
                   <div className="text-right">
                     <div className="flex items-center gap-2 justify-end">
                       <Trophy className="h-4 w-4 champion-badge" />
@@ -124,8 +137,8 @@ export default function Home() {
                     <div className="subtitle text-right">Top Score</div>
                   </div>
                   <Button 
-                    variant="secondary" 
-                    className="shadow-sm hover:shadow-md font-medium transition-colors bg-primary-100 hover:bg-primary-200 text-primary-700 border-primary-200"
+                    variant="outline" 
+                    className="shadow-sm hover:shadow-md font-medium transition-colors border bg-accent/30 hover:bg-accent/50 text-foreground"
                   >
                     <span className="flex items-center gap-2">
                       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">

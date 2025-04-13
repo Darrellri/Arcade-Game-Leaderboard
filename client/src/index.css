@@ -117,12 +117,23 @@
   
   /* Enhanced typography */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold tracking-tight;
+    @apply font-bold;
     line-height: 1.2;
   }
   
   .subtitle {
     @apply text-muted-foreground text-sm mt-1;
+  }
+  
+  .letter-spacing-wide {
+    letter-spacing: 0.05em;
+  }
+  
+  /* Text outline for better readability on dark backgrounds */
+  .text-outline {
+    text-shadow: 
+      0 0 1px rgba(255,255,255,0.5),
+      0 0 2px rgba(255,255,255,0.3);
   }
   
   /* Custom game section headers */

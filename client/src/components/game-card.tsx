@@ -22,9 +22,9 @@ export default function GameCard({ game }: GameCardProps) {
             ) : (
               <Gamepad2 className="h-4 w-4 game-type-icon" />
             )}
-            <h3 className="text-xl font-bold tracking-tight uppercase text-primary-600">{game.name}</h3>
+            <h3 className="text-lg font-bold tracking-wide uppercase text-primary drop-shadow-sm letter-spacing-wide">{game.name}</h3>
           </div>
-          {game.subtitle && <p className="subtitle text-primary-300">{game.subtitle}</p>}
+          {game.subtitle && <p className="subtitle tracking-wider">{game.subtitle}</p>}
 
           <div className="flex items-center justify-between">
               <div className="flex flex-col gap-1">
@@ -53,7 +53,7 @@ export default function GameCard({ game }: GameCardProps) {
               </div>
               <div className="flex flex-col gap-2 mt-4">
                 <div className="w-full">
-                  <Button variant="secondary" className="w-full font-medium bg-primary-100 hover:bg-primary-200 text-primary-700 transition-colors shadow-sm hover:shadow-md border-primary-200">
+                  <Button variant="outline" className="w-full font-medium transition-colors shadow-sm hover:shadow-md border bg-accent/30 hover:bg-accent/50 text-foreground">
                     <span className="flex items-center gap-2 justify-center">
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
                         <rect width="18" height="18" x="3" y="3" rx="2" />
