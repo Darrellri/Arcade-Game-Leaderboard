@@ -14,6 +14,18 @@
     --primary-lightness: 50%;
     --primary: var(--primary-hue) var(--primary-saturation) var(--primary-lightness);
     
+    /* Purple color variations */
+    --primary-50: var(--primary-hue) var(--primary-saturation) 95%;
+    --primary-100: var(--primary-hue) var(--primary-saturation) 90%;
+    --primary-200: var(--primary-hue) var(--primary-saturation) 80%;
+    --primary-300: var(--primary-hue) var(--primary-saturation) 70%;
+    --primary-400: var(--primary-hue) var(--primary-saturation) 60%;
+    --primary-500: var(--primary-hue) var(--primary-saturation) 50%;
+    --primary-600: var(--primary-hue) var(--primary-saturation) 40%;
+    --primary-700: var(--primary-hue) var(--primary-saturation) 30%;
+    --primary-800: var(--primary-hue) var(--primary-saturation) 20%;
+    --primary-900: var(--primary-hue) var(--primary-saturation) 10%;
+    
     --champion-color: 40 100% 50%;
     
     --background: 0 0% 100%;
@@ -127,19 +139,19 @@
   
   /* Custom game section headers */
   .section-header {
-    background: linear-gradient(to right, hsl(var(--primary) / 0.1), transparent);
+    background: linear-gradient(to right, hsl(var(--primary-100)), transparent);
     @apply p-4 rounded-lg mb-6;
   }
   
   /* List view enhancements */
   .list-item {
-    @apply transition-all duration-200 hover:bg-accent/50;
+    @apply transition-all duration-200 hover:bg-primary-50/40;
     border-radius: var(--radius);
   }
   
   /* Game type icons */
   .game-type-icon {
-    @apply text-primary flex-shrink-0;
+    @apply text-primary-500 flex-shrink-0;
   }
   
   /* Score display */

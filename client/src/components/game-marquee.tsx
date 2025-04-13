@@ -17,7 +17,7 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
           <img 
             src={imageUrl} 
             alt={`${game.name} marquee`}
-            className="w-auto h-full max-w-full object-contain"
+            className="w-auto h-full max-w-full object-contain transition-all duration-300 hover:opacity-90"
           />
         </div>
       </div>

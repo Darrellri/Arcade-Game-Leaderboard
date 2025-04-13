@@ -35,45 +35,45 @@ export default function Leaderboard() {
   return (
     <div className="space-y-8">
       {/* Game Marquee Display */}
-      <div className="relative mb-6 shadow-md rounded-lg overflow-hidden">
-        <div className="w-full h-[200px] relative overflow-hidden">
-          {game.imageUrl ? (
-            <div className="w-full h-full bg-black rounded-t-lg flex items-center justify-center">
-              <img 
-                src={game.imageUrl} 
-                alt={`${game.name} marquee`}
-                className="w-auto h-full max-w-full object-contain transition-transform duration-700 hover:scale-105"
-              />
-            </div>
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40 rounded-t-lg">
-              <h2 className="text-2xl md:text-3xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground">
-                {game.name}
-              </h2>
-            </div>
-          )}
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold tracking-tight uppercase text-white truncate max-w-[80%] drop-shadow-md">{game.name}</h1>
-              {game.subtitle && <p className="text-white/90 mt-1 drop-shadow-sm">{game.subtitle}</p>}
-              <p className="text-white/90 mt-1 font-medium drop-shadow-sm">Top Scores</p>
-            </div>
-            <Button 
-              variant="outline" 
-              asChild 
-              className="bg-white/10 hover:bg-white/30 border-white/20 text-white transition-colors duration-300 shadow-md hover:shadow-lg font-medium"
-            >
-              <Link href="/">
-                <span className="flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                    <path d="m15 18-6-6 6-6"/>
-                  </svg>
-                  Back to Games
-                </span>
+      <div className="mb-8">
+        <div className="w-full min-h-[220px] relative bg-gradient-to-b from-primary-600 via-primary-500 to-primary-400">
+          {/* Game image/marquee overlay */}
+          <div className="absolute inset-0 opacity-25 bg-repeat" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.2'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          }}></div>
+
+          {/* Main content overlay */}
+          <div className="absolute inset-0 flex items-center justify-center p-6 sm:p-8">
+            <div className="w-full max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+              <Link href="/scores">
+                <div className="w-[120px] sm:w-[160px] h-[80px] sm:h-[106px] relative rounded overflow-hidden bg-black shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer">
+                  <img 
+                    src={game.imageUrl} 
+                    alt={game.name} 
+                    className="w-auto h-full max-w-full object-contain mx-auto cursor-pointer"
+                  />
+                </div>
               </Link>
-            </Button>
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white drop-shadow-sm">{game.name}</h1>
+                {game.subtitle && <p className="text-white/80">{game.subtitle}</p>}
+                <p className="text-white/90 mt-1 font-medium drop-shadow-sm">Top Scores</p>
+              </div>
+              <Button 
+                variant="outline" 
+                asChild 
+                className="bg-primary-200/30 hover:bg-primary-100/40 border-primary-300/30 text-white transition-colors duration-300 shadow-md hover:shadow-lg font-medium"
+              >
+                <Link href="/">
+                  <span className="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                      <path d="m15 18-6-6 6-6"/>
+                    </svg>
+                    Back to Games
+                  </span>
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
