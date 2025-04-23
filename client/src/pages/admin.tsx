@@ -138,6 +138,77 @@ export default function Admin() {
     });
   };
   
+  // Add a new game
+  const addGame = useMutation({
+    mutationFn: async (data: any) => {
+      const res = await apiRequest("POST", "/api/games", data);
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/games"] });
+      toast({
+        title: "Game Added",
+        description: "New game has been added successfully.",
+      });
+      
+      // Reset form
+      setNewGameData({
+        name: "",
+        subtitle: "",
+        imageUrl: "",
+        type: "arcade"
+      });
+      
+      // Close modal
+      setShowAddGameModal(false);
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message,
+      });
+    },
+  });
+  
+  // Delete a game
+  const deleteGame = useMutation({
+    mutationFn: async (id: number) => {
+      await apiRequest("DELETE", `/api/games/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/games"] });
+      toast({
+        title: "Game Deleted",
+        description: "Game has been removed successfully.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message,
+      });
+    },
+  });
+  
+  // State for add game modal
+  const [showAddGameModal, setShowAddGameModal] = useState(false);
+  const [newGameData, setNewGameData] = useState({
+    name: "",
+    subtitle: "",
+    imageUrl: "",
+    type: "arcade"
+  });
+  
+  // Handle new game data changes
+  const handleNewGameChange = (field: string, value: string) => {
+    setNewGameData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+  
   // State for tracking which game's image uploader is visible
   const [selectedGameId, setSelectedGameId] = useState<number | null>(null);
 

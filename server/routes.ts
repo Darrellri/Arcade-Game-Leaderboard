@@ -1,7 +1,7 @@
 import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertScoreSchema, venueSettingsSchema } from "@shared/schema";
+import { insertScoreSchema, insertGameSchema, venueSettingsSchema } from "@shared/schema";
 import { ZodError } from "zod";
 import multer from "multer";
 import path from "path";
@@ -95,6 +95,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(games);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch games" });
+    }
+  });
+  
+  // Add a new game
+  app.post("/api/games", async (req, res) => {
+    try {
+      const gameData = insertGameSchema.parse(req.body);
+      const newGame = await storage.addGame(gameData);
+      res.status(201).json(newGame);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ 
+          message: "Invalid game data",
+          errors: error.errors 
+        });
+      }
+      res.status(500).json({ message: "Failed to add game" });
+    }
+  });
+  
+  // Delete a game
+  app.delete("/api/games/:id", async (req, res) => {
+    try {
+      const gameId = parseInt(req.params.id);
+      const game = await storage.getGame(gameId);
+      
+      if (!game) {
+        return res.status(404).json({ message: "Game not found" });
+      }
+      
+      await storage.deleteGame(gameId);
+      res.status(204).end();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete game" });
     }
   });
 
