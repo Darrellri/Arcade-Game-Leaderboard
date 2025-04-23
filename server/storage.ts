@@ -5,8 +5,9 @@ export interface IStorage {
   getAllGames(): Promise<Game[]>;
   getGame(id: number): Promise<Game | undefined>;
   addGame(game: InsertGame): Promise<Game>;
-  updateGameHighScore(id: number, score: number, playerName: string): Promise<Game>;
+  updateGameHighScore(id: number, score: number, playerName: string, date?: Date): Promise<Game>;
   updateGame(id: number, game: Partial<Game>): Promise<Game>;
+  deleteGame(id: number): Promise<void>;
 
   // Score operations
   getScoresByGame(gameId: number): Promise<Score[]>;
@@ -266,6 +267,16 @@ export class MemStorage implements IStorage {
       ...settings,
     };
     return this.venueSettings;
+  }
+  
+  async deleteGame(id: number): Promise<void> {
+    // First delete all scores for this game
+    this.scores = new Map(
+      Array.from(this.scores.entries()).filter(([_, score]) => score.gameId !== id)
+    );
+    
+    // Then delete the game itself
+    this.games.delete(id);
   }
 }
 
