@@ -33,33 +33,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { venueSettingsSchema, type VenueSettings, type Game } from "@shared/schema";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { 
-  Gamepad2, 
-  CircleDot, 
-  Image, 
-  ImageDown, 
-  Plus, 
-  Trash, 
-  MoreVertical, 
-  Gamepad as GamepadIcon
-} from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
+import { Gamepad2, CircleDot, Image, ImageDown } from "lucide-react";
 import MarqueeImageUploader from "@/components/marquee-image-uploader";
 
 export default function Admin() {
@@ -511,43 +485,20 @@ export default function Admin() {
 
         <TabsContent value="games" className="space-y-4">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Gamepad2 className="h-5 w-5" />
-                  <span>Game Management</span>
-                </CardTitle>
-                <CardDescription>
-                  Edit game details and manage your arcade collection
-                </CardDescription>
-              </div>
-              <Button 
-                onClick={() => setShowAddGameModal(true)}
-                className="flex items-center gap-1"
-              >
-                <Plus className="h-4 w-4" />
-                Add Game
-              </Button>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Gamepad2 className="h-5 w-5" />
+                <span>Game Management</span>
+              </CardTitle>
+              <CardDescription>
+                Edit game details and manage your arcade collection
+              </CardDescription>
             </CardHeader>
             <CardContent>
               {/* Theme Switcher removed to improve stability */}
               
               {gamesLoading ? (
                 <div>Loading games...</div>
-              ) : games?.length === 0 ? (
-                <div className="text-center py-10 bg-muted/30 rounded-lg">
-                  <div className="flex justify-center mb-4">
-                    <GamepadIcon className="h-16 w-16 text-muted-foreground/60" />
-                  </div>
-                  <h3 className="text-lg font-medium mb-2">No Games Added Yet</h3>
-                  <p className="text-muted-foreground max-w-md mx-auto mb-6">
-                    Start adding games to your arcade by clicking the "Add Game" button above.
-                  </p>
-                  <Button onClick={() => setShowAddGameModal(true)}>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Your First Game
-                  </Button>
-                </div>
               ) : (
                 <div className="space-y-8">
                   <Table>
@@ -653,7 +604,7 @@ export default function Admin() {
                             )}
                           </TableCell>
                           <TableCell>
-                            <div className="flex flex-col gap-1">
+                            <div className="space-y-1">
                               <Button 
                                 variant="outline" 
                                 size="sm"
@@ -663,19 +614,6 @@ export default function Admin() {
                                 }}
                               >
                                 View
-                              </Button>
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                className="w-full text-destructive hover:text-destructive hover:bg-destructive/10"
-                                onClick={() => {
-                                  if (window.confirm(`Are you sure you want to delete "${game.name}"? This action cannot be undone.`)) {
-                                    deleteGame.mutate(game.id);
-                                  }
-                                }}
-                              >
-                                <Trash className="h-3 w-3 mr-1" />
-                                Delete
                               </Button>
                             </div>
                           </TableCell>
@@ -714,95 +652,6 @@ export default function Admin() {
           </Card>
         </TabsContent>
       </Tabs>
-
-      {/* Add Game Modal */}
-      <Dialog open={showAddGameModal} onOpenChange={setShowAddGameModal}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Add New Game</DialogTitle>
-            <DialogDescription>
-              Add a new game to your arcade collection. You can upload a marquee image after creating the game.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Game Name
-              </Label>
-              <Input
-                id="name"
-                value={newGameData.name}
-                onChange={(e) => handleNewGameChange('name', e.target.value)}
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="subtitle" className="text-right">
-                Subtitle
-              </Label>
-              <Input
-                id="subtitle"
-                value={newGameData.subtitle}
-                onChange={(e) => handleNewGameChange('subtitle', e.target.value)}
-                className="col-span-3"
-                placeholder="Optional subtitle or manufacturer"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="type" className="text-right">
-                Game Type
-              </Label>
-              <Select
-                value={newGameData.type}
-                onValueChange={(value) => handleNewGameChange('type', value)}
-              >
-                <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Select a game type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="arcade">
-                    <div className="flex items-center gap-2">
-                      <Gamepad2 className="h-4 w-4" />
-                      <span>Arcade</span>
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="pinball">
-                    <div className="flex items-center gap-2">
-                      <CircleDot className="h-4 w-4" />
-                      <span>Pinball</span>
-                    </div>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowAddGameModal(false)}>
-              Cancel
-            </Button>
-            <Button 
-              onClick={() => {
-                if (!newGameData.name) {
-                  toast({
-                    variant: "destructive",
-                    title: "Error",
-                    description: "Game name is required",
-                  });
-                  return;
-                }
-                addGame.mutate({
-                  name: newGameData.name,
-                  subtitle: newGameData.subtitle || null,
-                  type: newGameData.type
-                });
-              }}
-              disabled={addGame.isPending}
-            >
-              {addGame.isPending ? "Adding..." : "Add Game"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
