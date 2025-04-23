@@ -148,6 +148,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Upload game marquee image (792x214 aspect ratio)
+  app.post("/api/games/:id/upload-marquee", upload.single('marqueeImage'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      const gameId = parseInt(req.params.id);
+      const game = await storage.getGame(gameId);
+      
+      if (!game) {
+        // Remove uploaded file if game doesn't exist
+        fs.unlinkSync(req.file.path);
+        return res.status(404).json({ message: "Game not found" });
+      }
+
+      // Create relative URL to the uploaded file
+      const relativeFilePath = `/uploads/${path.basename(req.file.path)}`;
+      
+      // Update the game's image URL
+      const updatedGame = await storage.updateGame(gameId, { 
+        imageUrl: relativeFilePath 
+      });
+
+      res.status(200).json({ 
+        success: true, 
+        game: updatedGame,
+        imageUrl: relativeFilePath
+      });
+    } catch (error) {
+      console.error("Error uploading marquee image:", error);
+      res.status(500).json({ message: "Failed to upload image" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
