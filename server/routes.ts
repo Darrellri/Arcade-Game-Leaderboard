@@ -1,8 +1,48 @@
-import type { Express } from "express";
+import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertScoreSchema, venueSettingsSchema } from "@shared/schema";
 import { ZodError } from "zod";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+
+// Configure multer for storing game marquee images
+const marqueeStorage = multer.diskStorage({
+  destination: (_req, _file, cb) => {
+    const uploadPath = path.join(process.cwd(), 'public', 'uploads');
+    // Ensure the directory exists
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+    cb(null, uploadPath);
+  },
+  filename: (_req, file, cb) => {
+    // Use gameId to name the file (passed in the request body)
+    // With a timestamp to prevent caching issues
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname);
+    cb(null, 'game-marquee-' + uniqueSuffix + ext);
+  }
+});
+
+const upload = multer({
+  storage: marqueeStorage,
+  limits: {
+    fileSize: 5 * 1024 * 1024 // 5MB limit
+  },
+  fileFilter: (_req, file, cb) => {
+    // Accept only images
+    const filetypes = /jpeg|jpg|png|gif|webp/;
+    const mimetype = filetypes.test(file.mimetype);
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb(new Error("Only image files are allowed!"));
+  }
+});
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get venue settings
