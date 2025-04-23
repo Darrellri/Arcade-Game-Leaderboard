@@ -178,13 +178,13 @@ export default function Leaderboard() {
           {sortedScores.map((score, index) => (
             <div
               key={score.id}
-              className="list-item flex items-center justify-between p-5 bg-card rounded-lg shadow-sm hover:shadow-md transition-all duration-300 w-full"
+              className={`list-item flex items-center justify-between p-6 bg-card rounded-lg shadow-md hover:shadow-lg transition-all duration-300 w-full ${index === 0 ? "border-l-4 border-yellow-500" : ""}`}
             >
-              <div className="flex items-center gap-4 flex-grow">
+              <div className="flex items-center gap-5 flex-grow pr-6">
                 {index === 0 ? (
-                  <div className="flex items-center gap-2">
-                    <div className="champion-icon p-1.5">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <div className="flex-shrink-0 bg-primary/20 rounded-xl p-3 border border-primary/30">
+                    <div className="champion-icon p-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
                         <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
                         <path d="M4 22h16"></path>
@@ -196,18 +196,22 @@ export default function Leaderboard() {
                         <path d="M12 12a4 4 0 0 0 4-4V6H8v2a4 4 0 0 0 4 4Z"></path>
                       </svg>
                     </div>
-                    <span className="text-xl font-bold champion-badge letter-spacing-wide">CHAMPION</span>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-2">
-                    <div className="bg-accent/70 size-9 rounded-full flex items-center justify-center text-lg font-bold">
+                  <div className="flex-shrink-0">
+                    <div className="bg-accent/50 size-12 rounded-full flex items-center justify-center text-xl font-bold text-foreground shadow-sm">
                       {index + 1}
                     </div>
                   </div>
                 )}
-                <div>
-                  <div className={`font-bold text-lg tracking-wide ${index === 0 ? "champion-badge" : ""}`}>{score.playerName}</div>
-                  <div className="subtitle tracking-wider">
+                <div className="flex flex-col">
+                  <div className={`font-bold text-xl md:text-2xl tracking-wide ${index === 0 ? "champion-badge text-2xl md:text-3xl letter-spacing-wide" : ""}`}>
+                    {score.playerName}
+                    {index === 0 && (
+                      <span className="ml-3 text-base font-semibold px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-400">CHAMPION</span>
+                    )}
+                  </div>
+                  <div className="subtitle tracking-wider mt-1">
                     {formatDate(new Date(score.submittedAt!))}
                     <span className="italic ml-2">
                       ({formatTime(new Date(score.submittedAt!))})
@@ -215,19 +219,17 @@ export default function Leaderboard() {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-4 flex-shrink-0">
-                <div className={`text-2xl score-display flex items-center gap-1 ${index === 0 ? "champion-badge" : ""}`}>
+              <div className="flex flex-col items-end gap-3 bg-accent/20 px-6 py-4 rounded-lg flex-shrink-0">
+                <div className={`score-display text-2xl md:text-4xl font-bold text-right ${index === 0 ? "champion-badge text-3xl md:text-5xl" : ""}`}>
                   {score.score.toLocaleString()}
                 </div>
                 <Button 
                   variant="outline" 
-                  size="sm" 
                   className="shadow-sm hover:shadow-md font-medium border bg-accent/30 hover:bg-accent/50 text-foreground"
                 >
                   <ShareScore 
                     game={game} 
                     score={score} 
-                    size="sm" 
                     variant="outline" 
                     className="w-full"
                   />

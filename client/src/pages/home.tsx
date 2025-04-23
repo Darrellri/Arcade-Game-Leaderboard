@@ -91,11 +91,11 @@ export default function Home() {
           {processedGames?.map((game) => (
             <Link href={`/leaderboard/${game.id}`} key={game.id} className="block w-full">
               <div
-                className="list-item flex items-center justify-between p-4 bg-card rounded-lg shadow-sm hover:shadow-md hover:bg-card/90 cursor-pointer transition-all duration-200 w-full"
+                className="list-item flex items-center justify-between p-6 bg-card rounded-lg shadow-md hover:shadow-lg hover:bg-card/90 cursor-pointer transition-all duration-200 w-full"
               >
-                <div className="flex-grow">
-                  <div className="flex items-center gap-3">
-                    <div className="w-[120px] h-[40px] relative overflow-hidden rounded flex-shrink-0 bg-black">
+                <div className="flex-grow pr-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-[160px] h-[55px] relative overflow-hidden rounded-md flex-shrink-0 bg-black shadow-sm">
                       <img 
                         src={game.imageUrl}
                         alt={game.name}
@@ -105,20 +105,20 @@ export default function Home() {
                     <div>
                       <div className="flex items-center gap-2">
                         {game.type === 'pinball' ? (
-                          <CircleDot className="h-4 w-4 text-primary" />
+                          <CircleDot className="h-5 w-5 text-primary" />
                         ) : (
-                          <Gamepad2 className="h-4 w-4 text-primary" />
+                          <Gamepad2 className="h-5 w-5 text-primary" />
                         )}
-                        <span className="font-bold uppercase tracking-wide letter-spacing-wide text-outline text-foreground">{game.name}</span>
+                        <span className="text-xl font-bold uppercase tracking-wide letter-spacing-wide text-outline text-foreground">{game.name}</span>
                       </div>
-                      {game.subtitle && <span className="subtitle block tracking-wider">{game.subtitle}</span>}
+                      {game.subtitle && <span className="subtitle block tracking-wider text-sm">{game.subtitle}</span>}
                     </div>
                   </div>
-                  <div className="subtitle mt-2">
-                    Top Score by: {game.topScorerName || 'No scores yet'}
+                  <div className="mt-3 text-base font-medium tracking-wide">
+                    <span className="text-primary">Top Player:</span> {game.topScorerName || 'No scores yet'}
                   </div>
                   {game.topScoreDate && (
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-sm text-muted-foreground mt-1">
                       {formatDate(new Date(game.topScoreDate))} 
                       <span className="italic ml-1">
                         ({formatTime(new Date(game.topScoreDate))})
@@ -126,29 +126,31 @@ export default function Home() {
                     </div>
                   )}
                 </div>
-                <div className="flex items-center gap-4 flex-shrink-0">
+                <div className="flex items-center gap-6 flex-shrink-0 bg-accent/20 px-6 py-4 rounded-lg">
                   <div className="text-right">
-                    <div className="flex items-center gap-2 justify-end">
-                      <Trophy className="h-4 w-4 champion-badge" />
-                      <div className="score-display text-lg champion-badge">
+                    <div className="flex items-center gap-3 justify-end mb-1">
+                      <Trophy className="h-6 w-6 champion-badge" />
+                      <div className="score-display text-2xl md:text-3xl font-bold champion-badge">
                         {(game.topScore || 0).toLocaleString()}
                       </div>
                     </div>
-                    <div className="subtitle text-right">Top Score</div>
+                    <div className="subtitle text-right uppercase tracking-widest">High Score</div>
                   </div>
-                  <Button 
-                    variant="outline" 
-                    className="shadow-sm hover:shadow-md font-medium transition-colors border bg-accent/30 hover:bg-accent/50 text-foreground"
-                  >
-                    <span className="flex items-center gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
-                        <rect width="18" height="18" x="3" y="3" rx="2" />
-                        <path d="M3 9h18" />
-                        <path d="M9 21V9" />
-                      </svg>
-                      View Scores
-                    </span>
-                  </Button>
+                  <div className="ml-2">
+                    <Button 
+                      variant="outline" 
+                      className="shadow-sm hover:shadow-md font-medium transition-colors border bg-accent/30 hover:bg-accent/50 text-foreground h-full"
+                    >
+                      <span className="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                          <rect width="18" height="18" x="3" y="3" rx="2" />
+                          <path d="M3 9h18" />
+                          <path d="M9 21V9" />
+                        </svg>
+                        View Scores
+                      </span>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </Link>
