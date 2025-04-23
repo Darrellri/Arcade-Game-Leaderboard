@@ -1,4 +1,5 @@
 import { Game, InsertGame, Score, InsertScore, VenueSettings } from "@shared/schema";
+import { DatabaseStorage } from "./database";
 
 export interface IStorage {
   // Game operations
@@ -280,4 +281,4 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
