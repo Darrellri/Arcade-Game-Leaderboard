@@ -172,11 +172,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         imageUrl: relativeFilePath 
       });
 
-      res.status(200).json({ 
+      // Use plain string to avoid JSON.stringify issues
+      res.setHeader('Content-Type', 'application/json');
+      res.status(200).send(JSON.stringify({ 
         success: true, 
         game: updatedGame,
         imageUrl: relativeFilePath
-      });
+      }));
     } catch (error) {
       console.error("Error uploading marquee image:", error);
       res.status(500).json({ message: "Failed to upload image" });

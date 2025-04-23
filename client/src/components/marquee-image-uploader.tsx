@@ -68,7 +68,14 @@ export default function MarqueeImageUploader({
         throw new Error(`Upload failed: ${response.statusText}`);
       }
 
-      const result = await response.json();
+      let result;
+      try {
+        const text = await response.text();
+        result = JSON.parse(text);
+      } catch (jsonError) {
+        console.error("JSON parsing error:", jsonError);
+        throw new Error("Failed to parse server response. The image may have been uploaded, but there was an error processing the response.");
+      }
       
       // Invalidate game queries to refresh the data
       queryClient.invalidateQueries({ queryKey: ['/api/games'] });
