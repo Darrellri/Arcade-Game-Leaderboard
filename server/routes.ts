@@ -6,6 +6,7 @@ import { ZodError } from "zod";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import { execSync } from "child_process";
 
 // Configure multer for storing game marquee images
 const marqueeStorage = multer.diskStorage({
@@ -216,6 +217,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error uploading marquee image:", error);
       res.status(500).json({ message: "Failed to upload image" });
+    }
+  });
+  
+  // Database management routes
+  
+  // Clear all data
+  app.get("/scripts/clear-all-data", async (req, res) => {
+    try {
+      // Run the clear-all-data script
+      execSync('cd scripts && npx tsx clear-all-data.ts');
+      
+      // Redirect back to admin page with success message
+      res.redirect('/admin?message=All%20data%20has%20been%20cleared');
+    } catch (error) {
+      console.error("Error clearing data:", error);
+      res.redirect('/admin?error=Failed%20to%20clear%20data');
+    }
+  });
+  
+  // Restore demo data
+  app.get("/scripts/seed-demo-data", async (req, res) => {
+    try {
+      // Run the seed-demo-data script
+      execSync('cd scripts && npx tsx seed-demo-data.ts');
+      
+      // Redirect back to admin page with success message
+      res.redirect('/admin?message=Demo%20data%20has%20been%20restored');
+    } catch (error) {
+      console.error("Error restoring demo data:", error);
+      res.redirect('/admin?error=Failed%20to%20restore%20demo%20data');
     }
   });
 

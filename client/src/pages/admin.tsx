@@ -33,7 +33,28 @@ import { Textarea } from "@/components/ui/textarea";
 import { venueSettingsSchema, type VenueSettings, type Game } from "@shared/schema";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Gamepad2, CircleDot, Image, ImageDown } from "lucide-react";
+import { 
+  Gamepad2, 
+  CircleDot, 
+  Image, 
+  ImageDown, 
+  PlusCircle, 
+  Trash2, 
+  Database, 
+  RefreshCw, 
+  AlertTriangle,
+  Upload,
+  Camera
+} from "lucide-react";
+import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import MarqueeImageUploader from "@/components/marquee-image-uploader";
 
 export default function Admin() {
@@ -485,14 +506,23 @@ export default function Admin() {
 
         <TabsContent value="games" className="space-y-4">
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Gamepad2 className="h-5 w-5" />
-                <span>Game Management</span>
-              </CardTitle>
-              <CardDescription>
-                Edit game details and manage your arcade collection
-              </CardDescription>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <Gamepad2 className="h-5 w-5" />
+                  <span>Game Management</span>
+                </CardTitle>
+                <CardDescription>
+                  Edit game details and manage your arcade collection
+                </CardDescription>
+              </div>
+              <Button 
+                onClick={() => setShowAddGameModal(true)}
+                className="ml-auto"
+              >
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Add New Game
+              </Button>
             </CardHeader>
             <CardContent>
               {/* Theme Switcher removed to improve stability */}
@@ -615,6 +645,18 @@ export default function Admin() {
                               >
                                 View
                               </Button>
+                              <Button 
+                                variant="destructive" 
+                                size="sm"
+                                className="w-full"
+                                onClick={() => {
+                                  if (window.confirm(`Are you sure you want to delete ${game.name}?\n\nThis will permanently remove this game and all its scores.`)) {
+                                    deleteGame.mutate(game.id);
+                                  }
+                                }}
+                              >
+                                Delete
+                              </Button>
                             </div>
                           </TableCell>
                         </TableRow>
@@ -650,7 +692,128 @@ export default function Admin() {
               )}
             </CardContent>
           </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Database className="h-5 w-5 mr-2" />
+                Database Management
+              </CardTitle>
+              <CardDescription>
+                Options to reset or clear data from the system
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-4 md:grid-cols-2">
+              <div>
+                <h3 className="font-semibold mb-2">Clear All Data</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Remove all games and scores from the database. This cannot be undone.
+                </p>
+                <Button 
+                  variant="destructive"
+                  onClick={() => {
+                    if (window.confirm("WARNING: This will permanently delete ALL games and scores. This action cannot be undone. Are you sure?")) {
+                      // Execute the clear-all-data script
+                      window.location.href = "/scripts/clear-all-data";
+                    }
+                  }}
+                >
+                  <AlertTriangle className="h-4 w-4 mr-2" />
+                  Clear All Data
+                </Button>
+              </div>
+              
+              <div>
+                <h3 className="font-semibold mb-2">Reset To Demo Data</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Restore the default demo data for testing. This will overwrite existing data.
+                </p>
+                <Button 
+                  variant="outline"
+                  onClick={() => {
+                    if (window.confirm("This will replace current data with demo data. Continue?")) {
+                      // Execute the seed-demo-data script
+                      window.location.href = "/scripts/seed-demo-data";
+                    }
+                  }}
+                >
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Restore Demo Data
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
+        
+        {/* Add Game Modal */}
+        {showAddGameModal && (
+          <Dialog open={showAddGameModal} onOpenChange={setShowAddGameModal}>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Add New Game</DialogTitle>
+                <DialogDescription>
+                  Enter the details for the new arcade or pinball game.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Game Name</Label>
+                  <Input 
+                    id="name" 
+                    value={newGameData.name} 
+                    onChange={(e) => handleNewGameChange('name', e.target.value)}
+                    placeholder="e.g., Pac-Man"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="subtitle">Subtitle (optional)</Label>
+                  <Input 
+                    id="subtitle" 
+                    value={newGameData.subtitle} 
+                    onChange={(e) => handleNewGameChange('subtitle', e.target.value)}
+                    placeholder="e.g., Championship Edition"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="type">Game Type</Label>
+                  <Select 
+                    value={newGameData.type} 
+                    onValueChange={(value) => handleNewGameChange('type', value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="arcade">Arcade</SelectItem>
+                      <SelectItem value="pinball">Pinball</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setShowAddGameModal(false)}>
+                  Cancel
+                </Button>
+                <Button 
+                  onClick={() => {
+                    if (!newGameData.name) {
+                      toast({
+                        variant: "destructive",
+                        title: "Error",
+                        description: "Game name is required",
+                      });
+                      return;
+                    }
+                    addGame.mutate(newGameData);
+                  }}
+                  disabled={addGame.isPending}
+                >
+                  {addGame.isPending ? "Adding..." : "Add Game"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
       </Tabs>
     </div>
   );
