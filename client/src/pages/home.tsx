@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "wouter";
-import { Game } from "@shared/schema";
+import { Game, VenueSettings } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import GameCard from "@/components/game-card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -14,9 +14,15 @@ type ViewMode = "grid" | "list";
 export default function Home() {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
 
-  const { data: games, isLoading } = useQuery<Game[]>({
+  const { data: games, isLoading: gamesLoading } = useQuery<Game[]>({
     queryKey: ["/api/games"],
   });
+  
+  const { data: venueSettings, isLoading: settingsLoading } = useQuery<VenueSettings>({
+    queryKey: ["/api/admin/settings"],
+  });
+
+  const isLoading = gamesLoading || settingsLoading;
 
   if (isLoading) {
     return (
@@ -41,10 +47,18 @@ export default function Home() {
 
 
   return (
-    <div className="space-y-8">
-      <div className="section-header px-4 py-3 flex items-center justify-between rounded-lg mb-4 w-full">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Arcade Top Scores</h1>
-        <div className="flex items-center gap-4">
+    <div className="space-y-6">
+      {/* Header with venue name and view mode controls */}
+      <div className="section-header px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-lg mb-2 w-full">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight text-primary uppercase">
+            {venueSettings?.name || "Arcade"}
+          </h2>
+          <h1 className="text-3xl font-black tracking-tight text-foreground uppercase letter-spacing-wide text-outline">
+            TOP SCORES
+          </h1>
+        </div>
+        <div className="flex items-center gap-4 mt-3 sm:mt-0">
           <div className="font-medium hidden md:block text-muted-foreground">View Mode</div>
           <div className="flex gap-2">
             <Button
@@ -67,15 +81,15 @@ export default function Home() {
         </div>
       </div>
       
-      {/* Navigation buttons at the top */}
-      <div className="flex space-x-2 mb-6">
-        <Button variant="outline" asChild className="flex-1">
+      {/* Smaller navigation buttons */}
+      <div className="flex justify-end space-x-2 mb-4">
+        <Button variant="outline" size="sm" asChild className="h-8 px-3">
           <Link href="/">Home</Link>
         </Button>
-        <Button variant="outline" asChild className="flex-1">
+        <Button variant="outline" size="sm" asChild className="h-8 px-3">
           <Link href="/scan">Scan</Link>
         </Button>
-        <Button variant="outline" asChild className="flex-1">
+        <Button variant="outline" size="sm" asChild className="h-8 px-3">
           <Link href="/admin">Admin</Link>
         </Button>
       </div>
