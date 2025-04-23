@@ -223,7 +223,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Database management routes
   
   // Clear all data
-  app.get("/scripts/clear-all-data", async (req, res) => {
+  app.get("/api/admin/clear-all-data", async (req, res) => {
     try {
       // Run the clear-all-data script
       execSync('cd scripts && npx tsx clear-all-data.ts');
@@ -237,7 +237,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Restore demo data
-  app.get("/scripts/seed-demo-data", async (req, res) => {
+  app.get("/api/admin/restore-demo-data", async (req, res) => {
     try {
       // Run the seed-demo-data script
       execSync('cd scripts && npx tsx seed-demo-data.ts');

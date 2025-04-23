@@ -714,7 +714,7 @@ export default function Admin() {
                   onClick={() => {
                     if (window.confirm("WARNING: This will permanently delete ALL games and scores. This action cannot be undone. Are you sure?")) {
                       // Execute the clear-all-data script
-                      window.location.href = "/scripts/clear-all-data";
+                      window.location.href = "/api/admin/clear-all-data";
                     }
                   }}
                 >
@@ -733,7 +733,7 @@ export default function Admin() {
                   onClick={() => {
                     if (window.confirm("This will replace current data with demo data. Continue?")) {
                       // Execute the seed-demo-data script
-                      window.location.href = "/scripts/seed-demo-data";
+                      window.location.href = "/api/admin/restore-demo-data";
                     }
                   }}
                 >
