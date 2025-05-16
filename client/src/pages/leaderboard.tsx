@@ -3,20 +3,16 @@ import { useParams, Link } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Grid2X2, List } from "lucide-react";
-import { useState } from "react";
+import { List } from "lucide-react";
 import type { Game, Score } from "@shared/schema";
 import ShareScore from "@/components/share-score";
 import { TrophyIcon } from "@/components/trophy-icon";
 
 import { formatDate, formatTime } from "@/lib/formatters";
 
-type ViewMode = "grid" | "list";
-
 export default function Leaderboard() {
   const { gameId } = useParams();
   const id = parseInt(gameId || "0");
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
   // Always sort by score in descending order for individual game pages
 
   const { data: game } = useQuery<Game>({
@@ -90,87 +86,11 @@ export default function Leaderboard() {
           <Link href="/admin">Admin</Link>
         </Button>
       </div>
-      
-      <div className="section-header px-4 py-3 flex items-center justify-between rounded-lg mb-4">
-        <div className="font-medium text-lg">
-          View Mode
-        </div>
-        <div className="flex gap-2">
-          <Button
-            variant={viewMode === "grid" ? "default" : "outline"}
-            size="icon"
-            onClick={() => setViewMode("grid")}
-            className="shadow-sm hover:shadow-md transition-all duration-200"
-          >
-            <Grid2X2 className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={viewMode === "list" ? "default" : "outline"}
-            size="icon"
-            onClick={() => setViewMode("list")}
-            className="shadow-sm hover:shadow-md transition-all duration-200"
-          >
-            <List className="h-4 w-4" />
-          </Button>
-        </div>
-      </div>
 
       {isLoading ? (
         <div className="space-y-2">
           {[...Array(5)].map((_, i) => (
             <Skeleton key={i} className="h-16" />
-          ))}
-        </div>
-      ) : viewMode === "grid" ? (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {sortedScores.map((score, index) => (
-            <Card 
-              key={score.id} 
-              className={`shadow-md hover:shadow-lg transition-all duration-300 ${index === 0 ? "border-2 border-yellow-500" : ""}`}
-            >
-              <CardContent className="pt-6 card-content">
-                {index === 0 ? (
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="champion-icon p-1.5">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-                        <path d="M4 22h16"></path>
-                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-                        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
-                        <path d="M9 2v7.5"></path>
-                        <path d="M15 2v7.5"></path>
-                        <path d="M12 2v10"></path>
-                        <path d="M12 12a4 4 0 0 0 4-4V6H8v2a4 4 0 0 0 4 4Z"></path>
-                      </svg>
-                    </div>
-                    <div className="text-2xl font-bold champion-badge">CHAMPION</div>
-                  </div>
-                ) : (
-                  <div className="text-2xl font-bold mb-2 flex items-center gap-2">
-                    <span className="bg-secondary/50 size-8 rounded-full flex items-center justify-center">
-                      {index + 1}
-                    </span>
-                    <span>Rank</span>
-                  </div>
-                )}
-                <div className="text-xl font-medium">{score.playerName}</div>
-                <div className={`text-3xl score-display mt-2 ${index === 0 ? "champion-badge" : ""}`}>
-                  {score.score.toLocaleString()}
-                </div>
-                <div className="subtitle mt-2">
-                  {formatDate(new Date(score.submittedAt!))}
-                  <span className="italic ml-2">
-                    ({formatTime(new Date(score.submittedAt!))})
-                  </span>
-                </div>
-                <div className="mt-4">
-                  <Button variant="secondary" className="w-full font-medium shadow-sm hover:shadow-md mb-2">
-                    <ShareScore game={game} score={score} variant="secondary" className="w-full" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
           ))}
         </div>
       ) : (

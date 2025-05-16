@@ -1,19 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
 import { Link } from "wouter";
 import { Game, VenueSettings } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import GameCard from "@/components/game-card";
 import ShareScore from "@/components/share-score";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Gamepad2, Grid2X2, List, CircleDot, Trophy } from "lucide-react";
+import { Gamepad2, CircleDot, Trophy } from "lucide-react";
 
 import { formatDate, formatTime } from "@/lib/formatters";
 
-type ViewMode = "grid" | "list";
-
 export default function Home() {
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
 
   const { data: games, isLoading: gamesLoading } = useQuery<Game[]>({
     queryKey: ["/api/games"],
@@ -49,8 +45,8 @@ export default function Home() {
 
   return (
     <div className="space-y-6">
-      {/* Header with venue name and view mode controls */}
-      <div className="section-header px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-lg mb-2 w-full">
+      {/* Header with venue name */}
+      <div className="section-header px-5 py-4 rounded-lg mb-2 w-full">
         <div className="flex items-center gap-4">
           {venueSettings?.logoUrl && (
             <div className="logo-container flex-shrink-0 overflow-hidden rounded-md shadow-md bg-card/70 border border-primary/20" 
@@ -71,27 +67,6 @@ export default function Home() {
             </h1>
           </div>
         </div>
-        <div className="flex items-center gap-4 mt-3 sm:mt-0">
-          <div className="font-medium hidden md:block text-muted-foreground">View Mode</div>
-          <div className="flex gap-2">
-            <Button
-              variant={viewMode === "grid" ? "default" : "outline"}
-              size="icon"
-              onClick={() => setViewMode("grid")}
-              className="shadow-sm hover:shadow-md transition-all duration-200"
-            >
-              <Grid2X2 className="h-4 w-4" />
-            </Button>
-            <Button
-              variant={viewMode === "list" ? "default" : "outline"}
-              size="icon"
-              onClick={() => setViewMode("list")}
-              className="shadow-sm hover:shadow-md transition-all duration-200"
-            >
-              <List className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
       </div>
       
       {/* Smaller navigation buttons */}
@@ -107,14 +82,7 @@ export default function Home() {
         </Button>
       </div>
 
-      {viewMode === "grid" ? (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {processedGames?.map((game) => (
-            <GameCard key={game.id} game={game} />
-          ))}
-        </div>
-      ) : (
-        <div className="space-y-3 w-full">
+      <div className="space-y-3 w-full">
           {processedGames?.map((game) => (
             <Link href={`/leaderboard/${game.id}`} key={game.id} className="block w-full">
               <div
@@ -196,7 +164,6 @@ export default function Home() {
             </Link>
           ))}
         </div>
-      )}
     </div>
   );
 }
