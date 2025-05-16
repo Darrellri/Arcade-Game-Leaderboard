@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { Game, VenueSettings } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import GameCard from "@/components/game-card";
+import ShareScore from "@/components/share-score";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Gamepad2, Grid2X2, List, CircleDot, Trophy } from "lucide-react";
 
@@ -169,7 +170,7 @@ export default function Home() {
                     </div>
                     <div className="subtitle text-right uppercase tracking-widest">High Score</div>
                   </div>
-                  <div className="ml-2">
+                  <div className="flex gap-2">
                     <Button 
                       variant="outline" 
                       className="shadow-sm hover:shadow-md font-medium transition-colors border bg-accent/30 hover:bg-accent/50 text-foreground h-full"
@@ -183,6 +184,12 @@ export default function Home() {
                         View Scores
                       </span>
                     </Button>
+                    <ShareScore 
+                      game={game} 
+                      variant="secondary" 
+                      size="sm"
+                      className="shadow-sm hover:shadow-md" 
+                    />
                   </div>
                 </div>
               </div>
