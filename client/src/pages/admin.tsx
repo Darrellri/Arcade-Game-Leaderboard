@@ -441,10 +441,11 @@ export default function Admin() {
                         ></div>
                         <Button 
                           size="sm" 
-                          className="px-3 ml-auto"
+                          className="px-3 ml-auto shadow-lg border border-white/20"
                           style={{ 
                             backgroundColor: settings.theme.primary === preset.primary ? '#666' : preset.primary,
-                            color: 'white'
+                            color: 'white',
+                            textShadow: '0 1px 2px rgba(0,0,0,0.6)'
                           }}
                         >
                           Apply
