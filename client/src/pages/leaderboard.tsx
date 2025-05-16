@@ -3,16 +3,20 @@ import { useParams, Link } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { List } from "lucide-react";
+import { Grid2X2, List } from "lucide-react";
+import { useState } from "react";
 import type { Game, Score } from "@shared/schema";
 import ShareScore from "@/components/share-score";
 import { TrophyIcon } from "@/components/trophy-icon";
 
 import { formatDate, formatTime } from "@/lib/formatters";
 
+type ViewMode = "grid" | "list";
+
 export default function Leaderboard() {
   const { gameId } = useParams();
   const id = parseInt(gameId || "0");
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
   // Always sort by score in descending order for individual game pages
 
   const { data: game } = useQuery<Game>({
@@ -32,33 +36,33 @@ export default function Leaderboard() {
     <div className="space-y-8">
       {/* Game Marquee Display */}
       <div className="mb-8">
-        <div className="w-full min-h-[240px] relative bg-gradient-to-r from-primary/40 via-primary/30 to-primary/20 rounded-lg shadow-lg overflow-hidden">
+        <div className="w-full min-h-[220px] relative bg-gradient-to-b from-primary-600 via-primary-500 to-primary-400">
           {/* Game image/marquee overlay */}
-          <div className="absolute inset-0 opacity-20 bg-repeat" style={{
+          <div className="absolute inset-0 opacity-25 bg-repeat" style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.2'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
           }}></div>
 
           {/* Main content overlay */}
           <div className="absolute inset-0 flex items-center justify-center p-6 sm:p-8">
-            <div className="w-full max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
-              <Link href="/scores" className="flex-shrink-0">
-                <div className="w-[150px] sm:w-[200px] h-[100px] sm:h-[133px] relative rounded-lg overflow-hidden bg-black shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer border border-white/20">
+            <div className="w-full max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+              <Link href="/scores">
+                <div className="w-[120px] sm:w-[160px] h-[80px] sm:h-[106px] relative rounded overflow-hidden bg-black shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer">
                   <img 
                     src={game.imageUrl} 
                     alt={game.name} 
-                    className="w-full h-full object-cover mx-auto cursor-pointer"
+                    className="w-auto h-full max-w-full object-contain mx-auto cursor-pointer"
                   />
                 </div>
               </Link>
-              <div className="flex-grow text-center sm:text-left">
-                <h1 className="text-3xl sm:text-5xl font-bold tracking-wide letter-spacing-wide text-white drop-shadow-md text-outline">{game.name}</h1>
-                {game.subtitle && <p className="text-white/90 tracking-wider text-lg">{game.subtitle}</p>}
-                <p className="text-white mt-2 font-medium drop-shadow-sm text-xl">TOP SCORES</p>
+              <div>
+                <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white drop-shadow-sm">{game.name}</h1>
+                {game.subtitle && <p className="text-white/80">{game.subtitle}</p>}
+                <p className="text-white/90 mt-1 font-medium drop-shadow-sm">Top Scores</p>
               </div>
               <Button 
                 variant="outline" 
                 asChild 
-                className="bg-accent/30 hover:bg-accent/50 border-white/20 text-white transition-colors duration-300 shadow-md hover:shadow-lg font-medium flex-shrink-0"
+                className="bg-primary-200/30 hover:bg-primary-100/40 border-primary-300/30 text-white transition-colors duration-300 shadow-md hover:shadow-lg font-medium"
               >
                 <Link href="/">
                   <span className="flex items-center gap-2">
@@ -74,17 +78,28 @@ export default function Leaderboard() {
         </div>
       </div>
 
-      {/* Navigation buttons at the top */}
-      <div className="flex space-x-2 mb-6">
-        <Button variant="outline" asChild className="flex-1">
-          <Link href="/">Home</Link>
-        </Button>
-        <Button variant="outline" asChild className="flex-1">
-          <Link href="/scan">Scan</Link>
-        </Button>
-        <Button variant="outline" asChild className="flex-1">
-          <Link href="/admin">Admin</Link>
-        </Button>
+      <div className="section-header px-4 py-3 flex items-center justify-between rounded-lg mb-4">
+        <div className="font-medium text-lg">
+          View Mode
+        </div>
+        <div className="flex gap-2">
+          <Button
+            variant={viewMode === "grid" ? "default" : "outline"}
+            size="icon"
+            onClick={() => setViewMode("grid")}
+            className="shadow-sm hover:shadow-md transition-all duration-200"
+          >
+            <Grid2X2 className="h-4 w-4" />
+          </Button>
+          <Button
+            variant={viewMode === "list" ? "default" : "outline"}
+            size="icon"
+            onClick={() => setViewMode("list")}
+            className="shadow-sm hover:shadow-md transition-all duration-200"
+          >
+            <List className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
       {isLoading ? (
@@ -93,18 +108,18 @@ export default function Leaderboard() {
             <Skeleton key={i} className="h-16" />
           ))}
         </div>
-      ) : (
-        <div className="space-y-3 w-full">
+      ) : viewMode === "grid" ? (
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {sortedScores.map((score, index) => (
-            <div
-              key={score.id}
-              className={`list-item flex items-center justify-between p-6 bg-card rounded-lg shadow-md hover:shadow-lg transition-all duration-300 w-full ${index === 0 ? "border-l-4 border-yellow-500" : ""}`}
+            <Card 
+              key={score.id} 
+              className={`shadow-md hover:shadow-lg transition-all duration-300 ${index === 0 ? "border-2 border-yellow-500" : ""}`}
             >
-              <div className="flex items-center gap-5 flex-grow pr-6">
+              <CardContent className="pt-6 card-content">
                 {index === 0 ? (
-                  <div className="flex-shrink-0 bg-primary/20 rounded-xl p-3 border border-primary/30">
-                    <div className="champion-icon p-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="champion-icon p-1.5">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
                         <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
                         <path d="M4 22h16"></path>
@@ -116,22 +131,70 @@ export default function Leaderboard() {
                         <path d="M12 12a4 4 0 0 0 4-4V6H8v2a4 4 0 0 0 4 4Z"></path>
                       </svg>
                     </div>
+                    <div className="text-2xl font-bold champion-badge">CHAMPION</div>
                   </div>
                 ) : (
-                  <div className="flex-shrink-0">
-                    <div className="bg-accent/50 size-12 rounded-full flex items-center justify-center text-xl font-bold text-foreground shadow-sm">
+                  <div className="text-2xl font-bold mb-2 flex items-center gap-2">
+                    <span className="bg-secondary/50 size-8 rounded-full flex items-center justify-center">
+                      {index + 1}
+                    </span>
+                    <span>Rank</span>
+                  </div>
+                )}
+                <div className="text-xl font-medium">{score.playerName}</div>
+                <div className={`text-3xl score-display mt-2 ${index === 0 ? "champion-badge" : ""}`}>
+                  {score.score.toLocaleString()}
+                </div>
+                <div className="subtitle mt-2">
+                  {formatDate(new Date(score.submittedAt!))}
+                  <span className="italic ml-2">
+                    ({formatTime(new Date(score.submittedAt!))})
+                  </span>
+                </div>
+                <div className="mt-4">
+                  <Button variant="secondary" className="w-full font-medium shadow-sm hover:shadow-md mb-2">
+                    <ShareScore game={game} score={score} variant="secondary" className="w-full" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {sortedScores.map((score, index) => (
+            <div
+              key={score.id}
+              className="list-item flex items-center justify-between p-4 bg-card rounded-lg shadow-sm hover:shadow-md transition-all duration-300"
+            >
+              <div className="flex items-center gap-4">
+                {index === 0 ? (
+                  <div className="flex items-center gap-2">
+                    <div className="champion-icon p-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+                        <path d="M4 22h16"></path>
+                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+                        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+                        <path d="M9 2v7.5"></path>
+                        <path d="M15 2v7.5"></path>
+                        <path d="M12 2v10"></path>
+                        <path d="M12 12a4 4 0 0 0 4-4V6H8v2a4 4 0 0 0 4 4Z"></path>
+                      </svg>
+                    </div>
+                    <span className="text-xl font-bold champion-badge">CHAMPION</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <div className="bg-secondary/50 size-8 rounded-full flex items-center justify-center">
                       {index + 1}
                     </div>
                   </div>
                 )}
-                <div className="flex flex-col">
-                  <div className={`font-bold text-xl md:text-2xl tracking-wide ${index === 0 ? "champion-badge text-2xl md:text-3xl letter-spacing-wide" : ""}`}>
-                    {score.playerName}
-                    {index === 0 && (
-                      <span className="ml-3 text-base font-semibold px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-400">CHAMPION</span>
-                    )}
-                  </div>
-                  <div className="subtitle tracking-wider mt-1">
+                <div>
+                  <div className={`font-medium text-lg ${index === 0 ? "champion-badge" : ""}`}>{score.playerName}</div>
+                  <div className="subtitle">
                     {formatDate(new Date(score.submittedAt!))}
                     <span className="italic ml-2">
                       ({formatTime(new Date(score.submittedAt!))})
@@ -139,18 +202,20 @@ export default function Leaderboard() {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col items-end gap-3 bg-accent/20 px-6 py-4 rounded-lg flex-shrink-0">
-                <div className={`score-display text-2xl md:text-4xl font-bold text-right ${index === 0 ? "champion-badge text-3xl md:text-5xl" : ""}`}>
+              <div className="flex items-center gap-3">
+                <div className={`text-xl score-display flex items-center gap-1 ${index === 0 ? "champion-badge" : ""}`}>
                   {score.score.toLocaleString()}
                 </div>
                 <Button 
-                  variant="outline" 
-                  className="shadow-sm hover:shadow-md font-medium border bg-accent/30 hover:bg-accent/50 text-foreground"
+                  variant="secondary" 
+                  size="sm" 
+                  className="shadow-sm hover:shadow-md font-medium"
                 >
                   <ShareScore 
                     game={game} 
                     score={score} 
-                    variant="outline" 
+                    size="sm" 
+                    variant="secondary" 
                     className="w-full"
                   />
                 </Button>

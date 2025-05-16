@@ -1,4 +1,4 @@
-import { Facebook, Share2, Twitter, Link as LinkIcon, Mail, Share, Instagram } from "lucide-react";
+import { Facebook, Share2, Twitter, Link as LinkIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -55,18 +55,6 @@ export default function ShareScore({
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
   };
-  
-  const shareToWhatsApp = () => {
-    const message = generateShareMessage();
-    const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
-  };
-  
-  const shareViaEmail = () => {
-    const message = generateShareMessage();
-    const url = `mailto:?subject=Arcade High Score&body=${encodeURIComponent(message)}`;
-    window.open(url);
-  };
 
   const copyToClipboard = async () => {
     const message = generateShareMessage();
@@ -116,20 +104,6 @@ export default function ShareScore({
         >
           <Twitter className="h-4 w-4 mr-2 text-sky-500" />
           <span className="font-medium">Twitter</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem 
-          onClick={shareToWhatsApp} 
-          className="flex items-center p-2 cursor-pointer transition-colors hover:bg-secondary rounded-sm"
-        >
-          <Share className="h-4 w-4 mr-2 text-green-500" />
-          <span className="font-medium">WhatsApp</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem 
-          onClick={shareViaEmail} 
-          className="flex items-center p-2 cursor-pointer transition-colors hover:bg-secondary rounded-sm"
-        >
-          <Mail className="h-4 w-4 mr-2 text-amber-500" />
-          <span className="font-medium">Email</span>
         </DropdownMenuItem>
         <DropdownMenuItem 
           onClick={copyToClipboard} 

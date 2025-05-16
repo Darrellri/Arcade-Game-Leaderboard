@@ -33,29 +33,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { venueSettingsSchema, type VenueSettings, type Game } from "@shared/schema";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { 
-  Gamepad2, 
-  CircleDot, 
-  Image, 
-  ImageDown, 
-  PlusCircle, 
-  Trash2, 
-  Database, 
-  RefreshCw, 
-  AlertTriangle,
-  Upload,
-  Camera
-} from "lucide-react";
-import { 
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import MarqueeImageUploader from "@/components/marquee-image-uploader";
+import { Gamepad2, CircleDot, Image } from "lucide-react";
 
 export default function Admin() {
   const { toast } = useToast();
@@ -158,80 +136,6 @@ export default function Admin() {
       data: { [field]: value }
     });
   };
-  
-  // Add a new game
-  const addGame = useMutation({
-    mutationFn: async (data: any) => {
-      const res = await apiRequest("POST", "/api/games", data);
-      return res.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/games"] });
-      toast({
-        title: "Game Added",
-        description: "New game has been added successfully.",
-      });
-      
-      // Reset form
-      setNewGameData({
-        name: "",
-        subtitle: "",
-        imageUrl: "",
-        type: "arcade"
-      });
-      
-      // Close modal
-      setShowAddGameModal(false);
-    },
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message,
-      });
-    },
-  });
-  
-  // Delete a game
-  const deleteGame = useMutation({
-    mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/games/${id}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/games"] });
-      toast({
-        title: "Game Deleted",
-        description: "Game has been removed successfully.",
-      });
-    },
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message,
-      });
-    },
-  });
-  
-  // State for add game modal
-  const [showAddGameModal, setShowAddGameModal] = useState(false);
-  const [newGameData, setNewGameData] = useState({
-    name: "",
-    subtitle: "",
-    imageUrl: "",
-    type: "arcade"
-  });
-  
-  // Handle new game data changes
-  const handleNewGameChange = (field: string, value: string) => {
-    setNewGameData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-  
-  // State for tracking which game's image uploader is visible
-  const [selectedGameId, setSelectedGameId] = useState<number | null>(null);
 
   if (settingsLoading) {
     return <div>Loading settings...</div>;
@@ -441,11 +345,10 @@ export default function Admin() {
                         ></div>
                         <Button 
                           size="sm" 
-                          className="px-3 ml-auto shadow-lg border border-white/20"
+                          className="px-3 ml-auto"
                           style={{ 
                             backgroundColor: settings.theme.primary === preset.primary ? '#666' : preset.primary,
-                            color: 'white',
-                            textShadow: '0 1px 2px rgba(0,0,0,0.6)'
+                            color: 'white'
                           }}
                         >
                           Apply
@@ -507,23 +410,14 @@ export default function Admin() {
 
         <TabsContent value="games" className="space-y-4">
           <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Gamepad2 className="h-5 w-5" />
-                  <span>Game Management</span>
-                </CardTitle>
-                <CardDescription>
-                  Edit game details and manage your arcade collection
-                </CardDescription>
-              </div>
-              <Button 
-                onClick={() => setShowAddGameModal(true)}
-                className="ml-auto"
-              >
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Add New Game
-              </Button>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Gamepad2 className="h-5 w-5" />
+                <span>Game Management</span>
+              </CardTitle>
+              <CardDescription>
+                Edit game details and manage your arcade collection
+              </CardDescription>
             </CardHeader>
             <CardContent>
               {/* Theme Switcher removed to improve stability */}
@@ -531,290 +425,95 @@ export default function Admin() {
               {gamesLoading ? (
                 <div>Loading games...</div>
               ) : (
-                <div className="space-y-8">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Game</TableHead>
-                        <TableHead>Type</TableHead>
-                        <TableHead>Image</TableHead>
-                        <TableHead>Top Score</TableHead>
-                        <TableHead>Actions</TableHead>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Game</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Image URL</TableHead>
+                      <TableHead>Top Score</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {games?.map((game) => (
+                      <TableRow key={game.id}>
+                        <TableCell>
+                          <Input 
+                            defaultValue={game.name}
+                            className="w-full max-w-[200px]"
+                            onBlur={(e) => {
+                              if (e.target.value !== game.name) {
+                                handleGameEdit(game.id, "name", e.target.value);
+                              }
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Select 
+                            defaultValue={game.type}
+                            onValueChange={(value) => handleGameEdit(game.id, "type", value)}
+                          >
+                            <SelectTrigger className="w-[120px]">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="arcade">
+                                <div className="flex items-center gap-2">
+                                  <Gamepad2 className="h-4 w-4" />
+                                  <span>Arcade</span>
+                                </div>
+                              </SelectItem>
+                              <SelectItem value="pinball">
+                                <div className="flex items-center gap-2">
+                                  <CircleDot className="h-4 w-4" />
+                                  <span>Pinball</span>
+                                </div>
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </TableCell>
+                        <TableCell>
+                          <Input 
+                            defaultValue={game.imageUrl}
+                            className="w-full max-w-[250px]"
+                            onBlur={(e) => {
+                              if (e.target.value !== game.imageUrl) {
+                                handleGameEdit(game.id, "imageUrl", e.target.value);
+                              }
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          {game.currentHighScore ? (
+                            <div>
+                              <div className="font-mono font-bold">{game.currentHighScore.toLocaleString()}</div>
+                              <div className="text-sm text-muted-foreground">by {game.topScorerName}</div>
+                            </div>
+                          ) : (
+                            <span className="text-muted-foreground">No scores yet</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => {
+                              // Preview functionality could be added here
+                              window.open(`/leaderboard/${game.id}`, '_blank');
+                            }}
+                          >
+                            View
+                          </Button>
+                        </TableCell>
                       </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {games?.map((game) => (
-                        <TableRow key={game.id}>
-                          <TableCell>
-                            <div className="space-y-2">
-                              <Input 
-                                defaultValue={game.name}
-                                className="w-full max-w-[200px]"
-                                onBlur={(e) => {
-                                  if (e.target.value !== game.name) {
-                                    handleGameEdit(game.id, "name", e.target.value);
-                                  }
-                                }}
-                              />
-                              <Input 
-                                defaultValue={game.subtitle || ''}
-                                placeholder="Game subtitle"
-                                className="w-full max-w-[200px] text-sm"
-                                onBlur={(e) => {
-                                  if (e.target.value !== game.subtitle) {
-                                    handleGameEdit(game.id, "subtitle", e.target.value);
-                                  }
-                                }}
-                              />
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <Select 
-                              defaultValue={game.type}
-                              onValueChange={(value) => handleGameEdit(game.id, "type", value)}
-                            >
-                              <SelectTrigger className="w-[120px]">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="arcade">
-                                  <div className="flex items-center gap-2">
-                                    <Gamepad2 className="h-4 w-4" />
-                                    <span>Arcade</span>
-                                  </div>
-                                </SelectItem>
-                                <SelectItem value="pinball">
-                                  <div className="flex items-center gap-2">
-                                    <CircleDot className="h-4 w-4" />
-                                    <span>Pinball</span>
-                                  </div>
-                                </SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </TableCell>
-                          <TableCell>
-                            <div className="space-y-2">
-                              <div className="w-[120px] h-[32px] bg-card/50 rounded overflow-hidden">
-                                {game.imageUrl ? (
-                                  <img 
-                                    src={game.imageUrl} 
-                                    alt={game.name} 
-                                    className="w-full h-full object-cover"
-                                    onError={(e) => {
-                                      const target = e.target as HTMLImageElement;
-                                      target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>';
-                                    }}
-                                  />
-                                ) : (
-                                  <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                                    <Image className="h-4 w-4" />
-                                  </div>
-                                )}
-                              </div>
-                              <div className="flex items-center">
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm"
-                                  className="h-8 px-2 text-xs flex items-center gap-1"
-                                  onClick={() => setSelectedGameId(selectedGameId === game.id ? null : game.id)}
-                                >
-                                  <ImageDown className="h-3 w-3" />
-                                  {selectedGameId === game.id ? "Close" : "Upload Image"}
-                                </Button>
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            {game.currentHighScore ? (
-                              <div>
-                                <div className="font-mono font-bold">{game.currentHighScore.toLocaleString()}</div>
-                                <div className="text-sm text-muted-foreground">by {game.topScorerName}</div>
-                              </div>
-                            ) : (
-                              <span className="text-muted-foreground">No scores yet</span>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            <div className="space-y-1">
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                className="w-full"
-                                onClick={() => {
-                                  window.open(`/leaderboard/${game.id}`, '_blank');
-                                }}
-                              >
-                                View
-                              </Button>
-                              <Button 
-                                variant="destructive" 
-                                size="sm"
-                                className="w-full"
-                                onClick={() => {
-                                  if (window.confirm(`Are you sure you want to delete ${game.name}?\n\nThis will permanently remove this game and all its scores.`)) {
-                                    deleteGame.mutate(game.id);
-                                  }
-                                }}
-                              >
-                                Delete
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                  
-                  {/* Image Upload Section */}
-                  {selectedGameId !== null && games?.find(g => g.id === selectedGameId) && (
-                    <Card className="mt-8 border border-primary/20">
-                      <CardHeader className="border-b bg-muted/50">
-                        <CardTitle className="text-xl flex items-center gap-2">
-                          <ImageDown className="h-5 w-5" />
-                          Game Marquee Upload
-                        </CardTitle>
-                        <CardDescription>
-                          Upload a new marquee image for {games.find(g => g.id === selectedGameId)?.name}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="pt-6">
-                        <MarqueeImageUploader
-                          gameId={selectedGameId}
-                          currentImageUrl={games.find(g => g.id === selectedGameId)?.imageUrl || null}
-                          onSuccess={(imageUrl) => {
-                            // Just close the uploader on success
-                            setSelectedGameId(null);
-                          }}
-                        />
-                      </CardContent>
-                    </Card>
-                  )}
-                </div>
+                    ))}
+                  </TableBody>
+                </Table>
               )}
             </CardContent>
           </Card>
-          
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Database className="h-5 w-5 mr-2" />
-                Database Management
-              </CardTitle>
-              <CardDescription>
-                Options to reset or clear data from the system
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-4 md:grid-cols-2">
-              <div>
-                <h3 className="font-semibold mb-2">Clear All Data</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Remove all games and scores from the database. This cannot be undone.
-                </p>
-                <Button 
-                  variant="destructive"
-                  onClick={() => {
-                    if (window.confirm("WARNING: This will permanently delete ALL games and scores. This action cannot be undone. Are you sure?")) {
-                      // Execute the clear-all-data script
-                      window.location.href = "/api/admin/clear-all-data";
-                    }
-                  }}
-                >
-                  <AlertTriangle className="h-4 w-4 mr-2" />
-                  Clear All Data
-                </Button>
-              </div>
-              
-              <div>
-                <h3 className="font-semibold mb-2">Reset To Demo Data</h3>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Restore the default demo data for testing. This will overwrite existing data.
-                </p>
-                <Button 
-                  variant="outline"
-                  onClick={() => {
-                    if (window.confirm("This will replace current data with demo data. Continue?")) {
-                      // Execute the seed-demo-data script
-                      window.location.href = "/api/admin/restore-demo-data";
-                    }
-                  }}
-                >
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Restore Demo Data
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
         </TabsContent>
-        
-        {/* Add Game Modal */}
-        {showAddGameModal && (
-          <Dialog open={showAddGameModal} onOpenChange={setShowAddGameModal}>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Add New Game</DialogTitle>
-                <DialogDescription>
-                  Enter the details for the new arcade or pinball game.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-4 py-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Game Name</Label>
-                  <Input 
-                    id="name" 
-                    value={newGameData.name} 
-                    onChange={(e) => handleNewGameChange('name', e.target.value)}
-                    placeholder="e.g., Pac-Man"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="subtitle">Subtitle (optional)</Label>
-                  <Input 
-                    id="subtitle" 
-                    value={newGameData.subtitle} 
-                    onChange={(e) => handleNewGameChange('subtitle', e.target.value)}
-                    placeholder="e.g., Championship Edition"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="type">Game Type</Label>
-                  <Select 
-                    value={newGameData.type} 
-                    onValueChange={(value) => handleNewGameChange('type', value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="arcade">Arcade</SelectItem>
-                      <SelectItem value="pinball">Pinball</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <DialogFooter>
-                <Button variant="outline" onClick={() => setShowAddGameModal(false)}>
-                  Cancel
-                </Button>
-                <Button 
-                  onClick={() => {
-                    if (!newGameData.name) {
-                      toast({
-                        variant: "destructive",
-                        title: "Error",
-                        description: "Game name is required",
-                      });
-                      return;
-                    }
-                    addGame.mutate(newGameData);
-                  }}
-                  disabled={addGame.isPending}
-                >
-                  {addGame.isPending ? "Adding..." : "Add Game"}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        )}
       </Tabs>
     </div>
   );

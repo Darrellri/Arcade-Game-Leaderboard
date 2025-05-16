@@ -1,8 +1,7 @@
-import { useLocation, Link } from "wouter";
+import { useLocation } from "wouter";
 import QRScanner from "@/components/qr-scanner";
 import { Card, CardContent } from "@/components/ui/card";
 import { QrCode, Gamepad2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export default function Scan() {
   const [, setLocation] = useLocation();
@@ -14,23 +13,10 @@ export default function Scan() {
   return (
     <div className="space-y-8 pb-20 md:pb-0">
       <div className="section-header px-6 py-4 rounded-lg">
-        <h1 className="text-3xl font-bold tracking-tight">Scan Top Score</h1>
+        <h1 className="text-4xl font-bold tracking-tight">Scan Top Score</h1>
         <p className="subtitle mt-2">
           Scan the QR code on your arcade game or enter the game ID manually
         </p>
-      </div>
-      
-      {/* Navigation buttons at the top */}
-      <div className="flex space-x-2 mb-6">
-        <Button variant="outline" asChild className="flex-1">
-          <Link href="/">Home</Link>
-        </Button>
-        <Button variant="outline" asChild className="flex-1">
-          <Link href="/scan">Scan</Link>
-        </Button>
-        <Button variant="outline" asChild className="flex-1">
-          <Link href="/admin">Admin</Link>
-        </Button>
       </div>
       
       <div className="max-w-md mx-auto space-y-6">
