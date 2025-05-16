@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import GameMarquee from "./game-marquee";
+import ShareScore from "./share-score";
 import { formatDate, formatTime } from "@/lib/formatters";
 
 interface GameCardProps {
@@ -27,10 +28,13 @@ export default function GameCard({ game }: GameCardProps) {
     Math.floor((new Date().getTime() - new Date(game.topScoreDate).getTime()) / (1000 * 3600 * 24)) : 0;
     
   return (
-    <Link href={`/leaderboard/${game.id}`} className="block">
-      <div className="overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 bg-card hover:bg-card/90 cursor-pointer border border-primary/20">
+    <div className="overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 bg-card border border-primary/20">
+      <Link href={`/leaderboard/${game.id}`}>
         <GameMarquee game={game} />
-        <div className="card-content p-4 space-y-3">
+      </Link>
+      
+      <div className="card-content p-4 space-y-3">
+        <Link href={`/leaderboard/${game.id}`}>
           <div className="flex items-center gap-2">
             {game.type === 'pinball' ? (
               <CircleDot className="h-4 w-4 text-primary" />
@@ -42,66 +46,75 @@ export default function GameCard({ game }: GameCardProps) {
           {game.subtitle && <p className="subtitle tracking-wider text-muted-foreground">{game.subtitle}</p>}
 
           <div className="flex items-center justify-between">
-              <div className="flex flex-col gap-1">
-                <div className="flex items-center gap-2">
-                  <div className="champion-icon">
-                    <Crown className="h-5 w-5 text-yellow-400" />
-                  </div>
-                  <span className="score-display text-xl font-bold text-white drop-shadow-md">
-                    {(game.currentHighScore || 0).toLocaleString()}
-                  </span>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2">
+                <div className="champion-icon">
+                  <Crown className="h-5 w-5 text-yellow-400" />
                 </div>
-                <div className="text-lg font-bold text-white">
-                  Top Score by {game.topScorerName || 'No scores yet'}
-                </div>
-                
-                {game.topScoreDate && (
-                  <div className="space-y-1 mt-1">
-                    <div className="flex flex-wrap items-center gap-x-2 text-sm">
-                      <span className="flex items-center gap-1 text-yellow-400">
-                        <Trophy className="h-3.5 w-3.5" />
-                        <span>Champion since:</span>
-                      </span>
-                      <span className="text-white">
-                        {formatDate(new Date(game.topScoreDate))}
-                      </span>
-                      <span className="font-semibold text-primary-foreground">
-                        ({daysAsChampion} days)
-                      </span>
-                    </div>
-                    
-                    {secondPlace && (
-                      <div className="flex items-center gap-1 text-sm">
-                        <Medal className="h-3.5 w-3.5 text-zinc-400" />
-                        <span>Took the lead from:</span>
-                        <span className="font-medium text-zinc-300">{secondPlace.playerName}</span>
-                      </div>
-                    )}
-                    
-                    <div className="text-xs text-muted-foreground flex items-center gap-1">
-                      <Calendar className="h-3 w-3" />
-                      {formatDate(new Date(game.topScoreDate))}, {formatTime(new Date(game.topScoreDate))}
-                    </div>
-                  </div>
-                )}
+                <span className="score-display text-xl font-bold text-white drop-shadow-md">
+                  {(game.currentHighScore || 0).toLocaleString()}
+                </span>
               </div>
-              <div className="flex flex-col gap-2 mt-4">
-                <div className="w-full">
-                  <Button variant="outline" className="w-full font-medium transition-colors shadow-md hover:shadow-lg border bg-accent/30 hover:bg-accent/50 text-foreground">
-                    <span className="flex items-center gap-2 justify-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                        <rect width="18" height="18" x="3" y="3" rx="2" />
-                        <path d="M3 9h18" />
-                        <path d="M9 21V9" />
-                      </svg>
-                      View Scores
+              <div className="text-lg font-bold text-white">
+                Top Score by {game.topScorerName || 'No scores yet'}
+              </div>
+              
+              {game.topScoreDate && (
+                <div className="space-y-1 mt-1">
+                  <div className="flex flex-wrap items-center gap-x-2 text-sm">
+                    <span className="flex items-center gap-1 text-yellow-400">
+                      <Trophy className="h-3.5 w-3.5" />
+                      <span>Champion since:</span>
                     </span>
-                  </Button>
+                    <span className="text-white">
+                      {formatDate(new Date(game.topScoreDate))}
+                    </span>
+                    <span className="font-semibold text-primary-foreground">
+                      ({daysAsChampion} days)
+                    </span>
+                  </div>
+                  
+                  {secondPlace && (
+                    <div className="flex items-center gap-1 text-sm">
+                      <Medal className="h-3.5 w-3.5 text-zinc-400" />
+                      <span>Took the lead from:</span>
+                      <span className="font-medium text-zinc-300">{secondPlace.playerName}</span>
+                    </div>
+                  )}
+                  
+                  <div className="text-xs text-muted-foreground flex items-center gap-1">
+                    <Calendar className="h-3 w-3" />
+                    {formatDate(new Date(game.topScoreDate))}, {formatTime(new Date(game.topScoreDate))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
+          </div>
+        </Link>
+
+        <div className="flex flex-col gap-2 mt-4">
+          <div className="w-full">
+            <Link href={`/leaderboard/${game.id}`}>
+              <Button variant="outline" className="w-full font-medium transition-colors shadow-md hover:shadow-lg border bg-accent/30 hover:bg-accent/50 text-foreground mb-2">
+                <span className="flex items-center gap-2 justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
+                    <rect width="18" height="18" x="3" y="3" rx="2" />
+                    <path d="M3 9h18" />
+                    <path d="M9 21V9" />
+                  </svg>
+                  View Scores
+                </span>
+              </Button>
+            </Link>
+            
+            <ShareScore 
+              game={game} 
+              variant="secondary" 
+              className="w-full shadow-sm hover:shadow-md" 
+            />
+          </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
