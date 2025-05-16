@@ -50,13 +50,25 @@ export default function Home() {
     <div className="space-y-6">
       {/* Header with venue name and view mode controls */}
       <div className="section-header px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-lg mb-2 w-full">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight text-primary uppercase">
-            {venueSettings?.name || "Arcade"}
-          </h2>
-          <h1 className="text-3xl font-black tracking-tight text-foreground uppercase letter-spacing-wide text-outline">
-            TOP SCORES
-          </h1>
+        <div className="flex items-center gap-4">
+          {venueSettings?.logoUrl && (
+            <div className="logo-container flex-shrink-0 overflow-hidden rounded-md shadow-md bg-card/70 border border-primary/20" 
+                 style={{ width: '200px', height: '100px' }}>
+              <img 
+                src={venueSettings.logoUrl} 
+                alt={venueSettings.name} 
+                className="w-full h-full object-contain p-2" 
+              />
+            </div>
+          )}
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight text-primary uppercase">
+              {venueSettings?.name || "Arcade"}
+            </h2>
+            <h1 className="text-3xl font-black tracking-tight text-foreground uppercase letter-spacing-wide text-outline">
+              TOP SCORES
+            </h1>
+          </div>
         </div>
         <div className="flex items-center gap-4 mt-3 sm:mt-0">
           <div className="font-medium hidden md:block text-muted-foreground">View Mode</div>
@@ -110,11 +122,18 @@ export default function Home() {
                 <div className="flex-grow pr-4">
                   <div className="flex items-center gap-4">
                     <div className="w-[160px] h-[55px] relative overflow-hidden rounded-md flex-shrink-0 bg-black shadow-sm">
-                      <img 
-                        src={game.imageUrl}
-                        alt={game.name}
-                        className="w-full h-full object-cover opacity-100 hover:opacity-90 transition-opacity"
-                      />
+                      {game.imageUrl && (
+                        <img 
+                          src={game.imageUrl}
+                          alt={game.name}
+                          className="w-full h-full object-cover opacity-100 hover:opacity-90 transition-opacity"
+                        />
+                      )}
+                      {!game.imageUrl && (
+                        <div className="w-full h-full flex items-center justify-center bg-card/50">
+                          <span className="text-xs text-muted-foreground">No image</span>
+                        </div>
+                      )}
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
