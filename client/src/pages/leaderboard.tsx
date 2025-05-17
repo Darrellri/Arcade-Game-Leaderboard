@@ -30,71 +30,57 @@ export default function Leaderboard() {
 
   return (
     <div className="space-y-8">
-      {/* Game Marquee Display */}
+      {/* Game Marquee Display - Full Size 792x214px */}
       <div className="mb-8">
-        <div className="w-full min-h-[220px] relative bg-gradient-to-b from-primary-600 via-primary-500 to-primary-400">
-          {/* Game image/marquee overlay */}
-          <div className="absolute inset-0 opacity-25 bg-repeat" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.2'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}></div>
+        <div className="w-full h-[214px] relative bg-black border-b border-primary/20 shadow-lg overflow-hidden">
+          {/* Full size marquee image as background */}
+          {game.imageUrl && (
+            <div className="absolute inset-0">
+              <img 
+                src={game.imageUrl} 
+                alt={game.name} 
+                className="w-full h-full object-cover"
+              />
+              {/* Gradient overlay to ensure text readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20"></div>
+            </div>
+          )}
 
           {/* Main content overlay */}
-          <div className="absolute inset-0 flex items-center justify-center p-6 sm:p-8">
-            <div className="w-full max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-              <Link href="/scores">
-                <div className="w-[120px] sm:w-[160px] h-[80px] sm:h-[106px] relative rounded overflow-hidden bg-black shadow-md hover:shadow-lg transition-all duration-200 cursor-pointer">
-                  <img 
-                    src={game.imageUrl} 
-                    alt={game.name} 
-                    className="w-auto h-full max-w-full object-contain mx-auto cursor-pointer"
-                  />
-                </div>
-              </Link>
-              <div>
-                <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white drop-shadow-sm">{game.name}</h1>
-                {game.subtitle && <p className="text-white/80">{game.subtitle}</p>}
-                <p className="text-white/90 mt-1 font-medium drop-shadow-sm">Top Scores</p>
-              </div>
+          <div className="absolute inset-0 flex flex-col justify-between p-4 sm:p-6">
+            <div className="flex justify-between items-start">
               <Button 
                 variant="outline" 
+                size="sm"
                 asChild 
-                className="bg-primary-200/30 hover:bg-primary-100/40 border-primary-300/30 text-white transition-colors duration-300 shadow-md hover:shadow-lg font-medium"
+                className="bg-black/30 border-white/20 text-white hover:bg-black/50 shadow-md"
               >
                 <Link href="/">
                   <span className="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                      <path d="m15 18-6-6 6-6"/>
-                    </svg>
+                    <ArrowLeft className="w-4 h-4" />
                     Back to Games
                   </span>
                 </Link>
               </Button>
+              
+              <ShareScore 
+                game={game} 
+                variant="outline" 
+                size="sm" 
+                className="bg-black/30 border-white/20 text-white hover:bg-black/50 shadow-md" 
+              />
+            </div>
+            
+            <div className="mt-auto">
+              <h1 className="text-3xl sm:text-4xl font-black tracking-tight uppercase text-white text-shadow-lg">{game.name}</h1>
+              {game.subtitle && (
+                <p className="text-xl text-white/90 mt-1 text-shadow-md">{game.subtitle}</p>
+              )}
+              <p className="text-lg text-white/90 mt-2 font-bold text-shadow-sm uppercase">
+                High Scores
+              </p>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div className="section-header px-4 py-3 flex items-center justify-between rounded-lg mb-4">
-        <div className="font-medium text-lg">
-          View Mode
-        </div>
-        <div className="flex gap-2">
-          <Button
-            variant={viewMode === "grid" ? "default" : "outline"}
-            size="icon"
-            onClick={() => setViewMode("grid")}
-            className="shadow-sm hover:shadow-md transition-all duration-200"
-          >
-            <Grid2X2 className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={viewMode === "list" ? "default" : "outline"}
-            size="icon"
-            onClick={() => setViewMode("list")}
-            className="shadow-sm hover:shadow-md transition-all duration-200"
-          >
-            <List className="h-4 w-4" />
-          </Button>
         </div>
       </div>
 
@@ -104,7 +90,7 @@ export default function Leaderboard() {
             <Skeleton key={i} className="h-16" />
           ))}
         </div>
-      ) : viewMode === "grid" ? (
+      ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {sortedScores.map((score, index) => (
             <Card 
