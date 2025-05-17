@@ -1,15 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { Link } from "wouter";
 import { Game, VenueSettings } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import GameCard from "@/components/game-card";
 import ShareScore from "@/components/share-score";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Gamepad2, CircleDot, Trophy } from "lucide-react";
+import { Gamepad2, Grid2X2, List, CircleDot, Trophy } from "lucide-react";
 
 import { formatDate, formatTime } from "@/lib/formatters";
 
+type ViewMode = "grid" | "list";
+
 export default function Home() {
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+
   const { data: games, isLoading: gamesLoading } = useQuery<Game[]>({
     queryKey: ["/api/games"],
   });
@@ -41,9 +46,10 @@ export default function Home() {
     };
   }) || [];
 
+
   return (
     <div className="space-y-6">
-      {/* Header with venue name and logo */}
+      {/* Header with venue name and view mode controls */}
       <div className="section-header px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-lg mb-2 w-full">
         <div className="flex items-center gap-4">
           {venueSettings?.logoUrl && (
@@ -65,6 +71,27 @@ export default function Home() {
             </h1>
           </div>
         </div>
+        <div className="flex items-center gap-4 mt-3 sm:mt-0">
+          <div className="font-medium hidden md:block text-muted-foreground">View Mode</div>
+          <div className="flex gap-2">
+            <Button
+              variant={viewMode === "grid" ? "default" : "outline"}
+              size="icon"
+              onClick={() => setViewMode("grid")}
+              className="shadow-sm hover:shadow-md transition-all duration-200"
+            >
+              <Grid2X2 className="h-4 w-4" />
+            </Button>
+            <Button
+              variant={viewMode === "list" ? "default" : "outline"}
+              size="icon"
+              onClick={() => setViewMode("list")}
+              className="shadow-sm hover:shadow-md transition-all duration-200"
+            >
+              <List className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
       </div>
       
       {/* Smaller navigation buttons */}
@@ -80,12 +107,96 @@ export default function Home() {
         </Button>
       </div>
 
-      {/* Always use grid view */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {processedGames?.map((game) => (
-          <GameCard key={game.id} game={game} />
-        ))}
-      </div>
+      {viewMode === "grid" ? (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {processedGames?.map((game) => (
+            <GameCard key={game.id} game={game} />
+          ))}
+        </div>
+      ) : (
+        <div className="space-y-3 w-full">
+          {processedGames?.map((game) => (
+            <Link href={`/leaderboard/${game.id}`} key={game.id} className="block w-full">
+              <div
+                className="list-item flex items-center justify-between p-6 bg-card rounded-lg shadow-md hover:shadow-lg hover:bg-card/90 cursor-pointer transition-all duration-200 w-full"
+              >
+                <div className="flex-grow pr-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-[160px] h-[55px] relative overflow-hidden rounded-md flex-shrink-0 bg-black shadow-sm">
+                      {game.imageUrl && (
+                        <img 
+                          src={game.imageUrl}
+                          alt={game.name}
+                          className="w-full h-full object-cover opacity-100 hover:opacity-90 transition-opacity"
+                        />
+                      )}
+                      {!game.imageUrl && (
+                        <div className="w-full h-full flex items-center justify-center bg-card/50">
+                          <span className="text-xs text-muted-foreground">No image</span>
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        {game.type === 'pinball' ? (
+                          <CircleDot className="h-5 w-5 text-primary" />
+                        ) : (
+                          <Gamepad2 className="h-5 w-5 text-primary" />
+                        )}
+                        <span className="text-xl font-bold uppercase tracking-wide letter-spacing-wide text-outline text-foreground">{game.name}</span>
+                      </div>
+                      {game.subtitle && <span className="subtitle block tracking-wider text-sm">{game.subtitle}</span>}
+                    </div>
+                  </div>
+                  <div className="mt-3 text-base font-medium tracking-wide">
+                    <span className="text-primary">Top Player:</span> {game.topScorerName || 'No scores yet'}
+                  </div>
+                  {game.topScoreDate && (
+                    <div className="text-sm text-muted-foreground mt-1">
+                      {formatDate(new Date(game.topScoreDate))} 
+                      <span className="italic ml-1">
+                        ({formatTime(new Date(game.topScoreDate))})
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex items-center gap-6 flex-shrink-0 bg-accent/20 px-6 py-4 rounded-lg">
+                  <div className="text-right">
+                    <div className="flex items-center gap-3 justify-end mb-1">
+                      <Trophy className="h-6 w-6 champion-badge" />
+                      <div className="score-display text-2xl md:text-3xl font-bold champion-badge">
+                        {(game.topScore || 0).toLocaleString()}
+                      </div>
+                    </div>
+                    <div className="subtitle text-right uppercase tracking-widest">High Score</div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline" 
+                      className="shadow-sm hover:shadow-md font-medium transition-colors border bg-accent/30 hover:bg-accent/50 text-foreground h-full"
+                    >
+                      <span className="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
+                          <rect width="18" height="18" x="3" y="3" rx="2" />
+                          <path d="M3 9h18" />
+                          <path d="M9 21V9" />
+                        </svg>
+                        View Scores
+                      </span>
+                    </Button>
+                    <ShareScore 
+                      game={game} 
+                      variant="secondary" 
+                      size="sm"
+                      className="shadow-sm hover:shadow-md" 
+                    />
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

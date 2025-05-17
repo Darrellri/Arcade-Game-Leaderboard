@@ -117,7 +117,7 @@
   
   /* Enhanced typography */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold tracking-tight;
+    @apply font-bold;
     line-height: 1.2;
   }
   
@@ -125,15 +125,26 @@
     @apply text-muted-foreground text-sm mt-1;
   }
   
+  .letter-spacing-wide {
+    letter-spacing: 0.05em;
+  }
+  
+  /* Text outline for better readability on dark backgrounds */
+  .text-outline {
+    text-shadow: 
+      0 0 1px rgba(255,255,255,0.5),
+      0 0 2px rgba(255,255,255,0.3);
+  }
+  
   /* Custom game section headers */
   .section-header {
-    background: linear-gradient(to right, hsl(var(--primary-100)), transparent);
+    background: linear-gradient(to right, hsl(var(--primary) / 0.1), transparent);
     @apply p-4 rounded-lg mb-6;
   }
   
   /* List view enhancements */
   .list-item {
-    @apply transition-all duration-200 hover:bg-accent/40;
+    @apply transition-all duration-200 hover:bg-accent/50;
     border-radius: var(--radius);
   }
   
