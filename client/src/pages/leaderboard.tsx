@@ -3,20 +3,16 @@ import { useParams, Link } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Grid2X2, List } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft } from "lucide-react";
 import type { Game, Score } from "@shared/schema";
 import ShareScore from "@/components/share-score";
 import { TrophyIcon } from "@/components/trophy-icon";
 
 import { formatDate, formatTime } from "@/lib/formatters";
 
-type ViewMode = "grid" | "list";
-
 export default function Leaderboard() {
   const { gameId } = useParams();
   const id = parseInt(gameId || "0");
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
   // Always sort by score in descending order for individual game pages
 
   const { data: game } = useQuery<Game>({
