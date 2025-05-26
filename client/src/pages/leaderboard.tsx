@@ -74,7 +74,7 @@ export default function Leaderboard() {
                   <img 
                     src="/badge.png" 
                     alt="Champion Badge" 
-                    className="w-8 h-8 object-contain drop-shadow-lg" 
+                    className="w-12 h-12 object-contain drop-shadow-lg" 
                   />
                   <p className="text-2xl sm:text-3xl text-white font-bold tracking-widest uppercase drop-shadow-lg"
                      style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
@@ -157,13 +157,11 @@ export default function Leaderboard() {
               <CardContent className="pt-6 card-content">
                 {index === 0 ? (
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="champion-icon p-1.5">
-                      <img 
-                        src="/badge.png" 
-                        alt="Champion Badge" 
-                        className="w-6 h-6 object-contain" 
-                      />
-                    </div>
+                    <img 
+                      src="/badge.png" 
+                      alt="Champion Badge" 
+                      className="w-8 h-8 object-contain" 
+                    />
                     <div className="text-2xl font-bold champion-badge">CHAMPION</div>
                   </div>
                 ) : (

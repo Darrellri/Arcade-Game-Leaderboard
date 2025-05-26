@@ -166,7 +166,7 @@ export default function Home() {
                       <img 
                         src="/badge.png" 
                         alt="Champion Badge" 
-                        className="w-6 h-6 object-contain" 
+                        className="w-8 h-8 object-contain" 
                       />
                       <div className="score-display text-2xl md:text-3xl font-bold champion-badge">
                         {(game.topScore || 0).toLocaleString()}
