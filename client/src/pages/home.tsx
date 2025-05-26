@@ -163,7 +163,11 @@ export default function Home() {
                 <div className="flex items-center gap-6 flex-shrink-0 bg-accent/20 px-6 py-4 rounded-lg">
                   <div className="text-right">
                     <div className="flex items-center gap-3 justify-end mb-1">
-                      <Trophy className="h-6 w-6 champion-badge" />
+                      <img 
+                        src="/badge.png" 
+                        alt="Champion Badge" 
+                        className="w-6 h-6 object-contain" 
+                      />
                       <div className="score-display text-2xl md:text-3xl font-bold champion-badge">
                         {(game.topScore || 0).toLocaleString()}
                       </div>
