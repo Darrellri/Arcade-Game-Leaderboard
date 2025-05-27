@@ -76,6 +76,7 @@ export default function Admin() {
     resolver: zodResolver(venueSettingsSchema),
     defaultValues: {
       name: "",
+      leaderboardName: "THE LEADERBOARD",
       theme: {
         primary: "hsl(280, 100%, 50%)",
         variant: "vibrant",
