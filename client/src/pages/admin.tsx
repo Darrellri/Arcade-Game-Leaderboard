@@ -444,7 +444,26 @@ export default function Admin() {
                       )}
                     </div>
                     <CardContent className="p-4">
-                      <div className="font-medium text-lg mb-2">{preset.name}</div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="font-medium text-lg">{preset.name}</div>
+                        {preset.appearance === 'light' ? (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500">
+                            <circle cx="12" cy="12" r="4"/>
+                            <path d="m12 2 0 2"/>
+                            <path d="m12 20 0 2"/>
+                            <path d="m4.93 4.93 1.41 1.41"/>
+                            <path d="m17.66 17.66 1.41 1.41"/>
+                            <path d="m2 12 2 0"/>
+                            <path d="m20 12 2 0"/>
+                            <path d="m6.34 17.66-1.41 1.41"/>
+                            <path d="m19.07 4.93-1.41 1.41"/>
+                          </svg>
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-600">
+                            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                          </svg>
+                        )}
+                      </div>
                       <div className="flex gap-2 flex-wrap">
                         <div 
                           className="size-8 rounded-full shadow-sm" 
