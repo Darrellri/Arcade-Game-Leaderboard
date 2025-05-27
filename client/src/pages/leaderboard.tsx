@@ -167,7 +167,7 @@ export default function Leaderboard() {
               className="shadow-md hover:shadow-lg transition-all duration-300"
             >
               <CardContent className="pt-6 card-content">
-                <div className="flex items-center gap-2 mb-2">
+                <div className="flex items-center gap-3 mb-2">
                   {index === 0 ? (
                     <img 
                       src="/badge2.png" 
@@ -188,11 +188,8 @@ export default function Leaderboard() {
                       </div>
                     </div>
                   )}
-                  <div className="text-2xl font-bold text-muted-foreground">
-                    #{index + 2}
-                  </div>
+                  <div className="text-xl font-medium">#{index + 2} {score.playerName}</div>
                 </div>
-                <div className="text-xl font-medium">#{index + 2} {score.playerName}</div>
                 <div className={`text-3xl score-display mt-2 ${index === 0 ? "champion-badge" : ""}`}>
                   {score.score.toLocaleString()}
                 </div>
