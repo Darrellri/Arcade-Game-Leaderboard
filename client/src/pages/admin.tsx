@@ -281,6 +281,20 @@ export default function Admin() {
 
                     <FormField
                       control={form.control}
+                      name="leaderboardName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Leaderboard Name</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="THE LEADERBOARD" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
                       name="logoUrl"
                       render={({ field }) => (
                         <FormItem>

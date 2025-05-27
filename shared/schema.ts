@@ -43,6 +43,7 @@ export const scoresRelations = relations(scores, ({ one }) => ({
 export const venueSettings = pgTable("venue_settings", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
+  leaderboardName: text("leaderboard_name").default("THE LEADERBOARD"),
   logoUrl: text("logo_url"),
   address: text("address"),
   phone: text("phone"),
@@ -55,6 +56,7 @@ export const venueSettings = pgTable("venue_settings", {
 // Venue settings schema for admin interface
 export const venueSettingsSchema = z.object({
   name: z.string().min(1, "Venue name is required"),
+  leaderboardName: z.string().min(1, "Leaderboard name is required"),
   logoUrl: z.string().optional(),
   address: z.string().optional(),
   phone: z.string().optional(),
