@@ -29,8 +29,9 @@ export default function Leaderboard() {
 
   if (!game) return null;
 
-  // Always sort by score (highest to lowest)
+  // Always sort by score (highest to lowest) and exclude the champion (first place)
   const sortedScores = [...(scores || [])].sort((a, b) => b.score - a.score);
+  const nonChampionScores = sortedScores.slice(1); // Start from 2nd place
 
   return (
     <div className="space-y-8">
@@ -160,20 +161,14 @@ export default function Leaderboard() {
         </div>
       ) : viewMode === "grid" ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {sortedScores.map((score, index) => (
+          {nonChampionScores.map((score, index) => (
             <Card 
               key={score.id} 
-              className={`shadow-md hover:shadow-lg transition-all duration-300 ${index === 0 ? "border-2 border-yellow-500" : ""}`}
+              className="shadow-md hover:shadow-lg transition-all duration-300"
             >
               <CardContent className="pt-6 card-content">
                 <div className="flex items-center gap-2 mb-2">
                   {index === 0 ? (
-                    <img 
-                      src="/badge1.png" 
-                      alt="Champion Badge" 
-                      className="w-16 h-16 object-contain" 
-                    />
-                  ) : index === 1 ? (
                     <img 
                       src="/badge2.png" 
                       alt="Second Place Badge" 
@@ -183,18 +178,18 @@ export default function Leaderboard() {
                     <div className="relative w-16 h-16">
                       <img 
                         src="/badge3.png" 
-                        alt={`Rank ${index + 1} Badge`} 
+                        alt={`Rank ${index + 2} Badge`} 
                         className="w-16 h-16 object-contain" 
                       />
                       <div className="absolute inset-0 flex items-center justify-center">
                         <span className="text-white text-lg font-bold drop-shadow-md">
-                          {index + 1}
+                          {index + 2}
                         </span>
                       </div>
                     </div>
                   )}
-                  <div className={`text-2xl font-bold ${index === 0 ? "champion-badge" : "text-muted-foreground"}`}>
-                    {index === 0 ? "CHAMPION" : `#${index + 1}`}
+                  <div className="text-2xl font-bold text-muted-foreground">
+                    #{index + 2}
                   </div>
                 </div>
                 <div className="text-xl font-medium">{score.playerName}</div>
@@ -218,20 +213,14 @@ export default function Leaderboard() {
         </div>
       ) : (
         <div className="space-y-3 w-full">
-          {sortedScores.map((score, index) => (
+          {nonChampionScores.map((score, index) => (
             <div
               key={score.id}
-              className={`list-item flex items-center justify-between p-6 bg-card rounded-lg shadow-md hover:shadow-lg transition-all duration-300 w-full ${index === 0 ? "border-l-4 border-yellow-500" : ""}`}
+              className="list-item flex items-center justify-between p-6 bg-card rounded-lg shadow-md hover:shadow-lg transition-all duration-300 w-full"
             >
               <div className="flex items-center gap-5 flex-grow pr-6">
                 <div className="flex-shrink-0">
                   {index === 0 ? (
-                    <img 
-                      src="/badge1.png" 
-                      alt="Champion Badge" 
-                      className="w-24 h-24 object-contain" 
-                    />
-                  ) : index === 1 ? (
                     <img 
                       src="/badge2.png" 
                       alt="Second Place Badge" 
@@ -241,23 +230,20 @@ export default function Leaderboard() {
                     <div className="relative w-24 h-24">
                       <img 
                         src="/badge3.png" 
-                        alt={`Rank ${index + 1} Badge`} 
+                        alt={`Rank ${index + 2} Badge`} 
                         className="w-24 h-24 object-contain" 
                       />
                       <div className="absolute inset-0 flex items-center justify-center">
                         <span className="text-white text-xl font-bold drop-shadow-md">
-                          {index + 1}
+                          {index + 2}
                         </span>
                       </div>
                     </div>
                   )}
                 </div>
                 <div className="flex flex-col">
-                  <div className={`font-bold text-xl md:text-2xl tracking-wide ${index === 0 ? "champion-badge text-2xl md:text-3xl letter-spacing-wide" : ""}`}>
+                  <div className="font-bold text-xl md:text-2xl tracking-wide">
                     {score.playerName}
-                    {index === 0 && (
-                      <span className="ml-3 text-base font-semibold px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-400">CHAMPION</span>
-                    )}
                   </div>
                   <div className="subtitle tracking-wider mt-1">
                     {formatDate(new Date(score.submittedAt!))}
