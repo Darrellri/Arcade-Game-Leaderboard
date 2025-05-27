@@ -88,6 +88,7 @@ export class DatabaseStorage implements IStorage {
     // Create default venue settings if none exist
     const defaultSettings = {
       name: "Winona Axe and Arcade",
+      leaderboardName: "THE LEADERBOARD",
       theme: {
         primary: "hsl(280, 100%, 50%)",
         variant: "vibrant" as const,
