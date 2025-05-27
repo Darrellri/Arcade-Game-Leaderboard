@@ -75,6 +75,7 @@ export class DatabaseStorage implements IStorage {
     if (settings) {
       return {
         name: settings.name,
+        leaderboardName: settings.leaderboardName || "THE LEADERBOARD",
         logoUrl: settings.logoUrl || undefined,
         address: settings.address || undefined,
         phone: settings.phone || undefined,
@@ -142,6 +143,7 @@ export class DatabaseStorage implements IStorage {
     // Insert the default settings
     await db.insert(venueSettings).values({
       name: defaultSettings.name,
+      leaderboardName: "THE LEADERBOARD",
       theme: defaultSettings.theme,
       themePresets: defaultSettings.themePresets
     });
@@ -158,6 +160,7 @@ export class DatabaseStorage implements IStorage {
       const [updated] = await db.update(venueSettings)
         .set({
           name: settings.name || existingSettings.name,
+          leaderboardName: settings.leaderboardName || existingSettings.leaderboardName,
           logoUrl: settings.logoUrl || existingSettings.logoUrl,
           address: settings.address || existingSettings.address,
           phone: settings.phone || existingSettings.phone,
@@ -171,6 +174,7 @@ export class DatabaseStorage implements IStorage {
       
       const updatedSettings: VenueSettings = {
         name: updated.name,
+        leaderboardName: updated.leaderboardName || "THE LEADERBOARD",
         logoUrl: updated.logoUrl || undefined,
         address: updated.address || undefined,
         phone: updated.phone || undefined,
