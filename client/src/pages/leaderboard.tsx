@@ -80,7 +80,7 @@ export default function Leaderboard() {
                   <div className="flex flex-col">
                     <p className="text-2xl sm:text-3xl text-white font-bold uppercase drop-shadow-lg"
                        style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)', letterSpacing: '2px' }}>
-                      {game.topScorerName || "NO CHAMPION YET"}
+                      #1 {game.topScorerName || "NO CHAMPION YET"}
                     </p>
                     {game.currentHighScore && (
                       <p className="text-xl sm:text-2xl text-yellow-400 font-bold drop-shadow-lg"
