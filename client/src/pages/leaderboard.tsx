@@ -194,46 +194,40 @@ export default function Leaderboard() {
           ))}
         </div>
       ) : (
-        <div className="space-y-3 w-full">
+        <div className="space-y-1 w-full">
           {nonChampionScores.map((score, index) => (
             <div
               key={score.id}
-              className="list-item flex items-center justify-between p-6 bg-card rounded-lg shadow-md hover:shadow-lg transition-all duration-300 w-full"
+              className="flex items-center justify-between px-6 py-4 bg-card/30 backdrop-blur-sm rounded-2xl border border-white/5 hover:bg-card/50 hover:border-white/10 transition-all duration-300 w-full group"
             >
-              <div className="flex items-center gap-5 flex-grow pr-6">
-                <div className="flex-shrink-0">
-                  <img 
-                    src="/badge3.png" 
-                    alt={`Rank ${index + 2} Badge`} 
-                    className="w-24 h-24 object-contain" 
-                  />
-                </div>
+              {/* Left side - Player info */}
+              <div className="flex items-center gap-4 flex-1">
+                <img 
+                  src="/badge3.png" 
+                  alt={`Rank ${index + 2} Badge`} 
+                  className="w-10 h-10 object-contain opacity-80" 
+                />
                 <div className="flex flex-col">
-                  <div className="font-bold text-xl md:text-2xl tracking-wide">
+                  <div className="font-medium text-lg text-foreground group-hover:text-primary transition-colors duration-200">
                     #{index + 2} {score.playerName}
                   </div>
-                  <div className="subtitle tracking-wider mt-1">
-                    {formatDate(new Date(score.submittedAt!))}
-                    <span className="italic ml-2">
-                      ({formatTime(new Date(score.submittedAt!))})
-                    </span>
+                  <div className="text-sm text-muted-foreground/80">
+                    {formatDate(new Date(score.submittedAt!))} • {formatTime(new Date(score.submittedAt!))}
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col items-end gap-3 bg-accent/20 px-6 py-4 rounded-lg flex-shrink-0">
-                <div className={`score-display text-2xl md:text-4xl font-bold text-right ${index === 0 ? "champion-badge text-3xl md:text-5xl" : ""}`}>
+
+              {/* Right side - Score and actions */}
+              <div className="flex items-center gap-6">
+                <div className="text-2xl font-semibold text-foreground tabular-nums">
                   {score.score.toLocaleString()}
                 </div>
                 <Button 
-                  variant="outline" 
-                  className="shadow-sm hover:shadow-md font-medium border bg-accent/30 hover:bg-accent/50 text-foreground"
+                  variant="ghost" 
+                  size="sm"
+                  className="text-muted-foreground hover:text-foreground border border-white/10 hover:border-white/30 bg-white/5 hover:bg-white/10 transition-all duration-200 px-3"
                 >
-                  <ShareScore 
-                    game={game} 
-                    score={score} 
-                    variant="outline" 
-                    className="w-full"
-                  />
+                  <ShareScore game={game} score={score} variant="ghost" size="sm" />
                 </Button>
               </div>
             </div>
