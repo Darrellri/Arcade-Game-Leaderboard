@@ -78,7 +78,7 @@ export default function Leaderboard() {
                   />
                   <p className="text-2xl sm:text-3xl text-white font-bold uppercase drop-shadow-lg"
                      style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)', letterSpacing: '2px' }}>
-                    THE LEADERBOARD
+                    {game.topScorerName || "NO CHAMPION YET"}
                   </p>
                 </div>
               </div>
