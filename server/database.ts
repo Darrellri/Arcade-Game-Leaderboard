@@ -97,46 +97,74 @@ export class DatabaseStorage implements IStorage {
       },
       themePresets: [
         {
-          name: "Classic Arcade Purple",
-          primary: "hsl(280, 100%, 50%)",
-          variant: "vibrant" as const,
+          name: "Midnight Blue",
+          primary: "hsl(220, 85%, 58%)",
+          variant: "professional" as const,
           appearance: "dark" as const,
           radius: 0.75
         },
         {
-          name: "Retro Green",
-          primary: "hsl(142, 71%, 45%)",
+          name: "Forest Green",
+          primary: "hsl(142, 76%, 36%)",
+          variant: "professional" as const,
+          appearance: "dark" as const,
+          radius: 0.5
+        },
+        {
+          name: "Deep Purple",
+          primary: "hsl(271, 81%, 56%)",
+          variant: "tint" as const,
+          appearance: "dark" as const,
+          radius: 0.75
+        },
+        {
+          name: "Crimson Red",
+          primary: "hsl(348, 83%, 47%)",
           variant: "vibrant" as const,
           appearance: "dark" as const,
           radius: 0.5
         },
         {
-          name: "Neon Blue",
-          primary: "hsl(215, 100%, 50%)",
-          variant: "vibrant" as const,
+          name: "Ocean Teal",
+          primary: "hsl(188, 94%, 37%)",
+          variant: "professional" as const,
           appearance: "dark" as const,
           radius: 0.75
         },
         {
-          name: "Classic Red",
-          primary: "hsl(0, 100%, 60%)",
+          name: "Sunset Orange",
+          primary: "hsl(24, 100%, 50%)",
           variant: "vibrant" as const,
           appearance: "dark" as const,
           radius: 0.5
         },
         {
-          name: "Golden",
-          primary: "hsl(48, 100%, 50%)",
-          variant: "vibrant" as const,
-          appearance: "dark" as const,
-          radius: 0.6
+          name: "Lavender Mist",
+          primary: "hsl(267, 57%, 78%)",
+          variant: "tint" as const,
+          appearance: "light" as const,
+          radius: 1.0
         },
         {
-          name: "Teal Dream",
-          primary: "hsl(180, 100%, 37%)",
+          name: "Rose Gold",
+          primary: "hsl(15, 86%, 67%)",
+          variant: "tint" as const,
+          appearance: "light" as const,
+          radius: 0.75
+        },
+        {
+          name: "Arctic Silver",
+          primary: "hsl(210, 20%, 55%)",
+          variant: "professional" as const,
+          appearance: "light" as const,
+          radius: 0.5
+        },
+        {
+          name: "Emerald Glow",
+          primary: "hsl(160, 84%, 39%)",
           variant: "vibrant" as const,
           appearance: "dark" as const,
-          radius: 0.8
+          radius: 0.75
         }
       ]
     };
