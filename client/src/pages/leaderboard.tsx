@@ -168,26 +168,18 @@ export default function Leaderboard() {
             >
               <CardContent className="pt-6 card-content">
                 <div className="flex items-center gap-3 mb-2">
-                  {index === 0 ? (
+                  <div className="relative w-16 h-16">
                     <img 
-                      src="/badge2.png" 
-                      alt="Second Place Badge" 
+                      src="/badge3.png" 
+                      alt={`Rank ${index + 2} Badge`} 
                       className="w-16 h-16 object-contain" 
                     />
-                  ) : (
-                    <div className="relative w-16 h-16">
-                      <img 
-                        src="/badge3.png" 
-                        alt={`Rank ${index + 2} Badge`} 
-                        className="w-16 h-16 object-contain" 
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-white text-lg font-bold drop-shadow-md">
-                          {index + 2}
-                        </span>
-                      </div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-white text-lg font-bold drop-shadow-md">
+                        {index + 2}
+                      </span>
                     </div>
-                  )}
+                  </div>
                   <div className="text-xl font-medium">#{index + 2} {score.playerName}</div>
                 </div>
                 <div className={`text-3xl score-display mt-2 ${index === 0 ? "champion-badge" : ""}`}>
@@ -217,26 +209,18 @@ export default function Leaderboard() {
             >
               <div className="flex items-center gap-5 flex-grow pr-6">
                 <div className="flex-shrink-0">
-                  {index === 0 ? (
+                  <div className="relative w-24 h-24">
                     <img 
-                      src="/badge2.png" 
-                      alt="Second Place Badge" 
+                      src="/badge3.png" 
+                      alt={`Rank ${index + 2} Badge`} 
                       className="w-24 h-24 object-contain" 
                     />
-                  ) : (
-                    <div className="relative w-24 h-24">
-                      <img 
-                        src="/badge3.png" 
-                        alt={`Rank ${index + 2} Badge`} 
-                        className="w-24 h-24 object-contain" 
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-white text-xl font-bold drop-shadow-md">
-                          {index + 2}
-                        </span>
-                      </div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-white text-xl font-bold drop-shadow-md">
+                        {index + 2}
+                      </span>
                     </div>
-                  )}
+                  </div>
                 </div>
                 <div className="flex flex-col">
                   <div className="font-bold text-xl md:text-2xl tracking-wide">
