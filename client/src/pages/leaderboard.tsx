@@ -76,10 +76,24 @@ export default function Leaderboard() {
                     alt="Champion Badge" 
                     className="w-12 h-12 object-contain drop-shadow-lg" 
                   />
-                  <p className="text-2xl sm:text-3xl text-white font-bold uppercase drop-shadow-lg"
-                     style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)', letterSpacing: '2px' }}>
-                    {game.topScorerName || "NO CHAMPION YET"}
-                  </p>
+                  <div className="flex flex-col">
+                    <p className="text-2xl sm:text-3xl text-white font-bold uppercase drop-shadow-lg"
+                       style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)', letterSpacing: '2px' }}>
+                      {game.topScorerName || "NO CHAMPION YET"}
+                    </p>
+                    {game.currentHighScore && (
+                      <p className="text-xl sm:text-2xl text-yellow-400 font-bold drop-shadow-lg"
+                         style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
+                        {game.currentHighScore.toLocaleString()}
+                      </p>
+                    )}
+                    {game.topScoreDate && (
+                      <p className="text-sm sm:text-base text-white/90 drop-shadow-lg"
+                         style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
+                        {formatDate(new Date(game.topScoreDate))} ({formatTime(new Date(game.topScoreDate))})
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
               
