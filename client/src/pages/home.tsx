@@ -72,7 +72,6 @@ export default function Home() {
           </div>
         </div>
         <div className="flex items-center gap-4 mt-3 sm:mt-0">
-          <div className="font-medium hidden md:block text-muted-foreground">View Mode</div>
           <div className="flex gap-2">
             <Button
               variant={viewMode === "grid" ? "default" : "outline"}

@@ -131,10 +131,7 @@ export default function Leaderboard() {
         </Button>
       </div>
       
-      <div className="section-header px-4 py-3 flex items-center justify-between rounded-lg mb-4">
-        <div className="font-medium text-lg">
-          View Mode
-        </div>
+      <div className="section-header px-4 py-3 flex items-center justify-end rounded-lg mb-4">
         <div className="flex gap-2">
           <Button
             variant={viewMode === "grid" ? "default" : "outline"}
