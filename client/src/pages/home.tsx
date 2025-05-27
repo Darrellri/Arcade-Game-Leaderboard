@@ -113,87 +113,65 @@ export default function Home() {
           ))}
         </div>
       ) : (
-        <div className="space-y-3 w-full">
+        <div className="space-y-1 w-full">
           {processedGames?.map((game) => (
             <Link href={`/leaderboard/${game.id}`} key={game.id} className="block w-full">
-              <div
-                className="list-item flex items-center justify-between p-6 bg-card rounded-lg shadow-md hover:shadow-lg hover:bg-card/90 cursor-pointer transition-all duration-200 w-full"
-              >
-                <div className="flex-grow pr-4">
-                  <div className="flex items-center gap-4">
-                    <div className="w-[160px] h-[55px] relative overflow-hidden rounded-md flex-shrink-0 bg-black shadow-sm">
-                      {game.imageUrl && (
-                        <img 
-                          src={game.imageUrl}
-                          alt={game.name}
-                          className="w-full h-full object-cover opacity-100 hover:opacity-90 transition-opacity"
-                        />
+              <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 bg-card/30 backdrop-blur-sm rounded-2xl border border-white/5 hover:bg-card/50 hover:border-white/10 transition-all duration-300 w-full group cursor-pointer">
+                
+                {/* Left side - Game info */}
+                <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
+                  <img 
+                    src="/badge.png" 
+                    alt="Champion Badge" 
+                    className="w-8 h-8 md:w-10 md:h-10 object-contain opacity-80 flex-shrink-0" 
+                  />
+                  <div className="flex flex-col min-w-0">
+                    <div className="flex items-center gap-2">
+                      {game.type === 'pinball' ? (
+                        <CircleDot className="h-3 w-3 md:h-4 md:w-4 text-primary flex-shrink-0" />
+                      ) : (
+                        <Gamepad2 className="h-3 w-3 md:h-4 md:w-4 text-primary flex-shrink-0" />
                       )}
-                      {!game.imageUrl && (
-                        <div className="w-full h-full flex items-center justify-center bg-card/50">
-                          <span className="text-xs text-muted-foreground">No image</span>
-                        </div>
-                      )}
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        {game.type === 'pinball' ? (
-                          <CircleDot className="h-5 w-5 text-primary" />
-                        ) : (
-                          <Gamepad2 className="h-5 w-5 text-primary" />
-                        )}
-                        <span className="text-xl font-bold uppercase tracking-wide letter-spacing-wide text-outline text-foreground">{game.name}</span>
+                      <div className="font-medium text-sm md:text-lg text-foreground group-hover:text-primary transition-colors duration-200 uppercase tracking-wide truncate">
+                        {game.name}
                       </div>
-                      {game.subtitle && <span className="subtitle block tracking-wider text-sm">{game.subtitle}</span>}
+                    </div>
+                    <div className="text-xs md:text-sm text-muted-foreground/80 truncate">
+                      {game.topScorerName || 'No champion yet'} • {game.topScoreDate ? formatDate(new Date(game.topScoreDate)) : 'No date'}
                     </div>
                   </div>
-                  <div className="mt-3 text-base font-medium tracking-wide">
-                    <span className="text-primary">Top Player:</span> {game.topScorerName || 'No scores yet'}
-                  </div>
-                  {game.topScoreDate && (
-                    <div className="text-sm text-muted-foreground mt-1">
-                      {formatDate(new Date(game.topScoreDate))} 
-                      <span className="italic ml-1">
-                        ({formatTime(new Date(game.topScoreDate))})
-                      </span>
-                    </div>
-                  )}
                 </div>
-                <div className="flex items-center gap-6 flex-shrink-0 bg-accent/20 px-6 py-4 rounded-lg">
-                  <div className="text-right">
-                    <div className="flex items-center gap-3 justify-end mb-1">
+
+                {/* Center - Marquee image (hidden on mobile) */}
+                <div className="hidden md:flex items-center justify-center mx-6 flex-shrink-0">
+                  <div className="w-24 h-8 relative overflow-hidden rounded-lg bg-black/20">
+                    {game.imageUrl ? (
                       <img 
-                        src="/badge.png" 
-                        alt="Champion Badge" 
-                        className="w-8 h-8 object-contain" 
+                        src={game.imageUrl}
+                        alt={`${game.name} marquee`}
+                        className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-200"
                       />
-                      <div className="score-display text-2xl md:text-3xl font-bold champion-badge">
-                        {(game.topScore || 0).toLocaleString()}
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <span className="text-xs text-muted-foreground/60">No image</span>
                       </div>
-                    </div>
-                    <div className="subtitle text-right uppercase tracking-widest">High Score</div>
+                    )}
                   </div>
-                  <div className="flex gap-2">
-                    <Button 
-                      variant="outline" 
-                      className="shadow-sm hover:shadow-md font-medium transition-colors border bg-accent/30 hover:bg-accent/50 text-foreground h-full"
-                    >
-                      <span className="flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
-                          <rect width="18" height="18" x="3" y="3" rx="2" />
-                          <path d="M3 9h18" />
-                          <path d="M9 21V9" />
-                        </svg>
-                        View Scores
-                      </span>
-                    </Button>
-                    <ShareScore 
-                      game={game} 
-                      variant="secondary" 
-                      size="sm"
-                      className="shadow-sm hover:shadow-md" 
-                    />
+                </div>
+
+                {/* Right side - Score and actions */}
+                <div className="flex items-center gap-3 md:gap-6 flex-shrink-0">
+                  <div className="text-lg md:text-2xl font-semibold text-foreground tabular-nums">
+                    {(game.currentHighScore || 0).toLocaleString()}
                   </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className="text-muted-foreground hover:text-foreground border border-white/10 hover:border-white/30 bg-white/5 hover:bg-white/10 transition-all duration-200 px-2 md:px-3 text-xs md:text-sm"
+                    onClick={(e) => e.preventDefault()}
+                  >
+                    <ShareScore game={game} variant="ghost" size="sm" />
+                  </Button>
                 </div>
               </div>
             </Link>
