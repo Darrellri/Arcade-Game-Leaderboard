@@ -44,7 +44,8 @@ import {
   RefreshCw, 
   AlertTriangle,
   Upload,
-  Camera
+  Camera,
+  Info
 } from "lucide-react";
 import { 
   Dialog,
@@ -55,6 +56,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import MarqueeImageUploader from "@/components/marquee-image-uploader";
 
 export default function Admin() {
@@ -271,7 +273,19 @@ export default function Admin() {
                       name="name"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Venue Name</FormLabel>
+                          <FormLabel className="flex items-center gap-2">
+                            Venue Name
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Displayed at the top of the Homepage</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </FormLabel>
                           <FormControl>
                             <Input {...field} />
                           </FormControl>
@@ -285,7 +299,19 @@ export default function Admin() {
                       name="leaderboardName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Leaderboard Name</FormLabel>
+                          <FormLabel className="flex items-center gap-2">
+                            Leaderboard Name
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Displayed underneath the Venue Name on the Homepage</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </FormLabel>
                           <FormControl>
                             <Input {...field} placeholder="THE LEADERBOARD" />
                           </FormControl>
