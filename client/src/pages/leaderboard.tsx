@@ -74,7 +74,7 @@ export default function Leaderboard() {
                   <img 
                     src="/badge1.png" 
                     alt="Champion Badge" 
-                    className="w-16 h-16 object-contain drop-shadow-lg" 
+                    className="w-32 h-32 object-contain drop-shadow-lg" 
                   />
                   <div className="flex flex-col">
                     <p className="text-2xl sm:text-3xl text-white font-bold uppercase drop-shadow-lg"
@@ -174,23 +174,23 @@ export default function Leaderboard() {
                     <img 
                       src="/badge1.png" 
                       alt="Champion Badge" 
-                      className="w-8 h-8 object-contain" 
+                      className="w-16 h-16 object-contain" 
                     />
                   ) : index === 1 ? (
                     <img 
                       src="/badge2.png" 
                       alt="Second Place Badge" 
-                      className="w-8 h-8 object-contain" 
+                      className="w-16 h-16 object-contain" 
                     />
                   ) : (
-                    <div className="relative w-8 h-8">
+                    <div className="relative w-16 h-16">
                       <img 
                         src="/badge3.png" 
                         alt={`Rank ${index + 1} Badge`} 
-                        className="w-8 h-8 object-contain" 
+                        className="w-16 h-16 object-contain" 
                       />
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-white text-xs font-bold drop-shadow-md">
+                        <span className="text-white text-lg font-bold drop-shadow-md">
                           {index + 1}
                         </span>
                       </div>
@@ -232,23 +232,23 @@ export default function Leaderboard() {
                     <img 
                       src="/badge1.png" 
                       alt="Champion Badge" 
-                      className="w-12 h-12 object-contain" 
+                      className="w-24 h-24 object-contain" 
                     />
                   ) : index === 1 ? (
                     <img 
                       src="/badge2.png" 
                       alt="Second Place Badge" 
-                      className="w-12 h-12 object-contain" 
+                      className="w-24 h-24 object-contain" 
                     />
                   ) : (
-                    <div className="relative w-12 h-12">
+                    <div className="relative w-24 h-24">
                       <img 
                         src="/badge3.png" 
                         alt={`Rank ${index + 1} Badge`} 
-                        className="w-12 h-12 object-contain" 
+                        className="w-24 h-24 object-contain" 
                       />
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-white text-sm font-bold drop-shadow-md">
+                        <span className="text-white text-xl font-bold drop-shadow-md">
                           {index + 1}
                         </span>
                       </div>
