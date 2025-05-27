@@ -409,12 +409,12 @@ export default function Admin() {
                 <span>Color Schemes</span>
               </CardTitle>
               <CardDescription>
-                Choose from six different color schemes for your arcade leaderboard
+                Choose from ten different color schemes for your arcade leaderboard
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {settings?.themePresets?.slice(0, 6).map((preset, index) => (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {settings?.themePresets?.map((preset, index) => (
                   <Card 
                     key={index} 
                     className={`
