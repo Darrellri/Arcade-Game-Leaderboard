@@ -192,7 +192,7 @@ export default function Leaderboard() {
                     #{index + 2}
                   </div>
                 </div>
-                <div className="text-xl font-medium">{score.playerName}</div>
+                <div className="text-xl font-medium">#{index + 2} {score.playerName}</div>
                 <div className={`text-3xl score-display mt-2 ${index === 0 ? "champion-badge" : ""}`}>
                   {score.score.toLocaleString()}
                 </div>
@@ -243,7 +243,7 @@ export default function Leaderboard() {
                 </div>
                 <div className="flex flex-col">
                   <div className="font-bold text-xl md:text-2xl tracking-wide">
-                    {score.playerName}
+                    #{index + 2} {score.playerName}
                   </div>
                   <div className="subtitle tracking-wider mt-1">
                     {formatDate(new Date(score.submittedAt!))}
