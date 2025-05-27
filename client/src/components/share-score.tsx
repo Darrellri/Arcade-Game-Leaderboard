@@ -7,8 +7,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "@/hooks/use-toast";
-import { Game, Score } from "@shared/schema";
+import { Game, Score, VenueSettings } from "@shared/schema";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 interface ShareScoreProps {
   game: Game;
@@ -27,32 +28,68 @@ export default function ShareScore({
 }: ShareScoreProps) {
   const [isLoading, setIsLoading] = useState(false);
 
-  // Generate the message for sharing
+  // Fetch venue settings for contact info
+  const { data: venueSettings } = useQuery<VenueSettings>({
+    queryKey: ["/api/admin/settings"],
+  });
+
+  // Generate the enhanced message for sharing
   const generateShareMessage = () => {
     const baseUrl = window.location.origin;
     let message = "";
     
     if (score) {
       // Sharing a specific score
-      message = `Check out my score of ${score.score.toLocaleString()} on ${game.name} at Winona Axe and Arcade! ${baseUrl}/leaderboard/${game.id}`;
+      message = `🎮 My Top Score: ${score.score.toLocaleString()} points on ${game.name}!\n\n`;
     } else {
       // Sharing the game's top score
-      message = `The top score on ${game.name} at Winona Axe and Arcade is ${game.currentHighScore?.toLocaleString() || '0'} by ${game.topScorerName || 'no one yet'}! Can you beat it? ${baseUrl}/leaderboard/${game.id}`;
+      message = `🏆 Current Top Score on ${game.name}: ${game.currentHighScore?.toLocaleString() || '0'} points by ${game.topScorerName || 'no one yet'}!\n\n`;
     }
+
+    // Add venue information
+    message += `🎯 ${venueSettings?.name || 'Winona Axe and Arcade'}\n`;
+    
+    if (venueSettings?.hours) {
+      message += `⏰ Hours: ${venueSettings.hours}\n`;
+    }
+    
+    if (venueSettings?.phone) {
+      message += `📞 Phone: ${venueSettings.phone}\n`;
+    }
+    
+    if (venueSettings?.address) {
+      message += `📍 ${venueSettings.address}\n`;
+    }
+    
+    message += `\n🌐 Visit us: ${baseUrl}\n`;
+    message += `🎲 Game Details: ${baseUrl}/leaderboard/${game.id}`;
     
     return message;
   };
 
-  // Share functions
+  // Share functions with enhanced content
   const shareToFacebook = () => {
     const message = generateShareMessage();
-    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(message)}`;
+    const gameUrl = `${window.location.origin}/leaderboard/${game.id}`;
+    let url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(gameUrl)}&quote=${encodeURIComponent(message)}`;
+    
+    // If game has marquee image, add it to the share
+    if (game.imageUrl) {
+      url += `&picture=${encodeURIComponent(game.imageUrl)}`;
+    }
+    
     window.open(url, '_blank');
   };
 
   const shareToTwitter = () => {
     const message = generateShareMessage();
-    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
+    const gameUrl = `${window.location.origin}/leaderboard/${game.id}`;
+    let url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
+    
+    // Add hashtags for better discoverability
+    const hashtags = ['arcade', 'gaming', 'highscore', 'winona'].join(',');
+    url += `&hashtags=${hashtags}&url=${encodeURIComponent(gameUrl)}`;
+    
     window.open(url, '_blank');
   };
   
