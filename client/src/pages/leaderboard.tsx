@@ -72,9 +72,9 @@ export default function Leaderboard() {
                 )}
                 <div className="mt-4 flex items-center justify-center sm:justify-start gap-3">
                   <img 
-                    src="/badge.png" 
+                    src="/badge1.png" 
                     alt="Champion Badge" 
-                    className="w-12 h-12 object-contain drop-shadow-lg" 
+                    className="w-16 h-16 object-contain drop-shadow-lg" 
                   />
                   <div className="flex flex-col">
                     <p className="text-2xl sm:text-3xl text-white font-bold uppercase drop-shadow-lg"
@@ -169,23 +169,37 @@ export default function Leaderboard() {
               className={`shadow-md hover:shadow-lg transition-all duration-300 ${index === 0 ? "border-2 border-yellow-500" : ""}`}
             >
               <CardContent className="pt-6 card-content">
-                {index === 0 ? (
-                  <div className="flex items-center gap-2 mb-2">
+                <div className="flex items-center gap-2 mb-2">
+                  {index === 0 ? (
                     <img 
-                      src="/badge.png" 
+                      src="/badge1.png" 
                       alt="Champion Badge" 
                       className="w-8 h-8 object-contain" 
                     />
-                    <div className="text-2xl font-bold champion-badge">CHAMPION</div>
+                  ) : index === 1 ? (
+                    <img 
+                      src="/badge2.png" 
+                      alt="Second Place Badge" 
+                      className="w-8 h-8 object-contain" 
+                    />
+                  ) : (
+                    <div className="relative w-8 h-8">
+                      <img 
+                        src="/badge3.png" 
+                        alt={`Rank ${index + 1} Badge`} 
+                        className="w-8 h-8 object-contain" 
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-white text-xs font-bold drop-shadow-md">
+                          {index + 1}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  <div className={`text-2xl font-bold ${index === 0 ? "champion-badge" : "text-muted-foreground"}`}>
+                    {index === 0 ? "CHAMPION" : `#${index + 1}`}
                   </div>
-                ) : (
-                  <div className="text-2xl font-bold mb-2 flex items-center gap-2">
-                    <span className="bg-secondary/50 size-8 rounded-full flex items-center justify-center">
-                      {index + 1}
-                    </span>
-                    <span>Rank</span>
-                  </div>
-                )}
+                </div>
                 <div className="text-xl font-medium">{score.playerName}</div>
                 <div className={`text-3xl score-display mt-2 ${index === 0 ? "champion-badge" : ""}`}>
                   {score.score.toLocaleString()}
@@ -213,29 +227,34 @@ export default function Leaderboard() {
               className={`list-item flex items-center justify-between p-6 bg-card rounded-lg shadow-md hover:shadow-lg transition-all duration-300 w-full ${index === 0 ? "border-l-4 border-yellow-500" : ""}`}
             >
               <div className="flex items-center gap-5 flex-grow pr-6">
-                {index === 0 ? (
-                  <div className="flex-shrink-0 bg-primary/20 rounded-xl p-3 border border-primary/30">
-                    <div className="champion-icon p-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-                        <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-                        <path d="M4 22h16"></path>
-                        <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-                        <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
-                        <path d="M9 2v7.5"></path>
-                        <path d="M15 2v7.5"></path>
-                        <path d="M12 2v10"></path>
-                        <path d="M12 12a4 4 0 0 0 4-4V6H8v2a4 4 0 0 0 4 4Z"></path>
-                      </svg>
+                <div className="flex-shrink-0">
+                  {index === 0 ? (
+                    <img 
+                      src="/badge1.png" 
+                      alt="Champion Badge" 
+                      className="w-12 h-12 object-contain" 
+                    />
+                  ) : index === 1 ? (
+                    <img 
+                      src="/badge2.png" 
+                      alt="Second Place Badge" 
+                      className="w-12 h-12 object-contain" 
+                    />
+                  ) : (
+                    <div className="relative w-12 h-12">
+                      <img 
+                        src="/badge3.png" 
+                        alt={`Rank ${index + 1} Badge`} 
+                        className="w-12 h-12 object-contain" 
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-white text-sm font-bold drop-shadow-md">
+                          {index + 1}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <div className="flex-shrink-0">
-                    <div className="bg-accent/50 size-12 rounded-full flex items-center justify-center text-xl font-bold text-foreground shadow-sm">
-                      {index + 1}
-                    </div>
-                  </div>
-                )}
+                  )}
+                </div>
                 <div className="flex flex-col">
                   <div className={`font-bold text-xl md:text-2xl tracking-wide ${index === 0 ? "champion-badge text-2xl md:text-3xl letter-spacing-wide" : ""}`}>
                     {score.playerName}
