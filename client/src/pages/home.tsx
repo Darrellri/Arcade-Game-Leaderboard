@@ -179,16 +179,16 @@ export default function Home() {
                 </div>
 
                 {/* Center - Top scorer name and marquee image (hidden on mobile) */}
-                <div className="hidden md:flex items-center gap-4 mx-6 flex-shrink-0">
-                  <div className="flex flex-col items-center min-w-0">
-                    <div className="text-base md:text-xl font-bold text-primary truncate max-w-32 text-center">
+                <div className="hidden md:flex items-center justify-center gap-6 mx-8 flex-1 max-w-80">
+                  <div className="flex flex-col items-center min-w-0 flex-1">
+                    <div className="text-base md:text-xl font-bold text-primary truncate max-w-full text-center px-2">
                       {game.topScorerName || 'No champion'}
                     </div>
                     <div className="text-xs text-muted-foreground/60">
                       Champion
                     </div>
                   </div>
-                  <div className="w-24 h-8 relative overflow-hidden rounded-lg bg-black/20">
+                  <div className="w-24 h-8 relative overflow-hidden rounded-lg bg-black/20 flex-shrink-0">
                     {game.imageUrl ? (
                       <img 
                         src={game.imageUrl}
@@ -205,8 +205,8 @@ export default function Home() {
 
                 {/* Right side - Score only */}
                 <div className="flex items-center flex-shrink-0">
-                  <div className="text-lg md:text-2xl font-semibold text-foreground tabular-nums">
-                    {(game.currentHighScore || 0).toLocaleString()}
+                  <div className="text-lg md:text-2xl font-semibold text-foreground tabular-nums min-w-32 text-right">
+                    {(game.currentHighScore || 0).toLocaleString().padStart(8, '\u00A0')}
                   </div>
                 </div>
               </div>
