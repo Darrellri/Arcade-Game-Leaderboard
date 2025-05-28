@@ -625,7 +625,7 @@ export default function Admin() {
         </TabsContent>
 
         <TabsContent value="games" className="space-y-4">
-          <Card>
+          <Card className="themed-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <div>
                 <CardTitle className="flex items-center gap-2">
