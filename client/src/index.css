@@ -149,6 +149,124 @@
       hsl(var(--primary) / 0.08) 100%);
     border-bottom: 1px solid hsl(var(--primary) / 0.2);
   }
+
+  /* Theme-aware toast styling */
+  .themed-toast {
+    background: linear-gradient(135deg, 
+      hsl(var(--primary) / 0.95) 0%, 
+      hsl(var(--primary) / 0.85) 100%);
+    border: 2px solid hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    box-shadow: 0 20px 25px -5px hsl(var(--primary) / 0.3), 
+                0 10px 10px -5px hsl(var(--primary) / 0.2);
+  }
+
+  /* 10 Unique Toast Animations */
+  @keyframes toast-bounce-gentle {
+    0%, 20%, 53%, 80%, 100% { transform: translate3d(0,0,0) scale(1); }
+    40%, 43% { transform: translate3d(0, -8px, 0) scale(1.02); }
+    70% { transform: translate3d(0, -4px, 0) scale(1.01); }
+    90% { transform: translate3d(0, -2px, 0) scale(1.005); }
+  }
+
+  @keyframes toast-pulse-glow {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 20px hsl(var(--primary) / 0.3); }
+    50% { transform: scale(1.05); box-shadow: 0 0 40px hsl(var(--primary) / 0.6); }
+  }
+
+  @keyframes toast-slide-wiggle {
+    0% { transform: translateX(0) rotate(0deg); }
+    15% { transform: translateX(-5px) rotate(-1deg); }
+    30% { transform: translateX(5px) rotate(1deg); }
+    45% { transform: translateX(-3px) rotate(-0.5deg); }
+    60% { transform: translateX(3px) rotate(0.5deg); }
+    75% { transform: translateX(-1px) rotate(-0.2deg); }
+    100% { transform: translateX(0) rotate(0deg); }
+  }
+
+  @keyframes toast-float-wave {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    25% { transform: translateY(-3px) rotate(0.5deg); }
+    50% { transform: translateY(-6px) rotate(0deg); }
+    75% { transform: translateY(-3px) rotate(-0.5deg); }
+  }
+
+  @keyframes toast-zoom-breath {
+    0%, 100% { transform: scale(1) rotateY(0deg); }
+    25% { transform: scale(1.02) rotateY(2deg); }
+    50% { transform: scale(1.04) rotateY(0deg); }
+    75% { transform: scale(1.02) rotateY(-2deg); }
+  }
+
+  @keyframes toast-shake-settle {
+    0% { transform: translateX(0); }
+    10% { transform: translateX(-8px); }
+    20% { transform: translateX(8px); }
+    30% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    50% { transform: translateX(-4px); }
+    60% { transform: translateX(4px); }
+    70% { transform: translateX(-2px); }
+    80% { transform: translateX(2px); }
+    90% { transform: translateX(-1px); }
+    100% { transform: translateX(0); }
+  }
+
+  @keyframes toast-flip-cascade {
+    0% { transform: perspective(400px) rotateY(0deg) scale(1); }
+    25% { transform: perspective(400px) rotateY(90deg) scale(0.95); }
+    50% { transform: perspective(400px) rotateY(180deg) scale(1.02); }
+    75% { transform: perspective(400px) rotateY(270deg) scale(0.98); }
+    100% { transform: perspective(400px) rotateY(360deg) scale(1); }
+  }
+
+  @keyframes toast-elastic-bounce {
+    0% { transform: scale(1) rotate(0deg); }
+    20% { transform: scale(1.15) rotate(2deg); }
+    40% { transform: scale(0.95) rotate(-1deg); }
+    60% { transform: scale(1.05) rotate(1deg); }
+    80% { transform: scale(0.98) rotate(-0.5deg); }
+    100% { transform: scale(1) rotate(0deg); }
+  }
+
+  @keyframes toast-orbit-spin {
+    0% { transform: rotate(0deg) translateX(0px) rotate(0deg); }
+    25% { transform: rotate(90deg) translateX(5px) rotate(-90deg); }
+    50% { transform: rotate(180deg) translateX(0px) rotate(-180deg); }
+    75% { transform: rotate(270deg) translateX(-5px) rotate(-270deg); }
+    100% { transform: rotate(360deg) translateX(0px) rotate(-360deg); }
+  }
+
+  @keyframes toast-morph-flow {
+    0%, 100% { 
+      transform: scale(1) skew(0deg, 0deg); 
+      border-radius: 12px; 
+    }
+    25% { 
+      transform: scale(1.02) skew(1deg, 0deg); 
+      border-radius: 16px 8px 16px 8px; 
+    }
+    50% { 
+      transform: scale(1.04) skew(0deg, 1deg); 
+      border-radius: 8px 16px 8px 16px; 
+    }
+    75% { 
+      transform: scale(1.02) skew(-1deg, 0deg); 
+      border-radius: 20px 4px 20px 4px; 
+    }
+  }
+
+  /* Random animation classes */
+  .toast-anim-1 { animation: toast-bounce-gentle 2s ease-in-out infinite; }
+  .toast-anim-2 { animation: toast-pulse-glow 3s ease-in-out infinite; }
+  .toast-anim-3 { animation: toast-slide-wiggle 2.5s ease-in-out infinite; }
+  .toast-anim-4 { animation: toast-float-wave 4s ease-in-out infinite; }
+  .toast-anim-5 { animation: toast-zoom-breath 3.5s ease-in-out infinite; }
+  .toast-anim-6 { animation: toast-shake-settle 1.5s ease-out infinite; }
+  .toast-anim-7 { animation: toast-flip-cascade 2s linear infinite; }
+  .toast-anim-8 { animation: toast-elastic-bounce 2.2s ease-out infinite; }
+  .toast-anim-9 { animation: toast-orbit-spin 3s linear infinite; }
+  .toast-anim-10 { animation: toast-morph-flow 4s ease-in-out infinite; }
   
   /* Enhanced typography */
   h1, h2, h3, h4, h5, h6 {

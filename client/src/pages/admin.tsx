@@ -105,9 +105,14 @@ export default function Admin() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/settings"] });
+      
+      // Generate random animation number (1-10)
+      const randomAnimation = Math.floor(Math.random() * 10) + 1;
+      
       toast({
         title: "Settings Updated",
         description: "Your changes have been saved successfully.",
+        className: `themed-toast toast-anim-${randomAnimation}`,
       });
     },
     onError: (error) => {
