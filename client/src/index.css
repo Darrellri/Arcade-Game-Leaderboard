@@ -125,6 +125,30 @@
   [data-theme="light"] .top-player-info {
     color: hsl(220 10% 30%);
   }
+
+  /* Theme-specific section backgrounds with 10% tint */
+  .section-background {
+    background-color: hsl(var(--primary) / 0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid hsl(var(--primary) / 0.15);
+  }
+
+  /* Card backgrounds with subtle theme tint */
+  .themed-card {
+    background: linear-gradient(135deg, 
+      hsl(var(--card)) 0%, 
+      hsl(var(--primary) / 0.05) 100%);
+    border: 1px solid hsl(var(--primary) / 0.1);
+  }
+
+  /* Header sections with enhanced theme integration */
+  .themed-header {
+    background: linear-gradient(135deg,
+      hsl(var(--primary) / 0.08) 0%,
+      hsl(var(--primary) / 0.12) 50%,
+      hsl(var(--primary) / 0.08) 100%);
+    border-bottom: 1px solid hsl(var(--primary) / 0.2);
+  }
   
   /* Enhanced typography */
   h1, h2, h3, h4, h5, h6 {

@@ -28,7 +28,7 @@ export default function GameCard({ game }: GameCardProps) {
     Math.floor((new Date().getTime() - new Date(game.topScoreDate).getTime()) / (1000 * 3600 * 24)) : 0;
     
   return (
-    <div className="overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 bg-card border border-primary/20">
+    <div className="overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 themed-card">
       <Link href={`/leaderboard/${game.id}`}>
         <GameMarquee game={game} />
       </Link>

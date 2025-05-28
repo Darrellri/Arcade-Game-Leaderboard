@@ -164,7 +164,7 @@ export default function Leaderboard() {
           {nonChampionScores.map((score, index) => (
             <Card 
               key={score.id} 
-              className="shadow-md hover:shadow-lg transition-all duration-300"
+              className="themed-card shadow-md hover:shadow-lg transition-all duration-300"
             >
               <CardContent className="pt-6 card-content">
                 <div className="flex items-center gap-3 mb-2">
@@ -198,7 +198,7 @@ export default function Leaderboard() {
           {nonChampionScores.map((score, index) => (
             <div
               key={score.id}
-              className="flex items-center justify-between px-6 py-4 bg-card/30 backdrop-blur-sm rounded-2xl border border-white/5 hover:bg-card/50 hover:border-white/10 transition-all duration-300 w-full group"
+              className="flex items-center justify-between px-6 py-4 section-background rounded-2xl hover:bg-primary/15 transition-all duration-300 w-full group"
             >
               {/* Left side - Player info */}
               <div className="flex items-center gap-4 flex-1">

@@ -50,7 +50,7 @@ export default function Home() {
   return (
     <div className="space-y-6">
       {/* Header with venue name and view mode controls */}
-      <div className="section-header px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-lg mb-2 w-full">
+      <div className="themed-header px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-lg mb-2 w-full">
         <div className="flex items-center gap-4">
           {venueSettings?.logoUrl && (
             <div className="logo-container flex-shrink-0 overflow-hidden rounded-md shadow-md bg-card/70 border border-primary/20" 
@@ -116,7 +116,7 @@ export default function Home() {
         <div className="space-y-1 w-full">
           {processedGames?.map((game) => (
             <Link href={`/leaderboard/${game.id}`} key={game.id} className="block w-full">
-              <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 bg-card/30 backdrop-blur-sm rounded-2xl border border-white/5 hover:bg-card/50 hover:border-white/10 transition-all duration-300 w-full group cursor-pointer">
+              <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 section-background rounded-2xl hover:bg-primary/15 transition-all duration-300 w-full group cursor-pointer">
                 
                 {/* Left side - Game info */}
                 <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
