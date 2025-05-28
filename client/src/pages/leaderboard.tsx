@@ -51,8 +51,8 @@ export default function Leaderboard() {
               <div className="absolute inset-0 bg-black/50 rounded-[10px]"></div>
               
               {/* Professional text overlay */}
-              <div className="absolute inset-0 flex items-center justify-center p-6">
-                <div className="text-center">
+              <div className="absolute inset-0 flex items-center p-6 sm:pl-[50px]">
+                <div className="text-center sm:text-left">
                   <h1 className="text-3xl sm:text-5xl font-black tracking-wide uppercase text-white drop-shadow-2xl" 
                       style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5)' }}>
                     {game.name}
@@ -63,7 +63,7 @@ export default function Leaderboard() {
                       {game.subtitle}
                     </p>
                   )}
-                  <div className="mt-4 flex items-center justify-center gap-3">
+                  <div className="mt-4 flex items-center justify-center sm:justify-start gap-3">
                     <img 
                       src="/badge1.png" 
                       alt="Champion Badge" 
