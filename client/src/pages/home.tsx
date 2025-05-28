@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "wouter";
 import { Game, VenueSettings } from "@shared/schema";
@@ -7,6 +7,7 @@ import GameCard from "@/components/game-card";
 import ShareScore from "@/components/share-score";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Gamepad2, Grid2X2, List, CircleDot, Trophy } from "lucide-react";
+import { queryClient, apiRequest } from "@/lib/queryClient";
 
 import { formatDate, formatTime } from "@/lib/formatters";
 
@@ -22,6 +23,37 @@ export default function Home() {
   const { data: venueSettings, isLoading: settingsLoading } = useQuery<VenueSettings>({
     queryKey: ["/api/admin/settings"],
   });
+
+  // Update venue settings mutation
+  const updateSettings = useMutation({
+    mutationFn: async (data: Partial<VenueSettings>) => {
+      const res = await apiRequest("PATCH", "/api/admin/settings", data);
+      return res.json() as Promise<VenueSettings>;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/settings"] });
+    },
+  });
+
+  // Function to cycle through color schemes
+  const cycleColorScheme = () => {
+    if (!venueSettings?.themePresets) return;
+    
+    const currentTheme = venueSettings.theme;
+    const presets = venueSettings.themePresets;
+    
+    // Find current theme index
+    const currentIndex = presets.findIndex(preset => preset.primary === currentTheme.primary);
+    
+    // Get next theme (cycle back to 0 if at end)
+    const nextIndex = (currentIndex + 1) % presets.length;
+    const nextTheme = presets[nextIndex];
+    
+    // Update the theme
+    updateSettings.mutate({
+      theme: nextTheme
+    });
+  };
 
   const isLoading = gamesLoading || settingsLoading;
 
@@ -53,8 +85,12 @@ export default function Home() {
       <div className="themed-header px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-lg mb-2 w-full">
         <div className="flex items-center gap-4">
           {venueSettings?.logoUrl && (
-            <div className="logo-container flex-shrink-0 overflow-hidden rounded-md shadow-md bg-card/70 border border-primary/20" 
-                 style={{ width: '200px', height: '100px' }}>
+            <div 
+              className="logo-container flex-shrink-0 overflow-hidden rounded-md shadow-md bg-card/70 border border-primary/20 cursor-pointer hover:opacity-80 transition-opacity" 
+              style={{ width: '200px', height: '100px' }}
+              onClick={cycleColorScheme}
+              title="Click to cycle through color schemes"
+            >
               <img 
                 src={venueSettings.logoUrl} 
                 alt={venueSettings.name} 
