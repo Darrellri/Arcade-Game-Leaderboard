@@ -114,6 +114,17 @@
     background-color: hsl(var(--champion-color) / 0.2);
     @apply rounded-full inline-flex items-center justify-center p-1;
   }
+
+  /* Light theme specific overrides */
+  [data-theme="light"] .champion-badge,
+  [data-theme="light"] .score-display {
+    color: hsl(var(--primary));
+  }
+
+  [data-theme="light"] .champion-details,
+  [data-theme="light"] .top-player-info {
+    color: hsl(220 10% 30%);
+  }
   
   /* Enhanced typography */
   h1, h2, h3, h4, h5, h6 {

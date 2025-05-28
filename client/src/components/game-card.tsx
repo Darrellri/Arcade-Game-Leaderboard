@@ -57,12 +57,12 @@ export default function GameCard({ game }: GameCardProps) {
                   {(game.currentHighScore || 0).toLocaleString()}
                 </span>
               </div>
-              <div className="text-lg font-bold text-white">
+              <div className="text-lg font-bold text-white top-player-info">
                 Top Score by {game.topScorerName || 'No scores yet'}
               </div>
               
               {game.topScoreDate && (
-                <div className="space-y-1 mt-1">
+                <div className="space-y-1 mt-1 champion-details">
                   <div className="flex flex-wrap items-center gap-x-2 text-sm">
                     <span className="flex items-center gap-1 text-yellow-400">
                       <Trophy className="h-3.5 w-3.5" />
