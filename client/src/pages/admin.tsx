@@ -45,7 +45,9 @@ import {
   AlertTriangle,
   Upload,
   Camera,
-  Info
+  Info,
+  Building2,
+  Palette
 } from "lucide-react";
 import { 
   Dialog,
@@ -256,9 +258,18 @@ export default function Admin() {
 
       <Tabs defaultValue="venue">
         <TabsList>
-          <TabsTrigger value="venue">Venue Details</TabsTrigger>
-          <TabsTrigger value="themes">Theme Settings</TabsTrigger>
-          <TabsTrigger value="games">Game Management</TabsTrigger>
+          <TabsTrigger value="venue" className="flex items-center gap-2">
+            <Building2 className="h-4 w-4" />
+            Venue Details
+          </TabsTrigger>
+          <TabsTrigger value="themes" className="flex items-center gap-2">
+            <Palette className="h-4 w-4" />
+            Theme Settings
+          </TabsTrigger>
+          <TabsTrigger value="games" className="flex items-center gap-2">
+            <Gamepad2 className="h-4 w-4" />
+            Game Management
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="venue" className="space-y-4">
