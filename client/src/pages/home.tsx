@@ -99,12 +99,12 @@ export default function Home() {
             </div>
           )}
           <div>
-            <h2 className="text-2xl md:text-4xl font-bold tracking-tight text-primary uppercase" style={{ letterSpacing: '4px' }}>
-              {venueSettings?.name || "Arcade"}
-            </h2>
             <h1 className="text-3xl font-black tracking-tight text-foreground uppercase text-outline" style={{ letterSpacing: '2px' }}>
               {venueSettings?.leaderboardName || "THE LEADERBOARD"}
             </h1>
+            <h2 className="text-lg md:text-2xl font-bold tracking-tight text-primary uppercase" style={{ letterSpacing: '4px' }}>
+              {venueSettings?.name || "Arcade"}
+            </h2>
           </div>
         </div>
         <div className="flex items-center gap-4 mt-3 sm:mt-0">
