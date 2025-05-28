@@ -178,8 +178,16 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Center - Marquee image (hidden on mobile) */}
-                <div className="hidden md:flex items-center justify-center mx-6 flex-shrink-0">
+                {/* Center - Top scorer name and marquee image (hidden on mobile) */}
+                <div className="hidden md:flex items-center gap-4 mx-6 flex-shrink-0">
+                  <div className="flex flex-col items-center min-w-0">
+                    <div className="text-base md:text-xl font-bold text-primary truncate max-w-32 text-center">
+                      {game.topScorerName || 'No champion'}
+                    </div>
+                    <div className="text-xs text-muted-foreground/60">
+                      Champion
+                    </div>
+                  </div>
                   <div className="w-24 h-8 relative overflow-hidden rounded-lg bg-black/20">
                     {game.imageUrl ? (
                       <img 
@@ -195,19 +203,11 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Right side - Score and actions */}
-                <div className="flex items-center gap-3 md:gap-6 flex-shrink-0">
+                {/* Right side - Score only */}
+                <div className="flex items-center flex-shrink-0">
                   <div className="text-lg md:text-2xl font-semibold text-foreground tabular-nums">
                     {(game.currentHighScore || 0).toLocaleString()}
                   </div>
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    className="text-muted-foreground hover:text-foreground border border-white/10 hover:border-white/30 bg-white/5 hover:bg-white/10 transition-all duration-200 px-2 md:px-3 text-xs md:text-sm"
-                    onClick={(e) => e.preventDefault()}
-                  >
-                    <ShareScore game={game} variant="ghost" size="sm" />
-                  </Button>
                 </div>
               </div>
             </Link>
