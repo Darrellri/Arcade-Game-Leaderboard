@@ -37,7 +37,8 @@ export default function Leaderboard() {
     <div className="space-y-8">
       {/* Full-Width Game Marquee Header */}
       <div className="mb-8 -mx-4 sm:-mx-6 lg:-mx-8">
-        <div className="w-full min-h-[300px] relative overflow-hidden rounded-[10px]">
+        <Link href="/">
+          <div className="w-full min-h-[300px] relative overflow-hidden rounded-[10px] cursor-pointer transition-all duration-300 hover:scale-[1.02] group">
           {/* Full marquee background image */}
           {game.imageUrl && (
             <div className="absolute inset-0 rounded-[10px] overflow-hidden">
@@ -97,26 +98,20 @@ export default function Leaderboard() {
                   </div>
                 </div>
               </div>
-              
-              {/* Navigation button */}
-              <Button 
-                variant="outline" 
-                asChild 
-                className="bg-black/30 hover:bg-black/50 border-white/30 text-white transition-colors duration-300 shadow-xl hover:shadow-2xl font-bold text-lg px-6 py-3 backdrop-blur-sm"
-                style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}
-              >
-                <Link href="/">
-                  <span className="flex items-center gap-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                      <path d="m15 18-6-6 6-6"/>
-                    </svg>
-                    Back to Games
-                  </span>
-                </Link>
-              </Button>
             </div>
           </div>
-        </div>
+          
+          {/* Back button indicator overlay */}
+          <div className="absolute top-4 left-4 opacity-75 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="flex items-center gap-2 px-4 py-2 bg-primary/80 hover:bg-primary text-primary-foreground rounded-lg backdrop-blur-sm border border-primary/20 shadow-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m15 18-6-6 6-6"/>
+              </svg>
+              <span className="font-semibold text-sm">Back to Games</span>
+            </div>
+          </div>
+          </div>
+        </Link>
       </div>
 
       {/* Navigation buttons at the top */}
