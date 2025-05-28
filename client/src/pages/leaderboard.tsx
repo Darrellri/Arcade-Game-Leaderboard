@@ -94,19 +94,23 @@ export default function Leaderboard() {
               </div>
             </Link>
           ) : (
-            /* Fallback gradient if no image */
-            <div className="w-full max-w-3xl aspect-[792/214] bg-gradient-to-r from-primary/60 via-primary/40 to-primary/60 rounded-[10px] flex items-center justify-center">
-              <div className="text-center">
-                <h1 className="text-3xl sm:text-5xl font-black tracking-wide uppercase text-white drop-shadow-2xl">
-                  {game.name}
-                </h1>
-                {game.subtitle && (
-                  <p className="text-lg sm:text-xl text-white/95 tracking-wider mt-2 font-medium drop-shadow-lg">
-                    {game.subtitle}
-                  </p>
-                )}
+            /* Fallback gradient if no image - exact 792x214 dimensions */
+            <Link href="/">
+              <div className="relative cursor-pointer transition-all duration-300 hover:scale-[1.02] group" style={{ width: '792px', height: '214px', maxWidth: '100vw' }}>
+                <div className="w-full h-full bg-gradient-to-r from-primary/60 via-primary/40 to-primary/60 rounded-[10px] flex items-center p-6 sm:pl-[30px]">
+                  <div className="text-center sm:text-left">
+                    <h1 className="text-3xl sm:text-5xl font-black tracking-wide uppercase text-white drop-shadow-2xl">
+                      {game.name}
+                    </h1>
+                    {game.subtitle && (
+                      <p className="text-lg sm:text-xl text-white/95 tracking-wider mt-2 font-medium drop-shadow-lg">
+                        {game.subtitle}
+                      </p>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
+            </Link>
           )}
           
           {/* Back button in lower right corner */}
