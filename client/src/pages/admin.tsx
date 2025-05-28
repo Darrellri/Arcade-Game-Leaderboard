@@ -18,7 +18,7 @@ function CountdownTimer({ initialCount, onComplete }: { initialCount: number, on
   }, [count, onComplete]);
 
   return (
-    <span className="text-xs italic text-muted-foreground ml-4">
+    <span className="text-sm italic text-muted-foreground whitespace-nowrap">
       closing in {count}
     </span>
   );
@@ -137,10 +137,9 @@ export default function Admin() {
       
       // Create countdown toast with auto-dismiss
       const toastId = toast({
-        title: "Settings Updated",
-        description: (
-          <div className="flex items-center justify-between">
-            <span>Your changes have been saved successfully.</span>
+        title: (
+          <div className="flex items-center justify-between w-full">
+            <span>Settings Updated</span>
             <CountdownTimer 
               initialCount={4} 
               onComplete={() => {
@@ -156,6 +155,7 @@ export default function Admin() {
             />
           </div>
         ),
+        description: "Your changes have been saved successfully.",
         className: `themed-toast toast-anim-${randomAnimation}`,
         duration: 4000, // 4 seconds
       });
