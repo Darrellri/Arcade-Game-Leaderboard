@@ -35,19 +35,19 @@ export default function GameCard({ game }: GameCardProps) {
       
       <div className="card-content p-4 space-y-3">
         <Link href={`/leaderboard/${game.id}`}>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center gap-2">
             {game.type === 'pinball' ? (
               <CircleDot className="h-4 w-4 text-primary" />
             ) : (
               <Gamepad2 className="h-4 w-4 text-primary" />
             )}
-            <h3 className="text-lg font-bold tracking-wide uppercase text-primary letter-spacing-wide text-outline">{game.name}</h3>
+            <h3 className="text-lg font-bold tracking-wide uppercase text-primary letter-spacing-wide text-outline text-center">{game.name}</h3>
           </div>
-          {game.subtitle && <p className="subtitle tracking-wider text-muted-foreground">{game.subtitle}</p>}
+          {game.subtitle && <p className="subtitle tracking-wider text-muted-foreground text-center mb-[10px]">{game.subtitle}</p>}
 
-          <div className="flex items-center justify-between">
-            <div className="flex flex-col gap-1">
-              <div className="flex items-center gap-2">
+          <div className="flex flex-col items-center justify-center">
+            <div className="flex flex-col gap-1 w-full">
+              <div className="flex items-center justify-center gap-2">
                 <img 
                   src="/badge.png" 
                   alt="Champion Badge" 
@@ -57,13 +57,13 @@ export default function GameCard({ game }: GameCardProps) {
                   {(game.currentHighScore || 0).toLocaleString()}
                 </span>
               </div>
-              <div className="text-lg font-bold text-white top-player-info">
+              <div className="text-lg font-bold text-white top-player-info text-center">
                 Top Score by {game.topScorerName || 'No scores yet'}
               </div>
               
               {game.topScoreDate && (
                 <div className="space-y-1 mt-1 champion-details">
-                  <div className="flex flex-wrap items-center gap-x-2 text-sm">
+                  <div className="flex flex-wrap items-center justify-center gap-x-2 text-sm">
                     <span className="flex items-center gap-1 text-yellow-400">
                       <Trophy className="h-3.5 w-3.5" />
                       <span>Champion since:</span>
@@ -77,14 +77,14 @@ export default function GameCard({ game }: GameCardProps) {
                   </div>
                   
                   {secondPlace && (
-                    <div className="flex items-center gap-1 text-sm">
+                    <div className="flex items-center justify-center gap-1 text-sm">
                       <Medal className="h-3.5 w-3.5 text-zinc-400" />
                       <span>Took the lead from:</span>
                       <span className="font-medium text-zinc-300">{secondPlace.playerName}</span>
                     </div>
                   )}
                   
-                  <div className="text-xs text-muted-foreground flex items-center gap-1">
+                  <div className="text-xs text-muted-foreground flex items-center justify-center gap-1">
                     <Calendar className="h-3 w-3" />
                     {formatDate(new Date(game.topScoreDate))}, {formatTime(new Date(game.topScoreDate))}
                   </div>
