@@ -37,10 +37,10 @@ export default function Leaderboard() {
     <div className="space-y-8">
       {/* Full-Width Game Marquee Header */}
       <div className="mb-8 -mx-4 sm:-mx-6 lg:-mx-8">
-        <div className="w-full min-h-[300px] relative overflow-hidden">
+        <div className="w-full min-h-[300px] relative overflow-hidden rounded-[10px]">
           {/* Full marquee background image */}
           {game.imageUrl && (
-            <div className="absolute inset-0">
+            <div className="absolute inset-0 rounded-[10px] overflow-hidden">
               <img 
                 src={game.imageUrl || ''} 
                 alt={game.name} 
@@ -53,7 +53,7 @@ export default function Leaderboard() {
           
           {/* Fallback gradient if no image */}
           {!game.imageUrl && (
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/60 via-primary/40 to-primary/60"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/60 via-primary/40 to-primary/60 rounded-[10px]"></div>
           )}
 
           {/* Professional text overlay */}
