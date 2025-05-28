@@ -317,32 +317,14 @@
     0% {
       transform: translateY(0px);
     }
-    10% {
-      transform: translateY(0px);
-    }
-    15% {
-      transform: translateY(3px);
-    }
     25% {
-      transform: translateY(3px);
-    }
-    40% {
-      transform: translateY(-6px);
-    }
-    50% {
-      transform: translateY(-6px);
-    }
-    65% {
-      transform: translateY(3px);
+      transform: translateY(5px);
     }
     75% {
-      transform: translateY(3px);
-    }
-    90% {
-      transform: translateY(-6px);
+      transform: translateY(-5px);
     }
     100% {
-      transform: translateY(-6px);
+      transform: translateY(0px);
     }
   }
   
