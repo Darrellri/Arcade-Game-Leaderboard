@@ -18,8 +18,8 @@ function CountdownTimer({ initialCount, onComplete }: { initialCount: number, on
   }, [count, onComplete]);
 
   return (
-    <span className="text-sm italic text-muted-foreground whitespace-nowrap">
-      closing in {count}
+    <span className="text-base italic text-muted-foreground whitespace-nowrap">
+      closing in <span className="text-xl font-bold">{count}</span>
     </span>
   );
 }
