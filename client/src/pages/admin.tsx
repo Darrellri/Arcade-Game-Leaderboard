@@ -112,7 +112,6 @@ export default function Admin() {
       toast({
         title: "Settings Updated",
         description: "Your changes have been saved successfully.",
-        variant: "themed" as any,
         className: `themed-toast toast-anim-${randomAnimation}`,
       });
     },

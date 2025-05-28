@@ -154,11 +154,11 @@
   .themed-toast {
     background: linear-gradient(135deg, 
       hsl(var(--primary) / 0.95) 0%, 
-      hsl(var(--primary) / 0.85) 100%);
-    border: 2px solid hsl(var(--primary));
-    color: hsl(var(--primary-foreground));
+      hsl(var(--primary) / 0.85) 100%) !important;
+    border: 2px solid hsl(var(--primary)) !important;
+    color: hsl(var(--primary-foreground)) !important;
     box-shadow: 0 20px 25px -5px hsl(var(--primary) / 0.3), 
-                0 10px 10px -5px hsl(var(--primary) / 0.2);
+                0 10px 10px -5px hsl(var(--primary) / 0.2) !important;
   }
 
   /* 10 Unique Toast Animations */
