@@ -312,6 +312,45 @@
     @apply font-mono;
   }
   
+  /* Champion badge floating animation */
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    10% {
+      transform: translateY(0px);
+    }
+    15% {
+      transform: translateY(3px);
+    }
+    25% {
+      transform: translateY(3px);
+    }
+    40% {
+      transform: translateY(-6px);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+    65% {
+      transform: translateY(3px);
+    }
+    75% {
+      transform: translateY(3px);
+    }
+    90% {
+      transform: translateY(-6px);
+    }
+    100% {
+      transform: translateY(-6px);
+    }
+  }
+  
+  .animate-float {
+    animation: float 8s ease-in-out infinite;
+    animation-delay: 5s;
+  }
+  
   /* Responsive adjustments */
   @media (max-width: 640px) {
     .image-container {

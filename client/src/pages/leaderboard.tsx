@@ -68,7 +68,7 @@ export default function Leaderboard() {
                       <img 
                         src="/badge1.png" 
                         alt="Champion Badge" 
-                        className="w-24 h-24 object-contain drop-shadow-lg" 
+                        className="w-24 h-24 object-contain drop-shadow-lg animate-float" 
                       />
                       <div className="flex flex-col">
                         <p className="text-xl sm:text-2xl text-white font-bold uppercase drop-shadow-lg"
