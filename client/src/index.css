@@ -126,28 +126,29 @@
     color: hsl(220 10% 30%);
   }
 
-  /* Theme-specific section backgrounds with 10% tint */
+  /* Theme-specific section backgrounds with 20% tint */
   .section-background {
-    background-color: hsl(var(--primary) / 0.1);
+    background-color: hsl(var(--primary) / 0.2);
     backdrop-filter: blur(8px);
-    border: 1px solid hsl(var(--primary) / 0.15);
+    border: 1px solid hsl(var(--primary) / 0.25);
   }
 
-  /* Card backgrounds with subtle theme tint */
+  /* Card backgrounds with enhanced theme tint */
   .themed-card {
     background: linear-gradient(135deg, 
-      hsl(var(--card)) 0%, 
-      hsl(var(--primary) / 0.05) 100%);
-    border: 1px solid hsl(var(--primary) / 0.1);
+      hsl(var(--primary) / 0.18) 0%, 
+      hsl(var(--primary) / 0.22) 50%,
+      hsl(var(--primary) / 0.15) 100%);
+    border: 1px solid hsl(var(--primary) / 0.25);
   }
 
   /* Header sections with enhanced theme integration */
   .themed-header {
     background: linear-gradient(135deg,
-      hsl(var(--primary) / 0.08) 0%,
-      hsl(var(--primary) / 0.12) 50%,
-      hsl(var(--primary) / 0.08) 100%);
-    border-bottom: 1px solid hsl(var(--primary) / 0.2);
+      hsl(var(--primary) / 0.18) 0%,
+      hsl(var(--primary) / 0.22) 50%,
+      hsl(var(--primary) / 0.18) 100%);
+    border-bottom: 1px solid hsl(var(--primary) / 0.3);
   }
 
   /* Theme-aware toast styling */

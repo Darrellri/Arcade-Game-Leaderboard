@@ -262,7 +262,7 @@ export default function Admin() {
         </TabsList>
 
         <TabsContent value="venue" className="space-y-4">
-          <Card>
+          <Card className="themed-card">
             <CardHeader>
               <CardTitle>Venue Information</CardTitle>
               <CardDescription>
@@ -428,7 +428,7 @@ export default function Admin() {
         </TabsContent>
 
         <TabsContent value="themes" className="space-y-4">
-          <Card>
+          <Card className="themed-card">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
