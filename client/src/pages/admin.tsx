@@ -1,4 +1,28 @@
 import { useState, useEffect } from "react";
+
+// Countdown Timer Component
+function CountdownTimer({ initialCount, onComplete }: { initialCount: number, onComplete: () => void }) {
+  const [count, setCount] = useState(initialCount);
+
+  useEffect(() => {
+    if (count <= 0) {
+      onComplete();
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setCount(count - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [count, onComplete]);
+
+  return (
+    <span className="text-xs italic text-muted-foreground ml-4">
+      closing in {count}
+    </span>
+  );
+}
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
@@ -111,10 +135,29 @@ export default function Admin() {
       // Generate random animation number (1-10)
       const randomAnimation = Math.floor(Math.random() * 10) + 1;
       
-      toast({
+      // Create countdown toast with auto-dismiss
+      const toastId = toast({
         title: "Settings Updated",
-        description: "Your changes have been saved successfully.",
+        description: (
+          <div className="flex items-center justify-between">
+            <span>Your changes have been saved successfully.</span>
+            <CountdownTimer 
+              initialCount={4} 
+              onComplete={() => {
+                // Dismiss the toast when countdown reaches 0
+                const toastElement = document.querySelector(`[data-toast-id="${toastId}"]`);
+                if (toastElement) {
+                  const closeButton = toastElement.querySelector('[data-toast-close]');
+                  if (closeButton) {
+                    (closeButton as HTMLElement).click();
+                  }
+                }
+              }} 
+            />
+          </div>
+        ),
         className: `themed-toast toast-anim-${randomAnimation}`,
+        duration: 4000, // 4 seconds
       });
     },
     onError: (error) => {
