@@ -100,12 +100,19 @@ export default function Admin() {
   // Update form values when settings are loaded
   useEffect(() => {
     if (settings) {
+      // Preserve current animated logo preview if it exists
+      const currentAnimatedLogo = animatedLogoPreview || settings.animatedLogoUrl;
+      
       form.reset(settings);
       setLogoPreview(settings.logoUrl || null);
-      setAnimatedLogoPreview(settings.animatedLogoUrl || null);
-      // Theme functionality removed
+      setAnimatedLogoPreview(currentAnimatedLogo || null);
+      
+      // If we have an animated logo preview that's not in the settings, update the form
+      if (currentAnimatedLogo && currentAnimatedLogo !== settings.animatedLogoUrl) {
+        form.setValue("animatedLogoUrl", currentAnimatedLogo);
+      }
     }
-  }, [settings, form]);
+  }, [settings, form, animatedLogoPreview]);
 
   // Update venue settings
   const updateSettings = useMutation({
@@ -209,16 +216,9 @@ export default function Admin() {
       setAnimatedLogoPreview(result.url);
       form.setValue("animatedLogoUrl", result.url);
       
-      // Automatically save the form to persist the animated logo URL
-      const currentValues = form.getValues();
-      updateSettings.mutate({
-        ...currentValues,
-        animatedLogoUrl: result.url
-      });
-      
       toast({
         title: "Upload successful",
-        description: "Animated logo has been uploaded and saved.",
+        description: "Animated logo has been uploaded. Click Save Venue Information to apply changes.",
       });
     } catch (error) {
       console.error('Upload error:', error);
@@ -234,6 +234,8 @@ export default function Admin() {
 
   // Handle form submission
   const onSaveVenueInfo = (data: VenueSettings) => {
+    console.log('Saving venue settings:', data);
+    console.log('Animated logo URL in form data:', data.animatedLogoUrl);
     updateSettings.mutate(data);
   };
 
