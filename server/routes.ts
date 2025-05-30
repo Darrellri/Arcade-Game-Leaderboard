@@ -45,6 +45,40 @@ const upload = multer({
   }
 });
 
+// Configure multer for animated logo videos
+const animatedLogoStorage = multer.diskStorage({
+  destination: (_req, _file, cb) => {
+    const uploadPath = path.join(process.cwd(), 'public', 'uploads');
+    if (!fs.existsSync(uploadPath)) {
+      fs.mkdirSync(uploadPath, { recursive: true });
+    }
+    cb(null, uploadPath);
+  },
+  filename: (_req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const ext = path.extname(file.originalname);
+    cb(null, 'animated-logo-' + uniqueSuffix + ext);
+  }
+});
+
+const uploadAnimatedLogo = multer({
+  storage: animatedLogoStorage,
+  limits: {
+    fileSize: 50 * 1024 * 1024 // 50MB limit for videos
+  },
+  fileFilter: (_req, file, cb) => {
+    // Accept only videos
+    const filetypes = /mp4|avi|mov|wmv|flv|webm|mkv/;
+    const mimetype = file.mimetype.startsWith('video/');
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb(new Error("Only video files are allowed!"));
+  }
+});
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get venue settings
   app.get("/api/admin/settings", async (_req, res) => {
@@ -69,6 +103,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       res.status(500).json({ message: "Failed to update venue settings" });
+    }
+  });
+
+  // Upload animated logo
+  app.post("/api/admin/upload-animated-logo", uploadAnimatedLogo.single('animatedLogo'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      // Create relative URL to the uploaded file
+      const relativeFilePath = `/uploads/${path.basename(req.file.path)}`;
+      
+      res.json({ 
+        url: relativeFilePath,
+        message: "Animated logo uploaded successfully" 
+      });
+    } catch (error) {
+      // Remove uploaded file if there's an error
+      if (req.file && fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+      }
+      res.status(500).json({ message: "Failed to upload animated logo" });
     }
   });
 

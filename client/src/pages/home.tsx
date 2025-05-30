@@ -84,18 +84,28 @@ export default function Home() {
       {/* Header with venue name and view mode controls */}
       <div className="themed-header px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-lg mb-2 w-full">
         <div className="flex items-center gap-4">
-          {venueSettings?.logoUrl && (
+          {(venueSettings?.animatedLogoUrl || venueSettings?.logoUrl) && (
             <div 
               className="logo-container flex-shrink-0 overflow-hidden rounded-md shadow-md bg-card/70 border border-primary/20 cursor-pointer hover:opacity-80 transition-opacity" 
               style={{ width: '200px', height: '100px' }}
               onClick={cycleColorScheme}
               title="Click to cycle through color schemes"
             >
-              <img 
-                src={venueSettings.logoUrl} 
-                alt={venueSettings.name} 
-                className="w-full h-full object-contain p-2" 
-              />
+              {venueSettings.animatedLogoUrl ? (
+                <video 
+                  src={venueSettings.animatedLogoUrl} 
+                  autoPlay 
+                  loop 
+                  muted
+                  className="w-full h-full object-contain p-2" 
+                />
+              ) : (
+                <img 
+                  src={venueSettings.logoUrl} 
+                  alt={venueSettings.name} 
+                  className="w-full h-full object-contain p-2" 
+                />
+              )}
             </div>
           )}
           <div>

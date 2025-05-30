@@ -1,28 +1,6 @@
 import { useState, useEffect } from "react";
 
-// Countdown Timer Component
-function CountdownTimer({ initialCount, onComplete }: { initialCount: number, onComplete: () => void }) {
-  const [count, setCount] = useState(initialCount);
 
-  useEffect(() => {
-    if (count <= 0) {
-      onComplete();
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      setCount(count - 1);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [count, onComplete]);
-
-  return (
-    <span className="text-base italic text-muted-foreground whitespace-nowrap">
-      closing in <span className="text-xl font-bold">{count}</span>
-    </span>
-  );
-}
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
@@ -88,6 +66,8 @@ import MarqueeImageUploader from "@/components/marquee-image-uploader";
 export default function Admin() {
   const { toast } = useToast();
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [animatedLogoPreview, setAnimatedLogoPreview] = useState<string | null>(null);
+  const [isUploadingAnimatedLogo, setIsUploadingAnimatedLogo] = useState(false);
 
   // Fetch venue settings
   const { data: settings, isLoading: settingsLoading } = useQuery<VenueSettings>({
@@ -119,6 +99,7 @@ export default function Admin() {
     if (settings) {
       form.reset(settings);
       setLogoPreview(settings.logoUrl || null);
+      setAnimatedLogoPreview(settings.animatedLogoUrl || null);
       // Theme functionality removed
     }
   }, [settings, form]);
@@ -135,26 +116,9 @@ export default function Admin() {
       // Generate random animation number (1-10)
       const randomAnimation = Math.floor(Math.random() * 10) + 1;
       
-      // Create countdown toast with auto-dismiss
-      const toastId = toast({
-        title: (
-          <div className="flex items-center justify-between w-full">
-            <span>Settings Updated</span>
-            <CountdownTimer 
-              initialCount={4} 
-              onComplete={() => {
-                // Dismiss the toast when countdown reaches 0
-                const toastElement = document.querySelector(`[data-toast-id="${toastId}"]`);
-                if (toastElement) {
-                  const closeButton = toastElement.querySelector('[data-toast-close]');
-                  if (closeButton) {
-                    (closeButton as HTMLElement).click();
-                  }
-                }
-              }} 
-            />
-          </div>
-        ),
+      // Create themed toast notification
+      toast({
+        title: "Settings Updated",
         description: "Your changes have been saved successfully.",
         className: `themed-toast toast-anim-${randomAnimation}`,
         duration: 4000, // 4 seconds
@@ -197,6 +161,61 @@ export default function Admin() {
   const handleLogoUrlChange = (url: string) => {
     setLogoPreview(url || null);
     form.setValue("logoUrl", url);
+  };
+
+  // Handle animated logo URL change
+  const handleAnimatedLogoUrlChange = (url: string) => {
+    setAnimatedLogoPreview(url || null);
+    form.setValue("animatedLogoUrl", url);
+  };
+
+  // Handle animated logo file upload
+  const handleAnimatedLogoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('video/')) {
+      toast({
+        variant: "destructive",
+        title: "Invalid file type",
+        description: "Please select a video file.",
+      });
+      return;
+    }
+
+    setIsUploadingAnimatedLogo(true);
+
+    try {
+      const formData = new FormData();
+      formData.append('animatedLogo', file);
+
+      const response = await fetch('/api/admin/upload-animated-logo', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const result = await response.json();
+      
+      setAnimatedLogoPreview(result.url);
+      form.setValue("animatedLogoUrl", result.url);
+      
+      toast({
+        title: "Upload successful",
+        description: "Animated logo has been uploaded.",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Upload failed",
+        description: "Failed to upload animated logo. Please try again.",
+      });
+    } finally {
+      setIsUploadingAnimatedLogo(false);
+    }
   };
 
   // Handle form submission
@@ -398,6 +417,35 @@ export default function Admin() {
 
                     <FormField
                       control={form.control}
+                      name="animatedLogoUrl"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Animated Logo (Video)</FormLabel>
+                          <FormControl>
+                            <div className="space-y-2">
+                              <Input 
+                                {...field} 
+                                placeholder="Upload or enter video URL"
+                                onChange={(e) => handleAnimatedLogoUrlChange(e.target.value)}
+                              />
+                              <input
+                                type="file"
+                                accept="video/*"
+                                onChange={handleAnimatedLogoUpload}
+                                className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/80"
+                              />
+                              <p className="text-xs text-muted-foreground">
+                                Upload a video file or enter a video URL. Video logo takes priority over image logo.
+                              </p>
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
                       name="address"
                       render={({ field }) => (
                         <FormItem>
@@ -461,7 +509,16 @@ export default function Admin() {
                 <div className="flex flex-col items-center">
                   <div className="text-sm font-medium mb-2">Logo Preview</div>
                   <div className="border rounded-lg p-4 w-full h-[200px] flex items-center justify-center bg-muted/30">
-                    {logoPreview ? (
+                    {animatedLogoPreview ? (
+                      <video 
+                        src={animatedLogoPreview} 
+                        autoPlay 
+                        loop 
+                        muted
+                        className="max-w-full max-h-full object-contain"
+                        onError={() => setAnimatedLogoPreview(null)}
+                      />
+                    ) : logoPreview ? (
                       <img 
                         src={logoPreview} 
                         alt="Venue Logo" 
@@ -475,6 +532,11 @@ export default function Admin() {
                       </div>
                     )}
                   </div>
+                  {animatedLogoPreview && logoPreview && (
+                    <div className="text-xs text-muted-foreground mt-2 text-center">
+                      Video logo is displayed. Image logo is saved as backup.
+                    </div>
+                  )}
                 </div>
               </div>
             </CardContent>
