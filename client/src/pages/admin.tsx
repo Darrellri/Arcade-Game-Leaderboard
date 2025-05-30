@@ -85,6 +85,8 @@ export default function Admin() {
     defaultValues: {
       name: "",
       leaderboardName: "THE LEADERBOARD",
+      logoUrl: "",
+      animatedLogoUrl: "",
       theme: {
         primary: "hsl(280, 100%, 50%)",
         variant: "vibrant",
@@ -189,13 +191,16 @@ export default function Admin() {
       const formData = new FormData();
       formData.append('animatedLogo', file);
 
+      // Use fetch directly for file uploads (don't use apiRequest which sets JSON headers)
       const response = await fetch('/api/admin/upload-animated-logo', {
         method: 'POST',
         body: formData,
+        credentials: 'include',
       });
 
       if (!response.ok) {
-        throw new Error('Upload failed');
+        const errorText = await response.text();
+        throw new Error(`Upload failed: ${response.status} ${errorText}`);
       }
 
       const result = await response.json();
@@ -208,10 +213,11 @@ export default function Admin() {
         description: "Animated logo has been uploaded.",
       });
     } catch (error) {
+      console.error('Upload error:', error);
       toast({
         variant: "destructive",
         title: "Upload failed",
-        description: "Failed to upload animated logo. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to upload animated logo. Please try again.",
       });
     } finally {
       setIsUploadingAnimatedLogo(false);
