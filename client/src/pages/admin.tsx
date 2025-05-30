@@ -209,9 +209,16 @@ export default function Admin() {
       setAnimatedLogoPreview(result.url);
       form.setValue("animatedLogoUrl", result.url);
       
+      // Automatically save the form to persist the animated logo URL
+      const currentValues = form.getValues();
+      updateSettings.mutate({
+        ...currentValues,
+        animatedLogoUrl: result.url
+      });
+      
       toast({
         title: "Upload successful",
-        description: "Animated logo has been uploaded.",
+        description: "Animated logo has been uploaded and saved.",
       });
     } catch (error) {
       console.error('Upload error:', error);
