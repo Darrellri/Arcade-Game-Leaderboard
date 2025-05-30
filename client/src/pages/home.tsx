@@ -86,8 +86,16 @@ export default function Home() {
         <div className="flex items-center gap-4">
           {(venueSettings?.animatedLogoUrl || venueSettings?.logoUrl) && (
             <div 
-              className="logo-container flex-shrink-0 overflow-hidden rounded-md shadow-md bg-card/70 border border-primary/20 cursor-pointer hover:opacity-80 transition-opacity" 
-              style={{ width: '200px', height: '100px' }}
+              className="logo-container flex-shrink-0 overflow-hidden rounded-md shadow-md border border-primary/20 cursor-pointer hover:opacity-80 transition-opacity" 
+              style={{ 
+                width: '200px', 
+                height: '100px',
+                backgroundColor: 
+                  venueSettings.logoBackgroundColor === 'white' ? '#ffffff' :
+                  venueSettings.logoBackgroundColor === 'black' ? '#000000' :
+                  venueSettings.logoBackgroundColor === 'theme' ? 'hsl(var(--primary))' :
+                  'rgba(var(--card), 0.7)'
+              }}
               onClick={cycleColorScheme}
               title="Click to cycle through color schemes"
             >

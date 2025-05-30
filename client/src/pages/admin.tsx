@@ -87,6 +87,7 @@ export default function Admin() {
       leaderboardName: "THE LEADERBOARD",
       logoUrl: "",
       animatedLogoUrl: "",
+      logoBackgroundColor: "transparent",
       theme: {
         primary: "hsl(280, 100%, 50%)",
         variant: "vibrant",
@@ -439,13 +440,44 @@ export default function Admin() {
                                 accept="video/*"
                                 onChange={handleAnimatedLogoUpload}
                                 className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/80"
+                                disabled={isUploadingAnimatedLogo}
                               />
+                              {isUploadingAnimatedLogo && (
+                                <p className="text-xs text-primary">Uploading video...</p>
+                              )}
                               <p className="text-xs text-muted-foreground">
                                 Upload a video file or enter a video URL. Video logo takes priority over image logo.
                               </p>
                             </div>
                           </FormControl>
                           <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="logoBackgroundColor"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Logo Background Color</FormLabel>
+                          <FormControl>
+                            <Select value={field.value || "transparent"} onValueChange={field.onChange}>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select background color" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="transparent">Transparent</SelectItem>
+                                <SelectItem value="white">White</SelectItem>
+                                <SelectItem value="black">Black</SelectItem>
+                                <SelectItem value="theme">Theme Color</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                          <p className="text-xs text-muted-foreground">
+                            Background color for the logo area (useful for transparent videos)
+                          </p>
                         </FormItem>
                       )}
                     />
@@ -514,7 +546,16 @@ export default function Admin() {
 
                 <div className="flex flex-col items-center">
                   <div className="text-sm font-medium mb-2">Logo Preview</div>
-                  <div className="border rounded-lg p-4 w-full h-[200px] flex items-center justify-center bg-muted/30">
+                  <div 
+                    className="border rounded-lg p-4 w-full h-[200px] flex items-center justify-center"
+                    style={{
+                      backgroundColor: 
+                        form.watch('logoBackgroundColor') === 'white' ? '#ffffff' :
+                        form.watch('logoBackgroundColor') === 'black' ? '#000000' :
+                        form.watch('logoBackgroundColor') === 'theme' ? 'hsl(var(--primary))' :
+                        'transparent'
+                    }}
+                  >
                     {animatedLogoPreview ? (
                       <video 
                         src={animatedLogoPreview} 
@@ -522,7 +563,12 @@ export default function Admin() {
                         loop 
                         muted
                         className="max-w-full max-h-full object-contain"
-                        onError={() => setAnimatedLogoPreview(null)}
+                        onError={(e) => {
+                          console.error('Video error:', e);
+                          setAnimatedLogoPreview(null);
+                        }}
+                        onLoadStart={() => console.log('Video loading started')}
+                        onCanPlay={() => console.log('Video can play')}
                       />
                     ) : logoPreview ? (
                       <img 
@@ -541,6 +587,11 @@ export default function Admin() {
                   {animatedLogoPreview && logoPreview && (
                     <div className="text-xs text-muted-foreground mt-2 text-center">
                       Video logo is displayed. Image logo is saved as backup.
+                    </div>
+                  )}
+                  {animatedLogoPreview && (
+                    <div className="text-xs text-muted-foreground mt-2 text-center">
+                      Video URL: {animatedLogoPreview}
                     </div>
                   )}
                 </div>
