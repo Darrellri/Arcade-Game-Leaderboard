@@ -958,14 +958,25 @@ export default function Admin() {
                         </CardDescription>
                       </CardHeader>
                       <CardContent className="pt-6">
-                        <MarqueeImageUploader
-                          gameId={selectedGameId}
-                          currentImageUrl={games.find(g => g.id === selectedGameId)?.imageUrl || null}
-                          onSuccess={(imageUrl) => {
-                            // Just close the uploader on success
-                            setSelectedGameId(null);
-                          }}
-                        />
+                        <div className="space-y-8">
+                          <MarqueeImageUploader
+                            gameId={selectedGameId}
+                            currentImageUrl={games.find(g => g.id === selectedGameId)?.imageUrl || null}
+                            onSuccess={(imageUrl) => {
+                              queryClient.invalidateQueries({ queryKey: ['/api/games'] });
+                            }}
+                          />
+                          
+                          <div className="border-t pt-6">
+                            <OverlayImageUploader
+                              gameId={selectedGameId}
+                              currentOverlayUrl={games.find(g => g.id === selectedGameId)?.overlayImageUrl || null}
+                              onSuccess={(overlayUrl) => {
+                                queryClient.invalidateQueries({ queryKey: ['/api/games'] });
+                              }}
+                            />
+                          </div>
+                        </div>
                       </CardContent>
                     </Card>
                   )}

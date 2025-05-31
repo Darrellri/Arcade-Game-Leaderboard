@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Game } from "@shared/schema";
+import { useState, useEffect } from "react";
 
 interface GameMarqueeProps {
   game: Game;
@@ -7,8 +8,55 @@ interface GameMarqueeProps {
 }
 
 export default function GameMarquee({ game, className }: GameMarqueeProps) {
+  const [overlayAnimation, setOverlayAnimation] = useState<string>("");
+  const [animationKey, setAnimationKey] = useState(0);
+  
   // Use the imageUrl directly from the game object
   const imageUrl = game.imageUrl;
+  const overlayImageUrl = game.overlayImageUrl;
+
+  // Array of random animations for the overlay
+  const animations = [
+    "animate-pulse",
+    "animate-bounce", 
+    "animate-spin",
+    "animate-ping",
+    "animate-[fadeInOut_2s_ease-in-out]",
+    "animate-[slideInFromLeft_1.5s_ease-out]",
+    "animate-[slideInFromRight_1.5s_ease-out]",
+    "animate-[zoomIn_1.5s_ease-out]",
+    "animate-[glow_2s_ease-in-out_infinite]"
+  ];
+
+  // Set up random animation timer for overlay
+  useEffect(() => {
+    if (!overlayImageUrl) return;
+
+    const triggerRandomAnimation = () => {
+      const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
+      setOverlayAnimation(randomAnimation);
+      setAnimationKey(prev => prev + 1);
+      
+      // Clear animation after it completes
+      setTimeout(() => {
+        setOverlayAnimation("");
+      }, 2500);
+    };
+
+    // Initial delay before first animation (5-10 seconds)
+    const initialDelay = Math.random() * 5000 + 5000;
+    const initialTimer = setTimeout(triggerRandomAnimation, initialDelay);
+
+    // Set up recurring timer (20-30 seconds)
+    const recurringTimer = setInterval(() => {
+      triggerRandomAnimation();
+    }, Math.random() * 10000 + 20000);
+
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(recurringTimer);
+    };
+  }, [overlayImageUrl]);
   
   // Using the exact 792x214 aspect ratio (3.7:1) for marquee images
   if (imageUrl) {
@@ -20,6 +68,25 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
             alt={`${game.name} marquee`}
             className="w-full h-full object-contain transition-all duration-300 hover:opacity-90"
           />
+          
+          {/* Overlay Image with Random Animations */}
+          {overlayImageUrl && (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <img
+                key={animationKey}
+                src={overlayImageUrl}
+                alt={`${game.name} overlay`}
+                className={cn(
+                  "max-w-full max-h-full object-contain",
+                  overlayAnimation
+                )}
+                style={{ 
+                  filter: "drop-shadow(2px 2px 4px rgba(0,0,0,0.5))",
+                  zIndex: 10
+                }}
+              />
+            </div>
+          )}
         </div>
       </div>
     );
