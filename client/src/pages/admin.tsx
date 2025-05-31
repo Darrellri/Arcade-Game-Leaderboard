@@ -584,7 +584,11 @@ export default function Admin() {
                 <div className="flex flex-col items-center">
                   <div className="text-sm font-medium mb-2">Logo Preview</div>
                   <div 
-                    className="border rounded-lg p-4 w-full h-[200px] flex items-center justify-center"
+                    className={`w-full h-[200px] flex items-center justify-center p-4 ${
+                      form.watch('hideLogoBorderShadow') === 'true' 
+                        ? '' 
+                        : 'border rounded-lg shadow-sm'
+                    }`}
                     style={{
                       backgroundColor: 
                         form.watch('logoBackgroundColor') === 'white' ? '#ffffff' :
