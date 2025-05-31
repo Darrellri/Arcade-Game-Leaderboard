@@ -15,16 +15,16 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
   const imageUrl = game.imageUrl;
   const overlayImageUrl = game.overlayImageUrl;
 
-  // Array of position-stable animations for the overlay
+  // Array of faster animations with reduced travel distance (175% faster)
   const animations = [
-    "animate-[overlayGrowShrink_2s_ease-in-out]",
-    "animate-[overlayJello_1.8s_ease-in-out]",
-    "animate-[overlaySkewWobble_2.2s_ease-in-out]",
-    "animate-[overlayPulseScale_1.5s_ease-in-out]",
-    "animate-[overlayElastic_2.5s_ease-out]",
-    "animate-[overlayBreath_3s_ease-in-out]",
-    "animate-[overlaySquish_2s_ease-in-out]",
-    "animate-[overlayGlow_2.5s_ease-in-out]"
+    "animate-[overlayGrowShrink_0.72s_ease-in-out]",
+    "animate-[overlayJello_0.65s_ease-in-out]",
+    "animate-[overlaySkewWobble_0.8s_ease-in-out]",
+    "animate-[overlayPulseScale_0.55s_ease-in-out]",
+    "animate-[overlayElastic_0.91s_ease-out]",
+    "animate-[overlayBreath_1.09s_ease-in-out]",
+    "animate-[overlaySquish_0.72s_ease-in-out]",
+    "animate-[overlayGlow_0.91s_ease-in-out]"
   ];
 
   // Set up random animation timer for overlay
@@ -68,7 +68,7 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
             className="w-full h-full object-contain transition-all duration-300 hover:opacity-90"
           />
           
-          {/* Overlay Image with Random Animations */}
+          {/* Overlay Image with Random Animations and Floating Effect */}
           {overlayImageUrl && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <img
@@ -77,7 +77,9 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
                 alt={`${game.name} overlay`}
                 className={cn(
                   "max-w-full max-h-full object-contain",
-                  overlayAnimation
+                  overlayAnimation,
+                  // Add continuous floating when no animation is active
+                  !overlayAnimation && "animate-[overlayFloat_4s_ease-in-out_infinite]"
                 )}
                 style={{ 
                   filter: "drop-shadow(2px 2px 4px rgba(0,0,0,0.5))",

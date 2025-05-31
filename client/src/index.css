@@ -333,53 +333,53 @@
     animation-delay: 5s;
   }
 
-  /* Overlay image animations - position stable with grow/shrink/skew/jello effects */
+  /* Overlay image animations - faster with reduced travel distance */
   @keyframes overlayGrowShrink {
     0%, 100% { transform: scale(1); }
-    25% { transform: scale(1.15); }
-    50% { transform: scale(0.85); }
-    75% { transform: scale(1.1); }
+    25% { transform: scale(1.03); }
+    50% { transform: scale(0.97); }
+    75% { transform: scale(1.02); }
   }
 
   @keyframes overlayJello {
     0%, 100% { transform: scale(1, 1); }
-    20% { transform: scale(1.1, 0.9); }
-    40% { transform: scale(0.9, 1.1); }
-    60% { transform: scale(1.05, 0.95); }
-    80% { transform: scale(0.95, 1.05); }
+    20% { transform: scale(1.02, 0.98); }
+    40% { transform: scale(0.98, 1.02); }
+    60% { transform: scale(1.01, 0.99); }
+    80% { transform: scale(0.99, 1.01); }
   }
 
   @keyframes overlaySkewWobble {
     0%, 100% { transform: skew(0deg, 0deg) scale(1); }
-    25% { transform: skew(2deg, 1deg) scale(1.05); }
-    50% { transform: skew(-2deg, -1deg) scale(0.95); }
-    75% { transform: skew(1deg, -2deg) scale(1.02); }
+    25% { transform: skew(0.4deg, 0.2deg) scale(1.01); }
+    50% { transform: skew(-0.4deg, -0.2deg) scale(0.99); }
+    75% { transform: skew(0.2deg, -0.4deg) scale(1.004); }
   }
 
   @keyframes overlayPulseScale {
     0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.2); opacity: 0.8; }
+    50% { transform: scale(1.04); opacity: 0.96; }
   }
 
   @keyframes overlayElastic {
     0% { transform: scale(1); }
-    20% { transform: scale(1.25, 0.75); }
-    40% { transform: scale(0.75, 1.25); }
-    60% { transform: scale(1.15, 0.85); }
-    80% { transform: scale(0.95, 1.05); }
+    20% { transform: scale(1.05, 0.95); }
+    40% { transform: scale(0.95, 1.05); }
+    60% { transform: scale(1.03, 0.97); }
+    80% { transform: scale(0.99, 1.01); }
     100% { transform: scale(1); }
   }
 
   @keyframes overlayBreath {
     0%, 100% { transform: scale(1) skew(0deg); }
-    50% { transform: scale(1.08) skew(1deg); }
+    50% { transform: scale(1.016) skew(0.2deg); }
   }
 
   @keyframes overlaySquish {
     0%, 100% { transform: scaleY(1) scaleX(1); }
-    25% { transform: scaleY(0.8) scaleX(1.2); }
-    50% { transform: scaleY(1.2) scaleX(0.8); }
-    75% { transform: scaleY(0.9) scaleX(1.1); }
+    25% { transform: scaleY(0.96) scaleX(1.04); }
+    50% { transform: scaleY(1.04) scaleX(0.96); }
+    75% { transform: scaleY(0.98) scaleX(1.02); }
   }
 
   @keyframes overlayGlow {
@@ -389,8 +389,14 @@
     }
     50% { 
       filter: drop-shadow(2px 2px 8px rgba(0,0,0,0.7)) drop-shadow(0 0 20px hsl(var(--primary) / 0.6)); 
-      transform: scale(1.05);
+      transform: scale(1.01);
     }
+  }
+
+  /* Subtle floating animation for when overlay is idle */
+  @keyframes overlayFloat {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-1px); }
   }
   
   /* Responsive adjustments */
