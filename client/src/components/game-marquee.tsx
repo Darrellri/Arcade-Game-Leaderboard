@@ -15,17 +15,16 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
   const imageUrl = game.imageUrl;
   const overlayImageUrl = game.overlayImageUrl;
 
-  // Array of random animations for the overlay
+  // Array of position-stable animations for the overlay
   const animations = [
-    "animate-pulse",
-    "animate-bounce", 
-    "animate-spin",
-    "animate-ping",
-    "animate-[fadeInOut_2s_ease-in-out]",
-    "animate-[slideInFromLeft_1.5s_ease-out]",
-    "animate-[slideInFromRight_1.5s_ease-out]",
-    "animate-[zoomIn_1.5s_ease-out]",
-    "animate-[glow_2s_ease-in-out_infinite]"
+    "animate-[overlayGrowShrink_2s_ease-in-out]",
+    "animate-[overlayJello_1.8s_ease-in-out]",
+    "animate-[overlaySkewWobble_2.2s_ease-in-out]",
+    "animate-[overlayPulseScale_1.5s_ease-in-out]",
+    "animate-[overlayElastic_2.5s_ease-out]",
+    "animate-[overlayBreath_3s_ease-in-out]",
+    "animate-[overlaySquish_2s_ease-in-out]",
+    "animate-[overlayGlow_2.5s_ease-in-out]"
   ];
 
   // Set up random animation timer for overlay
