@@ -64,6 +64,7 @@ export const venueSettingsSchema = z.object({
   logoUrl: z.string().optional(),
   animatedLogoUrl: z.string().optional(),
   logoBackgroundColor: z.string().optional(),
+  hideLogoBorderShadow: z.string().optional(),
   address: z.string().optional(),
   phone: z.string().optional(),
   hours: z.string().optional(),

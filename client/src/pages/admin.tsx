@@ -61,6 +61,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Checkbox } from "@/components/ui/checkbox";
 import MarqueeImageUploader from "@/components/marquee-image-uploader";
 import OverlayImageUploader from "@/components/overlay-image-uploader";
 
@@ -464,38 +465,7 @@ export default function Admin() {
                       )}
                     />
 
-                    <FormField
-                      control={form.control}
-                      name="animatedLogoUrl"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Animated Logo (Video)</FormLabel>
-                          <FormControl>
-                            <div className="space-y-2">
-                              <Input 
-                                {...field} 
-                                placeholder="Upload or enter video URL"
-                                onChange={(e) => handleAnimatedLogoUrlChange(e.target.value)}
-                              />
-                              <input
-                                type="file"
-                                accept="video/*"
-                                onChange={handleAnimatedLogoUpload}
-                                className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/80"
-                                disabled={isUploadingAnimatedLogo}
-                              />
-                              {isUploadingAnimatedLogo && (
-                                <p className="text-xs text-primary">Uploading video...</p>
-                              )}
-                              <p className="text-xs text-muted-foreground">
-                                Upload a video file or enter a video URL. Video logo takes priority over image logo.
-                              </p>
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+
 
                     <FormField
                       control={form.control}
@@ -520,6 +490,31 @@ export default function Admin() {
                           <p className="text-xs text-muted-foreground">
                             Background color for the logo area (useful for transparent videos)
                           </p>
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="hideLogoBorderShadow"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value === "true"}
+                              onCheckedChange={(checked) => {
+                                field.onChange(checked ? "true" : "false");
+                              }}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel>
+                              Hide the border and shadow around logo?
+                            </FormLabel>
+                            <p className="text-xs text-muted-foreground">
+                              Removes visual styling around the logo display area
+                            </p>
+                          </div>
                         </FormItem>
                       )}
                     />
