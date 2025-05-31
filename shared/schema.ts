@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, timestamp, real, json } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, timestamp, real, json, boolean } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
@@ -48,6 +48,7 @@ export const venueSettings = pgTable("venue_settings", {
   logoUrl: text("logo_url"),
   animatedLogoUrl: text("animated_logo_url"),
   logoBackgroundColor: text("logo_background_color").default("transparent"),
+  hideLogoBorderShadow: text("hide_logo_border_shadow").default("false"),
   address: text("address"),
   phone: text("phone"),
   hours: text("hours"),
