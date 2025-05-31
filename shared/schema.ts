@@ -8,6 +8,7 @@ export const games = pgTable("games", {
   name: text("name").notNull(),
   subtitle: text("subtitle"),
   imageUrl: text("image_url").default(''),
+  overlayImageUrl: text("overlay_image_url").default(''),
   type: text("type").notNull(), // 'arcade' or 'pinball'
   currentHighScore: integer("current_high_score").default(0),
   topScorerName: text("top_scorer_name"),

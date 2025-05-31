@@ -276,6 +276,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to upload image" });
     }
   });
+
+  // Upload overlay image for a game
+  app.post("/api/games/:id/upload-overlay", upload.single('overlayImage'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No file uploaded" });
+      }
+
+      const gameId = parseInt(req.params.id);
+      const game = await storage.getGame(gameId);
+      
+      if (!game) {
+        // Remove uploaded file if game doesn't exist
+        fs.unlinkSync(req.file.path);
+        return res.status(404).json({ message: "Game not found" });
+      }
+
+      // Create relative URL to the uploaded file
+      const relativeFilePath = `/uploads/${path.basename(req.file.path)}`;
+      
+      // Update the game's overlay image URL
+      const updatedGame = await storage.updateGame(gameId, { 
+        overlayImageUrl: relativeFilePath 
+      });
+
+      // Use plain string to avoid JSON.stringify issues
+      res.setHeader('Content-Type', 'application/json');
+      res.status(200).send(JSON.stringify({ 
+        success: true, 
+        game: updatedGame,
+        overlayUrl: relativeFilePath
+      }));
+    } catch (error) {
+      console.error("Error uploading overlay image:", error);
+      res.status(500).json({ message: "Failed to upload overlay image" });
+    }
+  });
   
   // Database management routes
   

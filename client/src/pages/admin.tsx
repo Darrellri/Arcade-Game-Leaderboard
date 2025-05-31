@@ -62,6 +62,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import MarqueeImageUploader from "@/components/marquee-image-uploader";
+import OverlayImageUploader from "@/components/overlay-image-uploader";
 
 export default function Admin() {
   const { toast } = useToast();
