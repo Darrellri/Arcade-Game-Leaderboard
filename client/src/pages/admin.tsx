@@ -68,6 +68,12 @@ export default function Admin() {
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [animatedLogoPreview, setAnimatedLogoPreview] = useState<string | null>(null);
   const [isUploadingAnimatedLogo, setIsUploadingAnimatedLogo] = useState(false);
+  
+  // State for confirmation dialogs
+  const [showClearDataDialog, setShowClearDataDialog] = useState(false);
+  const [showRestoreDataDialog, setShowRestoreDataDialog] = useState(false);
+  const [clearDataConfirmation, setClearDataConfirmation] = useState("");
+  const [restoreDataConfirmation, setRestoreDataConfirmation] = useState("");
 
   // Fetch venue settings
   const { data: settings, isLoading: settingsLoading } = useQuery<VenueSettings>({
@@ -237,6 +243,32 @@ export default function Admin() {
     console.log('Saving venue settings:', data);
     console.log('Animated logo URL in form data:', data.animatedLogoUrl);
     updateSettings.mutate(data);
+  };
+
+  // Handle clear data confirmation
+  const handleClearData = () => {
+    if (clearDataConfirmation === "DELETE ALL") {
+      window.location.href = "/api/admin/clear-all-data";
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Incorrect confirmation",
+        description: "You must type 'DELETE ALL' exactly to proceed.",
+      });
+    }
+  };
+
+  // Handle restore data confirmation
+  const handleRestoreData = () => {
+    if (restoreDataConfirmation === "RESTORE ALL") {
+      window.location.href = "/api/admin/restore-demo-data";
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Incorrect confirmation", 
+        description: "You must type 'RESTORE ALL' exactly to proceed.",
+      });
+    }
   };
 
   // Handle game editing
@@ -960,10 +992,8 @@ export default function Admin() {
                 <Button 
                   variant="destructive"
                   onClick={() => {
-                    if (window.confirm("WARNING: This will permanently delete ALL games and scores. This action cannot be undone. Are you sure?")) {
-                      // Execute the clear-all-data script
-                      window.location.href = "/api/admin/clear-all-data";
-                    }
+                    setClearDataConfirmation("");
+                    setShowClearDataDialog(true);
                   }}
                 >
                   <AlertTriangle className="h-4 w-4 mr-2" />
@@ -979,10 +1009,8 @@ export default function Admin() {
                 <Button 
                   variant="outline"
                   onClick={() => {
-                    if (window.confirm("This will replace current data with demo data. Continue?")) {
-                      // Execute the seed-demo-data script
-                      window.location.href = "/api/admin/restore-demo-data";
-                    }
+                    setRestoreDataConfirmation("");
+                    setShowRestoreDataDialog(true);
                   }}
                 >
                   <RefreshCw className="h-4 w-4 mr-2" />
@@ -992,6 +1020,84 @@ export default function Admin() {
             </CardContent>
           </Card>
         </TabsContent>
+
+        {/* Clear Data Confirmation Dialog */}
+        <Dialog open={showClearDataDialog} onOpenChange={setShowClearDataDialog}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle className="text-destructive">⚠️ Clear All Data</DialogTitle>
+              <DialogDescription>
+                This will permanently delete ALL games and scores from the database. This action cannot be undone.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="clear-confirmation">
+                  Type <strong>DELETE ALL</strong> to confirm:
+                </Label>
+                <Input
+                  id="clear-confirmation"
+                  value={clearDataConfirmation}
+                  onChange={(e) => setClearDataConfirmation(e.target.value)}
+                  placeholder="DELETE ALL"
+                  className={clearDataConfirmation === "DELETE ALL" ? "border-green-500" : ""}
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowClearDataDialog(false)}>
+                Cancel
+              </Button>
+              <Button 
+                variant="destructive" 
+                onClick={handleClearData}
+                disabled={clearDataConfirmation !== "DELETE ALL"}
+              >
+                <AlertTriangle className="h-4 w-4 mr-2" />
+                Clear All Data
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* Restore Data Confirmation Dialog */}
+        <Dialog open={showRestoreDataDialog} onOpenChange={setShowRestoreDataDialog}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>🔄 Restore Demo Data</DialogTitle>
+              <DialogDescription>
+                This will replace all current data with the default demo data. Existing games and scores will be overwritten.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="space-y-2">
+                <Label htmlFor="restore-confirmation">
+                  Type <strong>RESTORE ALL</strong> to confirm:
+                </Label>
+                <Input
+                  id="restore-confirmation"
+                  value={restoreDataConfirmation}
+                  onChange={(e) => setRestoreDataConfirmation(e.target.value)}
+                  placeholder="RESTORE ALL"
+                  className={restoreDataConfirmation === "RESTORE ALL" ? "border-green-500" : ""}
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowRestoreDataDialog(false)}>
+                Cancel
+              </Button>
+              <Button 
+                variant="default" 
+                onClick={handleRestoreData}
+                disabled={restoreDataConfirmation !== "RESTORE ALL"}
+              >
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Restore Demo Data
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
         
         {/* Add Game Modal */}
         {showAddGameModal && (
