@@ -277,7 +277,21 @@ export default function Home() {
             <h1 className="text-3xl font-black tracking-tight text-foreground uppercase text-outline" style={{ letterSpacing: '2px' }}>
               {venueSettings?.leaderboardName || "THE LEADERBOARD"}
             </h1>
-            <h2 className="text-lg md:text-2xl font-bold tracking-tight text-primary uppercase" style={{ letterSpacing: '4px' }}>
+            <h2 
+              className={`text-lg md:text-2xl tracking-tight ${
+                venueSettings?.subtitleBold === "true" ? "font-bold" : "font-normal"
+              } ${
+                venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
+              }`}
+              style={{ 
+                letterSpacing: '4px',
+                color: venueSettings?.subtitleWhite === "true" 
+                  ? "white" 
+                  : venueSettings?.theme?.primary
+                    ? `hsl(${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[1] || 280}, ${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[2] || 100}%, ${Math.min(100, parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "50") + 25)}%)`
+                    : "hsl(280, 100%, 75%)"
+              }}
+            >
               {venueSettings?.name || "Arcade"}
             </h2>
           </div>

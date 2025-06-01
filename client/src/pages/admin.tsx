@@ -317,6 +317,10 @@ export default function Admin() {
       logoUrl: "",
       animatedLogoUrl: "",
       logoBackgroundColor: "transparent",
+      hideLogoBorderShadow: "false",
+      subtitleBold: "true",
+      subtitleAllCaps: "true",
+      subtitleWhite: "false",
       theme: {
         primary: "hsl(280, 100%, 50%)",
         variant: "vibrant",
