@@ -149,12 +149,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Reorder games
   app.patch("/api/games/reorder", async (req, res) => {
     try {
+      console.log("Reorder endpoint called with body:", req.body);
       const { gameOrders } = req.body;
-      console.log("Received game orders:", gameOrders);
+      
+      if (!gameOrders || !Array.isArray(gameOrders)) {
+        console.error("Invalid gameOrders data:", gameOrders);
+        return res.status(400).json({ message: "Invalid gameOrders data" });
+      }
+      
+      console.log("Processing game orders:", gameOrders);
       await storage.updateGameOrders(gameOrders);
+      console.log("Game orders updated successfully");
       res.json({ message: "Game order updated successfully" });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error updating game order:", error);
+      console.error("Error stack:", error.stack);
       res.status(500).json({ message: "Failed to update game order", error: error.message });
     }
   });

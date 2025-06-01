@@ -64,14 +64,15 @@ export class DatabaseStorage implements IStorage {
     try {
       console.log("Updating game orders:", gameOrders);
       
-      // Update display order for each game
-      for (const { id, displayOrder } of gameOrders) {
-        console.log(`Updating game ${id} to order ${displayOrder}`);
-        const result = await db.update(games)
-          .set({ displayOrder })
-          .where(eq(games.id, id));
-        console.log(`Update result for game ${id}:`, result);
-      }
+      // Update display order for each game using a transaction for better reliability
+      await db.transaction(async (tx) => {
+        for (const { id, displayOrder } of gameOrders) {
+          console.log(`Updating game ${id} to order ${displayOrder}`);
+          await tx.update(games)
+            .set({ displayOrder })
+            .where(eq(games.id, id));
+        }
+      });
       
       console.log("All game orders updated successfully");
     } catch (error) {
