@@ -324,79 +324,19 @@ export default function Home() {
           ))}
         </div>
       ) : (
-        <div className="space-y-1 w-full">
-          {processedGames?.map((game) => (
-            <Link href={`/leaderboard/${game.id}`} key={game.id} className="block w-full">
-              <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 section-background rounded-2xl hover:bg-primary/15 transition-all duration-300 w-full group cursor-pointer">
-                
-                {/* Left side - Game info */}
-                <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
-                  <img 
-                    src="/badge.png" 
-                    alt="Champion Badge" 
-                    className="w-8 h-8 md:w-10 md:h-10 object-contain opacity-80 flex-shrink-0" 
-                  />
-                  <div className="flex flex-col min-w-0">
-                    <div className="flex items-center gap-2">
-                      {game.type === 'pinball' ? (
-                        <CircleDot className="h-3 w-3 md:h-4 md:w-4 text-primary flex-shrink-0" />
-                      ) : (
-                        <Gamepad2 className="h-3 w-3 md:h-4 md:w-4 text-primary flex-shrink-0" />
-                      )}
-                      <div className="font-medium text-sm md:text-lg text-foreground group-hover:text-primary transition-colors duration-200 uppercase tracking-wide truncate">
-                        {game.name}
-                      </div>
-                    </div>
-                    <div className="text-xs md:text-sm text-muted-foreground/80 truncate">
-                      {game.topScorerName || 'No champion yet'} • {game.topScoreDate ? formatDate(new Date(game.topScoreDate)) : 'No date'}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Center - Top scorer name and marquee image */}
-                <div className="flex md:hidden flex-col items-center gap-1 mx-2 flex-1">
-                  <div className="text-sm font-bold text-primary truncate max-w-full text-center">
-                    {game.topScorerName || 'No champion'}
-                  </div>
-                  <div className="text-xs text-muted-foreground/60">
-                    Champion
-                  </div>
-                </div>
-                
-                <div className="hidden md:flex items-center justify-center gap-6 mx-8 flex-1 max-w-80">
-                  <div className="flex flex-col items-center min-w-0 flex-1">
-                    <div className="text-base md:text-xl font-bold text-primary truncate max-w-full text-center px-2">
-                      {game.topScorerName || 'No champion'}
-                    </div>
-                    <div className="text-xs text-muted-foreground/60">
-                      Champion
-                    </div>
-                  </div>
-                  <div className="w-24 h-8 relative overflow-hidden rounded-lg bg-black/20 flex-shrink-0">
-                    {game.imageUrl ? (
-                      <img 
-                        src={game.imageUrl}
-                        alt={`${game.name} marquee`}
-                        className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-200"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <span className="text-xs text-muted-foreground/60">No image</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Right side - Score only */}
-                <div className="flex items-center flex-shrink-0">
-                  <div className="text-lg md:text-2xl font-semibold text-foreground tabular-nums min-w-32 text-right">
-                    {(game.currentHighScore || 0).toLocaleString().padStart(8, '\u00A0')}
-                  </div>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext items={localGames} strategy={verticalListSortingStrategy}>
+            <div className="space-y-1 w-full">
+              {localGames?.map((game) => (
+                <SortableGameListItem key={game.id} game={game} />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
       )}
     </div>
   );

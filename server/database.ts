@@ -60,6 +60,15 @@ export class DatabaseStorage implements IStorage {
     return updatedGame;
   }
 
+  async updateGameOrders(gameOrders: { id: number; displayOrder: number }[]): Promise<void> {
+    // Update display order for each game
+    for (const { id, displayOrder } of gameOrders) {
+      await db.update(games)
+        .set({ displayOrder })
+        .where(eq(games.id, id));
+    }
+  }
+
   async deleteGame(id: number): Promise<void> {
     // First delete all scores for this game
     await db.delete(scores).where(eq(scores.gameId, id));

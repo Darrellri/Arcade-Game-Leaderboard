@@ -146,6 +146,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Reorder games
+  app.patch("/api/games/reorder", async (req, res) => {
+    try {
+      const { gameOrders } = req.body;
+      await storage.updateGameOrders(gameOrders);
+      res.json({ message: "Game order updated successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update game order" });
+    }
+  });
+
   // Get all games
   app.get("/api/games", async (_req, res) => {
     try {

@@ -8,6 +8,7 @@ export interface IStorage {
   addGame(game: InsertGame): Promise<Game>;
   updateGameHighScore(id: number, score: number, playerName: string, date?: Date): Promise<Game>;
   updateGame(id: number, game: Partial<Game>): Promise<Game>;
+  updateGameOrders(gameOrders: { id: number; displayOrder: number }[]): Promise<void>;
   deleteGame(id: number): Promise<void>;
 
   // Score operations
@@ -256,6 +257,15 @@ export class MemStorage implements IStorage {
     };
     this.games.set(id, updatedGame);
     return updatedGame;
+  }
+
+  async updateGameOrders(gameOrders: { id: number; displayOrder: number }[]): Promise<void> {
+    gameOrders.forEach(({ id, displayOrder }) => {
+      const game = this.games.get(id);
+      if (game) {
+        this.games.set(id, { ...game, displayOrder });
+      }
+    });
   }
 
   async getVenueSettings(): Promise<VenueSettings> {
