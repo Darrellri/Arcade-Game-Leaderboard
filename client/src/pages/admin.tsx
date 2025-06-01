@@ -1032,167 +1032,38 @@ export default function Admin() {
                 <div>Loading games...</div>
               ) : (
                 <div className="space-y-8">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Game</TableHead>
-                        <TableHead>Type</TableHead>
-                        <TableHead>Image</TableHead>
-                        <TableHead>Top Score</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {games?.map((game) => (
-                        <TableRow key={game.id}>
-                          <TableCell>
-                            <div className="space-y-2">
-                              <Input 
-                                defaultValue={game.name}
-                                className="w-full max-w-[200px]"
-                                onBlur={(e) => {
-                                  if (e.target.value !== game.name) {
-                                    handleGameEdit(game.id, "name", e.target.value);
-                                  }
-                                }}
-                              />
-                              <Input 
-                                defaultValue={game.subtitle || ''}
-                                placeholder="Game subtitle"
-                                className="w-full max-w-[200px] text-sm"
-                                onBlur={(e) => {
-                                  if (e.target.value !== game.subtitle) {
-                                    handleGameEdit(game.id, "subtitle", e.target.value);
-                                  }
-                                }}
-                              />
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <Select 
-                              defaultValue={game.type}
-                              onValueChange={(value) => handleGameEdit(game.id, "type", value)}
-                            >
-                              <SelectTrigger className="w-[120px]">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="arcade">
-                                  <div className="flex items-center gap-2">
-                                    <Gamepad2 className="h-4 w-4" />
-                                    <span>Arcade</span>
-                                  </div>
-                                </SelectItem>
-                                <SelectItem value="pinball">
-                                  <div className="flex items-center gap-2">
-                                    <CircleDot className="h-4 w-4" />
-                                    <span>Pinball</span>
-                                  </div>
-                                </SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </TableCell>
-                          <TableCell>
-                            <div className="space-y-2">
-                              <div className="flex gap-2">
-                                {/* Marquee Image Thumbnail */}
-                                <div className="flex flex-col items-center gap-1">
-                                  <div className="w-[60px] h-[16px] bg-card/50 rounded overflow-hidden">
-                                    {game.imageUrl ? (
-                                      <img 
-                                        src={game.imageUrl} 
-                                        alt={`${game.name} marquee`} 
-                                        className="w-full h-full object-cover"
-                                        onError={(e) => {
-                                          const target = e.target as HTMLImageElement;
-                                          target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>';
-                                        }}
-                                      />
-                                    ) : (
-                                      <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                                        <Image className="h-3 w-3" />
-                                      </div>
-                                    )}
-                                  </div>
-                                  <span className="text-xs text-muted-foreground">Marquee</span>
-                                </div>
-                                
-                                {/* Overlay Image Thumbnail */}
-                                <div className="flex flex-col items-center gap-1">
-                                  <div className="w-[16px] h-[16px] bg-card/50 rounded overflow-hidden">
-                                    {game.overlayImageUrl ? (
-                                      <img 
-                                        src={game.overlayImageUrl} 
-                                        alt={`${game.name} overlay`} 
-                                        className="w-full h-full object-contain"
-                                        onError={(e) => {
-                                          const target = e.target as HTMLImageElement;
-                                          target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>';
-                                        }}
-                                      />
-                                    ) : (
-                                      <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                                        <Image className="h-3 w-3" />
-                                      </div>
-                                    )}
-                                  </div>
-                                  <span className="text-xs text-muted-foreground">Overlay</span>
-                                </div>
-                              </div>
-                              
-                              <div className="flex items-center">
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm"
-                                  className="h-8 px-2 text-xs flex items-center gap-1"
-                                  onClick={() => setSelectedGameId(selectedGameId === game.id ? null : game.id)}
-                                >
-                                  <ImageDown className="h-3 w-3" />
-                                  {selectedGameId === game.id ? "Close" : "Upload"}
-                                </Button>
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            {game.currentHighScore ? (
-                              <div>
-                                <div className="font-mono font-bold">{game.currentHighScore.toLocaleString()}</div>
-                                <div className="text-sm text-muted-foreground">by {game.topScorerName}</div>
-                              </div>
-                            ) : (
-                              <span className="text-muted-foreground">No scores yet</span>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            <div className="space-y-1">
-                              <Button 
-                                variant="outline" 
-                                size="sm"
-                                className="w-full"
-                                onClick={() => {
-                                  window.open(`/leaderboard/${game.id}`, '_blank');
-                                }}
-                              >
-                                View
-                              </Button>
-                              <Button 
-                                variant="destructive" 
-                                size="sm"
-                                className="w-full"
-                                onClick={() => {
-                                  if (window.confirm(`Are you sure you want to delete ${game.name}?\n\nThis will permanently remove this game and all its scores.`)) {
-                                    deleteGame.mutate(game.id);
-                                  }
-                                }}
-                              >
-                                Delete
-                              </Button>
-                            </div>
-                          </TableCell>
+                  <DndContext
+                    sensors={sensors}
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleAdminDragEnd}
+                  >
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Game</TableHead>
+                          <TableHead>Type</TableHead>
+                          <TableHead>Image</TableHead>
+                          <TableHead>Top Score</TableHead>
+                          <TableHead>Actions</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                      </TableHeader>
+                      <TableBody>
+                        <SortableContext
+                          items={localGames}
+                          strategy={verticalListSortingStrategy}
+                        >
+                          {localGames?.map((game) => (
+                            <SortableGameTableRow
+                              key={game.id}
+                              game={game}
+                              onGameEdit={handleGameEdit}
+                              onDelete={(id) => deleteGame.mutate(id)}
+                            />
+                          ))}
+                        </SortableContext>
+                      </TableBody>
+                    </Table>
+                  </DndContext>
                   
                   {/* Image Upload Section */}
                   {selectedGameId !== null && games?.find(g => g.id === selectedGameId) && (
