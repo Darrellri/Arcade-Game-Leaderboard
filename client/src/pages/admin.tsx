@@ -740,6 +740,85 @@ export default function Admin() {
                       )}
                     />
 
+                    <div className="space-y-4">
+                      <FormLabel className="text-base font-semibold">Subtitle Styling Options</FormLabel>
+                      
+                      <FormField
+                        control={form.control}
+                        name="subtitleBold"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value === "true"}
+                                onCheckedChange={(checked) => {
+                                  field.onChange(checked ? "true" : "false");
+                                }}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>
+                                Make subtitle bold
+                              </FormLabel>
+                              <p className="text-xs text-muted-foreground">
+                                Display the venue name in bold font weight
+                              </p>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="subtitleAllCaps"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value === "true"}
+                                onCheckedChange={(checked) => {
+                                  field.onChange(checked ? "true" : "false");
+                                }}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>
+                                Display subtitle in all caps
+                              </FormLabel>
+                              <p className="text-xs text-muted-foreground">
+                                Transform venue name to uppercase letters
+                              </p>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="subtitleWhite"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value === "true"}
+                                onCheckedChange={(checked) => {
+                                  field.onChange(checked ? "true" : "false");
+                                }}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>
+                                Use white color for subtitle
+                              </FormLabel>
+                              <p className="text-xs text-muted-foreground">
+                                Display subtitle in white instead of theme color
+                              </p>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
                     <FormField
                       control={form.control}
                       name="address"
