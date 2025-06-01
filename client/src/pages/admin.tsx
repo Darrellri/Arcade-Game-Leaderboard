@@ -171,6 +171,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { RetroButton } from "@/components/ui/retro-button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/retro-tooltip";
+import { ParticleBurst, ShootingStar } from "@/components/ui/particle-burst";
+import { FloatingScore } from "@/components/ui/floating-score";
 import {
   Card,
   CardContent,

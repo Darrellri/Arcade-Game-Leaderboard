@@ -1,3 +1,4 @@
+import React from "react";
 import { Facebook, Share2, Twitter, Link as LinkIcon, Mail, Share, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,13 +20,13 @@ interface ShareScoreProps {
   size?: "default" | "sm" | "lg" | "icon";
 }
 
-export default function ShareScore({ 
+const ShareScore = React.forwardRef<HTMLButtonElement, ShareScoreProps>(({ 
   game, 
   score, 
   className,
   variant = "default",
   size = "default"
-}: ShareScoreProps) {
+}, ref) => {
   const [isLoading, setIsLoading] = useState(false);
 
   // Fetch venue settings for contact info
@@ -178,4 +179,8 @@ export default function ShareScore({
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+});
+
+ShareScore.displayName = "ShareScore";
+
+export default ShareScore;
