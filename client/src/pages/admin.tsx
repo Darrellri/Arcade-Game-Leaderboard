@@ -172,7 +172,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RetroButton } from "@/components/ui/retro-button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/retro-tooltip";
+import { Tooltip as RetroTooltip, TooltipContent as RetroTooltipContent, TooltipProvider as RetroTooltipProvider, TooltipTrigger as RetroTooltipTrigger } from "@/components/ui/retro-tooltip";
 import { ParticleBurst, ShootingStar } from "@/components/ui/particle-burst";
 import { FloatingScore } from "@/components/ui/floating-score";
 import {
@@ -221,7 +221,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+
 import { Checkbox } from "@/components/ui/checkbox";
 import MarqueeImageUploader from "@/components/marquee-image-uploader";
 import OverlayImageUploader from "@/components/overlay-image-uploader";
