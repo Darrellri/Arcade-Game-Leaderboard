@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Game, VenueSettings } from "@shared/schema";
 import { Button } from "@/components/ui/button";
@@ -117,6 +117,7 @@ function SortableGameListItem({ game }: { game: Game }) {
 
 export default function Home() {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [localGames, setLocalGames] = useState<Game[]>([]);
 
   const { data: games, isLoading: gamesLoading } = useQuery<Game[]>({
     queryKey: ["/api/games"],
@@ -125,6 +126,56 @@ export default function Home() {
   const { data: venueSettings, isLoading: settingsLoading } = useQuery<VenueSettings>({
     queryKey: ["/api/admin/settings"],
   });
+
+  // Set local games when data loads
+  useEffect(() => {
+    if (games) {
+      setLocalGames(games);
+    }
+  }, [games]);
+
+  // Drag and drop sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // Mutation to update game order
+  const updateGameOrder = useMutation({
+    mutationFn: async (gameOrders: { id: number; displayOrder: number }[]) => {
+      const res = await apiRequest("PATCH", "/api/games/reorder", { gameOrders });
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/games"] });
+    },
+  });
+
+  // Handle drag end
+  function handleDragEnd(event: any) {
+    const { active, over } = event;
+
+    if (active.id !== over.id) {
+      setLocalGames((games) => {
+        const oldIndex = games.findIndex((game) => game.id === active.id);
+        const newIndex = games.findIndex((game) => game.id === over.id);
+        
+        const newGames = arrayMove(games, oldIndex, newIndex);
+        
+        // Update display order for all games
+        const gameOrders = newGames.map((game, index) => ({
+          id: game.id,
+          displayOrder: index,
+        }));
+        
+        updateGameOrder.mutate(gameOrders);
+        
+        return newGames;
+      });
+    }
+  }
 
   // Update venue settings mutation
   const updateSettings = useMutation({
