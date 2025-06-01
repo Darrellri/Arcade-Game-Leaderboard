@@ -13,6 +13,7 @@ export const games = pgTable("games", {
   currentHighScore: integer("current_high_score").default(0),
   topScorerName: text("top_scorer_name"),
   topScoreDate: timestamp("top_score_date"),
+  displayOrder: integer("display_order").default(0),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
