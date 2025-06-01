@@ -150,10 +150,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.patch("/api/games/reorder", async (req, res) => {
     try {
       const { gameOrders } = req.body;
+      console.log("Received game orders:", gameOrders);
       await storage.updateGameOrders(gameOrders);
       res.json({ message: "Game order updated successfully" });
     } catch (error) {
-      res.status(500).json({ message: "Failed to update game order" });
+      console.error("Error updating game order:", error);
+      res.status(500).json({ message: "Failed to update game order", error: error.message });
     }
   });
 

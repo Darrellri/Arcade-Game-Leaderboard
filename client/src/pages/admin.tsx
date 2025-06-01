@@ -1,8 +1,164 @@
 import { useState, useEffect } from "react";
-
-
 import { useQuery, useMutation } from "@tanstack/react-query";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import {
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { useToast } from "@/hooks/use-toast";
+
+// Sortable table row component for admin game management
+function SortableGameTableRow({ game, onGameEdit, onDelete }: { 
+  game: Game; 
+  onGameEdit: (id: number, field: string, value: string) => void;
+  onDelete: (id: number) => void;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: game.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <TableRow ref={setNodeRef} style={style}>
+      <TableCell>
+        <div className="flex items-center gap-2">
+          <div 
+            {...attributes}
+            {...listeners}
+            className="cursor-grab active:cursor-grabbing opacity-50 hover:opacity-100 transition-opacity"
+          >
+            <GripVertical className="h-4 w-4 text-muted-foreground" />
+          </div>
+          <div className="space-y-2 flex-1">
+            <Input 
+              defaultValue={game.name}
+              className="w-full max-w-[200px]"
+              onBlur={(e) => {
+                if (e.target.value !== game.name) {
+                  onGameEdit(game.id, "name", e.target.value);
+                }
+              }}
+            />
+            <Input 
+              defaultValue={game.subtitle || ''}
+              placeholder="Game subtitle"
+              className="w-full max-w-[200px] text-sm"
+              onBlur={(e) => {
+                if (e.target.value !== game.subtitle) {
+                  onGameEdit(game.id, "subtitle", e.target.value);
+                }
+              }}
+            />
+          </div>
+        </div>
+      </TableCell>
+      <TableCell>
+        <Select 
+          defaultValue={game.type}
+          onValueChange={(value) => onGameEdit(game.id, "type", value)}
+        >
+          <SelectTrigger className="w-[120px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="arcade">
+              <div className="flex items-center gap-2">
+                <Gamepad2 className="h-4 w-4" />
+                Arcade
+              </div>
+            </SelectItem>
+            <SelectItem value="pinball">
+              <div className="flex items-center gap-2">
+                <CircleDot className="h-4 w-4" />
+                Pinball
+              </div>
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </TableCell>
+      <TableCell>
+        <div className="flex items-center gap-2">
+          {game.imageUrl ? (
+            <div className="relative w-16 h-8 rounded overflow-hidden bg-black">
+              <img 
+                src={game.imageUrl} 
+                alt={`${game.name} marquee`}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          ) : (
+            <div className="w-16 h-8 rounded bg-muted flex items-center justify-center">
+              <Image className="h-4 w-4 text-muted-foreground" />
+            </div>
+          )}
+          {game.overlayImageUrl && (
+            <div className="relative w-8 h-8 rounded overflow-hidden bg-black/20">
+              <img 
+                src={game.overlayImageUrl} 
+                alt={`${game.name} overlay`}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
+        </div>
+      </TableCell>
+      <TableCell>
+        <div className="text-right tabular-nums">
+          {game.currentHighScore?.toLocaleString() || '0'}
+        </div>
+      </TableCell>
+      <TableCell>
+        <div className="space-y-1">
+          <Button 
+            variant="outline" 
+            size="sm"
+            className="w-full"
+            onClick={() => {
+              window.open(`/leaderboard/${game.id}`, '_blank');
+            }}
+          >
+            View
+          </Button>
+          <Button 
+            variant="destructive" 
+            size="sm"
+            className="w-full"
+            onClick={() => {
+              if (window.confirm(`Are you sure you want to delete ${game.name}?\n\nThis will permanently remove this game and all its scores.`)) {
+                onDelete(game.id);
+              }
+            }}
+          >
+            Delete
+          </Button>
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+}
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -49,7 +205,8 @@ import {
   Camera,
   Info,
   Building2,
-  Palette
+  Palette,
+  GripVertical
 } from "lucide-react";
 import { 
   Dialog,
@@ -86,6 +243,70 @@ export default function Admin() {
   const { data: games, isLoading: gamesLoading } = useQuery<Game[]>({
     queryKey: ["/api/games"],
   });
+
+  // Local state for drag-and-drop games ordering
+  const [localGames, setLocalGames] = useState<Game[]>([]);
+
+  // Set local games when data loads
+  useEffect(() => {
+    if (games) {
+      setLocalGames(games);
+    }
+  }, [games]);
+
+  // Drag and drop sensors for admin dashboard
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // Mutation to update game order
+  const updateGameOrder = useMutation({
+    mutationFn: async (gameOrders: { id: number; displayOrder: number }[]) => {
+      const res = await apiRequest("PATCH", "/api/games/reorder", { gameOrders });
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/games"] });
+      toast({
+        title: "Success",
+        description: "Game order updated successfully",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to update game order",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Handle drag end for admin dashboard
+  function handleAdminDragEnd(event: any) {
+    const { active, over } = event;
+
+    if (active.id !== over.id) {
+      setLocalGames((games) => {
+        const oldIndex = games.findIndex((game) => game.id === active.id);
+        const newIndex = games.findIndex((game) => game.id === over.id);
+        
+        const newGames = arrayMove(games, oldIndex, newIndex);
+        
+        // Update display order for all games
+        const gameOrders = newGames.map((game, index) => ({
+          id: game.id,
+          displayOrder: index,
+        }));
+        
+        updateGameOrder.mutate(gameOrders);
+        
+        return newGames;
+      });
+    }
+  }
 
   // Initialize the form with settings when they're loaded
   const form = useForm<VenueSettings>({
