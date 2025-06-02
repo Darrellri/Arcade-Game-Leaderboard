@@ -51,15 +51,15 @@ export default function Leaderboard() {
                 {/* Dark overlay for text readability */}
                 <div className="absolute inset-0 bg-black/50 rounded-[10px]"></div>
                 
-                {/* Professional text overlay */}
-                <div className="absolute inset-0 flex items-center p-6 sm:pl-[30px]">
+                {/* Desktop text overlay */}
+                <div className="hidden sm:absolute sm:inset-0 sm:flex sm:items-center p-6 sm:pl-[30px]">
                   <div className="text-center sm:text-left">
-                    <h1 className="text-3xl sm:text-5xl font-black tracking-wide uppercase text-white drop-shadow-2xl" 
+                    <h1 className="text-3xl md:text-5xl lg:text-5xl font-black tracking-wide uppercase text-white drop-shadow-2xl" 
                         style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5)' }}>
                       {game.name}
                     </h1>
                     {game.subtitle && (
-                      <p className="text-lg sm:text-xl text-white/95 tracking-wider mt-2 font-medium drop-shadow-lg"
+                      <p className="text-lg md:text-xl text-white/95 tracking-wider mt-2 font-medium drop-shadow-lg"
                          style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
                         {game.subtitle}
                       </p>
@@ -93,8 +93,44 @@ export default function Leaderboard() {
                 </div>
               </div>
             </Link>
-          ) : (
-            /* Fallback gradient if no image - exact 792x214 dimensions */
+          )}
+          
+          {/* Mobile title and subtitle below image */}
+          {game.imageUrl && (
+            <div className="sm:hidden mt-5 text-center">
+              <h1 className="text-sm font-black tracking-wide uppercase text-foreground mb-2" 
+                  style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>
+                {game.name}
+              </h1>
+              {game.subtitle && (
+                <p className="text-xs text-muted-foreground tracking-wider font-medium mb-2">
+                  {game.subtitle}
+                </p>
+              )}
+              {game.topScorerName && (
+                <div className="mt-3 flex items-center justify-center gap-2">
+                  <img 
+                    src="/badge1.png" 
+                    alt="Champion Badge" 
+                    className="w-12 h-12 object-contain" 
+                  />
+                  <div className="flex flex-col text-left">
+                    <p className="text-sm font-bold uppercase text-foreground"
+                       style={{ letterSpacing: '1px' }}>
+                      #1 {game.topScorerName}
+                    </p>
+                    {game.currentHighScore && (
+                      <p className="text-xs text-primary font-bold">
+                        {game.currentHighScore.toLocaleString()}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {!game.imageUrl && (
             <Link href="/">
               <div className="relative cursor-pointer transition-all duration-300 hover:scale-[1.02] group" style={{ width: '792px', height: '214px', maxWidth: '100vw' }}>
                 <div className="w-full h-full bg-gradient-to-r from-primary/60 via-primary/40 to-primary/60 rounded-[10px] flex items-center p-6 sm:pl-[30px]">
@@ -120,7 +156,10 @@ export default function Leaderboard() {
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="m15 18-6-6 6-6"/>
                 </svg>
-                <span className="font-semibold text-sm">Back to Games</span>
+                <span className="font-semibold text-sm">
+                  <span className="hidden sm:inline">Back to Games</span>
+                  <span className="sm:hidden">Back</span>
+                </span>
               </div>
             </div>
           </Link>
