@@ -172,7 +172,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RetroButton } from "@/components/ui/retro-button";
-import { Tooltip as RetroTooltip, TooltipContent as RetroTooltipContent, TooltipProvider as RetroTooltipProvider, TooltipTrigger as RetroTooltipTrigger } from "@/components/ui/retro-tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { ParticleBurst, ShootingStar } from "@/components/ui/particle-burst";
 import { FloatingScore } from "@/components/ui/floating-score";
 import {
