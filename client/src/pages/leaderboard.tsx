@@ -39,95 +39,95 @@ export default function Leaderboard() {
       <div className="mb-8 flex justify-center">
         <div className="relative">
           {/* Marquee image at natural aspect ratio */}
-          {game.imageUrl ? (
-            <Link href="/">
-              <div className="relative rounded-[10px] overflow-hidden cursor-pointer transition-all duration-300 hover:scale-[1.02] group">
-                <img 
-                  src={game.imageUrl || ''} 
-                  alt={game.name} 
-                  className="max-w-full h-auto object-contain rounded-[10px]"
-                  style={{ maxHeight: '300px' }}
-                />
-                {/* Dark overlay for text readability */}
-                <div className="absolute inset-0 bg-black/50 rounded-[10px]"></div>
-                
-                {/* Desktop text overlay */}
-                <div className="hidden sm:absolute sm:inset-0 sm:flex sm:items-center p-6 sm:pl-[30px]">
-                  <div className="text-center sm:text-left">
-                    <h1 className="text-3xl md:text-5xl lg:text-5xl font-black tracking-wide uppercase text-white drop-shadow-2xl" 
-                        style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5)' }}>
-                      {game.name}
-                    </h1>
-                    {game.subtitle && (
-                      <p className="text-lg md:text-xl text-white/95 tracking-wider mt-2 font-medium drop-shadow-lg"
-                         style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
-                        {game.subtitle}
-                      </p>
-                    )}
-                    <div className="mt-4 flex items-center justify-center sm:justify-start gap-3">
-                      <img 
-                        src="/badge1.png" 
-                        alt="Champion Badge" 
-                        className="w-24 h-24 object-contain drop-shadow-lg animate-float" 
-                      />
-                      <div className="flex flex-col">
-                        <p className="text-xl sm:text-2xl text-white font-bold uppercase drop-shadow-lg"
-                           style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)', letterSpacing: '2px' }}>
-                          #1 {game.topScorerName || "NO CHAMPION YET"}
+          {game.imageUrl && (
+            <>
+              <Link href="/">
+                <div className="relative rounded-[10px] overflow-hidden cursor-pointer transition-all duration-300 hover:scale-[1.02] group">
+                  <img 
+                    src={game.imageUrl || ''} 
+                    alt={game.name} 
+                    className="max-w-full h-auto object-contain rounded-[10px]"
+                    style={{ maxHeight: '300px' }}
+                  />
+                  {/* Dark overlay for text readability */}
+                  <div className="absolute inset-0 bg-black/50 rounded-[10px]"></div>
+                  
+                  {/* Desktop text overlay */}
+                  <div className="hidden sm:absolute sm:inset-0 sm:flex sm:items-center p-6 sm:pl-[30px]">
+                    <div className="text-center sm:text-left">
+                      <h1 className="text-3xl md:text-5xl lg:text-5xl font-black tracking-wide uppercase text-white drop-shadow-2xl" 
+                          style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5)' }}>
+                        {game.name}
+                      </h1>
+                      {game.subtitle && (
+                        <p className="text-lg md:text-xl text-white/95 tracking-wider mt-2 font-medium drop-shadow-lg"
+                           style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
+                          {game.subtitle}
                         </p>
-                        {game.currentHighScore && (
-                          <p className="text-lg sm:text-xl text-yellow-400 font-bold drop-shadow-lg"
-                             style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
-                            {game.currentHighScore.toLocaleString()}
+                      )}
+                      <div className="mt-4 flex items-center justify-center sm:justify-start gap-3">
+                        <img 
+                          src="/badge1.png" 
+                          alt="Champion Badge" 
+                          className="w-24 h-24 object-contain drop-shadow-lg animate-float" 
+                        />
+                        <div className="flex flex-col">
+                          <p className="text-xl sm:text-2xl text-white font-bold uppercase drop-shadow-lg"
+                             style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)', letterSpacing: '2px' }}>
+                            #1 {game.topScorerName || "NO CHAMPION YET"}
                           </p>
-                        )}
-                        {game.topScoreDate && (
-                          <p className="text-xs sm:text-sm text-white/90 drop-shadow-lg"
-                             style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
-                            {formatDate(new Date(game.topScoreDate))} ({formatTime(new Date(game.topScoreDate))})
-                          </p>
-                        )}
+                          {game.currentHighScore && (
+                            <p className="text-lg sm:text-xl text-yellow-400 font-bold drop-shadow-lg"
+                               style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
+                              {game.currentHighScore.toLocaleString()}
+                            </p>
+                          )}
+                          {game.topScoreDate && (
+                            <p className="text-xs sm:text-sm text-white/90 drop-shadow-lg"
+                               style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
+                              {formatDate(new Date(game.topScoreDate))} ({formatTime(new Date(game.topScoreDate))})
+                            </p>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Link>
-          )}
-          
-          {/* Mobile title and subtitle below image */}
-          {game.imageUrl && (
-            <div className="sm:hidden mt-5 text-center">
-              <h1 className="text-sm font-black tracking-wide uppercase text-foreground mb-2" 
-                  style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>
-                {game.name}
-              </h1>
-              {game.subtitle && (
-                <p className="text-xs text-muted-foreground tracking-wider font-medium mb-2">
-                  {game.subtitle}
-                </p>
-              )}
-              {game.topScorerName && (
-                <div className="mt-3 flex items-center justify-center gap-2">
-                  <img 
-                    src="/badge1.png" 
-                    alt="Champion Badge" 
-                    className="w-12 h-12 object-contain" 
-                  />
-                  <div className="flex flex-col text-left">
-                    <p className="text-sm font-bold uppercase text-foreground"
-                       style={{ letterSpacing: '1px' }}>
-                      #1 {game.topScorerName}
-                    </p>
-                    {game.currentHighScore && (
-                      <p className="text-xs text-primary font-bold">
-                        {game.currentHighScore.toLocaleString()}
+              </Link>
+              
+              {/* Mobile title and subtitle below image */}
+              <div className="sm:hidden mt-5 text-center">
+                <h1 className="text-sm font-black tracking-wide uppercase text-foreground mb-2" 
+                    style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}>
+                  {game.name}
+                </h1>
+                {game.subtitle && (
+                  <p className="text-xs text-muted-foreground tracking-wider font-medium mb-2">
+                    {game.subtitle}
+                  </p>
+                )}
+                {game.topScorerName && (
+                  <div className="mt-3 flex items-center justify-center gap-2">
+                    <img 
+                      src="/badge1.png" 
+                      alt="Champion Badge" 
+                      className="w-12 h-12 object-contain" 
+                    />
+                    <div className="flex flex-col text-left">
+                      <p className="text-sm font-bold uppercase text-foreground"
+                         style={{ letterSpacing: '1px' }}>
+                        #1 {game.topScorerName}
                       </p>
-                    )}
+                      {game.currentHighScore && (
+                        <p className="text-xs text-primary font-bold">
+                          {game.currentHighScore.toLocaleString()}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            </>
           )}
           
           {!game.imageUrl && (
