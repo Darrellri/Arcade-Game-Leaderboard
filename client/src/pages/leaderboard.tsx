@@ -65,7 +65,7 @@ export default function Leaderboard() {
                         <p className={`text-lg md:text-xl tracking-wider mt-2 drop-shadow-lg ${
                           venueSettings?.gameSubtitleWhite === 'true' 
                             ? 'text-white' 
-                            : 'text-white/95'
+                            : 'text-white'
                         } ${
                           venueSettings?.gameSubtitleBold === 'true' 
                             ? 'font-bold' 
@@ -119,7 +119,7 @@ export default function Leaderboard() {
                   <p className={`text-xs tracking-wider mb-2 ${
                     venueSettings?.gameSubtitleWhite === 'true' 
                       ? 'text-white' 
-                      : 'text-muted-foreground'
+                      : 'text-foreground'
                   } ${
                     venueSettings?.gameSubtitleBold === 'true' 
                       ? 'font-bold' 

@@ -52,7 +52,7 @@ export default function GameCard({ game }: GameCardProps) {
             <p className={`subtitle tracking-wider text-center mb-[10px] ${
               venueSettings?.gameSubtitleWhite === 'true' 
                 ? 'text-white' 
-                : 'text-muted-foreground'
+                : 'text-primary'
             } ${
               venueSettings?.gameSubtitleBold === 'true' 
                 ? 'font-bold' 
