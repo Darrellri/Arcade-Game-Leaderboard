@@ -6,6 +6,7 @@ import { VenueSettings } from "@shared/schema";
 type ThemeContextType = {
   theme: VenueSettings['theme'];
   updateTheme: (theme: VenueSettings['theme']) => void;
+  venueSettings: VenueSettings | null;
 };
 
 // Create the context

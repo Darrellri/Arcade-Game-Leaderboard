@@ -348,6 +348,9 @@ export default function Admin() {
       subtitleBold: "true",
       subtitleAllCaps: "true",
       subtitleWhite: "false",
+      gameSubtitleWhite: "false",
+      gameSubtitleBold: "false",
+      gameSubtitleItalic: "false",
       theme: {
         primary: "hsl(280, 100%, 50%)",
         variant: "vibrant",
@@ -843,6 +846,86 @@ export default function Admin() {
                               </FormLabel>
                               <p className="text-xs text-muted-foreground">
                                 Display subtitle in white instead of theme color
+                              </p>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    {/* Game Listing Styling Options */}
+                    <div className="space-y-4">
+                      <FormLabel className="text-base font-semibold">Game Listing Styling Options</FormLabel>
+                      
+                      <FormField
+                        control={form.control}
+                        name="gameSubtitleWhite"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value === "true"}
+                                onCheckedChange={(checked) => {
+                                  field.onChange(checked ? "true" : "false");
+                                }}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>
+                                Use white color for game subtitles
+                              </FormLabel>
+                              <p className="text-xs text-muted-foreground">
+                                Display game subtitles in white instead of theme color
+                              </p>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="gameSubtitleBold"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value === "true"}
+                                onCheckedChange={(checked) => {
+                                  field.onChange(checked ? "true" : "false");
+                                }}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>
+                                Make game subtitles bold
+                              </FormLabel>
+                              <p className="text-xs text-muted-foreground">
+                                Display game subtitles in bold font weight
+                              </p>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="gameSubtitleItalic"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value === "true"}
+                                onCheckedChange={(checked) => {
+                                  field.onChange(checked ? "true" : "false");
+                                }}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>
+                                Make game subtitles italic
+                              </FormLabel>
+                              <p className="text-xs text-muted-foreground">
+                                Display game subtitles in italic font style
                               </p>
                             </div>
                           </FormItem>
