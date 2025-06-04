@@ -53,7 +53,7 @@ function SortableGameListItem({ game }: { game: Game }) {
   return (
     <div ref={setNodeRef} style={style} className="w-full">
       <Link href={`/leaderboard/${game.id}`} className="block w-full">
-        <div className="flex items-center px-4 md:px-6 py-3 md:py-4 section-background rounded-2xl hover:bg-primary/15 transition-all duration-300 w-full group cursor-pointer">
+        <div className="flex items-center px-4 md:px-6 py-4 md:py-5 section-background rounded-2xl hover:bg-primary/15 transition-all duration-300 w-full group cursor-pointer">
           
           {/* Drag handle - only visible in admin mode */}
           <div 
@@ -65,20 +65,20 @@ function SortableGameListItem({ game }: { game: Game }) {
             <GripVertical className="h-4 w-4 text-muted-foreground" />
           </div>
 
-          {/* Left side - Game marquee image */}
-          <div className="flex-shrink-0 mr-2 md:mr-4">
+          {/* Left side - Game marquee image - Full width */}
+          <div className="flex-shrink-0 mr-2 md:mr-4 w-24 sm:w-32 md:w-40">
             {game.imageUrl ? (
               <img 
                 src={game.imageUrl} 
                 alt={game.name} 
-                className="w-12 h-8 sm:w-16 sm:h-10 md:w-20 md:h-12 object-cover rounded-lg shadow-md" 
+                className="w-full h-12 sm:h-14 md:h-16 object-cover rounded-lg shadow-md" 
               />
             ) : (
-              <div className="w-12 h-8 sm:w-16 sm:h-10 md:w-20 md:h-12 bg-muted rounded-lg flex items-center justify-center">
+              <div className="w-full h-12 sm:h-14 md:h-16 bg-muted rounded-lg flex items-center justify-center">
                 {game.type === 'pinball' ? (
-                  <CircleDot className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
+                  <CircleDot className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
                 ) : (
-                  <Gamepad2 className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
+                  <Gamepad2 className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
                 )}
               </div>
             )}
