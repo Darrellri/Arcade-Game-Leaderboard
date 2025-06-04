@@ -10,12 +10,14 @@ import ShareScore from "@/components/share-score";
 import { TrophyIcon } from "@/components/trophy-icon";
 
 import { formatDate, formatTime } from "@/lib/formatters";
+import { useTheme } from "@/contexts/ThemeContext";
 
 type ViewMode = "grid" | "list";
 
 export default function Leaderboard() {
   const { gameId } = useParams();
   const id = parseInt(gameId || "0");
+  const { venueSettings } = useTheme();
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   // Always sort by score in descending order for individual game pages
 
@@ -60,7 +62,19 @@ export default function Leaderboard() {
                         {game.name}
                       </h1>
                       {game.subtitle && (
-                        <p className="text-lg md:text-xl text-white/95 tracking-wider mt-2 font-medium drop-shadow-lg"
+                        <p className={`text-lg md:text-xl tracking-wider mt-2 drop-shadow-lg ${
+                          venueSettings?.gameSubtitleWhite === 'true' 
+                            ? 'text-white' 
+                            : 'text-white/95'
+                        } ${
+                          venueSettings?.gameSubtitleBold === 'true' 
+                            ? 'font-bold' 
+                            : 'font-medium'
+                        } ${
+                          venueSettings?.gameSubtitleItalic === 'true' 
+                            ? 'italic' 
+                            : ''
+                        }`}
                            style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
                           {game.subtitle}
                         </p>
@@ -102,7 +116,19 @@ export default function Leaderboard() {
                   {game.name}
                 </h1>
                 {game.subtitle && (
-                  <p className="text-xs text-muted-foreground tracking-wider font-medium mb-2">
+                  <p className={`text-xs tracking-wider mb-2 ${
+                    venueSettings?.gameSubtitleWhite === 'true' 
+                      ? 'text-white' 
+                      : 'text-muted-foreground'
+                  } ${
+                    venueSettings?.gameSubtitleBold === 'true' 
+                      ? 'font-bold' 
+                      : 'font-medium'
+                  } ${
+                    venueSettings?.gameSubtitleItalic === 'true' 
+                      ? 'italic' 
+                      : ''
+                  }`}>
                     {game.subtitle}
                   </p>
                 )}

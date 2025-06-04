@@ -48,7 +48,23 @@ export default function GameCard({ game }: GameCardProps) {
             )}
             <h3 className="text-lg font-bold tracking-wide uppercase text-primary letter-spacing-wide text-outline text-center">{game.name}</h3>
           </div>
-          {game.subtitle && <p className="subtitle tracking-wider text-muted-foreground text-center mb-[10px]">{game.subtitle}</p>}
+          {game.subtitle && (
+            <p className={`subtitle tracking-wider text-center mb-[10px] ${
+              venueSettings?.gameSubtitleWhite === 'true' 
+                ? 'text-white' 
+                : 'text-muted-foreground'
+            } ${
+              venueSettings?.gameSubtitleBold === 'true' 
+                ? 'font-bold' 
+                : ''
+            } ${
+              venueSettings?.gameSubtitleItalic === 'true' 
+                ? 'italic' 
+                : ''
+            }`}>
+              {game.subtitle}
+            </p>
+          )}
 
           <div className="flex flex-col items-center justify-center">
             <div className="flex flex-col gap-1 w-full">
