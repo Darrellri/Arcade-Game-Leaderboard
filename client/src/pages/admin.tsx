@@ -1072,7 +1072,7 @@ export default function Admin() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                 {settings?.themePresets?.map((preset, index) => (
                   <Card 
                     key={index} 
@@ -1089,7 +1089,7 @@ export default function Admin() {
                     }}
                   >
                     <div 
-                      className="h-16 w-full" 
+                      className="h-12 w-full" 
                       style={{ 
                         background: `linear-gradient(45deg, ${preset.primary} 0%, ${preset.primary}aa 100%)` 
                       }}
@@ -1102,9 +1102,9 @@ export default function Admin() {
                         </div>
                       )}
                     </div>
-                    <CardContent className="p-4">
+                    <CardContent className="p-3">
                       <div className="flex items-center gap-2 mb-2">
-                        <div className="font-medium text-lg">{preset.name}</div>
+                        <div className="font-medium text-sm">{preset.name}</div>
                         {preset.appearance === 'light' ? (
                           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500">
                             <circle cx="12" cy="12" r="4"/>
@@ -1123,18 +1123,18 @@ export default function Admin() {
                           </svg>
                         )}
                       </div>
-                      <div className="flex gap-2 flex-wrap">
+                      <div className="flex gap-1 items-center">
                         <div 
-                          className="size-8 rounded-full shadow-sm" 
+                          className="size-6 rounded-full shadow-sm" 
                           style={{ backgroundColor: preset.primary }}
                         ></div>
                         <div 
-                          className="size-8 rounded-md shadow-sm" 
+                          className="size-6 rounded-md shadow-sm" 
                           style={{ backgroundColor: preset.primary }}
                         ></div>
                         <Button 
                           size="sm" 
-                          className="px-3 ml-auto shadow-lg border border-white/20"
+                          className="px-2 py-1 ml-auto text-xs h-6 shadow-lg border border-white/20"
                           style={{ 
                             backgroundColor: settings.theme.primary === preset.primary ? '#666' : preset.primary,
                             color: 'white',
