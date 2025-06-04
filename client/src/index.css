@@ -312,6 +312,11 @@
     @apply font-mono;
   }
   
+  /* Custom scale utilities */
+  .scale-175 {
+    transform: scale(1.75);
+  }
+  
   /* Champion badge floating animation */
   @keyframes float {
     0% {
