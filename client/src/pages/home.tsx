@@ -28,11 +28,13 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 
 import { formatDate, formatTime } from "@/lib/formatters";
+import { useTheme } from "@/contexts/ThemeContext";
 
 type ViewMode = "grid" | "list";
 
 // Sortable list item component for drag-and-drop
 function SortableGameListItem({ game }: { game: Game }) {
+  const { venueSettings } = useTheme();
   const {
     attributes,
     listeners,
@@ -51,7 +53,7 @@ function SortableGameListItem({ game }: { game: Game }) {
   return (
     <div ref={setNodeRef} style={style} className="w-full">
       <Link href={`/leaderboard/${game.id}`} className="block w-full">
-        <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 section-background rounded-2xl hover:bg-primary/15 transition-all duration-300 w-full group cursor-pointer">
+        <div className="flex items-center px-4 md:px-6 py-3 md:py-4 section-background rounded-2xl hover:bg-primary/15 transition-all duration-300 w-full group cursor-pointer">
           
           {/* Drag handle - only visible in admin mode */}
           <div 
@@ -63,50 +65,89 @@ function SortableGameListItem({ game }: { game: Game }) {
             <GripVertical className="h-4 w-4 text-muted-foreground" />
           </div>
 
-          {/* Left side - Game info */}
-          <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
-            <img 
-              src="/badge.png" 
-              alt="Champion Badge" 
-              className="w-8 h-8 md:w-10 md:h-10 object-contain opacity-80 flex-shrink-0" 
-            />
-            <div className="flex flex-col min-w-0">
-              <div className="flex items-center gap-2">
+          {/* Left side - Game marquee image */}
+          <div className="flex-shrink-0 mr-2 md:mr-4">
+            {game.imageUrl ? (
+              <img 
+                src={game.imageUrl} 
+                alt={game.name} 
+                className="w-12 h-8 sm:w-16 sm:h-10 md:w-20 md:h-12 object-cover rounded-lg shadow-md" 
+              />
+            ) : (
+              <div className="w-12 h-8 sm:w-16 sm:h-10 md:w-20 md:h-12 bg-muted rounded-lg flex items-center justify-center">
                 {game.type === 'pinball' ? (
-                  <CircleDot className="h-3 w-3 md:h-4 md:w-4 text-primary flex-shrink-0" />
+                  <CircleDot className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
                 ) : (
-                  <Gamepad2 className="h-3 w-3 md:h-4 md:w-4 text-primary flex-shrink-0" />
+                  <Gamepad2 className="h-3 w-3 md:h-4 md:w-4 text-muted-foreground" />
                 )}
-                <div className="font-medium text-sm md:text-lg text-foreground group-hover:text-primary transition-colors duration-200 uppercase tracking-wide truncate">
-                  {game.name}
-                </div>
               </div>
-              <div className="text-xs md:text-sm text-muted-foreground/80 truncate">
-                {game.topScorerName || 'No champion yet'} • {game.topScoreDate ? formatDate(new Date(game.topScoreDate)) : 'No date'}
+            )}
+          </div>
+
+          {/* Game info - Hidden on mobile, shown on larger screens */}
+          <div className="hidden sm:flex flex-col min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              {game.type === 'pinball' ? (
+                <CircleDot className="h-3 w-3 md:h-4 md:w-4 text-primary flex-shrink-0" />
+              ) : (
+                <Gamepad2 className="h-3 w-3 md:h-4 md:w-4 text-primary flex-shrink-0" />
+              )}
+              <div className="font-medium text-sm md:text-lg text-foreground group-hover:text-primary transition-colors duration-200 uppercase tracking-wide truncate">
+                {game.name}
+              </div>
+            </div>
+            {game.subtitle && (
+              <div className={`text-xs md:text-sm tracking-wide truncate mt-1 ${
+                venueSettings?.gameSubtitleWhite === 'true' 
+                  ? 'text-white' 
+                  : 'text-primary'
+              } ${
+                venueSettings?.gameSubtitleBold === 'true' 
+                  ? 'font-bold' 
+                  : ''
+              } ${
+                venueSettings?.gameSubtitleItalic === 'true' 
+                  ? 'italic' 
+                  : ''
+              }`}>
+                {game.subtitle}
+              </div>
+            )}
+          </div>
+
+          {/* Mobile game title - Only shown on mobile */}
+          <div className="sm:hidden flex flex-col min-w-0 flex-1 mr-2">
+            <div className="flex items-center gap-2">
+              {game.type === 'pinball' ? (
+                <CircleDot className="h-3 w-3 text-primary flex-shrink-0" />
+              ) : (
+                <Gamepad2 className="h-3 w-3 text-primary flex-shrink-0" />
+              )}
+              <div className="font-medium text-xs text-foreground group-hover:text-primary transition-colors duration-200 uppercase tracking-wide truncate">
+                {game.name}
               </div>
             </div>
           </div>
 
-          {/* Right side - Score and share button */}
-          <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
-            <div className="text-right">
-              <div className="font-bold text-lg md:text-xl text-primary">
-                {game.currentHighScore?.toLocaleString() || '0'}
-              </div>
-              <div className="text-xs text-muted-foreground uppercase tracking-wider">
-                HIGH SCORE
-              </div>
+          {/* Center - Champion info */}
+          <div className="flex flex-col items-center text-center min-w-0 flex-1 px-1 sm:px-2">
+            <div className="font-bold text-sm sm:text-lg md:text-xl text-foreground truncate">
+              {game.topScorerName || 'No Champion'}
             </div>
-            <div className="flex items-center gap-1 md:gap-2">
-              <ShareScore 
-                game={game} 
-                variant="ghost" 
-                size="sm"
-                className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-primary/20"
-              />
-              <div className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-primary/20 flex items-center justify-center">
-                <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-primary"></div>
+            {game.topScoreDate && (
+              <div className="text-xs text-muted-foreground">
+                {formatDate(new Date(game.topScoreDate))}
               </div>
+            )}
+          </div>
+
+          {/* Right side - Score */}
+          <div className="flex flex-col items-end text-right flex-shrink-0">
+            <div className="font-bold text-sm sm:text-lg md:text-xl text-primary">
+              {game.currentHighScore?.toLocaleString() || '0'}
+            </div>
+            <div className="text-xs text-muted-foreground uppercase tracking-wider hidden sm:block">
+              HIGH SCORE
             </div>
           </div>
         </div>
