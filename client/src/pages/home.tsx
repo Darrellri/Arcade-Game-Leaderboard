@@ -326,9 +326,22 @@ export default function Home() {
                 letterSpacing: '2px',
                 color: venueSettings?.subtitleWhite === "true" 
                   ? "white" 
-                  : venueSettings?.theme?.primary
-                    ? `hsl(${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[1] || 280}, ${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[2] || 100}%, ${Math.min(100, parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "50") + 25)}%)`
-                    : "hsl(280, 100%, 75%)"
+                  : (() => {
+                      // For lighter color schemes, use primary color (same as game titles)
+                      const isLightScheme = venueSettings?.theme?.appearance === "light" || 
+                        (venueSettings?.theme?.variant === "tint" && venueSettings?.theme?.appearance !== "dark") ||
+                        (venueSettings?.theme?.primary && parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "0") > 60);
+                      
+                      if (isLightScheme) {
+                        // Use the same color as game titles (primary color)
+                        return venueSettings?.theme?.primary || "hsl(280, 100%, 50%)";
+                      } else {
+                        // For darker schemes, use the lighter version as before
+                        return venueSettings?.theme?.primary
+                          ? `hsl(${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[1] || 280}, ${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[2] || 100}%, ${Math.min(100, parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "50") + 25)}%)`
+                          : "hsl(280, 100%, 75%)";
+                      }
+                    })()
               }}
             >
               {venueSettings?.name || "Arcade"}
