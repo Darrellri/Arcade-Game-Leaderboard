@@ -6,7 +6,7 @@ import { IStorage } from "./storage";
 export class DatabaseStorage implements IStorage {
   
   async getAllGames(): Promise<Game[]> {
-    return await db.select().from(games).orderBy(desc(games.createdAt));
+    return await db.select().from(games).orderBy(games.displayOrder, games.createdAt);
   }
 
   async getGame(id: number): Promise<Game | undefined> {
