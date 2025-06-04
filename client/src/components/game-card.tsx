@@ -8,6 +8,7 @@ import GameMarquee from "./game-marquee";
 import ShareScore from "./share-score";
 import { formatDate, formatTime } from "@/lib/formatters";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/retro-tooltip";
+import { useTheme } from "@/contexts/ThemeContext";
 import { useState } from "react";
 
 interface GameCardProps {
@@ -15,6 +16,8 @@ interface GameCardProps {
 }
 
 export default function GameCard({ game }: GameCardProps) {
+  const { venueSettings } = useTheme();
+  
   // Fetch scores for this game to find the second place
   const { data: scores } = useQuery<Score[]>({
     queryKey: [`/api/games/${game.id}/scores`],

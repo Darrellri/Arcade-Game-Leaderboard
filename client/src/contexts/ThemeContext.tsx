@@ -22,7 +22,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     radius: 0.75
   });
 
-  // Fetch venue settings to get the theme
+  // Fetch venue settings to get the theme and other settings
   const { data: settings } = useQuery<VenueSettings>({
     queryKey: ["/api/admin/settings"],
   });
@@ -141,7 +141,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   // Provide the theme context to children components
   return (
-    <ThemeContext.Provider value={{ theme, updateTheme }}>
+    <ThemeContext.Provider value={{ theme, updateTheme, venueSettings: settings || null }}>
       {children}
     </ThemeContext.Provider>
   );
