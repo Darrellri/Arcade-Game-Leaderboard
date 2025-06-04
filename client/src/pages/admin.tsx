@@ -99,10 +99,10 @@ function SortableGameTableRow({ game, onGameEdit, onDelete }: {
           </SelectContent>
         </Select>
       </TableCell>
-      <TableCell>
-        <div className="flex items-center gap-2">
+      <TableCell className="p-2">
+        <div className="space-y-2">
           {game.imageUrl ? (
-            <div className="relative w-16 h-8 rounded overflow-hidden bg-black">
+            <div className="relative w-full h-16 rounded overflow-hidden bg-black">
               <img 
                 src={game.imageUrl} 
                 alt={`${game.name} marquee`}
@@ -110,12 +110,12 @@ function SortableGameTableRow({ game, onGameEdit, onDelete }: {
               />
             </div>
           ) : (
-            <div className="w-16 h-8 rounded bg-muted flex items-center justify-center">
-              <Image className="h-4 w-4 text-muted-foreground" />
+            <div className="w-full h-16 rounded bg-muted flex items-center justify-center">
+              <Image className="h-6 w-6 text-muted-foreground" />
             </div>
           )}
           {game.overlayImageUrl && (
-            <div className="relative w-8 h-8 rounded overflow-hidden bg-black/20">
+            <div className="relative w-12 h-12 rounded overflow-hidden bg-black/20 mx-auto">
               <img 
                 src={game.overlayImageUrl} 
                 alt={`${game.name} overlay`}
