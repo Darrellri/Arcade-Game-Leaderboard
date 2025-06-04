@@ -47,7 +47,7 @@ export default function Leaderboard() {
                     src={game.imageUrl || ''} 
                     alt={game.name} 
                     className="max-w-full h-auto object-contain rounded-[10px]"
-                    style={{ maxHeight: '300px' }}
+                    style={{ maxHeight: '405px' }}
                   />
                   {/* Dark overlay for text readability */}
                   <div className="absolute inset-0 bg-black/50 rounded-[10px]"></div>
