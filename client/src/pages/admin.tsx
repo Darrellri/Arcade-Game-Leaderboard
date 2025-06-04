@@ -269,7 +269,13 @@ export default function Admin() {
   // Mutation to update game order
   const updateGameOrder = useMutation({
     mutationFn: async (gameOrders: { id: number; displayOrder: number }[]) => {
+      console.log("Sending game order update:", gameOrders);
       const res = await apiRequest("PATCH", "/api/games/reorder", { gameOrders });
+      if (!res.ok) {
+        const errorData = await res.text();
+        console.error("Failed to update game order:", res.status, errorData);
+        throw new Error(`Failed to update game order: ${res.status} ${errorData}`);
+      }
       return res.json();
     },
     onSuccess: () => {
@@ -279,10 +285,11 @@ export default function Admin() {
         description: "Game order updated successfully",
       });
     },
-    onError: () => {
+    onError: (error: any) => {
+      console.error("Game order update error:", error);
       toast({
         title: "Error",
-        description: "Failed to update game order",
+        description: `Failed to update game order: ${error?.message || 'Unknown error'}`,
         variant: "destructive",
       });
     },
@@ -292,19 +299,35 @@ export default function Admin() {
   function handleAdminDragEnd(event: any) {
     const { active, over } = event;
 
+    if (!active || !over) {
+      console.warn("Drag end event missing active or over data");
+      return;
+    }
+
     if (active.id !== over.id) {
       setLocalGames((games) => {
+        if (!games || games.length === 0) {
+          console.warn("No games available for reordering");
+          return games;
+        }
+
         const oldIndex = games.findIndex((game) => game.id === active.id);
         const newIndex = games.findIndex((game) => game.id === over.id);
         
+        if (oldIndex === -1 || newIndex === -1) {
+          console.warn("Could not find game indices for drag operation");
+          return games;
+        }
+        
         const newGames = arrayMove(games, oldIndex, newIndex);
         
-        // Update display order for all games
+        // Update display order for all games starting from 0
         const gameOrders = newGames.map((game, index) => ({
           id: game.id,
           displayOrder: index,
         }));
         
+        console.log("Updating game order with:", gameOrders);
         updateGameOrder.mutate(gameOrders);
         
         return newGames;
