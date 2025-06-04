@@ -1148,52 +1148,7 @@ export default function Admin() {
                   </Card>
                 ))}
               </div>
-              <div className="mt-8 p-6 bg-card rounded-lg border shadow-md">
-                <div className="text-lg font-medium mb-4">Theme Preview</div>
-                <div className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <div className="font-medium mb-2">Buttons</div>
-                      <div className="flex flex-wrap gap-2">
-                        <Button>Primary</Button>
-                        <Button variant="secondary">Secondary</Button>
-                        <Button variant="outline">Outline</Button>
-                        <Button variant="ghost">Ghost</Button>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="font-medium mb-2">UI Elements</div>
-                      <div className="space-y-2">
-                        <Input placeholder="Text input" className="max-w-[250px]" />
-                        <div className="flex items-center gap-2">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="champion-icon">
-                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
-                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
-                            <path d="M4 22h16"></path>
-                            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
-                            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
-                            <path d="M9 2v7.5"></path>
-                            <path d="M15 2v7.5"></path>
-                            <path d="M12 2v10"></path>
-                            <path d="M12 12a4 4 0 0 0 4-4V6H8v2a4 4 0 0 0 4 4Z"></path>
-                          </svg>
-                          <span className="champion-badge">Champion Score</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="pt-4 border-t">
-                    <div className="font-medium mb-2">Color Palette</div>
-                    <div className="flex flex-wrap gap-2">
-                      <div className="h-8 w-20 rounded-md bg-primary flex items-center justify-center text-xs text-white font-medium">Primary</div>
-                      <div className="h-8 w-20 rounded-md bg-secondary flex items-center justify-center text-xs text-secondary-foreground font-medium">Secondary</div>
-                      <div className="h-8 w-20 rounded-md bg-muted flex items-center justify-center text-xs text-muted-foreground font-medium">Muted</div>
-                      <div className="h-8 w-20 rounded-md bg-accent flex items-center justify-center text-xs text-accent-foreground font-medium">Accent</div>
-                      <div className="h-8 w-20 rounded-md border flex items-center justify-center text-xs font-medium">Border</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+
             </CardContent>
           </Card>
         </TabsContent>
