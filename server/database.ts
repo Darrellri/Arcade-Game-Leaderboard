@@ -62,21 +62,56 @@ export class DatabaseStorage implements IStorage {
 
   async updateGameOrders(gameOrders: { id: number; displayOrder: number }[]): Promise<void> {
     try {
-      console.log("Updating game orders:", gameOrders);
+      console.log("=== DATABASE updateGameOrders START ===");
+      console.log("Game orders to update:", JSON.stringify(gameOrders, null, 2));
+      
+      // Validate input data
+      for (const order of gameOrders) {
+        if (!order.id || typeof order.id !== 'number') {
+          throw new Error(`Invalid game ID: ${order.id}`);
+        }
+        if (typeof order.displayOrder !== 'number') {
+          throw new Error(`Invalid displayOrder for game ${order.id}: ${order.displayOrder}`);
+        }
+      }
+      
+      console.log("Input validation passed");
       
       // Update display order for each game using a transaction for better reliability
       await db.transaction(async (tx) => {
+        console.log("Starting database transaction");
+        
         for (const { id, displayOrder } of gameOrders) {
-          console.log(`Updating game ${id} to order ${displayOrder}`);
-          await tx.update(games)
-            .set({ displayOrder })
-            .where(eq(games.id, id));
+          console.log(`Updating game ${id} to displayOrder ${displayOrder}`);
+          
+          try {
+            const result = await tx.update(games)
+              .set({ displayOrder })
+              .where(eq(games.id, id))
+              .returning();
+            
+            console.log(`Game ${id} update result:`, result);
+            
+            if (result.length === 0) {
+              throw new Error(`No game found with ID ${id}`);
+            }
+          } catch (gameError) {
+            console.error(`Failed to update game ${id}:`, gameError);
+            throw gameError;
+          }
         }
+        
+        console.log("Transaction completed successfully");
       });
       
-      console.log("All game orders updated successfully");
-    } catch (error) {
-      console.error("Error in updateGameOrders:", error);
+      console.log("=== DATABASE updateGameOrders SUCCESS ===");
+    } catch (error: any) {
+      console.error("=== DATABASE updateGameOrders ERROR ===");
+      console.error("Error type:", typeof error);
+      console.error("Error name:", error?.name);
+      console.error("Error message:", error?.message);
+      console.error("Error stack:", error?.stack);
+      console.error("Full error object:", error);
       throw error;
     }
   }

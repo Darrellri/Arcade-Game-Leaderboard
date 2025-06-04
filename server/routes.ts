@@ -129,6 +129,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Reorder games (must come before the :id route to avoid conflict)
+  app.patch("/api/games/reorder", async (req, res) => {
+    try {
+      console.log("=== REORDER ENDPOINT START ===");
+      console.log("Request body:", JSON.stringify(req.body, null, 2));
+      
+      const { gameOrders } = req.body;
+      
+      if (!gameOrders || !Array.isArray(gameOrders)) {
+        console.error("Invalid gameOrders data:", gameOrders);
+        return res.status(400).json({ message: "Invalid gameOrders data" });
+      }
+      
+      console.log("Valid gameOrders received, count:", gameOrders.length);
+      console.log("Game orders to process:", JSON.stringify(gameOrders, null, 2));
+      
+      await storage.updateGameOrders(gameOrders);
+      console.log("=== REORDER ENDPOINT SUCCESS ===");
+      res.json({ message: "Game order updated successfully" });
+    } catch (error: any) {
+      console.error("=== REORDER ENDPOINT ERROR ===");
+      console.error("Error type:", typeof error);
+      console.error("Error name:", error?.name);
+      console.error("Error message:", error?.message);
+      console.error("Error stack:", error?.stack);
+      console.error("Full error object:", error);
+      res.status(500).json({ 
+        message: "Failed to update game order", 
+        error: error?.message || "Unknown error",
+        details: error?.toString() || "No details available"
+      });
+    }
+  });
+
   // Update game
   app.patch("/api/games/:id", async (req, res) => {
     try {
@@ -143,28 +177,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       res.status(500).json({ message: "Failed to update game" });
-    }
-  });
-
-  // Reorder games
-  app.patch("/api/games/reorder", async (req, res) => {
-    try {
-      console.log("Reorder endpoint called with body:", req.body);
-      const { gameOrders } = req.body;
-      
-      if (!gameOrders || !Array.isArray(gameOrders)) {
-        console.error("Invalid gameOrders data:", gameOrders);
-        return res.status(400).json({ message: "Invalid gameOrders data" });
-      }
-      
-      console.log("Processing game orders:", gameOrders);
-      await storage.updateGameOrders(gameOrders);
-      console.log("Game orders updated successfully");
-      res.json({ message: "Game order updated successfully" });
-    } catch (error: any) {
-      console.error("Error updating game order:", error);
-      console.error("Error stack:", error.stack);
-      res.status(500).json({ message: "Failed to update game order", error: error.message });
     }
   });
 
