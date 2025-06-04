@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { Link } from "wouter";
 import {
   DndContext,
   closestCenter,
@@ -624,20 +625,34 @@ export default function Admin() {
       {/* Theme Switcher removed from here */}
 
       <Tabs defaultValue="venue">
-        <TabsList>
-          <TabsTrigger value="venue" className="flex items-center gap-2">
-            <Building2 className="h-4 w-4" />
-            Venue Details
-          </TabsTrigger>
-          <TabsTrigger value="themes" className="flex items-center gap-2">
-            <Palette className="h-4 w-4" />
-            Theme Settings
-          </TabsTrigger>
-          <TabsTrigger value="games" className="flex items-center gap-2">
-            <Gamepad2 className="h-4 w-4" />
-            Game Management
-          </TabsTrigger>
-        </TabsList>
+        <div className="flex items-center justify-between mb-6">
+          <TabsList>
+            <TabsTrigger value="venue" className="flex items-center gap-2">
+              <Building2 className="h-4 w-4" />
+              Venue Details
+            </TabsTrigger>
+            <TabsTrigger value="themes" className="flex items-center gap-2">
+              <Palette className="h-4 w-4" />
+              Theme Settings
+            </TabsTrigger>
+            <TabsTrigger value="games" className="flex items-center gap-2">
+              <Gamepad2 className="h-4 w-4" />
+              Game Management
+            </TabsTrigger>
+          </TabsList>
+          
+          <div className="flex space-x-2">
+            <Button variant="outline" size="sm" asChild className="h-8 px-3">
+              <Link href="/">Home</Link>
+            </Button>
+            <Button variant="outline" size="sm" asChild className="h-8 px-3">
+              <Link href="/scan">Scan</Link>
+            </Button>
+            <Button variant="outline" size="sm" asChild className="h-8 px-3">
+              <Link href="/admin">Admin</Link>
+            </Button>
+          </div>
+        </div>
 
         <TabsContent value="venue" className="space-y-4">
           <Card className="themed-card">

@@ -20,18 +20,7 @@ export default function Scan() {
         </p>
       </div>
       
-      {/* Navigation buttons at the top */}
-      <div className="flex space-x-2 mb-6">
-        <Button variant="outline" asChild className="flex-1">
-          <Link href="/">Home</Link>
-        </Button>
-        <Button variant="outline" asChild className="flex-1">
-          <Link href="/scan">Scan</Link>
-        </Button>
-        <Button variant="outline" asChild className="flex-1">
-          <Link href="/admin">Admin</Link>
-        </Button>
-      </div>
+
       
       <div className="max-w-md mx-auto space-y-6">
         <Card className="shadow-md overflow-hidden">

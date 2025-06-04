@@ -368,18 +368,7 @@ export default function Home() {
         </div>
       </div>
       
-      {/* Smaller navigation buttons */}
-      <div className="flex justify-end space-x-2 mb-4">
-        <Button variant="outline" size="sm" asChild className="h-8 px-3">
-          <Link href="/">Home</Link>
-        </Button>
-        <Button variant="outline" size="sm" asChild className="h-8 px-3">
-          <Link href="/scan">Scan</Link>
-        </Button>
-        <Button variant="outline" size="sm" asChild className="h-8 px-3">
-          <Link href="/admin">Admin</Link>
-        </Button>
-      </div>
+
 
       {viewMode === "grid" ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
