@@ -240,6 +240,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -816,62 +817,59 @@ export default function Admin() {
                 Essential venue details displayed to visitors
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Venue Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="Winona Axe and Arcade" />
+                      </FormControl>
+                      <p className="text-sm text-muted-foreground">
+                        Displayed at the top of the homepage
+                      </p>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="leaderboardName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Leaderboard Title</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="THE LEADERBOARD" />
+                      </FormControl>
+                      <p className="text-sm text-muted-foreground">
+                        Displayed at the top of the leaderboard page
+                      </p>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Logo Section */}
+          <Card className="themed-card">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Image className="h-5 w-5" />
+                Logo & Branding
+              </CardTitle>
+              <CardDescription>
+                Upload and customize your venue logo
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSaveVenueInfo)} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="flex items-center gap-2">
-                            Venue Name
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <Info className="h-4 w-4 text-muted-foreground cursor-help" />
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>Displayed at the top of the Homepage</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          </FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="leaderboardName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="flex items-center gap-2">
-                            Leaderboard Name
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <Info className="h-4 w-4 text-muted-foreground cursor-help" />
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  <p>Displayed underneath the Venue Name on the Homepage</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          </FormLabel>
-                          <FormControl>
-                            <Input {...field} placeholder="THE LEADERBOARD" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
 
                   {!logoPreview && !animatedLogoPreview && (
                       <FormField
