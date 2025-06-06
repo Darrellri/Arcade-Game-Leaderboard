@@ -263,6 +263,15 @@ export default function Leaderboard() {
           </CardContent>
         </Card>
       )}
+
+      {/* Thin Footer Bar */}
+      <div className="mt-12 py-6 border-t border-border/20 bg-card/30">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <p className="text-sm text-muted-foreground">
+            {venueSettings?.name || "Winona Axe and Arcade"} • High Score Tracking
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
