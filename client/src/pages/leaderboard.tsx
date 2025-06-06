@@ -245,7 +245,7 @@ export default function Leaderboard() {
                     <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold text-sm">
                       #{index + 2}
                     </div>
-                    <div>
+                    <div className="text-center">
                       <h3 className="font-semibold">{score.playerName}</h3>
                       <p className="text-xs text-muted-foreground">
                         {formatDate(new Date(score.submittedAt))} {formatTime(new Date(score.submittedAt))}
