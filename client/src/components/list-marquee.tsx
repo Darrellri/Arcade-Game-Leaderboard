@@ -65,11 +65,11 @@ export default function ListMarquee({ game, className }: ListMarqueeProps) {
   if (imageUrl) {
     return (
       <div className={cn("flex-shrink-0 mr-2 md:mr-4 w-24 sm:w-32 md:w-40 relative", className)}>
-        <div className="relative w-full h-12 sm:h-14 md:h-16 rounded-lg overflow-hidden shadow-md bg-black">
+        <div className="relative w-full rounded-lg overflow-hidden shadow-md bg-black" style={{ aspectRatio: '792/214' }}>
           <img 
             src={imageUrl} 
             alt={game.name} 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
             style={{
               filter: marqueeBlurred ? 'blur(1px)' : 'blur(0px)',
               transition: 'filter 0.3s ease-in-out'

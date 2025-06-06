@@ -67,9 +67,7 @@ function SortableGameListItem({ game }: { game: Game }) {
           </div>
 
           {/* Left side - Game marquee image with overlay support */}
-          <Link href={`/leaderboard/${game.id}`}>
-            <ListMarquee game={game} />
-          </Link>
+          <ListMarquee game={game} />
 
           {/* Game info - Hidden on mobile, shown on larger screens */}
           <div className="hidden sm:flex flex-col min-w-0 flex-1">
