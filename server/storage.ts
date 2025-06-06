@@ -3,7 +3,7 @@ import { DatabaseStorage } from "./database";
 
 export interface IStorage {
   // Game operations
-  getAllGames(): Promise<Game[]>;
+  getAllGames(includeHidden?: boolean): Promise<Game[]>;
   getGame(id: number): Promise<Game | undefined>;
   addGame(game: InsertGame): Promise<Game>;
   updateGameHighScore(id: number, score: number, playerName: string, date?: Date): Promise<Game>;

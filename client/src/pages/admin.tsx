@@ -24,7 +24,7 @@ import { useToast } from "@/hooks/use-toast";
 // Sortable table row component for admin game management
 function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onImageDelete }: { 
   game: Game; 
-  onGameEdit: (id: number, field: string, value: string) => void;
+  onGameEdit: (id: number, field: string, value: string | boolean) => void;
   onDelete: (id: number) => void;
   onImageUpload: (gameId: number) => void;
   onImageDelete: (gameId: number, imageType: 'marquee' | 'overlay') => void;
@@ -209,7 +209,7 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onIma
             size="sm"
             className="w-full"
             onClick={() => {
-              onGameEdit(game.id, "hidden", game.hidden ? false : true);
+              onGameEdit(game.id, "hidden", !game.hidden);
             }}
           >
             {game.hidden ? "Unhide" : "Hide"}
@@ -660,7 +660,7 @@ export default function Admin() {
   };
 
   // Handle game editing
-  const handleGameEdit = (id: number, field: string, value: string) => {
+  const handleGameEdit = (id: number, field: string, value: string | boolean) => {
     updateGame.mutate({
       id,
       data: { [field]: value }

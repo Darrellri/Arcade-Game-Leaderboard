@@ -5,7 +5,13 @@ import { IStorage } from "./storage";
 
 export class DatabaseStorage implements IStorage {
   
-  async getAllGames(): Promise<Game[]> {
+  async getAllGames(includeHidden = true): Promise<Game[]> {
+    if (!includeHidden) {
+      return await db.select().from(games)
+        .where(eq(games.hidden, false))
+        .orderBy(games.displayOrder, games.createdAt);
+    }
+    
     return await db.select().from(games).orderBy(games.displayOrder, games.createdAt);
   }
 
