@@ -1133,7 +1133,9 @@ export default function Admin() {
                 </Form>
 
                 <div className="flex flex-col items-center">
-                  <div className="text-sm font-medium mb-2">Logo Preview</div>
+                  {!animatedLogoPreview && !logoPreview && (
+                    <div className="text-sm font-medium mb-2">Logo Preview</div>
+                  )}
                   <div 
                     className={`w-full h-[200px] flex items-center justify-center p-4 ${
                       form.watch('hideLogoBorderShadow') === 'true' 
