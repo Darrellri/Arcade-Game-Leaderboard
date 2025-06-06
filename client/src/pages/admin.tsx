@@ -116,11 +116,11 @@ function SortableGameTableRow({ game, onGameEdit, onDelete }: {
             </div>
           )}
           {game.overlayImageUrl && (
-            <div className="relative w-12 h-12 rounded overflow-hidden bg-black/20 mx-auto">
+            <div className="relative w-full h-16 rounded overflow-hidden bg-black/20">
               <img 
                 src={game.overlayImageUrl} 
                 alt={`${game.name} overlay`}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             </div>
           )}
