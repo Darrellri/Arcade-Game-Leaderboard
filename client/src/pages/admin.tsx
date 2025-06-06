@@ -22,11 +22,12 @@ import { CSS } from '@dnd-kit/utilities';
 import { useToast } from "@/hooks/use-toast";
 
 // Sortable table row component for admin game management
-function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload }: { 
+function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onImageDelete }: { 
   game: Game; 
   onGameEdit: (id: number, field: string, value: string) => void;
   onDelete: (id: number) => void;
   onImageUpload: (gameId: number) => void;
+  onImageDelete: (gameId: number, imageType: 'marquee' | 'overlay') => void;
 }) {
   const {
     attributes,
@@ -118,15 +119,27 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload }: {
                 <Image className="h-6 w-6 text-muted-foreground" />
               </div>
             )}
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="w-full text-xs h-6"
-              onClick={() => onImageUpload(game.id)}
-            >
-              <ImageDown className="h-3 w-3 mr-1" />
-              Upload Marquee
-            </Button>
+            <div className="flex gap-1">
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="flex-1 text-xs h-6"
+                onClick={() => onImageUpload(game.id)}
+              >
+                <ImageDown className="h-3 w-3 mr-1" />
+                Upload Marquee
+              </Button>
+              {game.imageUrl && (
+                <Button 
+                  variant="destructive" 
+                  size="sm"
+                  className="h-6 w-6 p-0"
+                  onClick={() => onImageDelete(game.id, 'marquee')}
+                >
+                  <Trash2 className="h-3 w-3" />
+                </Button>
+              )}
+            </div>
           </div>
 
           {/* Overlay Image */}
@@ -140,15 +153,27 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload }: {
                 />
               </div>
             )}
-            <Button 
-              variant="outline" 
-              size="sm"
-              className="w-full text-xs h-6"
-              onClick={() => onImageUpload(game.id)}
-            >
-              <Upload className="h-3 w-3 mr-1" />
-              Upload Overlay
-            </Button>
+            <div className="flex gap-1">
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="flex-1 text-xs h-6"
+                onClick={() => onImageUpload(game.id)}
+              >
+                <Upload className="h-3 w-3 mr-1" />
+                Upload Overlay
+              </Button>
+              {game.overlayImageUrl && (
+                <Button 
+                  variant="destructive" 
+                  size="sm"
+                  className="h-6 w-6 p-0"
+                  onClick={() => onImageDelete(game.id, 'overlay')}
+                >
+                  <Trash2 className="h-3 w-3" />
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </TableCell>
@@ -551,6 +576,36 @@ export default function Admin() {
         variant: "destructive",
         title: "Incorrect confirmation", 
         description: "You must type 'RESTORE ALL' exactly to proceed.",
+      });
+    }
+  };
+
+  // Handle image deletion
+  const handleImageDelete = async (gameId: number, imageType: 'marquee' | 'overlay') => {
+    try {
+      const field = imageType === 'marquee' ? 'imageUrl' : 'overlayImageUrl';
+      const response = await fetch(`/api/games/${gameId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ [field]: null }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete image');
+      }
+
+      queryClient.invalidateQueries({ queryKey: ["/api/games"] });
+      toast({
+        title: "Image Deleted",
+        description: `${imageType === 'marquee' ? 'Marquee' : 'Overlay'} image has been removed successfully.`,
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to delete image. Please try again.",
       });
     }
   };
@@ -1279,6 +1334,7 @@ export default function Admin() {
                               onGameEdit={handleGameEdit}
                               onDelete={(id) => deleteGame.mutate(id)}
                               onImageUpload={setSelectedGameId}
+                              onImageDelete={handleImageDelete}
                             />
                           ))}
                         </SortableContext>
