@@ -102,28 +102,53 @@ function SortableGameTableRow({ game, onGameEdit, onDelete }: {
       </TableCell>
       <TableCell className="p-2">
         <div className="space-y-2">
-          {game.imageUrl ? (
-            <div className="relative w-full h-16 rounded overflow-hidden bg-black">
-              <img 
-                src={game.imageUrl} 
-                alt={`${game.name} marquee`}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          ) : (
-            <div className="w-full h-16 rounded bg-muted flex items-center justify-center">
-              <Image className="h-6 w-6 text-muted-foreground" />
-            </div>
-          )}
-          {game.overlayImageUrl && (
-            <div className="relative w-full h-16 rounded overflow-hidden bg-black/20">
-              <img 
-                src={game.overlayImageUrl} 
-                alt={`${game.name} overlay`}
-                className="w-full h-full object-contain"
-              />
-            </div>
-          )}
+          {/* Marquee Image */}
+          <div className="space-y-1">
+            {game.imageUrl ? (
+              <div className="relative w-full h-16 rounded overflow-hidden bg-black">
+                <img 
+                  src={game.imageUrl} 
+                  alt={`${game.name} marquee`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ) : (
+              <div className="w-full h-16 rounded bg-muted flex items-center justify-center">
+                <Image className="h-6 w-6 text-muted-foreground" />
+              </div>
+            )}
+            <Button 
+              variant="outline" 
+              size="xs"
+              className="w-full text-xs h-6"
+              onClick={() => setSelectedGameId(game.id)}
+            >
+              <ImageDown className="h-3 w-3 mr-1" />
+              Upload Marquee
+            </Button>
+          </div>
+
+          {/* Overlay Image */}
+          <div className="space-y-1">
+            {game.overlayImageUrl && (
+              <div className="relative w-full h-16 rounded overflow-hidden bg-black/20">
+                <img 
+                  src={game.overlayImageUrl} 
+                  alt={`${game.name} overlay`}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            )}
+            <Button 
+              variant="outline" 
+              size="xs"
+              className="w-full text-xs h-6"
+              onClick={() => setSelectedGameId(game.id)}
+            >
+              <Upload className="h-3 w-3 mr-1" />
+              Upload Overlay
+            </Button>
+          </div>
         </div>
       </TableCell>
       <TableCell>
