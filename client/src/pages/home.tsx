@@ -143,8 +143,20 @@ function SortableGameListItem({ game }: { game: Game }) {
 
           {/* Right side - Score */}
           <div className="flex flex-col items-end text-right flex-shrink-0">
-            <div className="font-bold text-sm sm:text-lg md:text-xl text-primary">
-              {game.currentHighScore?.toLocaleString() || '0'}
+            <div className="flex items-center gap-2">
+              {game.currentHighScore && game.currentHighScore > 0 && (
+                <img 
+                  src="/badge.png" 
+                  alt="Champion Badge" 
+                  className="w-5 h-5 object-contain" 
+                />
+              )}
+              <div className="font-bold text-sm sm:text-lg md:text-xl text-primary">
+                {game.currentHighScore && game.currentHighScore > 0 
+                  ? game.currentHighScore.toLocaleString()
+                  : "000,000"
+                }
+              </div>
             </div>
             <div className="text-xs text-muted-foreground uppercase tracking-wider hidden sm:block">
               HIGH SCORE

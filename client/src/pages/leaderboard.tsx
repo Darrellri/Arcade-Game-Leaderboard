@@ -78,22 +78,25 @@ export default function Leaderboard() {
                     </p>
                   )}
                   <div className="mt-4 flex items-center justify-center sm:justify-start gap-3">
-                    <img 
-                      src="/badge1.png" 
-                      alt="Champion Badge" 
-                      className="w-24 h-24 object-contain drop-shadow-lg animate-float" 
-                    />
+                    {game.currentHighScore && game.currentHighScore > 0 && (
+                      <img 
+                        src="/badge1.png" 
+                        alt="Champion Badge" 
+                        className="w-24 h-24 object-contain drop-shadow-lg animate-float" 
+                      />
+                    )}
                     <div className="flex flex-col">
                       <p className="text-xl sm:text-2xl text-white font-bold uppercase drop-shadow-lg"
                          style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)', letterSpacing: '2px' }}>
                         #1 {game.topScorerName || "NO CHAMPION YET"}
                       </p>
-                      {game.currentHighScore && (
-                        <p className="text-lg sm:text-xl text-yellow-400 font-bold drop-shadow-lg"
-                           style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
-                          {game.currentHighScore.toLocaleString()}
-                        </p>
-                      )}
+                      <p className="text-lg sm:text-xl text-yellow-400 font-bold drop-shadow-lg"
+                         style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
+                        {game.currentHighScore && game.currentHighScore > 0 
+                          ? game.currentHighScore.toLocaleString()
+                          : "000,000"
+                        }
+                      </p>
                       {game.topScoreDate && (
                         <p className="text-xs sm:text-sm text-white/90 drop-shadow-lg"
                            style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>

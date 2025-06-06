@@ -69,13 +69,18 @@ export default function GameCard({ game }: GameCardProps) {
           <div className="flex flex-col items-center justify-center">
             <div className="flex flex-col gap-1 w-full">
               <div className="flex items-center justify-center gap-2">
-                <img 
-                  src="/badge.png" 
-                  alt="Champion Badge" 
-                  className="w-7 h-7 object-contain" 
-                />
+                {game.currentHighScore && game.currentHighScore > 0 && (
+                  <img 
+                    src="/badge.png" 
+                    alt="Champion Badge" 
+                    className="w-7 h-7 object-contain" 
+                  />
+                )}
                 <span className="score-display text-xl font-bold text-white drop-shadow-md">
-                  {(game.currentHighScore || 0).toLocaleString()}
+                  {game.currentHighScore && game.currentHighScore > 0 
+                    ? game.currentHighScore.toLocaleString()
+                    : "000,000"
+                  }
                 </span>
               </div>
               <div className="text-lg font-bold text-white top-player-info text-center">
