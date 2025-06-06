@@ -738,6 +738,28 @@ export default function Admin() {
             <Button variant="outline" size="sm" asChild className="h-8 px-3">
               <Link href="/admin">Admin</Link>
             </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="h-8 w-8 rounded-full p-0 flex items-center justify-center"
+              onClick={() => {
+                if (settings?.themePresets) {
+                  const currentIndex = settings.themePresets.findIndex(
+                    preset => preset.primary === settings.theme.primary
+                  );
+                  const nextIndex = (currentIndex + 1) % settings.themePresets.length;
+                  const nextTheme = settings.themePresets[nextIndex];
+                  
+                  const newSettings = {
+                    ...settings,
+                    theme: nextTheme
+                  };
+                  updateSettings.mutate(newSettings);
+                }
+              }}
+            >
+              o
+            </Button>
           </div>
         </div>
 
