@@ -1103,6 +1103,42 @@ export default function Admin() {
 
                     <FormField
                       control={form.control}
+                      name="titleboxSpacing"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Titlebox Spacing</FormLabel>
+                          <FormControl>
+                            <div className="space-y-3">
+                              <div className="relative">
+                                <input
+                                  type="range"
+                                  min="20"
+                                  max="200"
+                                  step="10"
+                                  value={field.value || "20"}
+                                  onChange={(e) => field.onChange(e.target.value)}
+                                  className="w-full h-3 bg-secondary rounded-lg appearance-none cursor-pointer slider"
+                                  style={{
+                                    background: `linear-gradient(to right, hsl(var(--primary)) 0%, hsl(var(--primary)) ${((parseInt(field.value || "20") - 20) / (200 - 20)) * 100}%, hsl(var(--secondary)) ${((parseInt(field.value || "20") - 20) / (200 - 20)) * 100}%, hsl(var(--secondary)) 100%)`
+                                  }}
+                                />
+                              </div>
+                              <div className="flex justify-between text-xs text-muted-foreground">
+                                <span>20px</span>
+                                <span className="font-medium text-primary">{field.value || "20"}px spacing</span>
+                                <span>200px</span>
+                              </div>
+                            </div>
+                          </FormControl>
+                          <p className="text-xs text-muted-foreground">
+                            Adjusts spacing between the title box and game listings in 10px increments.
+                          </p>
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
                       name="gameSpacing"
                       render={({ field }) => (
                         <FormItem>
