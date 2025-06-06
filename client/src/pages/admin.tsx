@@ -453,6 +453,7 @@ export default function Admin() {
       gameSubtitleWhite: "false",
       gameSubtitleBold: "false",
       gameSubtitleItalic: "false",
+      titleboxSpacing: "20",
       gameSpacing: "30",
       theme: {
         primary: "hsl(280, 100%, 50%)",
