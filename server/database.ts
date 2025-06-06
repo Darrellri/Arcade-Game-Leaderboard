@@ -15,7 +15,19 @@ export class DatabaseStorage implements IStorage {
   }
 
   async addGame(game: InsertGame): Promise<Game> {
-    const [newGame] = await db.insert(games).values(game).returning();
+    // Get the highest displayOrder to place new game at the top
+    const maxOrderResult = await db.select({ maxOrder: games.displayOrder })
+      .from(games)
+      .orderBy(desc(games.displayOrder))
+      .limit(1);
+    
+    const maxOrder = maxOrderResult[0]?.maxOrder ?? 0;
+    const newDisplayOrder = maxOrder + 1;
+    
+    const [newGame] = await db.insert(games).values({
+      ...game,
+      displayOrder: newDisplayOrder
+    }).returning();
     return newGame;
   }
 

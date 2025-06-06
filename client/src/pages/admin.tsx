@@ -293,6 +293,10 @@ export default function Admin() {
   const [animatedLogoPreview, setAnimatedLogoPreview] = useState<string | null>(null);
   const [isUploadingAnimatedLogo, setIsUploadingAnimatedLogo] = useState(false);
   
+  // State for sorting and filtering
+  const [sortBy, setSortBy] = useState("displayOrder");
+  const [filterType, setFilterType] = useState("all");
+  
   // State for confirmation dialogs
   const [showClearDataDialog, setShowClearDataDialog] = useState(false);
   const [showRestoreDataDialog, setShowRestoreDataDialog] = useState(false);
@@ -312,12 +316,38 @@ export default function Admin() {
   // Local state for drag-and-drop games ordering
   const [localGames, setLocalGames] = useState<Game[]>([]);
 
-  // Set local games when data loads
+  // Set local games when data loads and apply sorting/filtering
   useEffect(() => {
     if (games) {
-      setLocalGames(games);
+      let filtered = [...games];
+      
+      // Apply filtering
+      if (filterType !== "all") {
+        filtered = filtered.filter(game => game.type === filterType);
+      }
+      
+      // Apply sorting
+      filtered.sort((a, b) => {
+        switch (sortBy) {
+          case "name-asc":
+            return a.name.localeCompare(b.name);
+          case "name-desc":
+            return b.name.localeCompare(a.name);
+          case "date-asc":
+            return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+          case "date-desc":
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          case "type":
+            return a.type.localeCompare(b.type) || a.name.localeCompare(b.name);
+          case "displayOrder":
+          default:
+            return (b.displayOrder || 0) - (a.displayOrder || 0);
+        }
+      });
+      
+      setLocalGames(filtered);
     }
-  }, [games]);
+  }, [games, sortBy, filterType]);
 
   // Drag and drop sensors for admin dashboard
   const sensors = useSensors(
@@ -1270,7 +1300,44 @@ export default function Admin() {
               </Button>
             </CardHeader>
             <CardContent>
-              {/* Theme Switcher removed to improve stability */}
+              <div className="mb-4 flex flex-wrap gap-4 items-center">
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="sort-by" className="text-sm font-medium">Sort by:</Label>
+                  <Select 
+                    value={sortBy} 
+                    onValueChange={setSortBy}
+                  >
+                    <SelectTrigger className="w-48">
+                      <SelectValue placeholder="Sort games by..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="displayOrder">Manual Order</SelectItem>
+                      <SelectItem value="name-asc">Name (A-Z)</SelectItem>
+                      <SelectItem value="name-desc">Name (Z-A)</SelectItem>
+                      <SelectItem value="date-asc">Date Added (Oldest)</SelectItem>
+                      <SelectItem value="date-desc">Date Added (Newest)</SelectItem>
+                      <SelectItem value="type">Game Type</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="filter-type" className="text-sm font-medium">Filter:</Label>
+                  <Select 
+                    value={filterType} 
+                    onValueChange={setFilterType}
+                  >
+                    <SelectTrigger className="w-32">
+                      <SelectValue placeholder="All games" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Games</SelectItem>
+                      <SelectItem value="arcade">Arcade Only</SelectItem>
+                      <SelectItem value="pinball">Pinball Only</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
               
               {gamesLoading ? (
                 <div>Loading games...</div>
