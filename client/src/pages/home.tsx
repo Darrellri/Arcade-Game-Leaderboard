@@ -158,7 +158,8 @@ export default function Home() {
   const [localGames, setLocalGames] = useState<Game[]>([]);
 
   const { data: games, isLoading: gamesLoading } = useQuery<Game[]>({
-    queryKey: ["/api/games"],
+    queryKey: ["/api/games", { includeHidden: false }],
+    queryFn: () => apiRequest("GET", "/api/games?includeHidden=false").then(res => res.json()),
   });
   
   const { data: venueSettings, isLoading: settingsLoading } = useQuery<VenueSettings>({

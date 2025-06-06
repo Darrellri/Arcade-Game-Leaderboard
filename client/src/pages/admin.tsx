@@ -318,9 +318,10 @@ export default function Admin() {
     queryKey: ["/api/admin/settings"],
   });
 
-  // Fetch all games
+  // Fetch all games (including hidden ones for admin view)
   const { data: games, isLoading: gamesLoading } = useQuery<Game[]>({
-    queryKey: ["/api/games"],
+    queryKey: ["/api/games", { includeHidden: true }],
+    queryFn: () => apiRequest("GET", "/api/games?includeHidden=true").then(res => res.json()),
   });
 
   // Local state for drag-and-drop games ordering
