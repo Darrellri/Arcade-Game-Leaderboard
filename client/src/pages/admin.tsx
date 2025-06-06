@@ -22,10 +22,11 @@ import { CSS } from '@dnd-kit/utilities';
 import { useToast } from "@/hooks/use-toast";
 
 // Sortable table row component for admin game management
-function SortableGameTableRow({ game, onGameEdit, onDelete }: { 
+function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload }: { 
   game: Game; 
   onGameEdit: (id: number, field: string, value: string) => void;
   onDelete: (id: number) => void;
+  onImageUpload: (gameId: number) => void;
 }) {
   const {
     attributes,
@@ -119,9 +120,9 @@ function SortableGameTableRow({ game, onGameEdit, onDelete }: {
             )}
             <Button 
               variant="outline" 
-              size="xs"
+              size="sm"
               className="w-full text-xs h-6"
-              onClick={() => setSelectedGameId(game.id)}
+              onClick={() => onImageUpload(game.id)}
             >
               <ImageDown className="h-3 w-3 mr-1" />
               Upload Marquee
@@ -141,9 +142,9 @@ function SortableGameTableRow({ game, onGameEdit, onDelete }: {
             )}
             <Button 
               variant="outline" 
-              size="xs"
+              size="sm"
               className="w-full text-xs h-6"
-              onClick={() => setSelectedGameId(game.id)}
+              onClick={() => onImageUpload(game.id)}
             >
               <Upload className="h-3 w-3 mr-1" />
               Upload Overlay
@@ -1277,6 +1278,7 @@ export default function Admin() {
                               game={game}
                               onGameEdit={handleGameEdit}
                               onDelete={(id) => deleteGame.mutate(id)}
+                              onImageUpload={setSelectedGameId}
                             />
                           ))}
                         </SortableContext>
