@@ -404,6 +404,12 @@
     50% { transform: translateY(-1px); }
   }
   
+  /* Titlebox spacing */
+  .space-y-6 > *:nth-child(2),
+  .space-y-8 > *:nth-child(2) {
+    margin-top: var(--titlebox-spacing) !important;
+  }
+
   /* Responsive game spacing */
   .responsive-game-grid {
     gap: var(--desktop-spacing);

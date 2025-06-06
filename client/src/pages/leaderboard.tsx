@@ -45,7 +45,12 @@ export default function Leaderboard() {
   const nonChampionScores = sortedScores.slice(1); // Start from 2nd place
 
   return (
-    <div className="space-y-8">
+    <div 
+      className="space-y-8"
+      style={{
+        '--titlebox-spacing': `${parseInt(venueSettings?.titleboxSpacing || "20")}px`
+      } as React.CSSProperties}
+    >
       {/* Game Marquee Header - Full Width */}
       <div className="mb-8 w-full">
         {game.imageUrl && (

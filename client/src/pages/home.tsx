@@ -272,7 +272,12 @@ export default function Home() {
 
 
   return (
-    <div className="space-y-6">
+    <div 
+      className="space-y-6"
+      style={{
+        '--titlebox-spacing': `${parseInt(venueSettings?.titleboxSpacing || "20")}px`
+      } as React.CSSProperties}
+    >
       {/* Header with venue name and view mode controls */}
       <div className="themed-header px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-lg mb-2 w-full">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
