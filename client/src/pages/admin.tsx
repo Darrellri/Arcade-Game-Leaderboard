@@ -1180,6 +1180,39 @@ export default function Admin() {
                       </div>
                     )}
                   </div>
+                  {(logoPreview || animatedLogoPreview) && (
+                    <div className="mt-3 space-y-2">
+                      <div className="flex items-center justify-center gap-2 text-sm text-green-600 bg-green-50 dark:bg-green-900/20 dark:text-green-400 px-3 py-2 rounded-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M20 6 9 17l-5-5"/>
+                        </svg>
+                        Logo Uploaded
+                      </div>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => {
+                          setLogoPreview(null);
+                          setAnimatedLogoPreview(null);
+                          form.setValue("logoUrl", "");
+                          form.setValue("animatedLogoUrl", "");
+                          toast({
+                            title: "Logo deleted",
+                            description: "Logo has been removed. Click Save Venue Information to apply changes.",
+                          });
+                        }}
+                        className="w-full"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+                          <path d="M3 6h18"/>
+                          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                          <path d="M8 6V4c0-1 1-2 2-2h4c0-1 1-2 2-2v2"/>
+                        </svg>
+                        Delete Logo
+                      </Button>
+                    </div>
+                  )}
                   {animatedLogoPreview && logoPreview && (
                     <div className="text-xs text-muted-foreground mt-2 text-center">
                       Video logo is displayed. Image logo is saved as backup.
