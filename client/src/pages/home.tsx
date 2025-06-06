@@ -395,7 +395,13 @@ export default function Home() {
 
 
       {viewMode === "grid" ? (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div 
+          className="grid md:grid-cols-2 lg:grid-cols-3"
+          style={{
+            gap: `${Math.max(12, Math.round((parseInt(venueSettings?.gameSpacing || "24") * 0.5)))}px ${parseInt(venueSettings?.gameSpacing || "24")}px`,
+            '--spacing': `${parseInt(venueSettings?.gameSpacing || "24")}px`
+          } as React.CSSProperties}
+        >
           {processedGames?.map((game) => (
             <GameCard key={game.id} game={game} />
           ))}
@@ -407,7 +413,14 @@ export default function Home() {
           onDragEnd={handleDragEnd}
         >
           <SortableContext items={localGames} strategy={verticalListSortingStrategy}>
-            <div className="space-y-1 w-full">
+            <div 
+              className="w-full"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: `${Math.max(4, Math.round((parseInt(venueSettings?.gameSpacing || "24") * 0.167)))}px`
+              }}
+            >
               {localGames?.map((game) => (
                 <SortableGameListItem key={game.id} game={game} />
               ))}

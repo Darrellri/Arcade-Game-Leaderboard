@@ -950,6 +950,37 @@ export default function Admin() {
 
                     <FormField
                       control={form.control}
+                      name="gameSpacing"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Game Listing Spacing</FormLabel>
+                          <FormControl>
+                            <div className="space-y-3">
+                              <input
+                                type="range"
+                                min="20"
+                                max="200"
+                                step="4"
+                                value={field.value || "24"}
+                                onChange={(e) => field.onChange(e.target.value)}
+                                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+                              />
+                              <div className="flex justify-between text-xs text-muted-foreground">
+                                <span>20px</span>
+                                <span className="font-medium">{field.value || "24"}px spacing</span>
+                                <span>200px</span>
+                              </div>
+                            </div>
+                          </FormControl>
+                          <p className="text-xs text-muted-foreground">
+                            Adjust spacing between game listings (scales down on mobile)
+                          </p>
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
                       name="address"
                       render={({ field }) => (
                         <FormItem>
