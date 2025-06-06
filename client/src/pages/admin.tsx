@@ -1193,101 +1193,9 @@ export default function Admin() {
         </TabsContent>
 
         <TabsContent value="themes" className="space-y-4">
-          <Card className="themed-card">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
-                  <path d="M4 3h16a2 2 0 0 1 2 2v6a10 10 0 0 1-10 10A10 10 0 0 1 2 11V5a2 2 0 0 1 2-2z"></path>
-                  <path d="M8 10h.01"></path>
-                  <path d="M12 10h.01"></path>
-                  <path d="M16 10h.01"></path>
-                </svg>
-                <span>Color Schemes</span>
-              </CardTitle>
-              <CardDescription>
-                Choose from ten different color schemes for your arcade leaderboard
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                {settings?.themePresets?.map((preset, index) => (
-                  <Card 
-                    key={index} 
-                    className={`
-                      overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300
-                      ${settings.theme.primary === preset.primary ? 'ring-2 ring-primary border-primary' : ''}
-                    `}
-                    onClick={() => {
-                      const newSettings = {
-                        ...settings,
-                        theme: preset
-                      };
-                      updateSettings.mutate(newSettings);
-                    }}
-                  >
-                    <div 
-                      className="h-12 w-full" 
-                      style={{ 
-                        background: `linear-gradient(45deg, ${preset.primary} 0%, ${preset.primary}aa 100%)` 
-                      }}
-                    >
-                      {settings.theme.primary === preset.primary && (
-                        <div className="flex justify-end p-2">
-                          <div className="bg-white text-primary text-xs font-bold px-2 py-1 rounded-full">
-                            ACTIVE
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <CardContent className="p-3">
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="font-medium text-sm">{preset.name}</div>
-                        {preset.appearance === 'light' ? (
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500">
-                            <circle cx="12" cy="12" r="4"/>
-                            <path d="m12 2 0 2"/>
-                            <path d="m12 20 0 2"/>
-                            <path d="m4.93 4.93 1.41 1.41"/>
-                            <path d="m17.66 17.66 1.41 1.41"/>
-                            <path d="m2 12 2 0"/>
-                            <path d="m20 12 2 0"/>
-                            <path d="m6.34 17.66-1.41 1.41"/>
-                            <path d="m19.07 4.93-1.41 1.41"/>
-                          </svg>
-                        ) : (
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-600">
-                            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-                          </svg>
-                        )}
-                      </div>
-                      <div className="flex gap-1 items-center">
-                        <div 
-                          className="size-6 rounded-full shadow-sm" 
-                          style={{ backgroundColor: preset.primary }}
-                        ></div>
-                        <div 
-                          className="size-6 rounded-md shadow-sm" 
-                          style={{ backgroundColor: preset.primary }}
-                        ></div>
-                        <Button 
-                          size="sm" 
-                          className="px-2 py-1 ml-auto text-xs h-6 shadow-lg border border-white/20"
-                          style={{ 
-                            backgroundColor: settings.theme.primary === preset.primary ? '#666' : preset.primary,
-                            color: 'white',
-                            textShadow: '0 1px 2px rgba(0,0,0,0.6)'
-                          }}
-                        >
-                          Apply
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-            </CardContent>
-          </Card>
+          <div className="text-center py-8 text-muted-foreground">
+            <p>Color schemes have been moved to the Game Management tab for better organization.</p>
+          </div>
         </TabsContent>
 
         <TabsContent value="games" className="space-y-4">
@@ -1389,6 +1297,101 @@ export default function Admin() {
                   )}
                 </div>
               )}
+            </CardContent>
+          </Card>
+
+          <Card className="themed-card">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
+                  <path d="M4 3h16a2 2 0 0 1 2 2v6a10 10 0 0 1-10 10A10 10 0 0 1 2 11V5a2 2 0 0 1 2-2z"></path>
+                  <path d="M8 10h.01"></path>
+                  <path d="M12 10h.01"></path>
+                  <path d="M16 10h.01"></path>
+                </svg>
+                <span>Color Schemes</span>
+              </CardTitle>
+              <CardDescription>
+                Choose from ten different color schemes for your arcade leaderboard
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                {settings?.themePresets?.map((preset, index) => (
+                  <Card 
+                    key={index} 
+                    className={`
+                      overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300
+                      ${settings.theme.primary === preset.primary ? 'ring-2 ring-primary border-primary' : ''}
+                    `}
+                    onClick={() => {
+                      const newSettings = {
+                        ...settings,
+                        theme: preset
+                      };
+                      updateSettings.mutate(newSettings);
+                    }}
+                  >
+                    <div 
+                      className="h-12 w-full" 
+                      style={{ 
+                        background: `linear-gradient(45deg, ${preset.primary} 0%, ${preset.primary}aa 100%)` 
+                      }}
+                    >
+                      {settings.theme.primary === preset.primary && (
+                        <div className="flex justify-end p-2">
+                          <div className="bg-white text-primary text-xs font-bold px-2 py-1 rounded-full">
+                            ACTIVE
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <CardContent className="p-3">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="font-medium text-sm">{preset.name}</div>
+                        {preset.appearance === 'light' ? (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-yellow-500">
+                            <circle cx="12" cy="12" r="4"/>
+                            <path d="m12 2 0 2"/>
+                            <path d="m12 20 0 2"/>
+                            <path d="m4.93 4.93 1.41 1.41"/>
+                            <path d="m17.66 17.66 1.41 1.41"/>
+                            <path d="m2 12 2 0"/>
+                            <path d="m20 12 2 0"/>
+                            <path d="m6.34 17.66-1.41 1.41"/>
+                            <path d="m19.07 4.93-1.41 1.41"/>
+                          </svg>
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-600">
+                            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                          </svg>
+                        )}
+                      </div>
+                      <div className="flex gap-1 items-center">
+                        <div 
+                          className="size-6 rounded-full shadow-sm" 
+                          style={{ backgroundColor: preset.primary }}
+                        ></div>
+                        <div 
+                          className="size-6 rounded-md shadow-sm" 
+                          style={{ backgroundColor: preset.primary }}
+                        ></div>
+                        <Button 
+                          size="sm" 
+                          className="px-2 py-1 ml-auto text-xs h-6 shadow-lg border border-white/20"
+                          style={{ 
+                            backgroundColor: settings.theme.primary === preset.primary ? '#666' : preset.primary,
+                            color: 'white',
+                            textShadow: '0 1px 2px rgba(0,0,0,0.6)'
+                          }}
+                        >
+                          Apply
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </CardContent>
           </Card>
           
