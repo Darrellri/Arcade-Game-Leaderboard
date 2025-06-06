@@ -100,7 +100,7 @@ export default function Leaderboard() {
                         {game.topScoreDate && (
                           <p className="text-xs sm:text-sm text-white/90 drop-shadow-lg"
                              style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
-                            {formatDate(new Date(game.topScoreDate))} ({formatTime(new Date(game.topScoreDate))})
+                            {formatDate(new Date(game.topScoreDate))} {formatTime(new Date(game.topScoreDate))}
                           </p>
                         )}
                       </div>
@@ -201,24 +201,16 @@ export default function Leaderboard() {
           {nonChampionScores.map((score, index) => (
             <Card key={score.id} className="relative overflow-hidden">
               <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold text-sm">
-                      #{index + 2}
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-lg">{score.playerName}</h3>
-                      <p className="text-xs text-muted-foreground">
-                        {formatDate(new Date(score.submittedAt))} • {formatTime(new Date(score.submittedAt))}
-                      </p>
-                    </div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold text-sm">
+                    #{index + 2}
                   </div>
-                  <ShareScore 
-                    game={game} 
-                    score={score}
-                    variant="ghost" 
-                    size="sm"
-                  />
+                  <div>
+                    <h3 className="font-semibold text-lg">{score.playerName}</h3>
+                    <p className="text-xs text-muted-foreground">
+                      {formatDate(new Date(score.submittedAt))} {formatTime(new Date(score.submittedAt))}
+                    </p>
+                  </div>
                 </div>
                 <div className="text-right">
                   <p className="text-2xl font-bold text-primary tabular-nums">
@@ -242,7 +234,7 @@ export default function Leaderboard() {
                     <div>
                       <h3 className="font-semibold">{score.playerName}</h3>
                       <p className="text-xs text-muted-foreground">
-                        {formatDate(new Date(score.submittedAt))} • {formatTime(new Date(score.submittedAt))}
+                        {formatDate(new Date(score.submittedAt))} {formatTime(new Date(score.submittedAt))}
                       </p>
                     </div>
                   </div>

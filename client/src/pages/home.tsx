@@ -136,7 +136,7 @@ function SortableGameListItem({ game }: { game: Game }) {
             </div>
             {game.topScoreDate && (
               <div className="text-xs text-muted-foreground">
-                {formatDate(new Date(game.topScoreDate))}
+                {formatDate(new Date(game.topScoreDate))} {formatTime(new Date(game.topScoreDate))}
               </div>
             )}
           </div>
