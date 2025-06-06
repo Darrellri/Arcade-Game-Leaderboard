@@ -88,7 +88,7 @@ export default function Leaderboard() {
                     </p>
                   )}
                   <div className="mt-4 flex items-center justify-center sm:justify-start gap-3">
-                    {game.currentHighScore && game.currentHighScore > 0 && (
+                    {(game.currentHighScore ?? 0) > 0 && (
                       <img 
                         src="/badge1.png" 
                         alt="Champion Badge" 
@@ -102,8 +102,8 @@ export default function Leaderboard() {
                       </p>
                       <p className="text-lg sm:text-xl text-yellow-400 font-bold drop-shadow-lg"
                          style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
-                        {game.currentHighScore && game.currentHighScore > 0 
-                          ? game.currentHighScore.toLocaleString()
+                        {(game.currentHighScore ?? 0) > 0 
+                          ? (game.currentHighScore ?? 0).toLocaleString()
                           : "000,000"
                         }
                       </p>
