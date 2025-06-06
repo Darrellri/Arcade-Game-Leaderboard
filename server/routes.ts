@@ -181,9 +181,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get all games
-  app.get("/api/games", async (_req, res) => {
+  app.get("/api/games", async (req, res) => {
     try {
-      const games = await storage.getAllGames();
+      const includeHidden = req.query.includeHidden === 'true';
+      const games = await storage.getAllGames(includeHidden);
       res.json(games);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch games" });

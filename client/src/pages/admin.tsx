@@ -205,6 +205,16 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onIma
             View
           </Button>
           <Button 
+            variant={game.hidden ? "default" : "secondary"} 
+            size="sm"
+            className="w-full"
+            onClick={() => {
+              onGameEdit(game.id, "hidden", game.hidden ? false : true);
+            }}
+          >
+            {game.hidden ? "Unhide" : "Hide"}
+          </Button>
+          <Button 
             variant="destructive" 
             size="sm"
             className="w-full"
