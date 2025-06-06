@@ -7,6 +7,7 @@ import GameCard from "@/components/game-card";
 import ShareScore from "@/components/share-score";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Gamepad2, Grid2X2, List, CircleDot, Trophy, GripVertical } from "lucide-react";
+import ListMarquee from "@/components/list-marquee";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import {
   DndContext,
@@ -65,24 +66,8 @@ function SortableGameListItem({ game }: { game: Game }) {
             <GripVertical className="h-4 w-4 text-muted-foreground" />
           </div>
 
-          {/* Left side - Game marquee image - Full width */}
-          <div className="flex-shrink-0 mr-2 md:mr-4 w-24 sm:w-32 md:w-40">
-            {game.imageUrl ? (
-              <img 
-                src={game.imageUrl} 
-                alt={game.name} 
-                className="w-full h-12 sm:h-14 md:h-16 object-cover rounded-lg shadow-md" 
-              />
-            ) : (
-              <div className="w-full h-12 sm:h-14 md:h-16 bg-muted rounded-lg flex items-center justify-center">
-                {game.type === 'pinball' ? (
-                  <CircleDot className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
-                ) : (
-                  <Gamepad2 className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
-                )}
-              </div>
-            )}
-          </div>
+          {/* Left side - Game marquee image with overlay support */}
+          <ListMarquee game={game} />
 
           {/* Game info - Hidden on mobile, shown on larger screens */}
           <div className="hidden sm:flex flex-col min-w-0 flex-1">
