@@ -227,14 +227,14 @@ export default function Leaderboard() {
                     #{index + 2}
                   </div>
                   <div>
-                    <h3 className="font-semibold text-lg">{score.playerName}</h3>
+                    <h3 className="font-semibold text-3xl">{score.playerName}</h3>
                     <p className="text-xs text-muted-foreground">
                       {formatDate(new Date(score.submittedAt))} {formatTime(new Date(score.submittedAt))}
                     </p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-primary tabular-nums">
+                  <p className="text-4xl font-bold text-primary tabular-nums">
                     {score.score.toLocaleString()}
                   </p>
                 </div>
@@ -253,14 +253,14 @@ export default function Leaderboard() {
                       #{index + 2}
                     </div>
                     <div className="text-center">
-                      <h3 className="font-semibold">{score.playerName}</h3>
+                      <h3 className="font-semibold text-2xl">{score.playerName}</h3>
                       <p className="text-xs text-muted-foreground">
                         {formatDate(new Date(score.submittedAt))} {formatTime(new Date(score.submittedAt))}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <p className="text-xl font-bold text-primary tabular-nums">
+                    <p className="text-3xl font-bold text-primary tabular-nums">
                       {score.score.toLocaleString()}
                     </p>
                     <ShareScore 
