@@ -10,6 +10,7 @@ interface GameMarqueeProps {
 export default function GameMarquee({ game, className }: GameMarqueeProps) {
   const [overlayAnimation, setOverlayAnimation] = useState<string>("");
   const [animationKey, setAnimationKey] = useState(0);
+  const [marqueeBlurred, setMarqueeBlurred] = useState(false);
   
   // Use the imageUrl directly from the game object
   const imageUrl = game.imageUrl;
@@ -36,9 +37,13 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
       setOverlayAnimation(randomAnimation);
       setAnimationKey(prev => prev + 1);
       
-      // Clear animation after it completes
+      // Blur marquee image when overlay animation starts
+      setMarqueeBlurred(true);
+      
+      // Clear animation and remove blur after it completes
       setTimeout(() => {
         setOverlayAnimation("");
+        setMarqueeBlurred(false);
       }, 2500);
     };
 
@@ -66,6 +71,10 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
             src={imageUrl} 
             alt={`${game.name} marquee`}
             className="w-full h-full object-contain transition-all duration-300 hover:opacity-90"
+            style={{
+              filter: marqueeBlurred ? 'blur(2px)' : 'blur(0px)',
+              transition: 'filter 0.3s ease-in-out'
+            }}
           />
           
           {/* Overlay Image with Random Animations and Floating Effect */}
