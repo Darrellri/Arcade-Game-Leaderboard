@@ -39,87 +39,74 @@ export default function Leaderboard() {
 
   return (
     <div className="space-y-8">
-      {/* Game Marquee Header */}
-      <div className="mb-8 flex justify-center">
-        <div className="relative w-full flex justify-between items-start">
-          {/* Marquee image at natural aspect ratio */}
-          {game.imageUrl && (
-            <div className="relative flex-1 mr-4">
-              <div className="relative rounded-[10px] overflow-hidden transition-all duration-300 group">
-                <img 
-                  src={game.imageUrl || ''} 
-                  alt={game.name} 
-                  className="max-w-full h-auto object-contain rounded-[10px] md:scale-175 md:origin-center brightness-125"
-                  style={{ maxHeight: '500px' }}
-                />
-                {/* Lighter overlay for better brightness */}
-                <div className="absolute inset-0 bg-black/30 rounded-[10px]"></div>
-                
-                {/* Desktop text overlay */}
-                <div className="hidden sm:absolute sm:inset-0 sm:flex sm:items-center p-6 sm:pl-[30px]">
-                  <div className="text-center sm:text-left">
-                    <h1 className="text-3xl md:text-5xl lg:text-5xl font-black tracking-wide uppercase text-white drop-shadow-2xl" 
-                        style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5)' }}>
-                      {game.name}
-                    </h1>
-                    {game.subtitle && (
-                      <p className={`text-lg md:text-xl tracking-wider mt-2 drop-shadow-lg ${
-                        venueSettings?.gameSubtitleWhite === 'true' 
-                          ? 'text-white' 
-                          : 'text-white'
-                      } ${
-                        venueSettings?.gameSubtitleBold === 'true' 
-                          ? 'font-bold' 
-                          : 'font-medium'
-                      } ${
-                        venueSettings?.gameSubtitleItalic === 'true' 
-                          ? 'italic' 
-                          : ''
-                      }`}
-                         style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
-                        {game.subtitle}
+      {/* Game Marquee Header - Full Width */}
+      <div className="mb-8 w-full">
+        {game.imageUrl && (
+          <div className="relative w-full">
+            <div className="relative rounded-[10px] overflow-hidden transition-all duration-300 group">
+              <img 
+                src={game.imageUrl || ''} 
+                alt={game.name} 
+                className="w-full h-auto object-contain rounded-[10px] brightness-125"
+              />
+              {/* Lighter overlay for better brightness */}
+              <div className="absolute inset-0 bg-black/30 rounded-[10px]"></div>
+              
+              {/* Desktop text overlay */}
+              <div className="hidden sm:absolute sm:inset-0 sm:flex sm:items-center p-6 sm:pl-[30px]">
+                <div className="text-center sm:text-left">
+                  <h1 className="text-3xl md:text-5xl lg:text-5xl font-black tracking-wide uppercase text-white drop-shadow-2xl" 
+                      style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5)' }}>
+                    {game.name}
+                  </h1>
+                  {game.subtitle && (
+                    <p className={`text-lg md:text-xl tracking-wider mt-2 drop-shadow-lg ${
+                      venueSettings?.gameSubtitleWhite === 'true' 
+                        ? 'text-white' 
+                        : 'text-white'
+                    } ${
+                      venueSettings?.gameSubtitleBold === 'true' 
+                        ? 'font-bold' 
+                        : 'font-medium'
+                    } ${
+                      venueSettings?.gameSubtitleItalic === 'true' 
+                        ? 'italic' 
+                        : ''
+                    }`}
+                       style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
+                      {game.subtitle}
+                    </p>
+                  )}
+                  <div className="mt-4 flex items-center justify-center sm:justify-start gap-3">
+                    <img 
+                      src="/badge1.png" 
+                      alt="Champion Badge" 
+                      className="w-24 h-24 object-contain drop-shadow-lg animate-float" 
+                    />
+                    <div className="flex flex-col">
+                      <p className="text-xl sm:text-2xl text-white font-bold uppercase drop-shadow-lg"
+                         style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)', letterSpacing: '2px' }}>
+                        #1 {game.topScorerName || "NO CHAMPION YET"}
                       </p>
-                    )}
-                    <div className="mt-4 flex items-center justify-center sm:justify-start gap-3">
-                      <img 
-                        src="/badge1.png" 
-                        alt="Champion Badge" 
-                        className="w-24 h-24 object-contain drop-shadow-lg animate-float" 
-                      />
-                      <div className="flex flex-col">
-                        <p className="text-xl sm:text-2xl text-white font-bold uppercase drop-shadow-lg"
-                           style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)', letterSpacing: '2px' }}>
-                          #1 {game.topScorerName || "NO CHAMPION YET"}
+                      {game.currentHighScore && (
+                        <p className="text-lg sm:text-xl text-yellow-400 font-bold drop-shadow-lg"
+                           style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
+                          {game.currentHighScore.toLocaleString()}
                         </p>
-                        {game.currentHighScore && (
-                          <p className="text-lg sm:text-xl text-yellow-400 font-bold drop-shadow-lg"
-                             style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
-                            {game.currentHighScore.toLocaleString()}
-                          </p>
-                        )}
-                        {game.topScoreDate && (
-                          <p className="text-xs sm:text-sm text-white/90 drop-shadow-lg"
-                             style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
-                            {formatDate(new Date(game.topScoreDate))} {formatTime(new Date(game.topScoreDate))}
-                          </p>
-                        )}
-                      </div>
+                      )}
+                      {game.topScoreDate && (
+                        <p className="text-xs sm:text-sm text-white/90 drop-shadow-lg"
+                           style={{ textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
+                          {formatDate(new Date(game.topScoreDate))} {formatTime(new Date(game.topScoreDate))}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          )}
-          
-          {/* Back to Games button positioned on the right */}
-          <div className="flex-shrink-0">
-            <Link href="/">
-              <Button variant="outline" className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20">
-                ← Back to Games
-              </Button>
-            </Link>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Mobile title and subtitle below image */}
@@ -167,26 +154,34 @@ export default function Leaderboard() {
         )}
       </div>
 
-      {/* View Mode Toggle */}
-      <div className="flex justify-center gap-2 mb-6">
-        <Button
-          variant={viewMode === "grid" ? "default" : "outline"}
-          size="sm"
-          onClick={() => setViewMode("grid")}
-          className="flex items-center gap-2"
-        >
-          <Grid2X2 className="h-4 w-4" />
-          Grid
-        </Button>
-        <Button
-          variant={viewMode === "list" ? "default" : "outline"}
-          size="sm"
-          onClick={() => setViewMode("list")}
-          className="flex items-center gap-2"
-        >
-          <List className="h-4 w-4" />
-          List
-        </Button>
+      {/* View Mode Toggle and Back Button */}
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex gap-2">
+          <Button
+            variant={viewMode === "grid" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setViewMode("grid")}
+            className="flex items-center gap-2"
+          >
+            <Grid2X2 className="h-4 w-4" />
+            Grid
+          </Button>
+          <Button
+            variant={viewMode === "list" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setViewMode("list")}
+            className="flex items-center gap-2"
+          >
+            <List className="h-4 w-4" />
+            List
+          </Button>
+        </div>
+        
+        <Link href="/">
+          <Button variant="outline" size="sm" className="flex items-center gap-2">
+            ← Back
+          </Button>
+        </Link>
       </div>
 
       {/* Leaderboard Content */}
