@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams, Link } from "wouter";
+import { useParams, Link, useLocation } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,13 @@ export default function Leaderboard() {
   const id = parseInt(gameId || "0");
   const { venueSettings } = useTheme();
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [, setLocation] = useLocation();
+  
+  // Handle marquee image click - navigate back to home
+  const handleMarqueeClick = () => {
+    setLocation("/");
+  };
+  
   // Always sort by score in descending order for individual game pages
 
   const { data: game } = useQuery<Game>({
@@ -43,7 +50,10 @@ export default function Leaderboard() {
       <div className="mb-8 w-full">
         {game.imageUrl && (
           <div className="relative w-full">
-            <div className="relative rounded-[10px] overflow-hidden transition-all duration-300 group">
+            <div 
+              className="relative rounded-[10px] overflow-hidden transition-all duration-300 group cursor-pointer hover:opacity-90"
+              onClick={handleMarqueeClick}
+            >
               <img 
                 src={game.imageUrl || ''} 
                 alt={game.name} 
