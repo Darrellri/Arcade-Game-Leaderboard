@@ -180,11 +180,17 @@ export default function Leaderboard() {
           </Button>
         </div>
         
-        <Link href="/">
-          <Button variant="outline" size="sm" className="flex items-center gap-2">
-            ← Back
+        <div className="flex space-x-2">
+          <Button variant="outline" size="sm" asChild className="h-8 px-3">
+            <Link href="/">Home</Link>
           </Button>
-        </Link>
+          <Button variant="outline" size="sm" asChild className="h-8 px-3">
+            <Link href="/scan">Scan</Link>
+          </Button>
+          <Button variant="outline" size="sm" asChild className="h-8 px-3">
+            <Link href="/admin">Admin</Link>
+          </Button>
+        </div>
       </div>
 
       {/* Leaderboard Content */}

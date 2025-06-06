@@ -377,6 +377,18 @@ export default function Home() {
           >
             <List className="h-4 w-4" />
           </Button>
+          
+          <div className="flex space-x-2 ml-2">
+            <Button variant="outline" size="sm" asChild className="h-8 px-3">
+              <Link href="/">Home</Link>
+            </Button>
+            <Button variant="outline" size="sm" asChild className="h-8 px-3">
+              <Link href="/scan">Scan</Link>
+            </Button>
+            <Button variant="outline" size="sm" asChild className="h-8 px-3">
+              <Link href="/admin">Admin</Link>
+            </Button>
+          </div>
         </div>
       </div>
       
