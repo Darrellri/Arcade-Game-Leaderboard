@@ -194,7 +194,6 @@ export default function Admin() {
       subtitleBold: false,
       subtitleAllCaps: false,
       subtitleWhite: false,
-      enableVerticalScroll: true,
       theme: {
         primary: "#7c3aed",
         variant: "vibrant",
@@ -251,11 +250,13 @@ export default function Admin() {
   // Mutation for adding games
   const addGame = useMutation({
     mutationFn: async (data: InsertGame) => {
-      return apiRequest('/api/games', {
+      const response = await fetch('/api/games', {
         method: 'POST',
         body: JSON.stringify({ ...data, displayOrder: 0 }),
         headers: { 'Content-Type': 'application/json' }
       });
+      if (!response.ok) throw new Error('Failed to add game');
+      return response.json();
     },
     onSuccess: () => {
       toast({ title: "Game added successfully" });
@@ -271,11 +272,13 @@ export default function Admin() {
   // Mutation for updating games
   const updateGame = useMutation({
     mutationFn: async ({ id, data }: { id: number; data: Partial<Game> }) => {
-      return apiRequest(`/api/games/${id}`, {
+      const response = await fetch(`/api/games/${id}`, {
         method: 'PATCH',
         body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' }
       });
+      if (!response.ok) throw new Error('Failed to update game');
+      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/games'] });
@@ -288,7 +291,9 @@ export default function Admin() {
   // Mutation for deleting games
   const deleteGame = useMutation({
     mutationFn: async (id: number) => {
-      return apiRequest(`/api/games/${id}`, { method: 'DELETE' });
+      const response = await fetch(`/api/games/${id}`, { method: 'DELETE' });
+      if (!response.ok) throw new Error('Failed to delete game');
+      return response.json();
     },
     onSuccess: () => {
       toast({ title: "Game deleted successfully" });
@@ -302,11 +307,13 @@ export default function Admin() {
   // Mutation for updating game order
   const updateGameOrder = useMutation({
     mutationFn: async (gameOrders: { id: number; displayOrder: number }[]) => {
-      return apiRequest('/api/games/reorder', {
+      const response = await fetch('/api/games/reorder', {
         method: 'POST',
         body: JSON.stringify({ gameOrders }),
         headers: { 'Content-Type': 'application/json' }
       });
+      if (!response.ok) throw new Error('Failed to update game order');
+      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/games'] });
