@@ -282,7 +282,8 @@ import {
   Camera,
   Info,
   Building2,
-  GripVertical
+  GripVertical,
+  Settings
 } from "lucide-react";
 import { 
   Dialog,
@@ -295,6 +296,7 @@ import {
 import { Label } from "@/components/ui/label";
 
 import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
 import MarqueeImageUploader from "@/components/marquee-image-uploader";
 import OverlayImageUploader from "@/components/overlay-image-uploader";
 
@@ -872,36 +874,39 @@ export default function Admin() {
                 <form onSubmit={form.handleSubmit(onSaveVenueInfo)} className="space-y-6">
 
                   {!logoPreview && !animatedLogoPreview && (
-                      <FormField
-                        control={form.control}
-                        name="logoUrl"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Logo URL</FormLabel>
-                            <FormControl>
-                              <Input 
-                                {...field} 
-                                onChange={(e) => handleLogoUrlChange(e.target.value)}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
+                    <FormField
+                      control={form.control}
+                      name="logoUrl"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Logo URL</FormLabel>
+                          <FormControl>
+                            <Input 
+                              {...field} 
+                              placeholder="https://example.com/logo.png"
+                              onChange={(e) => handleLogoUrlChange(e.target.value)}
+                            />
+                          </FormControl>
+                          <p className="text-sm text-muted-foreground">
+                            Enter a URL for your logo image or video
+                          </p>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
 
-
-
+                  <div className="grid md:grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
                       name="logoBackgroundColor"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Logo Background Color</FormLabel>
+                          <FormLabel>Logo Background</FormLabel>
                           <FormControl>
                             <Select value={field.value || "transparent"} onValueChange={field.onChange}>
                               <SelectTrigger>
-                                <SelectValue placeholder="Select background color" />
+                                <SelectValue />
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="transparent">Transparent</SelectItem>
@@ -911,10 +916,10 @@ export default function Admin() {
                               </SelectContent>
                             </Select>
                           </FormControl>
-                          <FormMessage />
-                          <p className="text-xs text-muted-foreground">
-                            Background color for the logo area (useful for transparent videos)
+                          <p className="text-sm text-muted-foreground">
+                            Background color for the logo area
                           </p>
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
@@ -923,7 +928,7 @@ export default function Admin() {
                       control={form.control}
                       name="hideLogoBorderShadow"
                       render={({ field }) => (
-                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 mt-8">
                           <FormControl>
                             <Checkbox
                               checked={field.value === "true"}
@@ -933,41 +938,103 @@ export default function Admin() {
                             />
                           </FormControl>
                           <div className="space-y-1 leading-none">
-                            <FormLabel>
-                              Hide the border and shadow around logo?
-                            </FormLabel>
-                            <p className="text-xs text-muted-foreground">
-                              Removes visual styling around the logo display area
+                            <FormLabel>Hide border and shadow</FormLabel>
+                            <p className="text-sm text-muted-foreground">
+                              Remove visual styling around the logo
                             </p>
                           </div>
                         </FormItem>
                       )}
                     />
+                  </div>
 
-                    <div className="space-y-4">
-                      <FormLabel className="text-base font-semibold">Subtitle Styling Options</FormLabel>
+                  {/* Logo Preview */}
+                  <div className="space-y-2">
+                    <FormLabel>Preview</FormLabel>
+                    <div 
+                      className={`w-full h-[200px] flex items-center justify-center p-4 ${
+                        form.watch('hideLogoBorderShadow') === 'true' 
+                          ? 'bg-muted/20' 
+                          : 'border rounded-lg shadow-sm bg-muted/10'
+                      }`}
+                      style={{
+                        backgroundColor: 
+                          form.watch('logoBackgroundColor') === 'white' ? '#ffffff' :
+                          form.watch('logoBackgroundColor') === 'black' ? '#000000' :
+                          form.watch('logoBackgroundColor') === 'theme' ? 'hsl(var(--primary))' :
+                          form.watch('hideLogoBorderShadow') === 'true' ? 'hsl(var(--muted))' : 'transparent'
+                      }}
+                    >
+                      {animatedLogoPreview ? (
+                        <video
+                          src={animatedLogoPreview}
+                          autoPlay
+                          loop
+                          muted
+                          className="max-w-full max-h-full object-contain"
+                        />
+                      ) : logoPreview ? (
+                        <img
+                          src={logoPreview}
+                          alt="Logo preview"
+                          className="max-w-full max-h-full object-contain"
+                        />
+                      ) : (
+                        <div className="text-muted-foreground text-sm text-center">
+                          Enter a logo URL above to see preview
+                        </div>
+                      )}
+                    </div>
+                    {animatedLogoPreview && logoPreview && (
+                      <p className="text-xs text-muted-foreground text-center">
+                        Video logo is displayed. Image logo is saved as backup.
+                      </p>
+                    )}
+                  </div>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+
+          {/* Display Options Section */}
+          <Card className="themed-card">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Settings className="h-5 w-5" />
+                Display Options
+              </CardTitle>
+              <CardDescription>
+                Customize text appearance and page behavior
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSaveVenueInfo)} className="space-y-6">
+                  <div className="space-y-4">
+                    <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                      Text Styling
+                    </h4>
+                    <div className="grid gap-4">
                       
                       <FormField
                         control={form.control}
                         name="subtitleBold"
                         render={({ field }) => (
-                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                            <div className="space-y-0.5">
+                              <FormLabel className="text-base">Bold subtitle</FormLabel>
+                              <p className="text-sm text-muted-foreground">
+                                Display the venue name in bold font weight
+                              </p>
+                            </div>
                             <FormControl>
-                              <Checkbox
+                              <Switch
                                 checked={field.value === "true"}
                                 onCheckedChange={(checked) => {
                                   field.onChange(checked ? "true" : "false");
                                 }}
                               />
                             </FormControl>
-                            <div className="space-y-1 leading-none">
-                              <FormLabel>
-                                Make subtitle bold
-                              </FormLabel>
-                              <p className="text-xs text-muted-foreground">
-                                Display the venue name in bold font weight
-                              </p>
-                            </div>
                           </FormItem>
                         )}
                       />
@@ -976,23 +1043,21 @@ export default function Admin() {
                         control={form.control}
                         name="subtitleAllCaps"
                         render={({ field }) => (
-                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                            <div className="space-y-0.5">
+                              <FormLabel className="text-base">Uppercase subtitle</FormLabel>
+                              <p className="text-sm text-muted-foreground">
+                                Transform venue name to uppercase letters
+                              </p>
+                            </div>
                             <FormControl>
-                              <Checkbox
+                              <Switch
                                 checked={field.value === "true"}
                                 onCheckedChange={(checked) => {
                                   field.onChange(checked ? "true" : "false");
                                 }}
                               />
                             </FormControl>
-                            <div className="space-y-1 leading-none">
-                              <FormLabel>
-                                Display subtitle in all caps
-                              </FormLabel>
-                              <p className="text-xs text-muted-foreground">
-                                Transform venue name to uppercase letters
-                              </p>
-                            </div>
                           </FormItem>
                         )}
                       />
@@ -1001,53 +1066,79 @@ export default function Admin() {
                         control={form.control}
                         name="subtitleWhite"
                         render={({ field }) => (
-                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                            <div className="space-y-0.5">
+                              <FormLabel className="text-base">White subtitle</FormLabel>
+                              <p className="text-sm text-muted-foreground">
+                                Display subtitle in white instead of theme color
+                              </p>
+                            </div>
                             <FormControl>
-                              <Checkbox
+                              <Switch
                                 checked={field.value === "true"}
                                 onCheckedChange={(checked) => {
                                   field.onChange(checked ? "true" : "false");
                                 }}
                               />
                             </FormControl>
-                            <div className="space-y-1 leading-none">
-                              <FormLabel>
-                                Use white color for subtitle
-                              </FormLabel>
-                              <p className="text-xs text-muted-foreground">
-                                Display subtitle in white instead of theme color
-                              </p>
-                            </div>
                           </FormItem>
                         )}
                       />
                     </div>
+                  </div>
 
-                    {/* Game Listing Styling Options */}
-                    <div className="space-y-4">
-                      <FormLabel className="text-base font-semibold">Game Listing Styling Options</FormLabel>
-                      
+                  <div className="space-y-4">
+                    <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                      Page Behavior
+                    </h4>
+                    <FormField
+                      control={form.control}
+                      name="enableVerticalScroll"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base">Vertical scrolling</FormLabel>
+                            <p className="text-sm text-muted-foreground">
+                              Allow pages to scroll vertically instead of fitting all content
+                            </p>
+                          </div>
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value === "true"}
+                              onCheckedChange={(checked: boolean) => {
+                                field.onChange(checked ? "true" : "false");
+                              }}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="space-y-4">
+                    <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                      Game Display Options
+                    </h4>
+                    <div className="grid gap-4">
                       <FormField
                         control={form.control}
                         name="gameSubtitleWhite"
                         render={({ field }) => (
-                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                            <div className="space-y-0.5">
+                              <FormLabel className="text-base">White game subtitles</FormLabel>
+                              <p className="text-sm text-muted-foreground">
+                                Display game subtitles in white instead of theme color
+                              </p>
+                            </div>
                             <FormControl>
                               <Checkbox
                                 checked={field.value === "true"}
-                                onCheckedChange={(checked) => {
+                                onCheckedChange={(checked: boolean) => {
                                   field.onChange(checked ? "true" : "false");
                                 }}
                               />
                             </FormControl>
-                            <div className="space-y-1 leading-none">
-                              <FormLabel>
-                                Use white color for game subtitles
-                              </FormLabel>
-                              <p className="text-xs text-muted-foreground">
-                                Display game subtitles in white instead of theme color
-                              </p>
-                            </div>
                           </FormItem>
                         )}
                       />
@@ -1056,23 +1147,21 @@ export default function Admin() {
                         control={form.control}
                         name="gameSubtitleBold"
                         render={({ field }) => (
-                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                            <div className="space-y-0.5">
+                              <FormLabel className="text-base">Bold game subtitles</FormLabel>
+                              <p className="text-sm text-muted-foreground">
+                                Display game subtitles in bold font weight
+                              </p>
+                            </div>
                             <FormControl>
                               <Checkbox
                                 checked={field.value === "true"}
-                                onCheckedChange={(checked) => {
+                                onCheckedChange={(checked: boolean) => {
                                   field.onChange(checked ? "true" : "false");
                                 }}
                               />
                             </FormControl>
-                            <div className="space-y-1 leading-none">
-                              <FormLabel>
-                                Make game subtitles bold
-                              </FormLabel>
-                              <p className="text-xs text-muted-foreground">
-                                Display game subtitles in bold font weight
-                              </p>
-                            </div>
                           </FormItem>
                         )}
                       />
@@ -1081,32 +1170,50 @@ export default function Admin() {
                         control={form.control}
                         name="gameSubtitleItalic"
                         render={({ field }) => (
-                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                            <div className="space-y-0.5">
+                              <FormLabel className="text-base">Italic game subtitles</FormLabel>
+                              <p className="text-sm text-muted-foreground">
+                                Display game subtitles in italic font style
+                              </p>
+                            </div>
                             <FormControl>
                               <Checkbox
                                 checked={field.value === "true"}
-                                onCheckedChange={(checked) => {
+                                onCheckedChange={(checked: boolean) => {
                                   field.onChange(checked ? "true" : "false");
                                 }}
                               />
                             </FormControl>
-                            <div className="space-y-1 leading-none">
-                              <FormLabel>
-                                Make game subtitles italic
-                              </FormLabel>
-                              <p className="text-xs text-muted-foreground">
-                                Display game subtitles in italic font style
-                              </p>
-                            </div>
                           </FormItem>
                         )}
                       />
                     </div>
+                  </div>
 
-                    <FormField
-                      control={form.control}
-                      name="gameSpacing"
-                      render={({ field }) => (
+                  {/* Save Button */}
+                  <div className="flex justify-end">
+                    <Button 
+                      type="submit" 
+                      size="lg"
+                      disabled={updateSettings.isPending}
+                      className="min-w-[120px]"
+                    >
+                      {updateSettings.isPending ? (
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                          Saving...
+                        </div>
+                      ) : (
+                        "Save Changes"
+                      )}
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </TabsContent>
                         <FormItem>
                           <FormLabel>Game Listing Spacing</FormLabel>
                           <FormControl>
