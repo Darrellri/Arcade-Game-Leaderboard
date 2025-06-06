@@ -453,6 +453,7 @@ export default function Admin() {
       gameSubtitleWhite: "false",
       gameSubtitleBold: "false",
       gameSubtitleItalic: "false",
+      gameSpacing: "30",
       theme: {
         primary: "hsl(280, 100%, 50%)",
         variant: "vibrant",
@@ -1108,24 +1109,29 @@ export default function Admin() {
                           <FormLabel>Game Listing Spacing</FormLabel>
                           <FormControl>
                             <div className="space-y-3">
-                              <input
-                                type="range"
-                                min="20"
-                                max="200"
-                                step="4"
-                                value={field.value || "24"}
-                                onChange={(e) => field.onChange(e.target.value)}
-                                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-                              />
+                              <div className="relative">
+                                <input
+                                  type="range"
+                                  min="20"
+                                  max="200"
+                                  step="10"
+                                  value={field.value || "30"}
+                                  onChange={(e) => field.onChange(e.target.value)}
+                                  className="w-full h-3 bg-secondary rounded-lg appearance-none cursor-pointer slider"
+                                  style={{
+                                    background: `linear-gradient(to right, hsl(var(--primary)) 0%, hsl(var(--primary)) ${((parseInt(field.value || "30") - 20) / (200 - 20)) * 100}%, hsl(var(--secondary)) ${((parseInt(field.value || "30") - 20) / (200 - 20)) * 100}%, hsl(var(--secondary)) 100%)`
+                                  }}
+                                />
+                              </div>
                               <div className="flex justify-between text-xs text-muted-foreground">
                                 <span>20px</span>
-                                <span className="font-medium">{field.value || "24"}px spacing</span>
+                                <span className="font-medium text-primary">{field.value || "30"}px spacing</span>
                                 <span>200px</span>
                               </div>
                             </div>
                           </FormControl>
                           <p className="text-xs text-muted-foreground">
-                            Adjust spacing between game listings (scales down on mobile)
+                            Adjusts spacing between game listings in 10px increments. Automatically scales down on smaller screens.
                           </p>
                         </FormItem>
                       )}

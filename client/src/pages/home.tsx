@@ -384,8 +384,8 @@ export default function Home() {
         <div 
           className="grid md:grid-cols-2 lg:grid-cols-3"
           style={{
-            gap: `${Math.max(12, Math.round((parseInt(venueSettings?.gameSpacing || "24") * 0.5)))}px ${parseInt(venueSettings?.gameSpacing || "24")}px`,
-            '--spacing': `${parseInt(venueSettings?.gameSpacing || "24")}px`
+            gap: `${Math.max(8, Math.round((parseInt(venueSettings?.gameSpacing || "30") * 0.4)))}px ${Math.max(12, Math.round((parseInt(venueSettings?.gameSpacing || "30") * 0.6)))}px`,
+            '--spacing': `${parseInt(venueSettings?.gameSpacing || "30")}px`
           } as React.CSSProperties}
         >
           {processedGames?.map((game) => (
@@ -404,7 +404,7 @@ export default function Home() {
               style={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: `${Math.max(4, Math.round((parseInt(venueSettings?.gameSpacing || "24") * 0.167)))}px`
+                gap: `${Math.max(6, Math.round((parseInt(venueSettings?.gameSpacing || "30") * 0.25)))}px`
               }}
             >
               {localGames?.map((game) => (
