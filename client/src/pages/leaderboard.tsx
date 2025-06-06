@@ -192,16 +192,16 @@ export default function Leaderboard() {
         
       </div>
 
-      {/* Navigation Buttons */}
-      <div className="flex justify-center space-x-2 mb-6">
-        <Button variant="outline" size="sm" asChild className="h-8 px-3">
-          <Link href="/">Home</Link>
+      {/* Navigation Buttons - Moved Outside */}
+      <div className="flex justify-center space-x-4 mb-8 p-4 bg-card/50 rounded-lg border">
+        <Button variant="outline" size="sm" asChild className="h-9 px-4">
+          <Link href="/">🏠 Home</Link>
         </Button>
-        <Button variant="outline" size="sm" asChild className="h-8 px-3">
-          <Link href="/scan">Scan</Link>
+        <Button variant="outline" size="sm" asChild className="h-9 px-4">
+          <Link href="/scan">📱 Scan</Link>
         </Button>
-        <Button variant="outline" size="sm" asChild className="h-8 px-3">
-          <Link href="/admin">Admin</Link>
+        <Button variant="outline" size="sm" asChild className="h-9 px-4">
+          <Link href="/admin">⚙️ Admin</Link>
         </Button>
       </div>
 
