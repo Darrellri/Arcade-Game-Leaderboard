@@ -34,7 +34,9 @@ export default function GameCard({ game }: GameCardProps) {
     
   return (
     <div className="overflow-hidden rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 themed-card">
-      <GameMarquee game={game} />
+      <Link href={`/leaderboard/${game.id}`}>
+        <GameMarquee game={game} />
+      </Link>
       
       <div className="card-content p-4 space-y-3">
         <Link href={`/leaderboard/${game.id}`}>
