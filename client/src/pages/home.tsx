@@ -382,10 +382,12 @@ export default function Home() {
 
       {viewMode === "grid" ? (
         <div 
-          className="grid md:grid-cols-2 lg:grid-cols-3"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 responsive-game-grid"
           style={{
-            gap: `${Math.max(8, Math.round((parseInt(venueSettings?.gameSpacing || "30") * 0.4)))}px ${Math.max(12, Math.round((parseInt(venueSettings?.gameSpacing || "30") * 0.6)))}px`,
-            '--spacing': `${parseInt(venueSettings?.gameSpacing || "30")}px`
+            '--desktop-spacing': `${parseInt(venueSettings?.gameSpacing || "30")}px`,
+            '--tablet-spacing': `${Math.max(12, Math.round(parseInt(venueSettings?.gameSpacing || "30") * 0.7))}px`,
+            '--mobile-spacing': `${Math.max(8, Math.round(parseInt(venueSettings?.gameSpacing || "30") * 0.5))}px`,
+            gap: `var(--desktop-spacing)`
           } as React.CSSProperties}
         >
           {processedGames?.map((game) => (
@@ -400,12 +402,13 @@ export default function Home() {
         >
           <SortableContext items={localGames} strategy={verticalListSortingStrategy}>
             <div 
-              className="w-full"
+              className="w-full flex flex-col responsive-game-list"
               style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: `${Math.max(6, Math.round((parseInt(venueSettings?.gameSpacing || "30") * 0.25)))}px`
-              }}
+                '--desktop-spacing': `${parseInt(venueSettings?.gameSpacing || "30")}px`,
+                '--tablet-spacing': `${Math.max(8, Math.round(parseInt(venueSettings?.gameSpacing || "30") * 0.6))}px`,
+                '--mobile-spacing': `${Math.max(6, Math.round(parseInt(venueSettings?.gameSpacing || "30") * 0.4))}px`,
+                gap: `var(--desktop-spacing)`
+              } as React.CSSProperties}
             >
               {localGames?.map((game) => (
                 <SortableGameListItem key={game.id} game={game} />

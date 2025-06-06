@@ -404,8 +404,34 @@
     50% { transform: translateY(-1px); }
   }
   
-  /* Responsive adjustments */
+  /* Responsive game spacing */
+  .responsive-game-grid {
+    gap: var(--desktop-spacing);
+  }
+  
+  .responsive-game-list {
+    gap: var(--desktop-spacing);
+  }
+  
+  @media (max-width: 1024px) {
+    .responsive-game-grid {
+      gap: var(--tablet-spacing);
+    }
+    
+    .responsive-game-list {
+      gap: var(--tablet-spacing);
+    }
+  }
+  
   @media (max-width: 640px) {
+    .responsive-game-grid {
+      gap: var(--mobile-spacing);
+    }
+    
+    .responsive-game-list {
+      gap: var(--mobile-spacing);
+    }
+    
     .image-container {
       height: 140px;
     }
