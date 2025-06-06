@@ -79,28 +79,38 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onIma
         </div>
       </TableCell>
       <TableCell>
-        <Select 
-          defaultValue={game.type}
-          onValueChange={(value) => onGameEdit(game.id, "type", value)}
-        >
-          <SelectTrigger className="w-[120px]">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="arcade">
-              <div className="flex items-center gap-2">
-                <Gamepad2 className="h-4 w-4" />
-                Arcade
-              </div>
-            </SelectItem>
-            <SelectItem value="pinball">
-              <div className="flex items-center gap-2">
-                <CircleDot className="h-4 w-4" />
-                Pinball
-              </div>
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="space-y-2">
+          <div className="flex items-center space-x-2">
+            <input
+              type="radio"
+              id={`arcade-${game.id}`}
+              name={`type-${game.id}`}
+              value="arcade"
+              checked={game.type === "arcade"}
+              onChange={() => onGameEdit(game.id, "type", "arcade")}
+              className="w-4 h-4 text-primary focus:ring-primary"
+            />
+            <label htmlFor={`arcade-${game.id}`} className="flex items-center gap-1 text-sm font-medium cursor-pointer">
+              <Gamepad2 className="h-3 w-3" />
+              Arcade
+            </label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <input
+              type="radio"
+              id={`pinball-${game.id}`}
+              name={`type-${game.id}`}
+              value="pinball"
+              checked={game.type === "pinball"}
+              onChange={() => onGameEdit(game.id, "type", "pinball")}
+              className="w-4 h-4 text-primary focus:ring-primary"
+            />
+            <label htmlFor={`pinball-${game.id}`} className="flex items-center gap-1 text-sm font-medium cursor-pointer">
+              <CircleDot className="h-3 w-3" />
+              Pinball
+            </label>
+          </div>
+        </div>
       </TableCell>
       <TableCell className="p-2">
         <div className="space-y-2">
