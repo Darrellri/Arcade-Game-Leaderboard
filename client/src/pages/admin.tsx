@@ -1214,55 +1214,8 @@ export default function Admin() {
             </CardContent>
           </Card>
         </TabsContent>
-                        <FormItem>
-                          <FormLabel>Game Listing Spacing</FormLabel>
-                          <FormControl>
-                            <div className="space-y-3">
-                              <input
-                                type="range"
-                                min="20"
-                                max="200"
-                                step="4"
-                                value={field.value || "24"}
-                                onChange={(e) => field.onChange(e.target.value)}
-                                className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-                              />
-                              <div className="flex justify-between text-xs text-muted-foreground">
-                                <span>20px</span>
-                                <span className="font-medium">{field.value || "24"}px spacing</span>
-                                <span>200px</span>
-                              </div>
-                            </div>
-                          </FormControl>
-                          <p className="text-xs text-muted-foreground">
-                            Adjust spacing between game listings (scales down on mobile)
-                          </p>
-                        </FormItem>
-                      )}
-                    />
 
-                    <FormField
-                      control={form.control}
-                      name="address"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Address</FormLabel>
-                          <FormControl>
-                            <Textarea 
-                              {...field} 
-                              placeholder="Enter your venue's address" 
-                              value={field.value || ""}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="phone"
+        <TabsContent value="games" className="space-y-4">
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Phone</FormLabel>
@@ -1303,7 +1256,7 @@ export default function Admin() {
                   </form>
                 </Form>
 
-                <div className="flex flex-col items-center">
+                <div className="flex flex-col items-center mt-6">
                   {!animatedLogoPreview && !logoPreview && (
                     <div className="text-sm font-medium mb-2">Logo Preview</div>
                   )}
@@ -1395,7 +1348,7 @@ export default function Admin() {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
+        </TabsContent>
 
 
 
