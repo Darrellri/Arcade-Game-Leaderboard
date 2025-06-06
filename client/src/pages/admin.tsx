@@ -804,18 +804,22 @@ export default function Admin() {
           </div>
         </div>
 
-        <TabsContent value="venue" className="space-y-4">
+        <TabsContent value="venue" className="space-y-6">
+          {/* Basic Information Section */}
           <Card className="themed-card">
             <CardHeader>
-              <CardTitle>Venue Information</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Building2 className="h-5 w-5" />
+                Basic Information
+              </CardTitle>
               <CardDescription>
-                Update your venue's basic information
+                Essential venue details displayed to visitors
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-[2fr_1fr] gap-6">
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSaveVenueInfo)} className="space-y-4">
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSaveVenueInfo)} className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-4">
                     <FormField
                       control={form.control}
                       name="name"
@@ -867,8 +871,9 @@ export default function Admin() {
                         </FormItem>
                       )}
                     />
+                  </div>
 
-                    {!logoPreview && !animatedLogoPreview && (
+                  {!logoPreview && !animatedLogoPreview && (
                       <FormField
                         control={form.control}
                         name="logoUrl"
@@ -1283,10 +1288,9 @@ export default function Admin() {
                     </div>
                   )}
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
 
 
