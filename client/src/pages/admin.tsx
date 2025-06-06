@@ -271,7 +271,6 @@ import {
   Camera,
   Info,
   Building2,
-  Palette,
   GripVertical
 } from "lucide-react";
 import { 
@@ -722,10 +721,7 @@ export default function Admin() {
               <Building2 className="h-4 w-4" />
               Venue Details
             </TabsTrigger>
-            <TabsTrigger value="themes" className="flex items-center gap-2">
-              <Palette className="h-4 w-4" />
-              Theme Settings
-            </TabsTrigger>
+
             <TabsTrigger value="games" className="flex items-center gap-2">
               <Gamepad2 className="h-4 w-4" />
               Game Management
@@ -1229,11 +1225,7 @@ export default function Admin() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="themes" className="space-y-4">
-          <div className="text-center py-8 text-muted-foreground">
-            <p>Color schemes have been moved to the Game Management tab for better organization.</p>
-          </div>
-        </TabsContent>
+
 
         <TabsContent value="games" className="space-y-4">
           <Card className="themed-card">
