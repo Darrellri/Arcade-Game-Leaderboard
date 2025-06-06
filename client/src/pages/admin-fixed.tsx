@@ -231,13 +231,11 @@ export default function Admin() {
   // Mutation for updating venue settings
   const updateSettings = useMutation({
     mutationFn: async (data: VenueSettings) => {
-      const response = await fetch('/api/venue-settings', {
+      return apiRequest('/api/venue-settings', {
         method: 'PUT',
         body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' }
       });
-      if (!response.ok) throw new Error('Failed to update settings');
-      return response.json();
     },
     onSuccess: () => {
       toast({ title: "Settings updated successfully" });
