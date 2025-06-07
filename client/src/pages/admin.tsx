@@ -914,32 +914,37 @@ export default function Admin() {
                           </div>
                           <div className="px-1">
                             <Slider
-                              value={[50]}
+                              value={[venueSettings.theme.appearance === 'dark' ? 25 : 75]}
                               max={100}
-                              step={1}
+                              step={5}
                               className="w-full"
-                              onValueChange={(value) => {
-                                // Calculate background darkness/lightness
+                              onValueCommit={(value) => {
+                                // Only update when user finishes dragging
                                 const bgValue = value[0];
-                                const isDark = bgValue < 50;
-                                const intensity = isDark ? (50 - bgValue) * 2 : (bgValue - 50) * 2;
+                                const newAppearance = bgValue < 50 ? "dark" : "light";
                                 
-                                // Override the theme's appearance setting
-                                updateSettings.mutate({
-                                  theme: {
-                                    name: preset.name,
-                                    primary: preset.primary,
-                                    variant: preset.variant,
-                                    appearance: isDark ? "dark" : "light",
-                                    radius: preset.radius,
-                                  },
-                                });
+                                // Only update if this preset is currently active
+                                if (venueSettings.theme.primary === preset.primary) {
+                                  updateSettings.mutate({
+                                    theme: {
+                                      name: preset.name,
+                                      primary: preset.primary,
+                                      variant: preset.variant,
+                                      appearance: newAppearance,
+                                      radius: preset.radius,
+                                    },
+                                  });
+                                }
                               }}
+                              disabled={venueSettings.theme.primary !== preset.primary}
                             />
                             <div className="flex justify-between text-xs text-muted-foreground mt-1">
                               <span className="flex items-center gap-1">
                                 <Moon className="w-2 h-2" />
                                 Dark
+                              </span>
+                              <span className="text-xs">
+                                {venueSettings.theme.primary === preset.primary ? "Active" : "Select theme first"}
                               </span>
                               <span className="flex items-center gap-1">
                                 <Sun className="w-2 h-2" />
