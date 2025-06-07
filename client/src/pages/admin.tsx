@@ -920,33 +920,25 @@ export default function Admin() {
                                   : (preset.appearance === 'dark' ? 0 : 100)
                               ]}
                               max={100}
-                              step={10}
+                              step={25}
                               className="w-full"
-                              onValueCommit={(value) => {
-                                // Only update when user finishes dragging
-                                const bgValue = value[0];
-                                const newAppearance = bgValue < 50 ? "dark" : "light";
-                                
-                                // Only update if this preset is currently active
-                                if (venueSettings.theme.primary === preset.primary) {
-                                  updateSettings.mutate({
-                                    theme: {
-                                      name: venueSettings.theme.name,
-                                      primary: venueSettings.theme.primary,
-                                      variant: venueSettings.theme.variant,
-                                      appearance: newAppearance,
-                                      radius: venueSettings.theme.radius,
-                                    },
-                                  });
-                                }
-                              }}
                               onValueChange={(value) => {
-                                // Immediate visual feedback without saving
+                                // Save immediately when slider changes
                                 if (venueSettings.theme.primary === preset.primary) {
                                   const bgValue = value[0];
                                   const newAppearance = bgValue < 50 ? "dark" : "light";
                                   
-                                  // Optional: Add visual preview here without saving
+                                  // Only update if appearance actually changed
+                                  if (newAppearance !== venueSettings.theme.appearance) {
+                                    updateSettings.mutate({
+                                      theme: {
+                                        primary: venueSettings.theme.primary,
+                                        variant: venueSettings.theme.variant,
+                                        appearance: newAppearance,
+                                        radius: venueSettings.theme.radius,
+                                      },
+                                    });
+                                  }
                                 }
                               }}
                               disabled={venueSettings.theme.primary !== preset.primary}
