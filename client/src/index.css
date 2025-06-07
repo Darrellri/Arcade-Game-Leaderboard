@@ -450,4 +450,12 @@
       @apply p-3;
     }
   }
+
+  /* Transparent video support */
+  .transparent-video {
+    background: transparent !important;
+    background-color: transparent !important;
+    -webkit-background-clip: content-box;
+    background-clip: content-box;
+  }
 }

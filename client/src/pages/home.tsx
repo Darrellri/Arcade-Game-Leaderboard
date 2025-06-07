@@ -304,7 +304,7 @@ export default function Home() {
                   autoPlay 
                   loop 
                   muted
-                  className="w-full h-full object-contain p-2" 
+                  className="w-full h-full object-contain transparent-video" 
                 />
               ) : (
                 <img 
