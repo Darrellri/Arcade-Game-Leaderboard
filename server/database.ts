@@ -167,7 +167,8 @@ export class DatabaseStorage implements IStorage {
         hours: settings.hours || undefined,
         theme: settings.theme as VenueSettings['theme'],
         themePresets: settings.themePresets as VenueSettings['themePresets'],
-        backgroundOverride: settings.backgroundOverride || false
+        backgroundOverride: settings.backgroundOverride || false,
+        customBackgroundColor: settings.customBackgroundColor || "#000000"
       };
     }
     
@@ -306,6 +307,7 @@ export class DatabaseStorage implements IStorage {
           theme: settings.theme ? settings.theme : existingSettings.theme,
           themePresets: settings.themePresets ? settings.themePresets : existingSettings.themePresets,
           backgroundOverride: settings.backgroundOverride !== undefined ? settings.backgroundOverride : existingSettings.backgroundOverride,
+          customBackgroundColor: settings.customBackgroundColor !== undefined ? settings.customBackgroundColor : existingSettings.customBackgroundColor,
           updatedAt: new Date()
         })
         .where(eq(venueSettings.id, existingSettings.id))
@@ -331,7 +333,8 @@ export class DatabaseStorage implements IStorage {
         hours: updated.hours || undefined,
         theme: updated.theme as VenueSettings['theme'],
         themePresets: updated.themePresets as VenueSettings['themePresets'],
-        backgroundOverride: updated.backgroundOverride || false
+        backgroundOverride: updated.backgroundOverride || false,
+        customBackgroundColor: updated.customBackgroundColor || "#000000"
       };
       
       return updatedSettings;

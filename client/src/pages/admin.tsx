@@ -313,6 +313,7 @@ export default function Admin() {
       setLocalBackgroundOverride(venueSettings.backgroundOverride || false);
       setLocalAppearance(venueSettings.theme.appearance as "dark" | "light");
       setLocalDarknessLevel(venueSettings.theme.appearance === 'dark' ? 20 : 80);
+      setLocalCustomBackgroundColor(venueSettings.customBackgroundColor || '#000000');
       setHasUnsavedChanges(false);
       
       console.log("Initialized background override:", venueSettings.backgroundOverride);
