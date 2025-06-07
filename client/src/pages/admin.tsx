@@ -914,9 +914,13 @@ export default function Admin() {
                           </div>
                           <div className="px-1">
                             <Slider
-                              value={[venueSettings.theme.appearance === 'dark' ? 25 : 75]}
+                              value={[
+                                venueSettings.theme.primary === preset.primary 
+                                  ? (venueSettings.theme.appearance === 'dark' ? 0 : 100)
+                                  : (preset.appearance === 'dark' ? 0 : 100)
+                              ]}
                               max={100}
-                              step={5}
+                              step={10}
                               className="w-full"
                               onValueCommit={(value) => {
                                 // Only update when user finishes dragging
@@ -927,13 +931,22 @@ export default function Admin() {
                                 if (venueSettings.theme.primary === preset.primary) {
                                   updateSettings.mutate({
                                     theme: {
-                                      name: preset.name,
-                                      primary: preset.primary,
-                                      variant: preset.variant,
+                                      name: venueSettings.theme.name,
+                                      primary: venueSettings.theme.primary,
+                                      variant: venueSettings.theme.variant,
                                       appearance: newAppearance,
-                                      radius: preset.radius,
+                                      radius: venueSettings.theme.radius,
                                     },
                                   });
+                                }
+                              }}
+                              onValueChange={(value) => {
+                                // Immediate visual feedback without saving
+                                if (venueSettings.theme.primary === preset.primary) {
+                                  const bgValue = value[0];
+                                  const newAppearance = bgValue < 50 ? "dark" : "light";
+                                  
+                                  // Optional: Add visual preview here without saving
                                 }
                               }}
                               disabled={venueSettings.theme.primary !== preset.primary}
@@ -944,7 +957,7 @@ export default function Admin() {
                                 Dark
                               </span>
                               <span className="text-xs">
-                                {venueSettings.theme.primary === preset.primary ? "Active" : "Select theme first"}
+                                {venueSettings.theme.primary === preset.primary ? "Drag to change" : "Select theme first"}
                               </span>
                               <span className="flex items-center gap-1">
                                 <Sun className="w-2 h-2" />
