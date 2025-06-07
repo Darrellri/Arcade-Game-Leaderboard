@@ -763,25 +763,49 @@ export default function Admin() {
           </Card>
 
           {/* Color Schemes Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Palette className="h-5 w-5" />
-                Color Schemes
+          <Card className="overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-muted/50 to-background border-b">
+              <CardTitle className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <Palette className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <div className="text-lg font-bold">Color Schemes</div>
+                  <div className="text-sm text-muted-foreground font-normal">
+                    Transform your arcade's visual identity
+                  </div>
+                </div>
               </CardTitle>
-              <CardDescription>
-                Choose a color scheme for your arcade leaderboard
-              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <CardContent className="p-6">
+              {/* Category Filters */}
+              <div className="mb-6 flex flex-wrap gap-2">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <span className="font-medium">Categories:</span>
+                </div>
+                <Badge variant="outline" className="flex items-center gap-1">
+                  <Moon className="w-3 h-3" />
+                  Dark Themes
+                </Badge>
+                <Badge variant="outline" className="flex items-center gap-1">
+                  <Sun className="w-3 h-3" />
+                  Light Themes
+                </Badge>
+                <Badge variant="outline" className="flex items-center gap-1">
+                  <Palette className="w-3 h-3" />
+                  All Variants
+                </Badge>
+              </div>
+
+              {/* Enhanced Theme Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {venueSettings?.themePresets?.map((preset) => (
-                  <Card
+                  <div
                     key={preset.name}
-                    className={`cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-lg ${
+                    className={`group relative cursor-pointer transition-all duration-500 hover:scale-[1.03] ${
                       venueSettings.theme.primary === preset.primary
-                        ? "ring-2 ring-primary shadow-xl border-primary/50"
-                        : "hover:shadow-md border-border"
+                        ? "scale-[1.02]"
+                        : ""
                     }`}
                     onClick={() => {
                       updateSettings.mutate({
@@ -795,103 +819,144 @@ export default function Admin() {
                       });
                     }}
                   >
-                    <CardContent className="p-4">
-                      {/* Enhanced Color Swatch */}
-                      <div className="relative mb-4">
-                        <div
-                          className="w-full h-20 rounded-lg overflow-hidden shadow-inner border-2 border-white/20"
-                          style={{
-                            background: `linear-gradient(135deg, ${preset.primary}, ${preset.primary}CC, ${preset.primary}80)`,
-                          }}
-                        >
-                          {/* Variant indicator pattern overlay */}
+                    <Card className={`overflow-hidden transition-all duration-300 ${
+                      venueSettings.theme.primary === preset.primary
+                        ? "ring-2 ring-primary shadow-2xl border-primary/30 bg-primary/5"
+                        : "hover:shadow-xl group-hover:border-primary/20"
+                    }`}>
+                      <CardContent className="p-0">
+                        {/* Main Color Display */}
+                        <div className="relative h-32 overflow-hidden">
+                          <div
+                            className="absolute inset-0 transition-all duration-500"
+                            style={{
+                              background: `linear-gradient(135deg, 
+                                ${preset.primary}FF 0%, 
+                                ${preset.primary}E6 25%, 
+                                ${preset.primary}CC 50%, 
+                                ${preset.primary}B3 75%, 
+                                ${preset.primary}80 100%)`,
+                            }}
+                          />
+                          
+                          {/* Variant-specific patterns */}
                           {preset.variant === 'vibrant' && (
-                            <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-white/10" />
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent via-50% to-black/20" />
                           )}
                           {preset.variant === 'tint' && (
-                            <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-white/20" />
+                            <div className="absolute inset-0">
+                              <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-transparent to-white/30" />
+                              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,rgba(255,255,255,0.1))]" />
+                            </div>
                           )}
                           {preset.variant === 'professional' && (
-                            <div className="absolute inset-0 bg-gradient-to-b from-white/15 to-black/10" />
+                            <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-black/30" />
                           )}
-                          
-                          {/* Theme indicator icons */}
-                          <div className="absolute top-2 right-2 flex items-center gap-1">
-                            {preset.appearance === 'dark' ? (
-                              <div className="w-6 h-6 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center">
-                                <Moon className="w-3 h-3 text-white" />
-                              </div>
-                            ) : (
-                              <div className="w-6 h-6 bg-white/70 backdrop-blur-sm rounded-full flex items-center justify-center">
-                                <Sun className="w-3 h-3 text-yellow-600" />
-                              </div>
-                            )}
+
+                          {/* Appearance indicator */}
+                          <div className="absolute top-3 right-3">
+                            <div className={`p-2 rounded-full backdrop-blur-md shadow-lg transition-all duration-300 ${
+                              preset.appearance === 'dark' 
+                                ? 'bg-black/60 text-white' 
+                                : 'bg-white/80 text-gray-800'
+                            }`}>
+                              {preset.appearance === 'dark' ? (
+                                <Moon className="w-4 h-4" />
+                              ) : (
+                                <Sun className="w-4 h-4" />
+                              )}
+                            </div>
                           </div>
 
-                          {/* Active selection indicator */}
+                          {/* Active selection overlay */}
                           {venueSettings.theme.primary === preset.primary && (
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="w-8 h-8 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg">
-                                <div className="w-4 h-4 bg-green-500 rounded-full animate-pulse" />
+                            <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+                              <div className="bg-white/95 backdrop-blur-sm rounded-full p-3 shadow-2xl animate-pulse">
+                                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                  <div className="w-3 h-3 bg-white rounded-full" />
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Hover overlay */}
+                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300" />
+                        </div>
+
+                        {/* Theme Information Panel */}
+                        <div className="p-4 space-y-3">
+                          <div className="text-center">
+                            <h3 className="font-bold text-base mb-1 group-hover:text-primary transition-colors">
+                              {preset.name}
+                            </h3>
+                            <div className="text-xs font-mono text-muted-foreground bg-muted/50 rounded px-2 py-1">
+                              {preset.primary}
+                            </div>
+                          </div>
+
+                          {/* Detailed specs */}
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-muted-foreground">Variant</span>
+                              <div className="flex items-center gap-1">
+                                <div 
+                                  className="w-3 h-3 rounded-full border-2 border-white shadow-sm"
+                                  style={{ backgroundColor: preset.primary }}
+                                />
+                                <span className="capitalize font-medium">{preset.variant}</span>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-muted-foreground">Mode</span>
+                              <div className="flex items-center gap-1">
+                                {preset.appearance === 'dark' ? (
+                                  <Moon className="w-3 h-3 text-muted-foreground" />
+                                ) : (
+                                  <Sun className="w-3 h-3 text-muted-foreground" />
+                                )}
+                                <span className="capitalize">{preset.appearance}</span>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-muted-foreground">Radius</span>
+                              <div className="flex items-center gap-1">
+                                <div 
+                                  className="w-4 h-4 border-2 border-muted-foreground"
+                                  style={{ borderRadius: `${preset.radius * 4}px` }}
+                                />
+                                <span>{preset.radius}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Selection indicator */}
+                          {venueSettings.theme.primary === preset.primary && (
+                            <div className="mt-3 pt-3 border-t border-primary/20">
+                              <div className="flex items-center justify-center gap-2 text-primary text-sm font-medium">
+                                <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                                Currently Active
                               </div>
                             </div>
                           )}
                         </div>
-
-                        {/* Color value display */}
-                        <div className="absolute bottom-1 left-1 right-1">
-                          <div className="bg-black/70 backdrop-blur-sm rounded px-2 py-1">
-                            <code className="text-white text-xs font-mono">{preset.primary}</code>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Theme information */}
-                      <div className="space-y-2">
-                        <div className="text-center">
-                          <h4 className="font-semibold text-sm leading-tight">{preset.name}</h4>
-                        </div>
-                        
-                        <div className="flex items-center justify-between text-xs">
-                          <div className="flex items-center gap-1">
-                            <div 
-                              className="w-2 h-2 rounded-full"
-                              style={{ backgroundColor: preset.primary }}
-                            />
-                            <span className="text-muted-foreground capitalize font-medium">
-                              {preset.variant}
-                            </span>
-                          </div>
-                          
-                          <div className="flex items-center gap-1">
-                            {preset.appearance === 'dark' ? (
-                              <>
-                                <Moon className="w-3 h-3 text-muted-foreground" />
-                                <span className="text-muted-foreground">Dark</span>
-                              </>
-                            ) : (
-                              <>
-                                <Sun className="w-3 h-3 text-muted-foreground" />
-                                <span className="text-muted-foreground">Light</span>
-                              </>
-                            )}
-                          </div>
-                        </div>
-
-                        {/* Border radius indicator */}
-                        <div className="flex items-center justify-center pt-1">
-                          <div className="text-xs text-muted-foreground flex items-center gap-1">
-                            <div 
-                              className="w-3 h-3 border border-current"
-                              style={{ borderRadius: `${preset.radius * 4}px` }}
-                            />
-                            <span>Radius: {preset.radius}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </div>
                 ))}
+              </div>
+
+              {/* Quick Actions */}
+              <div className="mt-8 pt-6 border-t border-border">
+                <div className="flex items-center justify-between">
+                  <div className="text-sm text-muted-foreground">
+                    Click any theme to apply it instantly to your arcade
+                  </div>
+                  <Badge variant="secondary" className="text-xs">
+                    {venueSettings?.themePresets?.length || 0} themes available
+                  </Badge>
+                </div>
               </div>
             </CardContent>
           </Card>
