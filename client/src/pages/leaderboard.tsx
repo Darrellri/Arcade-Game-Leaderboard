@@ -4,13 +4,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Grid2X2, List } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Game, Score } from "@shared/schema";
 import ShareScore from "@/components/share-score";
 import { TrophyIcon } from "@/components/trophy-icon";
 
 import { formatDate, formatTime } from "@/lib/formatters";
 import { useTheme } from "@/contexts/ThemeContext";
+import { cn } from "@/lib/utils";
 
 type ViewMode = "grid" | "list";
 
@@ -21,11 +22,28 @@ export default function Leaderboard() {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [, setLocation] = useLocation();
   
+  // Animation state for marquee overlay
+  const [overlayAnimation, setOverlayAnimation] = useState<string>("");
+  const [animationKey, setAnimationKey] = useState(0);
+  const [marqueeBlurred, setMarqueeBlurred] = useState(false);
+  
   // Handle marquee image click - navigate back to home
   const handleMarqueeClick = () => {
     setLocation("/");
   };
-  
+
+  // Array of faster animations with reduced travel distance (175% faster)
+  const animations = [
+    "animate-[overlayGrowShrink_0.72s_ease-in-out]",
+    "animate-[overlayJello_0.65s_ease-in-out]",
+    "animate-[overlaySkewWobble_0.8s_ease-in-out]",
+    "animate-[overlayPulseScale_0.55s_ease-in-out]",
+    "animate-[overlayElastic_0.91s_ease-out]",
+    "animate-[overlayBreath_1.09s_ease-in-out]",
+    "animate-[overlaySquish_0.72s_ease-in-out]",
+    "animate-[overlayGlow_0.91s_ease-in-out]"
+  ];
+
   // Always sort by score in descending order for individual game pages
 
   const { data: game, isLoading: gameLoading } = useQuery<Game>({
@@ -35,6 +53,40 @@ export default function Leaderboard() {
   const { data: scores, isLoading: scoresLoading } = useQuery<Score[]>({
     queryKey: [`/api/games/${id}/scores`],
   });
+
+  // Set up random animation timer for overlay
+  useEffect(() => {
+    if (!game?.overlayImageUrl) return;
+
+    const triggerRandomAnimation = () => {
+      const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
+      setOverlayAnimation(randomAnimation);
+      setAnimationKey(prev => prev + 1);
+      
+      // Blur marquee image when overlay animation starts
+      setMarqueeBlurred(true);
+      
+      // Clear animation and remove blur after it completes
+      setTimeout(() => {
+        setOverlayAnimation("");
+        setMarqueeBlurred(false);
+      }, 2500);
+    };
+
+    // Trigger first animation after a random delay (8-15 seconds)
+    const initialDelay = Math.random() * 7000 + 8000;
+    const initialTimer = setTimeout(triggerRandomAnimation, initialDelay);
+
+    // Set up recurring animations every 20-30 seconds
+    const recurringTimer = setInterval(() => {
+      triggerRandomAnimation();
+    }, Math.random() * 10000 + 20000);
+
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(recurringTimer);
+    };
+  }, [game?.overlayImageUrl]);
 
   if (gameLoading) {
     return (
@@ -78,7 +130,32 @@ export default function Leaderboard() {
                 src={game.imageUrl || ''} 
                 alt={game.name} 
                 className="w-full h-auto object-contain rounded-[10px] brightness-125"
+                style={{
+                  filter: marqueeBlurred ? 'blur(2px)' : 'blur(0px)',
+                  transition: 'filter 0.3s ease-in-out'
+                }}
               />
+              
+              {/* Overlay Image with Random Animations and Floating Effect */}
+              {game.overlayImageUrl && (
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <img
+                    key={animationKey}
+                    src={game.overlayImageUrl}
+                    alt={`${game.name} overlay`}
+                    className={cn(
+                      "max-w-full max-h-full object-contain",
+                      overlayAnimation,
+                      // Add continuous floating when no animation is active
+                      !overlayAnimation && "animate-[overlayFloat_4s_ease-in-out_infinite]"
+                    )}
+                    style={{ 
+                      filter: "drop-shadow(2px 2px 4px rgba(0,0,0,0.5))",
+                      zIndex: 10
+                    }}
+                  />
+                </div>
+              )}
               {/* Lighter overlay for better brightness */}
               <div className="absolute inset-0 bg-black/30 rounded-[10px]"></div>
               
