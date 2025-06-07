@@ -112,17 +112,13 @@ export default function OverlayImageUploader({
   };
 
   return (
-    <div className="space-y-4">
-      <div className="text-sm font-medium mb-1 flex items-center gap-2">
-        <Layers className="h-4 w-4" />
-        Game Overlay Image (792×214) - Transparent Background
-      </div>
+    <div className="space-y-2">
+      <div className="text-xs font-medium text-muted-foreground">Overlay Image</div>
       
       {/* Image Preview Area */}
       <div 
-        className="border rounded-lg p-4 w-full h-[214px] flex items-center justify-center bg-card/50 relative"
+        className="border rounded p-2 w-full h-16 flex items-center justify-center bg-card/50 relative"
         style={{ 
-          maxWidth: '792px',
           backgroundImage: 'url("data:image/svg+xml,%3csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3e%3cdefs%3e%3cpattern id="a" patternUnits="userSpaceOnUse" width="20" height="20"%3e%3crect fill="%23f1f5f9" width="10" height="10"/%3e%3crect fill="%23e2e8f0" x="10" y="10" width="10" height="10"/%3e%3c/pattern%3e%3c/defs%3e%3crect width="100" height="100" fill="url(%23a)"/%3e%3c/svg%3e")'
         }}
       >
@@ -130,23 +126,20 @@ export default function OverlayImageUploader({
           <div className="relative w-full h-full">
             <img 
               src={previewUrl} 
-              alt="Game Overlay Preview" 
+              alt="Overlay Preview" 
               className="w-full h-full object-contain"
               onError={() => setPreviewUrl(null)}
             />
           </div>
         ) : (
-          <div className="flex flex-col items-center text-muted-foreground">
-            <Layers className="h-12 w-12 mb-2 opacity-50" />
-            <span>No overlay image selected</span>
-            <span className="text-xs mt-1">Recommended size: 792×214</span>
-            <span className="text-xs">Use transparent background</span>
+          <div className="flex items-center text-muted-foreground">
+            <Layers className="h-4 w-4 opacity-50" />
           </div>
         )}
       </div>
       
       {/* Upload Controls */}
-      <div className="flex flex-wrap gap-3 items-center">
+      <div className="flex gap-1">
         <input
           type="file"
           ref={fileInputRef}
@@ -159,20 +152,22 @@ export default function OverlayImageUploader({
           variant="outline" 
           onClick={() => fileInputRef.current?.click()}
           type="button"
-          className="flex items-center gap-2"
+          size="sm"
+          className="flex-1 text-xs h-6"
         >
-          <Layers className="h-4 w-4" />
-          Select Overlay
+          <Layers className="h-3 w-3 mr-1" />
+          Select
         </Button>
         
         <Button 
           onClick={handleUpload} 
           type="button"
           disabled={isUploading || !fileInputRef.current?.files?.[0]}
-          className="flex items-center gap-2"
+          size="sm"
+          className="flex-1 text-xs h-6"
         >
-          <Upload className="h-4 w-4" />
-          {isUploading ? "Uploading..." : "Upload & Save"}
+          <Upload className="h-3 w-3 mr-1" />
+          {isUploading ? "..." : "Upload"}
         </Button>
         
         {previewUrl && previewUrl !== currentOverlayUrl && (
@@ -180,18 +175,12 @@ export default function OverlayImageUploader({
             variant="ghost" 
             onClick={clearSelection}
             type="button"
-            className="flex items-center gap-2 text-muted-foreground"
+            size="sm"
+            className="h-6 w-6 p-0"
           >
-            <X className="h-4 w-4" />
-            Clear
+            <X className="h-3 w-3" />
           </Button>
         )}
-      </div>
-      
-      <div className="text-sm text-muted-foreground mt-2">
-        <p>Upload an overlay image that will appear on top of the marquee image with subtle animations.</p>
-        <p className="font-medium mt-1">Optimal dimensions: 792×214 pixels with transparent background</p>
-        <p className="text-xs mt-1">The overlay will animate randomly every 20-30 seconds when displayed.</p>
       </div>
     </div>
   );

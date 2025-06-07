@@ -112,34 +112,31 @@ export default function MarqueeImageUploader({
   };
 
   return (
-    <div className="space-y-4">
-      <div className="text-sm font-medium mb-1">Game Marquee Image (792×214)</div>
+    <div className="space-y-2">
+      <div className="text-xs font-medium text-muted-foreground">Marquee Image</div>
       
       {/* Image Preview Area */}
       <div 
-        className="border rounded-lg p-4 w-full h-[214px] flex items-center justify-center bg-card/50 relative"
-        style={{ maxWidth: '792px' }}
+        className="border rounded p-2 w-full h-16 flex items-center justify-center bg-card/50 relative"
       >
         {previewUrl ? (
           <div className="relative w-full h-full">
             <img 
               src={previewUrl} 
-              alt="Game Marquee Preview" 
+              alt="Marquee Preview" 
               className="w-full h-full object-contain"
               onError={() => setPreviewUrl(null)}
             />
           </div>
         ) : (
-          <div className="flex flex-col items-center text-muted-foreground">
-            <ImageIcon className="h-12 w-12 mb-2 opacity-50" />
-            <span>No image selected</span>
-            <span className="text-xs mt-1">Recommended size: 792×214</span>
+          <div className="flex items-center text-muted-foreground">
+            <ImageIcon className="h-4 w-4 opacity-50" />
           </div>
         )}
       </div>
       
       {/* Upload Controls */}
-      <div className="flex flex-wrap gap-3 items-center">
+      <div className="flex gap-1">
         <input
           type="file"
           ref={fileInputRef}
@@ -152,20 +149,22 @@ export default function MarqueeImageUploader({
           variant="outline" 
           onClick={() => fileInputRef.current?.click()}
           type="button"
-          className="flex items-center gap-2"
+          size="sm"
+          className="flex-1 text-xs h-6"
         >
-          <ImageIcon className="h-4 w-4" />
-          Select Image
+          <ImageIcon className="h-3 w-3 mr-1" />
+          Select
         </Button>
         
         <Button 
           onClick={handleUpload} 
           type="button"
           disabled={isUploading || !fileInputRef.current?.files?.[0]}
-          className="flex items-center gap-2"
+          size="sm"
+          className="flex-1 text-xs h-6"
         >
-          <Upload className="h-4 w-4" />
-          {isUploading ? "Uploading..." : "Upload & Save"}
+          <Upload className="h-3 w-3 mr-1" />
+          {isUploading ? "..." : "Upload"}
         </Button>
         
         {previewUrl && previewUrl !== currentImageUrl && (
@@ -173,17 +172,12 @@ export default function MarqueeImageUploader({
             variant="ghost" 
             onClick={clearSelection}
             type="button"
-            className="flex items-center gap-2 text-muted-foreground"
+            size="sm"
+            className="h-6 w-6 p-0"
           >
-            <X className="h-4 w-4" />
-            Clear
+            <X className="h-3 w-3" />
           </Button>
         )}
-      </div>
-      
-      <div className="text-sm text-muted-foreground mt-2">
-        <p>Upload a marquee image for this game. The image will be displayed at the top of the game's leaderboard page.</p>
-        <p className="font-medium mt-1">Optimal dimensions: 792×214 pixels</p>
       </div>
     </div>
   );

@@ -119,7 +119,7 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onIma
 
   return (
     <TableRow ref={setNodeRef} style={style}>
-      <TableCell>
+      <TableCell className="p-2">
         <div className="flex items-center gap-2">
           <div 
             {...attributes} 
@@ -134,27 +134,27 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onIma
             ) : (
               <Gamepad2 className="h-4 w-4 text-primary" />
             )}
-            <span className="font-medium">{game.name}</span>
+            <span className="font-medium text-sm">{game.name}</span>
           </div>
         </div>
       </TableCell>
       
-      <TableCell>
+      <TableCell className="p-2">
         <input
           type="text"
           value={game.subtitle || ""}
           onChange={(e) => onGameEdit(game.id, "subtitle", e.target.value)}
-          className="w-full px-2 py-1 text-sm border rounded"
+          className="w-full px-2 py-1 text-xs border rounded h-6"
           placeholder="Subtitle (optional)"
         />
       </TableCell>
       
-      <TableCell>
+      <TableCell className="p-2">
         <Select 
           value={game.type} 
           onValueChange={(value) => onGameEdit(game.id, "type", value)}
         >
-          <SelectTrigger className="w-full">
+          <SelectTrigger className="w-full h-6 text-xs">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -164,13 +164,12 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onIma
         </Select>
       </TableCell>
       
-      <TableCell>
-        <div className="flex flex-col gap-2">
+      <TableCell className="p-2">
+        <div className="space-y-1">
           <MarqueeImageUploader 
             gameId={game.id}
             currentImageUrl={game.imageUrl}
             onSuccess={() => {
-              // Refetch games after successful upload
               queryClient.invalidateQueries({ queryKey: ["/api/games"] });
             }}
           />
@@ -178,39 +177,38 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onIma
             gameId={game.id}
             currentOverlayUrl={game.overlayImageUrl}
             onSuccess={() => {
-              // Refetch games after successful upload
               queryClient.invalidateQueries({ queryKey: ["/api/games"] });
             }}
           />
         </div>
       </TableCell>
       
-      <TableCell>
+      <TableCell className="p-2">
         <div className="flex items-center space-x-2">
           <Checkbox
             checked={!game.hidden}
             onCheckedChange={(checked) => onGameEdit(game.id, "hidden", !checked)}
           />
-          <label className="text-sm">Visible</label>
+          <label className="text-xs">Visible</label>
         </div>
       </TableCell>
       
-      <TableCell>
-        <div className="flex flex-col gap-2">
+      <TableCell className="p-2">
+        <div className="flex gap-1">
           <Button 
             variant={game.hidden ? "outline" : "secondary"} 
             size="sm"
-            className="w-full"
+            className="text-xs h-6 px-2"
             onClick={() => onGameEdit(game.id, "hidden", !game.hidden)}
           >
-            {game.hidden ? "Unhide" : "Hide"}
+            {game.hidden ? "Show" : "Hide"}
           </Button>
           <Button 
             variant="destructive" 
             size="sm"
-            className="w-full"
+            className="text-xs h-6 px-2"
             onClick={() => {
-              if (window.confirm(`Are you sure you want to delete ${game.name}?\n\nThis will permanently remove this game and all its scores.`)) {
+              if (window.confirm(`Delete ${game.name}? This will remove the game and all scores.`)) {
                 onDelete(game.id);
               }
             }}
