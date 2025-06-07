@@ -279,9 +279,8 @@ export default function Admin() {
   const [animatedLogoPreview, setAnimatedLogoPreview] = useState<string | null>(null);
   const [isUploadingAnimatedLogo, setIsUploadingAnimatedLogo] = useState(false);
   
-  // State for sorting and filtering
+  // State for sorting
   const [sortBy, setSortBy] = useState("displayOrder");
-  const [filterType, setFilterType] = useState("all");
   
   // State for confirmation dialogs
   const [showClearDataDialog, setShowClearDataDialog] = useState(false);
@@ -417,17 +416,12 @@ export default function Admin() {
     }
   }, [games]);
 
-  // Filter and sort games
-  const filteredAndSortedGames = localGames
-    .filter(game => {
-      if (filterType === "all") return true;
-      return game.type === filterType;
-    })
-    .sort((a, b) => {
-      if (sortBy === "name") return a.name.localeCompare(b.name);
-      if (sortBy === "type") return a.type.localeCompare(b.type);
-      return (a.displayOrder || 0) - (b.displayOrder || 0);
-    });
+  // Sort games (no filtering - show all games)
+  const filteredAndSortedGames = localGames.sort((a, b) => {
+    if (sortBy === "name") return a.name.localeCompare(b.name);
+    if (sortBy === "type") return a.type.localeCompare(b.type);
+    return (a.displayOrder || 0) - (b.displayOrder || 0);
+  });
 
   // Add game mutation
   const addGame = useMutation({
@@ -698,6 +692,23 @@ export default function Admin() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
+              {/* Sort Option */}
+              <div className="flex justify-end">
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium">Sort by:</label>
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-32">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="displayOrder">Order</SelectItem>
+                      <SelectItem value="name">Name</SelectItem>
+                      <SelectItem value="type">Type</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
               {/* Add Game Form */}
               <div className="border rounded-lg p-4 bg-muted/50">
                 <h3 className="font-semibold mb-4">Add New Game</h3>
@@ -746,35 +757,7 @@ export default function Admin() {
                 </form>
               </div>
 
-              {/* Filters and Sorting */}
-              <div className="flex gap-4 flex-wrap">
-                <div className="flex items-center gap-2">
-                  <label className="text-sm font-medium">Filter:</label>
-                  <Select value={filterType} onValueChange={setFilterType}>
-                    <SelectTrigger className="w-32">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Games</SelectItem>
-                      <SelectItem value="arcade">Arcade</SelectItem>
-                      <SelectItem value="pinball">Pinball</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex items-center gap-2">
-                  <label className="text-sm font-medium">Sort by:</label>
-                  <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-32">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="displayOrder">Order</SelectItem>
-                      <SelectItem value="name">Name</SelectItem>
-                      <SelectItem value="type">Type</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+
 
               {/* Games Table */}
               <div className="border rounded-lg overflow-hidden">
