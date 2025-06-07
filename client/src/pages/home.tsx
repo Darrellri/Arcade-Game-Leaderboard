@@ -293,7 +293,7 @@ export default function Home() {
                   venueSettings.logoBackgroundColor === 'white' ? '#ffffff' :
                   venueSettings.logoBackgroundColor === 'black' ? '#000000' :
                   venueSettings.logoBackgroundColor === 'theme' ? 'hsl(var(--primary))' :
-                  'rgba(var(--card), 0.7)'
+                  'transparent'
               }}
               onClick={cycleColorScheme}
               title="Click to cycle through color schemes"
