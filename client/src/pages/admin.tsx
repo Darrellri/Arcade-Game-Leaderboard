@@ -899,8 +899,8 @@ export default function Admin() {
                           {/* Active selection indicator */}
                           {venueSettings.theme.primary === preset.primary && (
                             <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                              <div className="bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg">
-                                <div className="w-4 h-4 bg-green-500 rounded-full animate-pulse" />
+                              <div className="bg-white/90 backdrop-blur-sm rounded px-3 py-1 shadow-lg">
+                                <span className="text-xs font-bold text-green-600">ACTIVE</span>
                               </div>
                             </div>
                           )}
@@ -946,15 +946,7 @@ export default function Admin() {
 
 
 
-                        {/* Active indicator */}
-                        {venueSettings.theme.primary === preset.primary && (
-                          <div className="mt-2 pt-2 border-t border-primary/20">
-                            <div className="flex items-center justify-center gap-1 text-primary text-xs font-medium">
-                              <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
-                              Active
-                            </div>
-                          </div>
-                        )}
+
                       </CardContent>
                     </Card>
                   </div>
