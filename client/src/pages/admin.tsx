@@ -899,8 +899,8 @@ export default function Admin() {
                           {/* Active selection indicator */}
                           {venueSettings.theme.primary === preset.primary && (
                             <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                              <div className="bg-white/90 backdrop-blur-sm rounded px-3 py-1 shadow-lg">
-                                <span className="text-xs font-bold text-green-600">ACTIVE</span>
+                              <div className="bg-gradient-to-b from-white via-gray-50 to-gray-100 backdrop-blur-sm rounded-full px-4 py-1 shadow-lg border border-white/50 transform -translate-y-0.5">
+                                <span className="text-xs font-bold text-green-700 tracking-wider">ACTIVE</span>
                               </div>
                             </div>
                           )}
