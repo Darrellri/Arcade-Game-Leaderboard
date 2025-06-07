@@ -84,7 +84,10 @@ export default function GameCard({ game }: GameCardProps) {
                 </span>
               </div>
               <div className="text-lg font-bold text-white top-player-info text-center">
-                Top Score by {game.topScorerName || 'No scores yet'}
+                {game.topScorerName && game.topScorerName !== 'No scores yet' 
+                  ? `Top Score by ${game.topScorerName}`
+                  : 'No scores yet'
+                }
               </div>
               
               {game.topScoreDate && (
