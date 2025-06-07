@@ -337,15 +337,16 @@ export default function Leaderboard() {
           {nonChampionScores.map((score, index) => (
             <Card key={score.id} className="overflow-hidden">
               <CardContent className="p-4">
-                <div className="grid grid-cols-4 gap-4 items-center">
-                  {/* Marquee Image Column */}
-                  <div className="flex justify-center">
+                {/* Desktop Layout (4 columns) */}
+                <div className="hidden sm:grid sm:grid-cols-4 gap-4 items-center">
+                  {/* Marquee Image Column - Desktop */}
+                  <div className="flex justify-center pr-5">
                     {game.imageUrl ? (
                       <img 
                         src={game.imageUrl} 
                         alt={game.name}
                         className="w-24 h-auto object-contain rounded-[10px]"
-                        style={{ transform: 'scale(1.5)' }}
+                        style={{ transform: 'scale(1.3)' }}
                       />
                     ) : (
                       <div className="w-24 h-16 bg-muted rounded-[10px] flex items-center justify-center">
@@ -354,24 +355,55 @@ export default function Leaderboard() {
                     )}
                   </div>
                   
-                  {/* Rank Column */}
+                  {/* Rank Column - Desktop */}
                   <div className="flex justify-center">
                     <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold text-sm">
                       #{index + 2}
                     </div>
                   </div>
                   
-                  {/* Champion Name Column */}
+                  {/* Champion Name Column - Desktop */}
                   <div className="text-center">
-                    <h3 className="font-semibold text-2xl">{score.playerName}</h3>
+                    <h3 className="font-semibold text-5xl">{score.playerName}</h3>
                     <p className="text-xs text-muted-foreground">
                       {formatDate(new Date(score.submittedAt))} {formatTime(new Date(score.submittedAt))}
                     </p>
                   </div>
                   
-                  {/* Score Column */}
+                  {/* Score Column - Desktop */}
                   <div className="flex items-center justify-center gap-4">
                     <p className="text-3xl font-bold text-primary tabular-nums">
+                      {score.score.toLocaleString()}
+                    </p>
+                    <ShareScore 
+                      game={game} 
+                      score={score}
+                      variant="ghost" 
+                      size="sm"
+                    />
+                  </div>
+                </div>
+
+                {/* Mobile Layout (3 columns - no game name/subtitle) */}
+                <div className="sm:hidden grid grid-cols-3 gap-2 items-center">
+                  {/* Rank Column - Mobile */}
+                  <div className="flex justify-center">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold text-sm">
+                      #{index + 2}
+                    </div>
+                  </div>
+                  
+                  {/* Champion Name Column - Mobile */}
+                  <div className="text-center">
+                    <h3 className="font-semibold text-lg">{score.playerName}</h3>
+                    <p className="text-xs text-muted-foreground">
+                      {formatDate(new Date(score.submittedAt))} {formatTime(new Date(score.submittedAt))}
+                    </p>
+                  </div>
+                  
+                  {/* Score Column - Mobile */}
+                  <div className="flex items-center justify-center gap-2">
+                    <p className="text-xl font-bold text-primary tabular-nums">
                       {score.score.toLocaleString()}
                     </p>
                     <ShareScore 
