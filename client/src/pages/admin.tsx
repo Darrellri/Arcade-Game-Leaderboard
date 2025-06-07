@@ -255,6 +255,11 @@ export default function Admin() {
   const [clearDataConfirmation, setClearDataConfirmation] = useState("");
   const [restoreDataConfirmation, setRestoreDataConfirmation] = useState("");
 
+  // Local state for background override functionality
+  const [localBackgroundOverride, setLocalBackgroundOverride] = useState(false);
+  const [localAppearance, setLocalAppearance] = useState<"dark" | "light">("dark");
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+
   // Fetch venue settings
   const { data: venueSettings, isLoading: settingsLoading } = useQuery<VenueSettings>({
     queryKey: ["/api/admin/settings"],
@@ -265,6 +270,15 @@ export default function Admin() {
     queryKey: ["/api/games", { includeHidden: true }],
     queryFn: () => apiRequest("GET", "/api/games?includeHidden=true").then(res => res.json()),
   });
+
+  // Initialize local state when venue settings load
+  useEffect(() => {
+    if (venueSettings) {
+      setLocalBackgroundOverride(venueSettings.backgroundOverride || false);
+      setLocalAppearance(venueSettings.theme.appearance as "dark" | "light");
+      setHasUnsavedChanges(false);
+    }
+  }, [venueSettings]);
 
   // Form setup for venue settings
   const form = useForm<VenueSettings>({
@@ -955,37 +969,17 @@ export default function Admin() {
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="backgroundOverride"
-                  checked={false}
+                  checked={localBackgroundOverride}
                   onCheckedChange={(checked) => {
-                    if (checked) {
-                      // Enable override with smart default based on current theme type
-                      const isDarkTheme = venueSettings?.themePresets?.filter(p => p.appearance === 'dark').some(p => p.primary === venueSettings.theme.primary);
-                      const defaultAppearance = isDarkTheme ? 'dark' : 'light';
-                      
-                      updateSettings.mutate({
-                        theme: {
-                          primary: venueSettings.theme.primary,
-                          variant: venueSettings.theme.variant,
-                          appearance: defaultAppearance,
-                          radius: venueSettings.theme.radius,
-                        },
-                        backgroundOverride: true,
-                      });
-                    } else {
-                      // Disable override and revert to original theme setting
-                      const originalPreset = venueSettings?.themePresets?.find(p => p.primary === venueSettings.theme.primary);
+                    setLocalBackgroundOverride(!!checked);
+                    if (!checked && venueSettings) {
+                      // When disabling, revert to original theme appearance
+                      const originalPreset = venueSettings.themePresets?.find(p => p.primary === venueSettings.theme.primary);
                       if (originalPreset) {
-                        updateSettings.mutate({
-                          theme: {
-                            primary: originalPreset.primary,
-                            variant: originalPreset.variant,
-                            appearance: originalPreset.appearance,
-                            radius: originalPreset.radius,
-                          },
-                          backgroundOverride: false,
-                        });
+                        setLocalAppearance(originalPreset.appearance as "dark" | "light");
                       }
                     }
+                    setHasUnsavedChanges(true);
                   }}
                 />
                 <Label htmlFor="backgroundOverride" className="text-sm font-medium">
@@ -993,55 +987,107 @@ export default function Admin() {
                 </Label>
               </div>
 
-              <div className="space-y-3">
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Background Mode</span>
-                  <span className="font-medium capitalize">
-                    {venueSettings.theme.appearance}
-                  </span>
-                </div>
-
-                <div className="px-2">
-                  <Slider
-                    value={[venueSettings.theme.appearance === 'dark' ? 0 : 100]}
-                    max={100}
-                    step={50}
-                    className="w-full"
-                    onValueChange={(value) => {
-                      const bgValue = value[0];
-                      const newAppearance = bgValue < 50 ? "dark" : "light";
-                      
-                      if (newAppearance !== venueSettings.theme.appearance) {
-                        updateSettings.mutate({
-                          theme: {
-                            primary: venueSettings.theme.primary,
-                            variant: venueSettings.theme.variant,
-                            appearance: newAppearance,
-                            radius: venueSettings.theme.radius,
-                          },
-                          backgroundOverride: true,
-                        });
-                      }
-                    }}
-                    disabled={false}
-                  />
-                  <div className="flex justify-between text-xs text-muted-foreground mt-2">
-                    <span className="flex items-center gap-1">
-                      <Moon className="w-3 h-3" />
-                      Dark (7 themes)
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Sun className="w-3 h-3" />
-                      Light (3 themes)
+              {localBackgroundOverride && (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">Background Mode</span>
+                    <span className="font-medium capitalize">
+                      {localAppearance}
                     </span>
                   </div>
-                </div>
 
-                <div className="text-xs text-muted-foreground bg-muted/50 rounded p-2">
-                  <strong>How it works:</strong> When enabled, this setting overrides the background color of any active theme. 
-                  The slider starts at the appropriate position based on whether you have a dark theme (7 available) or light theme (3 available) selected.
+                  <div className="px-2">
+                    <Slider
+                      value={[localAppearance === 'dark' ? 0 : 100]}
+                      max={100}
+                      step={50}
+                      className="w-full"
+                      onValueChange={(value) => {
+                        const bgValue = value[0];
+                        const newAppearance = bgValue < 50 ? "dark" : "light";
+                        
+                        if (newAppearance !== localAppearance) {
+                          setLocalAppearance(newAppearance);
+                          setHasUnsavedChanges(true);
+
+                          // Apply real-time preview to the admin page
+                          if (venueSettings) {
+                            const previewTheme = {
+                              primary: venueSettings.theme.primary,
+                              variant: venueSettings.theme.variant,
+                              appearance: newAppearance,
+                              radius: venueSettings.theme.radius,
+                            };
+                            // Apply theme immediately for preview
+                            document.documentElement.setAttribute('data-theme', JSON.stringify(previewTheme));
+                          }
+                        }
+                      }}
+                    />
+                    <div className="flex justify-between text-xs text-muted-foreground mt-2">
+                      <span className="flex items-center gap-1">
+                        <Moon className="w-3 h-3" />
+                        Dark (7 themes)
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Sun className="w-3 h-3" />
+                        Light (3 themes)
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="text-xs text-muted-foreground bg-muted/50 rounded p-2">
+                    <strong>How it works:</strong> When enabled, this setting overrides the background color of any active theme. 
+                    The slider starts at the appropriate position based on whether you have a dark theme (7 available) or light theme (3 available) selected.
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {hasUnsavedChanges && (
+                <div className="flex items-center justify-between p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                  <div className="flex items-center gap-2 text-sm text-amber-800">
+                    <AlertCircle className="w-4 h-4" />
+                    You have unsaved changes to the background override
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        if (venueSettings) {
+                          setLocalBackgroundOverride(venueSettings.backgroundOverride || false);
+                          setLocalAppearance(venueSettings.theme.appearance as "dark" | "light");
+                          setHasUnsavedChanges(false);
+                          // Reset preview
+                          document.documentElement.setAttribute('data-theme', JSON.stringify(venueSettings.theme));
+                        }
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        if (venueSettings) {
+                          updateSettings.mutate({
+                            backgroundOverride: localBackgroundOverride,
+                            theme: {
+                              primary: venueSettings.theme.primary,
+                              variant: venueSettings.theme.variant,
+                              appearance: localAppearance,
+                              radius: venueSettings.theme.radius,
+                            },
+                          });
+                          setHasUnsavedChanges(false);
+                        }
+                      }}
+                      disabled={updateSettings.isPending}
+                    >
+                      {updateSettings.isPending ? "Saving..." : "Save Changes"}
+                    </Button>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
