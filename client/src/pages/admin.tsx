@@ -769,6 +769,11 @@ export default function Admin() {
               <Gamepad2 className="h-4 w-4" />
               Game Management
             </TabsTrigger>
+
+            <TabsTrigger value="notes" className="flex items-center gap-2">
+              <Info className="h-4 w-4" />
+              Notes
+            </TabsTrigger>
           </TabsList>
           
           <div className="flex space-x-2">
@@ -1610,6 +1615,198 @@ export default function Admin() {
                   <RefreshCw className="h-4 w-4 mr-2" />
                   Restore Demo Data
                 </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="notes" className="space-y-4">
+          <Card className="themed-card">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Info className="h-5 w-5" />
+                System Features & Documentation
+              </CardTitle>
+              <CardDescription>
+                Complete overview of the high score tracking system capabilities
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              
+              {/* Core Features */}
+              <div>
+                <h3 className="text-lg font-semibold mb-3 text-primary">🎮 Core Features</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Game Management</h4>
+                    <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+                      <li>• Add/edit arcade and pinball games</li>
+                      <li>• Drag-and-drop game ordering</li>
+                      <li>• Hide/show games from public view</li>
+                      <li>• Upload marquee and overlay images</li>
+                      <li>• Auto-generated QR codes for each game</li>
+                    </ul>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Score Tracking</h4>
+                    <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+                      <li>• Real-time high score tracking</li>
+                      <li>• Photo evidence with scores</li>
+                      <li>• Champion tracking with dates</li>
+                      <li>• Days as champion counter</li>
+                      <li>• Complete score history per game</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* User Experience */}
+              <div>
+                <h3 className="text-lg font-semibold mb-3 text-primary">📱 User Experience</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Mobile-First Design</h4>
+                    <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+                      <li>• Responsive layout for all devices</li>
+                      <li>• Touch-friendly interface</li>
+                      <li>• QR code scanner integration</li>
+                      <li>• Grid and list view modes</li>
+                      <li>• Optimized for arcade environment</li>
+                    </ul>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Navigation</h4>
+                    <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+                      <li>• Main leaderboard with all games</li>
+                      <li>• Individual game leaderboards</li>
+                      <li>• Score submission via QR scan</li>
+                      <li>• Social sharing capabilities</li>
+                      <li>• Smooth transitions and loading states</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Customization */}
+              <div>
+                <h3 className="text-lg font-semibold mb-3 text-primary">🎨 Customization</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Venue Branding</h4>
+                    <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+                      <li>• Custom venue name and branding</li>
+                      <li>• Logo upload (static and animated)</li>
+                      <li>• Multiple color themes</li>
+                      <li>• Customizable spacing controls</li>
+                      <li>• Typography and styling options</li>
+                    </ul>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Layout Controls</h4>
+                    <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+                      <li>• Game listing spacing (20px-200px)</li>
+                      <li>• Title box spacing (20px-200px)</li>
+                      <li>• Game subtitle formatting options</li>
+                      <li>• Champion badge display</li>
+                      <li>• Responsive scaling</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Admin Features */}
+              <div>
+                <h3 className="text-lg font-semibold mb-3 text-primary">⚙️ Admin Features</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Management Tools</h4>
+                    <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+                      <li>• Sortable game table with filters</li>
+                      <li>• Bulk operations and editing</li>
+                      <li>• Image upload with preview</li>
+                      <li>• Game type categorization</li>
+                      <li>• Display order management</li>
+                    </ul>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Data Management</h4>
+                    <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+                      <li>• Database backup and restore</li>
+                      <li>• Demo data reset functionality</li>
+                      <li>• Safe data clearing with confirmation</li>
+                      <li>• Real-time data synchronization</li>
+                      <li>• Error handling and validation</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Technical Features */}
+              <div>
+                <h3 className="text-lg font-semibold mb-3 text-primary">🔧 Technical Features</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Performance</h4>
+                    <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+                      <li>• PostgreSQL database with Drizzle ORM</li>
+                      <li>• React Query for caching and sync</li>
+                      <li>• Optimistic UI updates</li>
+                      <li>• Image optimization and caching</li>
+                      <li>• Hot reload development</li>
+                    </ul>
+                  </div>
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Security & Reliability</h4>
+                    <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+                      <li>• Input validation and sanitization</li>
+                      <li>• Error boundaries and fallbacks</li>
+                      <li>• Progressive loading states</li>
+                      <li>• Consistent data integrity</li>
+                      <li>• Graceful error handling</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Workflow */}
+              <div className="border-t pt-4">
+                <h3 className="text-lg font-semibold mb-3 text-primary">🔄 Typical Workflow</h3>
+                <div className="space-y-3">
+                  <div className="bg-muted/50 p-4 rounded-lg">
+                    <h4 className="font-medium mb-2">1. Setup Phase</h4>
+                    <p className="text-sm text-muted-foreground">Configure venue details, upload logo, add games with marquee images, arrange display order</p>
+                  </div>
+                  <div className="bg-muted/50 p-4 rounded-lg">
+                    <h4 className="font-medium mb-2">2. Player Interaction</h4>
+                    <p className="text-sm text-muted-foreground">Player scans QR code → submits score with photo → system validates and updates leaderboard</p>
+                  </div>
+                  <div className="bg-muted/50 p-4 rounded-lg">
+                    <h4 className="font-medium mb-2">3. Ongoing Management</h4>
+                    <p className="text-sm text-muted-foreground">Monitor scores, adjust settings, manage games, backup data, and customize appearance</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* System Info */}
+              <div className="border-t pt-4">
+                <h3 className="text-lg font-semibold mb-3 text-primary">📊 System Information</h3>
+                <div className="grid md:grid-cols-3 gap-4 text-sm">
+                  <div className="bg-card/50 p-3 rounded border">
+                    <h4 className="font-medium mb-1">Frontend</h4>
+                    <p className="text-muted-foreground">React + TypeScript</p>
+                    <p className="text-muted-foreground">Tailwind CSS + shadcn/ui</p>
+                  </div>
+                  <div className="bg-card/50 p-3 rounded border">
+                    <h4 className="font-medium mb-1">Backend</h4>
+                    <p className="text-muted-foreground">Express.js + Node.js</p>
+                    <p className="text-muted-foreground">PostgreSQL + Drizzle ORM</p>
+                  </div>
+                  <div className="bg-card/50 p-3 rounded border">
+                    <h4 className="font-medium mb-1">Features</h4>
+                    <p className="text-muted-foreground">QR Scanner + Image Upload</p>
+                    <p className="text-muted-foreground">Real-time Updates</p>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
