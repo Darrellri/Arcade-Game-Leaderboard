@@ -20,6 +20,78 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useToast } from "@/hooks/use-toast";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { RetroButton } from "@/components/ui/retro-button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { ParticleBurst, ShootingStar } from "@/components/ui/particle-burst";
+import { FloatingScore } from "@/components/ui/floating-score";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { Slider } from "@/components/ui/slider";
+import type { Game, VenueSettings, InsertGame } from "@shared/schema";
+import { insertGameSchema } from "@shared/schema";
+import { insertVenueSettingsSchema } from "@shared/schema";
+import { queryClient, apiRequest } from "@/lib/queryClient";
+import {
+  PlusCircle,
+  Settings,
+  Gamepad2,
+  CircleDot,
+  AlertTriangle,
+  RefreshCw,
+  Trash2,
+  Upload,
+  Camera,
+  Info,
+  Building2,
+  GripVertical
+} from "lucide-react";
+import { 
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import MarqueeImageUploader from "@/components/marquee-image-uploader";
+import OverlayImageUploader from "@/components/overlay-image-uploader";
 
 // Sortable table row component for admin game management
 function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onImageDelete }: { 
@@ -98,7 +170,7 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onIma
             currentImageUrl={game.imageUrl}
             onSuccess={() => {
               // Refetch games after successful upload
-              window.location.reload();
+              queryClient.invalidateQueries({ queryKey: ["/api/games"] });
             }}
           />
           <OverlayImageUploader 
@@ -106,37 +178,29 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onIma
             currentOverlayUrl={game.overlayImageUrl}
             onSuccess={() => {
               // Refetch games after successful upload
-              window.location.reload();
+              queryClient.invalidateQueries({ queryKey: ["/api/games"] });
             }}
           />
         </div>
       </TableCell>
       
-      <TableCell className="text-center">
-        <Badge variant={game.hidden ? "secondary" : "default"}>
-          {game.hidden ? "Hidden" : "Visible"}
-        </Badge>
+      <TableCell>
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            checked={!game.hidden}
+            onCheckedChange={(checked) => onGameEdit(game.id, "hidden", !checked)}
+          />
+          <label className="text-sm">Visible</label>
+        </div>
       </TableCell>
       
       <TableCell>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-2">
           <Button 
-            variant="outline" 
+            variant={game.hidden ? "outline" : "secondary"} 
             size="sm"
             className="w-full"
-            onClick={() => {
-              window.open(`/leaderboard/${game.id}`, '_blank');
-            }}
-          >
-            View
-          </Button>
-          <Button 
-            variant={game.hidden ? "default" : "secondary"} 
-            size="sm"
-            className="w-full"
-            onClick={() => {
-              onGameEdit(game.id, "hidden", !game.hidden);
-            }}
+            onClick={() => onGameEdit(game.id, "hidden", !game.hidden)}
           >
             {game.hidden ? "Unhide" : "Hide"}
           </Button>
@@ -157,79 +221,6 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onIma
     </TableRow>
   );
 }
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { RetroButton } from "@/components/ui/retro-button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { ParticleBurst, ShootingStar } from "@/components/ui/particle-burst";
-import { FloatingScore } from "@/components/ui/floating-score";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
-import { Slider } from "@/components/ui/slider";
-import type { Game, VenueSettings, InsertGame } from "@shared/schema";
-import { insertGameSchema } from "@shared/schema";
-import { insertVenueSettingsSchema } from "@shared/schema";
-import { queryClient, apiRequest } from "@/lib/queryClient";
-import {
-  PlusCircle,
-  Settings,
-  Gamepad2,
-  CircleDot,
-  AlertTriangle,
-  RefreshCw,
-  Trash2,
-  Upload,
-  Camera,
-  Info,
-  Building2,
-  GripVertical
-} from "lucide-react";
-import { 
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-
-import { Checkbox } from "@/components/ui/checkbox";
-import MarqueeImageUploader from "@/components/marquee-image-uploader";
-import OverlayImageUploader from "@/components/overlay-image-uploader";
 
 export default function Admin() {
   const { toast } = useToast();
@@ -248,118 +239,259 @@ export default function Admin() {
   const [restoreDataConfirmation, setRestoreDataConfirmation] = useState("");
 
   // Fetch venue settings
-  const { data: settings, isLoading: settingsLoading } = useQuery<VenueSettings>({
+  const { data: venueSettings, isLoading: settingsLoading } = useQuery<VenueSettings>({
     queryKey: ["/api/admin/settings"],
   });
 
-  // Fetch all games (including hidden ones for admin view)
+  // Fetch games for admin view (include hidden games)
   const { data: games, isLoading: gamesLoading } = useQuery<Game[]>({
     queryKey: ["/api/games", { includeHidden: true }],
     queryFn: () => apiRequest("GET", "/api/games?includeHidden=true").then(res => res.json()),
   });
 
-  // Local state for drag-and-drop games ordering
-  const [localGames, setLocalGames] = useState<Game[]>([]);
-
-  // Set local games when data loads and apply sorting/filtering
-  useEffect(() => {
-    if (games) {
-      let filteredGames = [...games];
-      
-      // Apply type filter
-      if (filterType !== "all") {
-        filteredGames = filteredGames.filter(game => game.type === filterType);
-      }
-      
-      // Apply sorting
-      filteredGames.sort((a, b) => {
-        switch (sortBy) {
-          case "name":
-            return a.name.localeCompare(b.name);
-          case "type":
-            return a.type.localeCompare(b.type);
-          case "displayOrder":
-          default:
-            return (a.displayOrder || 0) - (b.displayOrder || 0);
-        }
-      });
-      
-      setLocalGames(filteredGames);
-    }
-  }, [games, sortBy, filterType]);
-
-  // Initialize form with current settings
-  const form = useForm({
+  // Form setup for venue settings
+  const form = useForm<VenueSettings>({
     resolver: zodResolver(insertVenueSettingsSchema),
     defaultValues: {
       name: "",
       leaderboardName: "",
+      address: "",
       logoUrl: "",
       animatedLogoUrl: "",
       logoBackgroundColor: "transparent",
       hideLogoBorderShadow: "false",
+      theme: {
+        primary: "hsl(280, 100%, 70%)",
+        variant: "vibrant",
+        appearance: "dark",
+        radius: 0.75,
+      },
       subtitleBold: "false",
       subtitleAllCaps: "false", 
       subtitleWhite: "false",
-      gameSubtitleWhite: "false",
-      gameSubtitleBold: "false",
-      gameSubtitleItalic: "false",
       titleboxSpacing: "20",
-      gameSpacing: "30",
-      address: "",
+      themePresets: [
+        { primary: "hsl(280, 100%, 70%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
+        { primary: "hsl(15, 86%, 67%)", variant: "tint", appearance: "light", radius: 0.75 },
+        { primary: "hsl(142, 76%, 36%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
+        { primary: "hsl(221, 83%, 53%)", variant: "professional", appearance: "light", radius: 0.75 },
+      ],
     },
   });
 
-  // Update form when settings load
+  // Update form when venue settings load
   useEffect(() => {
-    if (settings) {
+    if (venueSettings) {
+      // Safely parse theme data
+      let themeData = venueSettings.theme;
+      if (typeof themeData === 'string') {
+        try {
+          themeData = JSON.parse(themeData);
+        } catch (e) {
+          themeData = {
+            primary: "hsl(280, 100%, 70%)",
+            variant: "vibrant",
+            appearance: "dark",
+            radius: 0.75
+          };
+        }
+      }
+
+      // Safely parse themePresets data
+      let themePresentData = venueSettings.themePresets;
+      if (typeof themePresentData === 'string') {
+        try {
+          themePresentData = JSON.parse(themePresentData);
+        } catch (e) {
+          themePresentData = [
+            { primary: "hsl(280, 100%, 70%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
+            { primary: "hsl(15, 86%, 67%)", variant: "tint", appearance: "light", radius: 0.75 },
+            { primary: "hsl(142, 76%, 36%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
+            { primary: "hsl(221, 83%, 53%)", variant: "professional", appearance: "light", radius: 0.75 },
+          ];
+        }
+      }
+
       form.reset({
-        name: settings.name || "",
-        leaderboardName: settings.leaderboardName || "",
-        logoUrl: settings.logoUrl || "",
-        animatedLogoUrl: settings.animatedLogoUrl || "",
-        logoBackgroundColor: settings.logoBackgroundColor || "transparent",
-        hideLogoBorderShadow: settings.hideLogoBorderShadow || "false",
-        subtitleBold: settings.subtitleBold || "false",
-        subtitleAllCaps: settings.subtitleAllCaps || "false",
-        subtitleWhite: settings.subtitleWhite || "false",
-        gameSubtitleWhite: settings.gameSubtitleWhite || "false",
-        gameSubtitleBold: settings.gameSubtitleBold || "false",
-        gameSubtitleItalic: settings.gameSubtitleItalic || "false",
-        titleboxSpacing: settings.titleboxSpacing || "20",
-        gameSpacing: settings.gameSpacing || "30",
-        address: settings.address || "",
+        ...venueSettings,
+        theme: themeData,
+        themePresets: themePresentData,
       });
       
-      // Set logo previews if they exist
-      if (settings.logoUrl) {
-        setLogoPreview(settings.logoUrl);
+      // Set logo previews
+      if (venueSettings.logoUrl) {
+        setLogoPreview(venueSettings.logoUrl);
       }
-      if (settings.animatedLogoUrl) {
-        setAnimatedLogoPreview(settings.animatedLogoUrl);
+      if (venueSettings.animatedLogoUrl) {
+        setAnimatedLogoPreview(venueSettings.animatedLogoUrl);
       }
     }
-  }, [settings, form]);
+  }, [venueSettings, form]);
 
-  // Handle logo URL changes
-  const handleLogoUrlChange = (url: string) => {
-    form.setValue("logoUrl", url);
-    setLogoPreview(url || null);
+  // Drag and drop sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // Local state for games
+  const [localGames, setLocalGames] = useState<Game[]>([]);
+
+  // Initialize local games when data loads
+  useEffect(() => {
+    if (games) {
+      setLocalGames(games);
+    }
+  }, [games]);
+
+  // Filter and sort games
+  const filteredAndSortedGames = localGames
+    .filter(game => {
+      if (filterType === "all") return true;
+      return game.type === filterType;
+    })
+    .sort((a, b) => {
+      if (sortBy === "name") return a.name.localeCompare(b.name);
+      if (sortBy === "type") return a.type.localeCompare(b.type);
+      return (a.displayOrder || 0) - (b.displayOrder || 0);
+    });
+
+  // Add game mutation
+  const addGame = useMutation({
+    mutationFn: async (data: InsertGame) => {
+      const response = await apiRequest("POST", "/api/games", data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/games"] });
+      toast({
+        title: "Game Added",
+        description: "New game has been added successfully.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message,
+      });
+    },
+  });
+
+  // Update game mutation
+  const updateGame = useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: Partial<Game> }) => {
+      const response = await apiRequest("PATCH", `/api/games/${id}`, data);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/games"] });
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive", 
+        title: "Error",
+        description: error.message,
+      });
+    },
+  });
+
+  // Delete game mutation
+  const deleteGame = useMutation({
+    mutationFn: async (id: number) => {
+      const response = await apiRequest("DELETE", `/api/games/${id}`);
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/games"] });
+      toast({
+        title: "Game Deleted",
+        description: "Game has been deleted successfully.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Error", 
+        description: error.message,
+      });
+    },
+  });
+
+  // Update game order mutation  
+  const updateGameOrder = useMutation({
+    mutationFn: async (gameOrders: { id: number; displayOrder: number }[]) => {
+      const response = await apiRequest("POST", "/api/games/reorder", { gameOrders });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/games"] });
+      toast({
+        title: "Order Updated",
+        description: "Game order has been updated successfully.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message,
+      });
+    },
+  });
+
+  // Handle drag end for game reordering
+  function handleDragEnd(event: any) {
+    const { active, over } = event;
+
+    if (active.id !== over?.id) {
+      setLocalGames((items) => {
+        const oldIndex = items.findIndex((item) => item.id === active.id);
+        const newIndex = items.findIndex((item) => item.id === over.id);
+        
+        const newItems = arrayMove(items, oldIndex, newIndex);
+        
+        // Update display orders
+        const gameOrders = newItems.map((game, index) => ({
+          id: game.id,
+          displayOrder: index
+        }));
+        
+        updateGameOrder.mutate(gameOrders);
+        
+        return newItems;
+      });
+    }
+  }
+
+  // Handle game field edits
+  const handleGameEdit = (id: number, field: string, value: string | boolean) => {
+    updateGame.mutate({ 
+      id, 
+      data: { [field]: value } 
+    });
   };
 
-  // Logo upload handler
+  // Handle game deletion
+  const handleGameDelete = (id: number) => {
+    deleteGame.mutate(id);
+  };
+
+  // Handle logo upload
   const handleLogoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('type', 'logo');
-
     try {
-      const response = await fetch('/api/upload', {
+      const formData = new FormData();
+      formData.append('logo', file);
+
+      const response = await fetch('/api/admin/upload-logo', {
         method: 'POST',
         body: formData,
+        credentials: 'include',
       });
 
       if (response.ok) {
@@ -382,20 +514,21 @@ export default function Admin() {
     }
   };
 
-  // Animated logo upload handler
+  // Handle animated logo upload  
   const handleAnimatedLogoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     setIsUploadingAnimatedLogo(true);
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('type', 'animated-logo');
 
     try {
-      const response = await fetch('/api/upload', {
+      const formData = new FormData();
+      formData.append('animatedLogo', file);
+
+      const response = await fetch('/api/admin/upload-animated-logo', {
         method: 'POST',
         body: formData,
+        credentials: 'include',
       });
 
       if (response.ok) {
@@ -442,140 +575,181 @@ export default function Admin() {
     },
   });
 
-  // Add game mutation
-  const addGame = useMutation({
-    mutationFn: async (data: InsertGame) => {
-      const response = await apiRequest("POST", "/api/games", data);
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/games"] });
-      setShowAddGameModal(false);
-      setNewGameData({ name: "", subtitle: "", imageUrl: "", type: "arcade" });
-      toast({
-        title: "Game Added",
-        description: "New game has been added successfully.",
-      });
-    },
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message,
-      });
-    },
-  });
+  const isLoading = gamesLoading || settingsLoading;
 
-  // Update game mutation
-  const updateGame = useMutation({
-    mutationFn: async ({ id, data }: { id: number; data: Partial<Game> }) => {
-      const response = await apiRequest("PUT", `/api/games/${id}`, data);
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/games"] });
-      toast({
-        title: "Game Updated",
-        description: "Game has been updated successfully.",
-      });
-    },
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message,
-      });
-    },
-  });
-  
-  // Delete a game
-  const deleteGame = useMutation({
-    mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/games/${id}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/games"] });
-      toast({
-        title: "Game Deleted",
-        description: "Game has been removed successfully.",
-      });
-    },
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message,
-      });
-    },
-  });
-  
-  // State for add game modal
-  const [showAddGameModal, setShowAddGameModal] = useState(false);
-  const [newGameData, setNewGameData] = useState({
-    name: "",
-    subtitle: "",
-    imageUrl: "",
-    type: "arcade"
-  });
-  
-  // Handle new game data changes
-  const handleNewGameChange = (field: string, value: string) => {
-    setNewGameData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-  
-  // State for tracking which game's image uploader is visible
-  const [selectedGameId, setSelectedGameId] = useState<number | null>(null);
-
-  if (settingsLoading) {
-    return <div>Loading settings...</div>;
+  if (isLoading) {
+    return (
+      <div className="container mx-auto p-6">
+        <div className="animate-pulse space-y-6">
+          <div className="h-8 bg-muted rounded w-1/4"></div>
+          <div className="h-96 bg-muted rounded"></div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="space-y-8 pb-16">
-      <div>
-        <h1 className="text-4xl font-bold tracking-tight">Admin Dashboard</h1>
-        <p className="text-muted-foreground mt-2">Manage your venue settings</p>
+    <div className="container mx-auto p-6 max-w-7xl space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+          <p className="text-muted-foreground">
+            Manage your arcade games and venue settings
+          </p>
+        </div>
+        <Link href="/" className="inline-flex">
+          <Button variant="outline">
+            Back to Home
+          </Button>
+        </Link>
       </div>
 
-      <Tabs defaultValue="venue">
-        <div className="flex items-center justify-between mb-6">
-          <TabsList>
-            <TabsTrigger value="venue" className="flex items-center gap-2">
-              <Building2 className="h-4 w-4" />
-              Venue Details
-            </TabsTrigger>
+      <Tabs defaultValue="games" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="games">Games Management</TabsTrigger>
+          <TabsTrigger value="venue">Venue Settings</TabsTrigger>
+          <TabsTrigger value="notes">Notes</TabsTrigger>
+        </TabsList>
 
-            <TabsTrigger value="games" className="flex items-center gap-2">
-              <Gamepad2 className="h-4 w-4" />
-              Game Management
-            </TabsTrigger>
-
-            <TabsTrigger value="notes" className="flex items-center gap-2">
-              <Info className="h-4 w-4" />
-              Notes
-            </TabsTrigger>
-          </TabsList>
-          
-          <div className="flex space-x-2">
-            <Button variant="outline" size="sm" asChild className="h-8 px-3">
-              <Link href="/">Home</Link>
-            </Button>
-            <Button variant="outline" size="sm" asChild className="h-8 px-3">
-              <Link href="/scan">Scan</Link>
-            </Button>
-            <Button variant="outline" size="sm" asChild className="h-8 px-3">
-              <Link href="/admin">Admin</Link>
-            </Button>
-          </div>
-        </div>
-
-        <TabsContent value="venue" className="space-y-4">
-          <Card className="themed-card">
+        <TabsContent value="games" className="space-y-6">
+          <Card>
             <CardHeader>
-              <CardTitle>Venue Information</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Gamepad2 className="h-5 w-5" />
+                Games Management
+              </CardTitle>
+              <CardDescription>
+                Add, edit, and organize your arcade games
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Add Game Form */}
+              <div className="border rounded-lg p-4 bg-muted/50">
+                <h3 className="font-semibold mb-4">Add New Game</h3>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const formData = new FormData(e.currentTarget);
+                    const name = formData.get("name") as string;
+                    const subtitle = formData.get("subtitle") as string;
+                    const type = formData.get("type") as "arcade" | "pinball";
+                    
+                    if (name) {
+                      addGame.mutate({
+                        name,
+                        subtitle: subtitle || undefined,
+                        type,
+                        displayOrder: (games?.length || 0),
+                      });
+                      e.currentTarget.reset();
+                    }
+                  }}
+                  className="grid grid-cols-1 md:grid-cols-4 gap-4"
+                >
+                  <Input
+                    name="name"
+                    placeholder="Game name"
+                    required
+                  />
+                  <Input
+                    name="subtitle"
+                    placeholder="Subtitle (optional)"
+                  />
+                  <Select name="type" defaultValue="arcade">
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="arcade">Arcade</SelectItem>
+                      <SelectItem value="pinball">Pinball</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button type="submit" disabled={addGame.isPending}>
+                    <PlusCircle className="h-4 w-4 mr-2" />
+                    Add Game
+                  </Button>
+                </form>
+              </div>
+
+              {/* Filters and Sorting */}
+              <div className="flex gap-4 flex-wrap">
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium">Filter:</label>
+                  <Select value={filterType} onValueChange={setFilterType}>
+                    <SelectTrigger className="w-32">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Games</SelectItem>
+                      <SelectItem value="arcade">Arcade</SelectItem>
+                      <SelectItem value="pinball">Pinball</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium">Sort by:</label>
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-32">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="displayOrder">Order</SelectItem>
+                      <SelectItem value="name">Name</SelectItem>
+                      <SelectItem value="type">Type</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {/* Games Table */}
+              <div className="border rounded-lg overflow-hidden">
+                <DndContext
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={handleDragEnd}
+                >
+                  <SortableContext
+                    items={filteredAndSortedGames.map(g => g.id)}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Game</TableHead>
+                          <TableHead>Subtitle</TableHead>
+                          <TableHead>Type</TableHead>
+                          <TableHead>Images</TableHead>
+                          <TableHead>Visibility</TableHead>
+                          <TableHead>Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {filteredAndSortedGames.map((game) => (
+                          <SortableGameTableRow
+                            key={game.id}
+                            game={game}
+                            onGameEdit={handleGameEdit}
+                            onDelete={handleGameDelete}
+                            onImageUpload={() => {}}
+                            onImageDelete={() => {}}
+                          />
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </SortableContext>
+                </DndContext>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="venue" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Building2 className="h-5 w-5" />
+                Venue Information
+              </CardTitle>
               <CardDescription>
                 Update your venue's basic information
               </CardDescription>
@@ -654,171 +828,6 @@ export default function Admin() {
                       )}
                     />
 
-                    {/* Styling Options - Side by side boxes */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                      {/* Subtitle Styling Options */}
-                      <div className="border rounded-lg p-4 bg-card/50">
-                        <h4 className="text-base font-semibold mb-4 text-primary">Subtitle Styling Options</h4>
-                        <div className="space-y-3">
-                          <FormField
-                            control={form.control}
-                            name="subtitleBold"
-                            render={({ field }) => (
-                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value === "true"}
-                                    onCheckedChange={(checked) => {
-                                      field.onChange(checked ? "true" : "false");
-                                    }}
-                                  />
-                                </FormControl>
-                                <div className="space-y-1 leading-none">
-                                  <FormLabel>
-                                    Make subtitle bold
-                                  </FormLabel>
-                                  <p className="text-xs text-muted-foreground">
-                                    Display the venue name in bold font weight
-                                  </p>
-                                </div>
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={form.control}
-                            name="subtitleAllCaps"
-                            render={({ field }) => (
-                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value === "true"}
-                                    onCheckedChange={(checked) => {
-                                      field.onChange(checked ? "true" : "false");
-                                    }}
-                                  />
-                                </FormControl>
-                                <div className="space-y-1 leading-none">
-                                  <FormLabel>
-                                    Display subtitle in all caps
-                                  </FormLabel>
-                                  <p className="text-xs text-muted-foreground">
-                                    Transform venue name to uppercase letters
-                                  </p>
-                                </div>
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={form.control}
-                            name="subtitleWhite"
-                            render={({ field }) => (
-                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value === "true"}
-                                    onCheckedChange={(checked) => {
-                                      field.onChange(checked ? "true" : "false");
-                                    }}
-                                  />
-                                </FormControl>
-                                <div className="space-y-1 leading-none">
-                                  <FormLabel>
-                                    Use white color for subtitle
-                                  </FormLabel>
-                                  <p className="text-xs text-muted-foreground">
-                                    Display subtitle in white instead of theme color
-                                  </p>
-                                </div>
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Game Listing Styling Options */}
-                      <div className="border rounded-lg p-4 bg-card/50">
-                        <h4 className="text-base font-semibold mb-4 text-primary">Game Listing Styling Options</h4>
-                        <div className="space-y-3">
-                          <FormField
-                            control={form.control}
-                            name="gameSubtitleWhite"
-                            render={({ field }) => (
-                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value === "true"}
-                                    onCheckedChange={(checked) => {
-                                      field.onChange(checked ? "true" : "false");
-                                    }}
-                                  />
-                                </FormControl>
-                                <div className="space-y-1 leading-none">
-                                  <FormLabel>
-                                    Use white color for game subtitles
-                                  </FormLabel>
-                                  <p className="text-xs text-muted-foreground">
-                                    Display game subtitles in white instead of theme color
-                                  </p>
-                                </div>
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={form.control}
-                            name="gameSubtitleBold"
-                            render={({ field }) => (
-                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value === "true"}
-                                    onCheckedChange={(checked) => {
-                                      field.onChange(checked ? "true" : "false");
-                                    }}
-                                  />
-                                </FormControl>
-                                <div className="space-y-1 leading-none">
-                                  <FormLabel>
-                                    Make game subtitles bold
-                                  </FormLabel>
-                                  <p className="text-xs text-muted-foreground">
-                                    Display game subtitles in bold font weight
-                                  </p>
-                                </div>
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={form.control}
-                            name="gameSubtitleItalic"
-                            render={({ field }) => (
-                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value === "true"}
-                                    onCheckedChange={(checked) => {
-                                      field.onChange(checked ? "true" : "false");
-                                    }}
-                                  />
-                                </FormControl>
-                                <div className="space-y-1 leading-none">
-                                  <FormLabel>
-                                    Make game subtitles italic
-                                  </FormLabel>
-                                  <p className="text-xs text-muted-foreground">
-                                    Display game subtitles in italic font style
-                                  </p>
-                                </div>
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-                      </div>
-                    </div>
-
                     <Button type="submit" disabled={updateSettings.isPending}>
                       {updateSettings.isPending ? "Saving..." : "Save Changes"}
                     </Button>
@@ -856,6 +865,31 @@ export default function Admin() {
                     )}
                   </div>
 
+                  {/* Static Logo Preview */}
+                  {logoPreview && !animatedLogoPreview && (
+                    <div className="space-y-2">
+                      <h4 className="font-medium">Current Static Logo Preview:</h4>
+                      <img 
+                        src={logoPreview} 
+                        alt="Venue Logo" 
+                        className="max-w-xs max-h-24 object-contain border rounded"
+                      />
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => {
+                          setLogoPreview(null);
+                          form.setValue("logoUrl", "");
+                        }}
+                      >
+                        Remove Static Logo
+                      </Button>
+                      <div className="text-xs text-muted-foreground">
+                        Image URL: {logoPreview}
+                      </div>
+                    </div>
+                  )}
+
                   {/* Video Logo Preview (takes precedence) */}
                   {animatedLogoPreview && (
                     <div className="space-y-2">
@@ -881,31 +915,6 @@ export default function Admin() {
                       <div className="text-xs text-muted-foreground">
                         Video URL: {animatedLogoPreview}
                       </div>
-                    </div>
-                  )}
-
-                  {/* Static Logo Preview (backup/fallback) */}
-                  {logoPreview && (
-                    <div className="space-y-2">
-                      <h4 className="font-medium">
-                        {animatedLogoPreview ? "Backup Static Logo:" : "Current Static Logo Preview:"}
-                      </h4>
-                      <img src={logoPreview} alt="Logo preview" className="max-w-xs max-h-24 object-contain border rounded" />
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        onClick={() => {
-                          setLogoPreview(null);
-                          form.setValue("logoUrl", "");
-                        }}
-                      >
-                        Remove Static Logo
-                      </Button>
-                      {animatedLogoPreview && (
-                        <div className="text-xs text-muted-foreground">
-                          This static logo is kept as backup. Video logo will be displayed when available.
-                        </div>
-                      )}
                     </div>
                   )}
 
@@ -939,31 +948,12 @@ export default function Admin() {
                           </FormItem>
                         )}
                       />
+                    </div>
+                  )}
 
-                      <FormField
-                        control={form.control}
-                        name="hideLogoBorderShadow"
-                        render={({ field }) => (
-                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value === "true"}
-                                onCheckedChange={(checked) => {
-                                  field.onChange(checked ? "true" : "false");
-                                }}
-                              />
-                            </FormControl>
-                            <div className="space-y-1 leading-none">
-                              <FormLabel>
-                                Hide the border and shadow around logo?
-                              </FormLabel>
-                              <p className="text-xs text-muted-foreground">
-                                Removes visual styling around the logo display area
-                              </p>
-                            </div>
-                          </FormItem>
-                        )}
-                      />
+                  {animatedLogoPreview && logoPreview && (
+                    <div className="text-xs text-muted-foreground mt-2 text-center bg-blue-50 dark:bg-blue-900/20 p-2 rounded">
+                      Video logo is displayed. Image logo is saved as backup.
                     </div>
                   )}
                 </div>
@@ -972,57 +962,77 @@ export default function Admin() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="games" className="space-y-4">
-          <Card className="themed-card">
+        <TabsContent value="notes" className="space-y-6">
+          <Card>
             <CardHeader>
-              <CardTitle>Game Management</CardTitle>
+              <CardTitle>System Notes & Features</CardTitle>
               <CardDescription>
-                Manage your arcade games
+                Documentation of platform capabilities and features
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <p>Game management functionality will be implemented here.</p>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            <CardContent className="prose prose-sm max-w-none dark:prose-invert">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Core Features</h3>
+                  <ul className="space-y-2">
+                    <li><strong>Game Management:</strong> Add, edit, reorder, and delete arcade/pinball games</li>
+                    <li><strong>Score Tracking:</strong> Players can submit scores with photo validation</li>
+                    <li><strong>QR Code System:</strong> Venue-specific QR codes for score submission</li>
+                    <li><strong>Real-time Leaderboards:</strong> Dynamic ranking system with high score tracking</li>
+                    <li><strong>Mobile Responsive:</strong> Optimized for all device sizes</li>
+                  </ul>
+                </div>
 
-        <TabsContent value="notes" className="space-y-4">
-          <Card className="themed-card">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Info className="h-5 w-5" />
-                System Features & Documentation
-              </CardTitle>
-              <CardDescription>
-                Complete overview of the high score tracking system capabilities
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              
-              {/* Core Features */}
-              <div>
-                <h3 className="text-lg font-semibold mb-3 text-primary">🎮 Core Features</h3>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <h4 className="font-medium">Game Management</h4>
-                    <ul className="text-sm text-muted-foreground space-y-1 ml-4">
-                      <li>• Add/edit arcade and pinball games</li>
-                      <li>• Drag-and-drop game ordering</li>
-                      <li>• Hide/show games from public view</li>
-                      <li>• Upload marquee and overlay images</li>
-                      <li>• Auto-generated QR codes for each game</li>
-                    </ul>
-                  </div>
-                  <div className="space-y-2">
-                    <h4 className="font-medium">Score Tracking</h4>
-                    <ul className="text-sm text-muted-foreground space-y-1 ml-4">
-                      <li>• Real-time high score tracking</li>
-                      <li>• Photo evidence with scores</li>
-                      <li>• Champion tracking with dates</li>
-                      <li>• Days as champion counter</li>
-                      <li>• Complete score history per game</li>
-                    </ul>
-                  </div>
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Venue Customization</h3>
+                  <ul className="space-y-2">
+                    <li><strong>Logo Support:</strong> Static images and animated videos (MP4/WebM)</li>
+                    <li><strong>Theme System:</strong> Multiple color schemes with click-to-cycle functionality</li>
+                    <li><strong>Layout Controls:</strong> Customizable spacing, typography, and visual styling</li>
+                    <li><strong>Branding Options:</strong> Venue name, leaderboard titles, and address display</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Admin Capabilities</h3>
+                  <ul className="space-y-2">
+                    <li><strong>Drag & Drop Reordering:</strong> Intuitive game organization</li>
+                    <li><strong>Image Management:</strong> Marquee and overlay image uploads per game</li>
+                    <li><strong>Visibility Controls:</strong> Show/hide games from public view</li>
+                    <li><strong>Bulk Operations:</strong> Filter and sort games by type or name</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Player Experience</h3>
+                  <ul className="space-y-2">
+                    <li><strong>Score Submission:</strong> Photo evidence required for verification</li>
+                    <li><strong>Champion Recognition:</strong> Special highlighting for #1 scores</li>
+                    <li><strong>Social Features:</strong> Score sharing and friendly competition</li>
+                    <li><strong>Game Discovery:</strong> Grid and list view modes</li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Technical Stack</h3>
+                  <ul className="space-y-2">
+                    <li><strong>Frontend:</strong> React, TypeScript, Tailwind CSS</li>
+                    <li><strong>Backend:</strong> Express.js, Node.js</li>
+                    <li><strong>Database:</strong> PostgreSQL with Drizzle ORM</li>
+                    <li><strong>UI Components:</strong> Shadcn/ui with custom arcade theming</li>
+                    <li><strong>File Storage:</strong> Local upload system for images/videos</li>
+                  </ul>
+                </div>
+
+                <div className="bg-muted p-4 rounded-lg">
+                  <h4 className="font-semibold mb-2">Venue Information</h4>
+                  <p><strong>Winona Axe and Arcade</strong></p>
+                  <p>Operating Hours:</p>
+                  <ul className="ml-4">
+                    <li>Wednesday-Friday: 4pm-10pm</li>
+                    <li>Saturday: 11am-10pm</li>
+                    <li>Sunday: noon-6pm</li>
+                  </ul>
                 </div>
               </div>
             </CardContent>
