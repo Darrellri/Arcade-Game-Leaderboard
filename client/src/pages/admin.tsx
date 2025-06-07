@@ -907,6 +907,48 @@ export default function Admin() {
                           </code>
                         </div>
 
+                        {/* Background Darkness/Lightness Slider */}
+                        <div className="mt-3 pt-2 border-t border-border/50">
+                          <div className="text-xs text-muted-foreground mb-2 text-center">
+                            Background Override
+                          </div>
+                          <div className="px-1">
+                            <Slider
+                              value={[50]}
+                              max={100}
+                              step={1}
+                              className="w-full"
+                              onValueChange={(value) => {
+                                // Calculate background darkness/lightness
+                                const bgValue = value[0];
+                                const isDark = bgValue < 50;
+                                const intensity = isDark ? (50 - bgValue) * 2 : (bgValue - 50) * 2;
+                                
+                                // Override the theme's appearance setting
+                                updateSettings.mutate({
+                                  theme: {
+                                    name: preset.name,
+                                    primary: preset.primary,
+                                    variant: preset.variant,
+                                    appearance: isDark ? "dark" : "light",
+                                    radius: preset.radius,
+                                  },
+                                });
+                              }}
+                            />
+                            <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                              <span className="flex items-center gap-1">
+                                <Moon className="w-2 h-2" />
+                                Dark
+                              </span>
+                              <span className="flex items-center gap-1">
+                                <Sun className="w-2 h-2" />
+                                Light
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
                         {/* Active indicator */}
                         {venueSettings.theme.primary === preset.primary && (
                           <div className="mt-2 pt-2 border-t border-primary/20">
