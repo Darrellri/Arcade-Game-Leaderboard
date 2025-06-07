@@ -997,49 +997,67 @@ export default function Admin() {
                     </span>
                   </div>
 
-                  <div className="px-2">
-                    <Slider
-                      value={[localAppearance === 'dark' ? 0 : 100]}
-                      max={100}
-                      step={50}
-                      className="w-full"
-                      onValueChange={(value) => {
-                        const bgValue = value[0];
-                        const newAppearance = bgValue < 50 ? "dark" : "light";
-                        
-                        if (newAppearance !== localAppearance) {
-                          setLocalAppearance(newAppearance);
-                          setHasUnsavedChanges(true);
+                  <div className="space-y-3">
+                    {/* Toggle Buttons */}
+                    <div className="flex rounded-lg border p-1 bg-muted/50">
+                      <Button
+                        variant={localAppearance === 'dark' ? 'default' : 'ghost'}
+                        size="sm"
+                        className="flex-1 flex items-center gap-2"
+                        onClick={() => {
+                          if (localAppearance !== 'dark') {
+                            setLocalAppearance('dark');
+                            setHasUnsavedChanges(true);
 
-                          // Apply real-time preview to the admin page
-                          if (venueSettings) {
-                            const previewTheme = {
-                              primary: venueSettings.theme.primary,
-                              variant: venueSettings.theme.variant,
-                              appearance: newAppearance,
-                              radius: venueSettings.theme.radius,
-                            };
-                            // Apply theme immediately for preview
-                            document.documentElement.setAttribute('data-theme', JSON.stringify(previewTheme));
+                            // Apply real-time preview to the admin page
+                            if (venueSettings) {
+                              const previewTheme = {
+                                primary: venueSettings.theme.primary,
+                                variant: venueSettings.theme.variant,
+                                appearance: 'dark' as const,
+                                radius: venueSettings.theme.radius,
+                              };
+                              // Apply theme immediately for preview
+                              document.documentElement.setAttribute('data-theme', JSON.stringify(previewTheme));
+                            }
                           }
-                        }
-                      }}
-                    />
-                    <div className="flex justify-between text-xs text-muted-foreground mt-2">
-                      <span className="flex items-center gap-1">
-                        <Moon className="w-3 h-3" />
+                        }}
+                      >
+                        <Moon className="w-4 h-4" />
                         Dark (7 themes)
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Sun className="w-3 h-3" />
+                      </Button>
+                      <Button
+                        variant={localAppearance === 'light' ? 'default' : 'ghost'}
+                        size="sm"
+                        className="flex-1 flex items-center gap-2"
+                        onClick={() => {
+                          if (localAppearance !== 'light') {
+                            setLocalAppearance('light');
+                            setHasUnsavedChanges(true);
+
+                            // Apply real-time preview to the admin page
+                            if (venueSettings) {
+                              const previewTheme = {
+                                primary: venueSettings.theme.primary,
+                                variant: venueSettings.theme.variant,
+                                appearance: 'light' as const,
+                                radius: venueSettings.theme.radius,
+                              };
+                              // Apply theme immediately for preview
+                              document.documentElement.setAttribute('data-theme', JSON.stringify(previewTheme));
+                            }
+                          }
+                        }}
+                      >
+                        <Sun className="w-4 h-4" />
                         Light (3 themes)
-                      </span>
+                      </Button>
                     </div>
                   </div>
 
                   <div className="text-xs text-muted-foreground bg-muted/50 rounded p-2">
                     <strong>How it works:</strong> When enabled, this setting overrides the background color of any active theme. 
-                    The slider starts at the appropriate position based on whether you have a dark theme (7 available) or light theme (3 available) selected.
+                    Click the buttons above to switch between dark and light modes with real-time preview.
                   </div>
                 </div>
               )}
