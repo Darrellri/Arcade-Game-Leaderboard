@@ -692,6 +692,35 @@ export default function Admin() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
+              {/* Section Navigation */}
+              <div className="flex flex-wrap gap-2 p-4 bg-muted/30 rounded-lg border">
+                <h4 className="text-sm font-medium text-muted-foreground mr-4">Quick Navigation:</h4>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => document.getElementById('color-schemes-section')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="h-7 px-3 text-xs"
+                >
+                  Color Schemes
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => document.getElementById('background-color-section')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="h-7 px-3 text-xs"
+                >
+                  Custom Background Color
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => document.getElementById('display-view-section')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="h-7 px-3 text-xs"
+                >
+                  Display View Options
+                </Button>
+              </div>
+
               {/* Sort Option */}
               <div className="flex justify-end">
                 <div className="flex items-center gap-2">
@@ -800,7 +829,7 @@ export default function Admin() {
           </Card>
 
           {/* Color Schemes Section */}
-          <Card className="overflow-hidden">
+          <Card id="color-schemes-section" className="overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-muted/50 to-background border-b">
               <CardTitle className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-primary/10">
@@ -977,7 +1006,7 @@ export default function Admin() {
           </Card>
 
           {/* Custom Background Color */}
-          <Card>
+          <Card id="background-color-section">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <div className="p-1.5 rounded-lg bg-secondary/50">
@@ -1199,7 +1228,7 @@ export default function Admin() {
               )}
 
               {/* Display View Options */}
-              <div className="space-y-6">
+              <div id="display-view-section" className="space-y-6">
                 <div>
                   <h3 className="text-lg font-semibold mb-4">Display View Options</h3>
                   <p className="text-sm text-muted-foreground mb-4">
