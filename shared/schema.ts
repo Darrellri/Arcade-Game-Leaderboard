@@ -66,6 +66,28 @@ export const venueSettings = pgTable("venue_settings", {
   themePresets: json("theme_presets"),
   backgroundOverride: boolean("background_override").default(false),
   customBackgroundColor: text("custom_background_color").default("#000000"),
+  
+  // Display View Settings
+  dualViewSpeed: integer("dual_view_speed").default(8),
+  dualViewAnimations: boolean("dual_view_animations").default(true),
+  dualViewHideHeader: boolean("dual_view_hide_header").default(false),
+  
+  singleViewSpeed: integer("single_view_speed").default(6),
+  singleViewAnimations: boolean("single_view_animations").default(true),
+  singleViewHideHeader: boolean("single_view_hide_header").default(false),
+  singleViewSize: text("single_view_size").default("large"),
+  
+  scrollViewSpeed: integer("scroll_view_speed").default(50),
+  scrollViewSpacing: integer("scroll_view_spacing").default(200),
+  scrollViewAnimations: boolean("scroll_view_animations").default(true),
+  scrollViewStickyHeader: boolean("scroll_view_sticky_header").default(true),
+  scrollViewLazyLoad: boolean("scroll_view_lazy_load").default(false),
+  
+  // Animation System Settings
+  animationCategories: json("animation_categories"),
+  animationTiming: text("animation_timing").default("0.8"),
+  animationDelay: text("animation_delay").default("0.3"),
+  
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
@@ -103,6 +125,36 @@ export const venueSettingsSchema = z.object({
   })).optional(),
   backgroundOverride: z.boolean().optional(),
   customBackgroundColor: z.string().optional(),
+  
+  // Display View Settings
+  dualViewSpeed: z.number().optional(),
+  dualViewAnimations: z.boolean().optional(),
+  dualViewHideHeader: z.boolean().optional(),
+  
+  singleViewSpeed: z.number().optional(),
+  singleViewAnimations: z.boolean().optional(),
+  singleViewHideHeader: z.boolean().optional(),
+  singleViewSize: z.string().optional(),
+  
+  scrollViewSpeed: z.number().optional(),
+  scrollViewSpacing: z.number().optional(),
+  scrollViewAnimations: z.boolean().optional(),
+  scrollViewStickyHeader: z.boolean().optional(),
+  scrollViewLazyLoad: z.boolean().optional(),
+  
+  // Animation System Settings
+  animationCategories: z.object({
+    fade: z.boolean().optional(),
+    slide: z.boolean().optional(),
+    zoom: z.boolean().optional(),
+    bounce: z.boolean().optional(),
+    rotation: z.boolean().optional(),
+    elastic: z.boolean().optional(),
+    fun: z.boolean().optional(),
+    dramatic: z.boolean().optional(),
+  }).optional(),
+  animationTiming: z.string().optional(),
+  animationDelay: z.string().optional(),
 });
 
 export const insertGameSchema = createInsertSchema(games).omit({ 
