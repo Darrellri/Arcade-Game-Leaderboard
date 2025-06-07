@@ -296,9 +296,9 @@ function DualView({ games, animationsEnabled, hideHeader }: {
               animationDelay: `${index * 0.4}s`,
               animationFillMode: 'both',
               position: index === 0 ? 'relative' : 'absolute',
-              top: index === 1 ? '-64px' : '0', // 20% of 321px height = 64px overlap
+              top: index === 1 ? '-289px' : '0', // 90% of 321px height = 289px overlap
               zIndex: index === 0 ? 1 : 2,
-              marginBottom: index === 0 ? '257px' : '0' // Reserve space for bottom image (321px - 64px overlap)
+              marginBottom: index === 0 ? '32px' : '0' // Reserve space for bottom image (321px - 289px overlap)
             }}
           >
             <FullSizeMarquee game={game} />
