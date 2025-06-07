@@ -1435,11 +1435,16 @@ export default function Admin() {
                 {/* Save Button */}
                 <div className="flex justify-end pt-4 border-t">
                   <Button 
-                    onClick={handleSaveDisplaySettings}
+                    onClick={() => {
+                      console.log("Saving display settings...");
+                      toast({
+                        title: "Feature Coming Soon",
+                        description: "Display settings save functionality will be implemented shortly.",
+                      });
+                    }}
                     className="px-6"
-                    disabled={updateVenueSettingsMutation.isPending}
                   >
-                    {updateVenueSettingsMutation.isPending ? "Saving..." : "Save Display Settings"}
+                    Save Display Settings
                   </Button>
                 </div>
               </div>
