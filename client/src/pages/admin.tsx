@@ -900,11 +900,13 @@ export default function Admin() {
                           {venueSettings.theme.primary === preset.primary && (
                             <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
                               <div 
-                                className="backdrop-blur-sm rounded-full px-1 shadow-lg border border-white/50 transform -translate-y-0.5"
+                                className="backdrop-blur-sm rounded-full shadow-lg border border-white/50 animate-[active-button-float_3s_ease-in-out_infinite]"
                                 style={{
                                   background: `linear-gradient(to bottom, ${preset.primary}40, ${preset.primary}60, ${preset.primary}80)`,
                                   paddingTop: '1px',
-                                  paddingBottom: '6px'
+                                  paddingBottom: '4px',
+                                  paddingLeft: '6px',
+                                  paddingRight: '6px'
                                 }}
                               >
                                 <span className="text-xs font-bold text-white tracking-wider drop-shadow-sm">ACTIVE</span>

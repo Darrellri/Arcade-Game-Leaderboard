@@ -199,6 +199,12 @@
     75% { transform: scale(1.02) rotateY(-2deg); }
   }
 
+  /* Custom 5-pixel vertical float animation for ACTIVE button */
+  @keyframes active-button-float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-5px); }
+  }
+
   @keyframes toast-shake-settle {
     0% { transform: translateX(0); }
     10% { transform: translateX(-8px); }
