@@ -65,14 +65,15 @@ export default function ListMarquee({ game, className }: ListMarqueeProps) {
   if (imageUrl) {
     return (
       <div className={cn("flex-shrink-0 mr-2 md:mr-4 w-24 sm:w-32 md:w-40 relative", className)}>
-        <div className="relative w-full rounded-lg overflow-hidden shadow-md bg-black" style={{ aspectRatio: '792/214' }}>
+        <div className="relative w-full rounded-lg overflow-hidden shadow-md bg-black aspect-[792/214]">
           <img 
             src={imageUrl} 
             alt={game.name} 
-            className="w-full h-full object-contain"
+            className="w-full h-full object-cover"
             style={{
               filter: marqueeBlurred ? 'blur(1px)' : 'blur(0px)',
-              transition: 'filter 0.3s ease-in-out'
+              transition: 'filter 0.3s ease-in-out',
+              aspectRatio: '792/214'
             }}
           />
           
@@ -84,14 +85,19 @@ export default function ListMarquee({ game, className }: ListMarqueeProps) {
                 src={overlayImageUrl}
                 alt={`${game.name} overlay`}
                 className={cn(
-                  "max-w-full max-h-full object-contain",
+                  "absolute",
                   overlayAnimation,
                   // Add continuous floating when no animation is active
                   !overlayAnimation && "animate-[overlayFloat_4s_ease-in-out_infinite]"
                 )}
                 style={{ 
                   filter: "drop-shadow(1px 1px 2px rgba(0,0,0,0.5))",
-                  zIndex: 10
+                  zIndex: 10,
+                  width: 'auto',
+                  height: 'auto',
+                  maxWidth: '100%',
+                  maxHeight: '100%',
+                  objectFit: 'contain'
                 }}
               />
             </div>

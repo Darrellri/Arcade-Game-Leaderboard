@@ -70,10 +70,11 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
           <img 
             src={imageUrl} 
             alt={`${game.name} marquee`}
-            className="w-full h-full object-contain transition-all duration-300 hover:opacity-90"
+            className="w-full h-full object-cover transition-all duration-300 hover:opacity-90"
             style={{
               filter: marqueeBlurred ? 'blur(2px)' : 'blur(0px)',
-              transition: 'filter 0.3s ease-in-out'
+              transition: 'filter 0.3s ease-in-out',
+              aspectRatio: '792/214'
             }}
           />
           
@@ -85,14 +86,19 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
                 src={overlayImageUrl}
                 alt={`${game.name} overlay`}
                 className={cn(
-                  "max-w-full max-h-full object-contain",
+                  "absolute",
                   overlayAnimation,
                   // Add continuous floating when no animation is active
                   !overlayAnimation && "animate-[overlayFloat_4s_ease-in-out_infinite]"
                 )}
                 style={{ 
                   filter: "drop-shadow(2px 2px 4px rgba(0,0,0,0.5))",
-                  zIndex: 10
+                  zIndex: 10,
+                  width: 'auto',
+                  height: 'auto',
+                  maxWidth: '100%',
+                  maxHeight: '100%',
+                  objectFit: 'contain'
                 }}
               />
             </div>
