@@ -69,7 +69,7 @@ export default function ListMarquee({ game, className }: ListMarqueeProps) {
           <img 
             src={imageUrl} 
             alt={game.name} 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
             style={{
               filter: marqueeBlurred ? 'blur(1px)' : 'blur(0px)',
               transition: 'filter 0.3s ease-in-out',

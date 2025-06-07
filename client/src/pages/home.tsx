@@ -88,7 +88,7 @@ function FullSizeMarquee({ game, className = "" }: { game: Game; className?: str
           <img 
             src={imageUrl} 
             alt={`${game.name} marquee`}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
             style={{
               filter: marqueeBlurred ? 'blur(2px)' : 'blur(0px)',
               transition: 'filter 0.3s ease-in-out',

@@ -70,7 +70,7 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
           <img 
             src={imageUrl} 
             alt={`${game.name} marquee`}
-            className="w-full h-full object-cover transition-all duration-300 hover:opacity-90"
+            className="w-full h-full object-contain transition-all duration-300 hover:opacity-90"
             style={{
               filter: marqueeBlurred ? 'blur(2px)' : 'blur(0px)',
               transition: 'filter 0.3s ease-in-out',
