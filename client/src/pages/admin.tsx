@@ -827,7 +827,7 @@ export default function Admin() {
 
                 <div className="space-y-4">
                   <div>
-                    <h3 className="font-semibold mb-2">Logo Upload</h3>
+                    <h3 className="font-semibold mb-2">Static Logo Upload</h3>
                     <input
                       type="file"
                       accept="image/*"
@@ -835,14 +835,134 @@ export default function Admin() {
                       className="mb-2"
                     />
                     <p className="text-sm text-muted-foreground mb-4">
-                      Upload an image file for your venue logo.
+                      Upload an image file for your venue logo. Recommended size: 300x100px or similar aspect ratio.
                     </p>
                   </div>
 
+                  <div>
+                    <h3 className="font-semibold mb-2">Video Logo Upload</h3>
+                    <input
+                      type="file"
+                      accept="video/*"
+                      onChange={handleAnimatedLogoUpload}
+                      disabled={isUploadingAnimatedLogo}
+                      className="mb-2"
+                    />
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Upload a video file for animated venue logo. Takes precedence over static logo when present. Recommended: MP4 format, under 5MB.
+                    </p>
+                    {isUploadingAnimatedLogo && (
+                      <p className="text-sm text-blue-600">Uploading video logo...</p>
+                    )}
+                  </div>
+
+                  {/* Video Logo Preview (takes precedence) */}
+                  {animatedLogoPreview && (
+                    <div className="space-y-2">
+                      <h4 className="font-medium">Current Video Logo Preview:</h4>
+                      <video 
+                        src={animatedLogoPreview} 
+                        autoPlay 
+                        muted 
+                        loop 
+                        className="max-w-xs max-h-24 object-contain border rounded"
+                      />
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => {
+                          setAnimatedLogoPreview(null);
+                          form.setValue("animatedLogoUrl", "");
+                        }}
+                      >
+                        Remove Video Logo
+                      </Button>
+                      <div className="text-xs text-muted-foreground">
+                        Video URL: {animatedLogoPreview}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Static Logo Preview (backup/fallback) */}
                   {logoPreview && (
                     <div className="space-y-2">
-                      <h4 className="font-medium">Current Logo Preview:</h4>
+                      <h4 className="font-medium">
+                        {animatedLogoPreview ? "Backup Static Logo:" : "Current Static Logo Preview:"}
+                      </h4>
                       <img src={logoPreview} alt="Logo preview" className="max-w-xs max-h-24 object-contain border rounded" />
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => {
+                          setLogoPreview(null);
+                          form.setValue("logoUrl", "");
+                        }}
+                      >
+                        Remove Static Logo
+                      </Button>
+                      {animatedLogoPreview && (
+                        <div className="text-xs text-muted-foreground">
+                          This static logo is kept as backup. Video logo will be displayed when available.
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Logo Background Options */}
+                  {(logoPreview || animatedLogoPreview) && (
+                    <div className="space-y-3 pt-4 border-t">
+                      <h4 className="font-medium">Logo Display Options</h4>
+                      <FormField
+                        control={form.control}
+                        name="logoBackgroundColor"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Logo Background Color</FormLabel>
+                            <FormControl>
+                              <Select value={field.value || "transparent"} onValueChange={field.onChange}>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select background color" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="transparent">Transparent</SelectItem>
+                                  <SelectItem value="white">White</SelectItem>
+                                  <SelectItem value="black">Black</SelectItem>
+                                  <SelectItem value="theme">Theme Color</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                            <p className="text-xs text-muted-foreground">
+                              Background color for the logo area (useful for transparent videos)
+                            </p>
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="hideLogoBorderShadow"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value === "true"}
+                                onCheckedChange={(checked) => {
+                                  field.onChange(checked ? "true" : "false");
+                                }}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>
+                                Hide the border and shadow around logo?
+                              </FormLabel>
+                              <p className="text-xs text-muted-foreground">
+                                Removes visual styling around the logo display area
+                              </p>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
                     </div>
                   )}
                 </div>
