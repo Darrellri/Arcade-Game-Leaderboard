@@ -798,13 +798,13 @@ export default function Admin() {
               </div>
 
               {/* Enhanced Theme Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {venueSettings?.themePresets?.map((preset) => (
                   <div
                     key={preset.name}
-                    className={`group relative cursor-pointer transition-all duration-500 hover:scale-[1.03] ${
+                    className={`group relative cursor-pointer transition-all duration-300 hover:scale-[1.02] ${
                       venueSettings.theme.primary === preset.primary
-                        ? "scale-[1.02]"
+                        ? "scale-[1.01]"
                         : ""
                     }`}
                     onClick={() => {
@@ -821,126 +821,101 @@ export default function Admin() {
                   >
                     <Card className={`overflow-hidden transition-all duration-300 ${
                       venueSettings.theme.primary === preset.primary
-                        ? "ring-2 ring-primary shadow-2xl border-primary/30 bg-primary/5"
-                        : "hover:shadow-xl group-hover:border-primary/20"
+                        ? "ring-2 ring-primary shadow-lg border-primary/40"
+                        : "hover:shadow-md group-hover:border-primary/20"
                     }`}>
-                      <CardContent className="p-0">
-                        {/* Main Color Display */}
-                        <div className="relative h-32 overflow-hidden">
+                      <CardContent className="p-3">
+                        {/* Compact Color Display */}
+                        <div className="relative h-16 mb-3 overflow-hidden rounded-md">
+                          {/* Main color swatch */}
                           <div
-                            className="absolute inset-0 transition-all duration-500"
-                            style={{
-                              background: `linear-gradient(135deg, 
-                                ${preset.primary}FF 0%, 
-                                ${preset.primary}E6 25%, 
-                                ${preset.primary}CC 50%, 
-                                ${preset.primary}B3 75%, 
-                                ${preset.primary}80 100%)`,
-                            }}
+                            className="absolute inset-0"
+                            style={{ backgroundColor: preset.primary }}
                           />
                           
-                          {/* Variant-specific patterns */}
+                          {/* Variant pattern overlay */}
                           {preset.variant === 'vibrant' && (
-                            <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent via-50% to-black/20" />
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-black/20" />
                           )}
                           {preset.variant === 'tint' && (
-                            <div className="absolute inset-0">
-                              <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-transparent to-white/30" />
-                              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,rgba(255,255,255,0.1))]" />
-                            </div>
+                            <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-white/20" />
                           )}
                           {preset.variant === 'professional' && (
-                            <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-black/30" />
+                            <div className="absolute inset-0 bg-gradient-to-b from-white/15 to-black/15" />
                           )}
 
-                          {/* Appearance indicator */}
-                          <div className="absolute top-3 right-3">
-                            <div className={`p-2 rounded-full backdrop-blur-md shadow-lg transition-all duration-300 ${
+                          {/* Theme mode indicator */}
+                          <div className="absolute top-2 right-2">
+                            <div className={`p-1 rounded-full backdrop-blur-sm shadow-sm ${
                               preset.appearance === 'dark' 
-                                ? 'bg-black/60 text-white' 
-                                : 'bg-white/80 text-gray-800'
+                                ? 'bg-black/50 text-white' 
+                                : 'bg-white/70 text-gray-700'
                             }`}>
                               {preset.appearance === 'dark' ? (
-                                <Moon className="w-4 h-4" />
+                                <Moon className="w-3 h-3" />
                               ) : (
-                                <Sun className="w-4 h-4" />
+                                <Sun className="w-3 h-3" />
                               )}
                             </div>
                           </div>
 
-                          {/* Active selection overlay */}
+                          {/* Active selection indicator */}
                           {venueSettings.theme.primary === preset.primary && (
                             <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                              <div className="bg-white/95 backdrop-blur-sm rounded-full p-3 shadow-2xl animate-pulse">
-                                <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                                  <div className="w-3 h-3 bg-white rounded-full" />
-                                </div>
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Hover overlay */}
-                          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300" />
-                        </div>
-
-                        {/* Theme Information Panel */}
-                        <div className="p-4 space-y-3">
-                          <div className="text-center">
-                            <h3 className="font-bold text-base mb-1 group-hover:text-primary transition-colors">
-                              {preset.name}
-                            </h3>
-                            <div className="text-xs font-mono text-muted-foreground bg-muted/50 rounded px-2 py-1">
-                              {preset.primary}
-                            </div>
-                          </div>
-
-                          {/* Detailed specs */}
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between text-sm">
-                              <span className="text-muted-foreground">Variant</span>
-                              <div className="flex items-center gap-1">
-                                <div 
-                                  className="w-3 h-3 rounded-full border-2 border-white shadow-sm"
-                                  style={{ backgroundColor: preset.primary }}
-                                />
-                                <span className="capitalize font-medium">{preset.variant}</span>
-                              </div>
-                            </div>
-
-                            <div className="flex items-center justify-between text-sm">
-                              <span className="text-muted-foreground">Mode</span>
-                              <div className="flex items-center gap-1">
-                                {preset.appearance === 'dark' ? (
-                                  <Moon className="w-3 h-3 text-muted-foreground" />
-                                ) : (
-                                  <Sun className="w-3 h-3 text-muted-foreground" />
-                                )}
-                                <span className="capitalize">{preset.appearance}</span>
-                              </div>
-                            </div>
-
-                            <div className="flex items-center justify-between text-sm">
-                              <span className="text-muted-foreground">Radius</span>
-                              <div className="flex items-center gap-1">
-                                <div 
-                                  className="w-4 h-4 border-2 border-muted-foreground"
-                                  style={{ borderRadius: `${preset.radius * 4}px` }}
-                                />
-                                <span>{preset.radius}</span>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Selection indicator */}
-                          {venueSettings.theme.primary === preset.primary && (
-                            <div className="mt-3 pt-3 border-t border-primary/20">
-                              <div className="flex items-center justify-center gap-2 text-primary text-sm font-medium">
-                                <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-                                Currently Active
+                              <div className="bg-white/90 backdrop-blur-sm rounded-full p-2 shadow-lg">
+                                <div className="w-4 h-4 bg-green-500 rounded-full animate-pulse" />
                               </div>
                             </div>
                           )}
                         </div>
+
+                        {/* Theme Name with Color */}
+                        <div className="text-center mb-2">
+                          <h3 
+                            className="font-bold text-sm mb-1 transition-colors"
+                            style={{ color: preset.primary }}
+                          >
+                            {preset.name}
+                          </h3>
+                        </div>
+
+                        {/* Compact Info Row */}
+                        <div className="flex items-center justify-between text-xs">
+                          <div className="flex items-center gap-1">
+                            <div 
+                              className="w-2 h-2 rounded-full border border-white/50"
+                              style={{ backgroundColor: preset.primary }}
+                            />
+                            <span className="text-muted-foreground capitalize truncate">
+                              {preset.variant}
+                            </span>
+                          </div>
+                          
+                          <div className="flex items-center gap-1 text-muted-foreground">
+                            {preset.appearance === 'dark' ? (
+                              <Moon className="w-3 h-3" />
+                            ) : (
+                              <Sun className="w-3 h-3" />
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Color Value */}
+                        <div className="mt-2 text-center">
+                          <code className="text-xs font-mono text-muted-foreground bg-muted/50 rounded px-1 py-0.5">
+                            {preset.primary.replace('hsl(', '').replace(')', '')}
+                          </code>
+                        </div>
+
+                        {/* Active indicator */}
+                        {venueSettings.theme.primary === preset.primary && (
+                          <div className="mt-2 pt-2 border-t border-primary/20">
+                            <div className="flex items-center justify-center gap-1 text-primary text-xs font-medium">
+                              <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
+                              Active
+                            </div>
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   </div>
