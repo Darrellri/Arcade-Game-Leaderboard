@@ -365,7 +365,7 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
 }) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [visibleGames, setVisibleGames] = useState<Game[]>([]);
-  const gameSpacing = 300; // Increased spacing for larger marquee images
+  const gameSpacing = 120; // Reduced spacing between images
 
   // Create infinite loop of games
   useEffect(() => {
@@ -403,7 +403,7 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
         className="space-y-4"
         style={{ 
           transform: `translateY(-${scrollPosition}px)`,
-          paddingTop: `${gameSpacing}px`
+          paddingTop: `200px` // Start 200 pixels higher
         }}
       >
         {visibleGames.map((game, index) => {
