@@ -98,6 +98,39 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import MarqueeImageUploader from "@/components/marquee-image-uploader";
 import OverlayImageUploader from "@/components/overlay-image-uploader";
 
+// Helper functions for color conversion
+function hexToRgb(hex: string) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
+}
+
+function rgbToHsl(r: number, g: number, b: number) {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h, s, l = (max + min) / 2;
+
+  if (max === min) {
+    h = s = 0;
+  } else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h! /= 6;
+  }
+
+  return { h: h!, s, l };
+}
+
 // Sortable table row component for admin game management
 function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onImageDelete }: { 
   game: Game; 
@@ -260,6 +293,7 @@ export default function Admin() {
   const [localBackgroundOverride, setLocalBackgroundOverride] = useState(false);
   const [localAppearance, setLocalAppearance] = useState<"dark" | "light">("dark");
   const [localDarknessLevel, setLocalDarknessLevel] = useState(20); // 0-100 scale
+  const [localCustomBackgroundColor, setLocalCustomBackgroundColor] = useState('#000000');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   // Fetch venue settings
@@ -957,135 +991,178 @@ export default function Admin() {
             </CardContent>
           </Card>
 
-          {/* Background Override Section */}
+          {/* Custom Background Color */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <div className="p-1.5 rounded-lg bg-secondary/50">
-                  <Sun className="h-4 w-4" />
+                  <Palette className="h-4 w-4" />
                 </div>
-                Background Override
+                Custom Background Color
               </CardTitle>
               <CardDescription>
-                Force dark or light background for any color scheme
+                Set a specific background color that overrides any theme
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* Three Simple Options */}
               <div className="space-y-4">
-                <div className="text-sm font-medium">Background Mode:</div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {/* Default Mode */}
-                  <Button
-                    variant={!localBackgroundOverride ? "default" : "outline"}
-                    className="h-auto p-4 flex-col gap-2 justify-start text-center"
-                    onClick={() => {
-                      setLocalBackgroundOverride(false);
+                {/* Enable/Disable Toggle */}
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="customBackgroundEnabled"
+                    checked={localBackgroundOverride}
+                    onCheckedChange={(checked) => {
+                      setLocalBackgroundOverride(!!checked);
                       setHasUnsavedChanges(true);
                       
-                      // Revert to original theme
-                      if (venueSettings) {
-                        const originalPreset = venueSettings.themePresets?.find(p => p.primary === venueSettings.theme.primary);
-                        if (originalPreset) {
-                          setLocalAppearance(originalPreset.appearance as "dark" | "light");
-                          document.documentElement.setAttribute('data-theme', JSON.stringify({
-                            primary: venueSettings.theme.primary,
-                            variant: venueSettings.theme.variant,
-                            appearance: originalPreset.appearance,
-                            radius: venueSettings.theme.radius,
-                          }));
-                        }
+                      if (!checked && venueSettings) {
+                        // Reset to theme default
+                        document.documentElement.style.removeProperty('--background');
+                        document.documentElement.style.removeProperty('--foreground');
                       }
                     }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full bg-gradient-to-r from-slate-800 to-slate-100 border"></div>
-                      <span className="font-medium">Default</span>
-                    </div>
-                    <div className="text-xs opacity-70">
-                      Use theme's original setting
-                    </div>
-                  </Button>
-
-                  {/* Force Dark Mode */}
-                  <Button
-                    variant={localBackgroundOverride && localAppearance === 'dark' ? "default" : "outline"}
-                    className="h-auto p-4 flex-col gap-2 justify-start text-center"
-                    onClick={() => {
-                      setLocalBackgroundOverride(true);
-                      setLocalAppearance('dark');
-                      setHasUnsavedChanges(true);
-                      
-                      // Apply dark theme immediately
-                      if (venueSettings) {
-                        document.documentElement.setAttribute('data-theme', JSON.stringify({
-                          primary: venueSettings.theme.primary,
-                          variant: venueSettings.theme.variant,
-                          appearance: 'dark',
-                          radius: venueSettings.theme.radius,
-                        }));
-                      }
-                    }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <Moon className="w-4 h-4" />
-                      <span className="font-medium">Force Dark</span>
-                    </div>
-                    <div className="text-xs opacity-70">
-                      Always use dark background
-                    </div>
-                  </Button>
-
-                  {/* Force Light Mode */}
-                  <Button
-                    variant={localBackgroundOverride && localAppearance === 'light' ? "default" : "outline"}
-                    className="h-auto p-4 flex-col gap-2 justify-start text-center"
-                    onClick={() => {
-                      setLocalBackgroundOverride(true);
-                      setLocalAppearance('light');
-                      setHasUnsavedChanges(true);
-                      
-                      // Apply light theme immediately
-                      if (venueSettings) {
-                        document.documentElement.setAttribute('data-theme', JSON.stringify({
-                          primary: venueSettings.theme.primary,
-                          variant: venueSettings.theme.variant,
-                          appearance: 'light',
-                          radius: venueSettings.theme.radius,
-                        }));
-                      }
-                    }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <Sun className="w-4 h-4" />
-                      <span className="font-medium">Force Light</span>
-                    </div>
-                    <div className="text-xs opacity-70">
-                      Always use light background
-                    </div>
-                  </Button>
+                  />
+                  <Label htmlFor="customBackgroundEnabled" className="text-sm font-medium">
+                    Use custom background color
+                  </Label>
                 </div>
 
-                {/* Current Status Display */}
+                {localBackgroundOverride && (
+                  <div className="space-y-4">
+                    {/* Color Input */}
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Background Color</Label>
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="color"
+                          value={localCustomBackgroundColor}
+                          onChange={(e) => {
+                            setLocalCustomBackgroundColor(e.target.value);
+                            setHasUnsavedChanges(true);
+                            
+                            // Apply immediately as preview
+                            const rgb = hexToRgb(e.target.value);
+                            if (rgb) {
+                              const { r, g, b } = rgb;
+                              const hsl = rgbToHsl(r, g, b);
+                              const lightness = hsl.l;
+                              
+                              // Set background color
+                              document.documentElement.style.setProperty('--background', `${r} ${g} ${b}`);
+                              
+                              // Set foreground color based on lightness
+                              if (lightness > 0.5) {
+                                // Light background, use dark text
+                                document.documentElement.style.setProperty('--foreground', '0 0 0');
+                              } else {
+                                // Dark background, use light text
+                                document.documentElement.style.setProperty('--foreground', '255 255 255');
+                              }
+                            }
+                          }}
+                          className="w-12 h-12 rounded border cursor-pointer"
+                        />
+                        <div className="flex-1">
+                          <input
+                            type="text"
+                            value={localCustomBackgroundColor}
+                            onChange={(e) => {
+                              setLocalCustomBackgroundColor(e.target.value);
+                              setHasUnsavedChanges(true);
+                              
+                              // Apply immediately as preview if valid hex
+                              if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
+                                const rgb = hexToRgb(e.target.value);
+                                if (rgb) {
+                                  const { r, g, b } = rgb;
+                                  const hsl = rgbToHsl(r, g, b);
+                                  const lightness = hsl.l;
+                                  
+                                  document.documentElement.style.setProperty('--background', `${r} ${g} ${b}`);
+                                  
+                                  if (lightness > 0.5) {
+                                    document.documentElement.style.setProperty('--foreground', '0 0 0');
+                                  } else {
+                                    document.documentElement.style.setProperty('--foreground', '255 255 255');
+                                  }
+                                }
+                              }
+                            }}
+                            placeholder="#000000"
+                            className="w-full px-3 py-2 border border-input rounded-md text-sm"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Preview */}
+                    <div className="p-4 border rounded-lg" style={{ backgroundColor: localCustomBackgroundColor }}>
+                      <div className="text-center">
+                        <div className="text-sm font-medium mb-1">Preview</div>
+                        <div className="text-xs opacity-70">This is how your background will look</div>
+                      </div>
+                    </div>
+
+                    {/* Common Color Presets */}
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Quick Colors</Label>
+                      <div className="flex gap-2 flex-wrap">
+                        {[
+                          { name: 'Black', color: '#000000' },
+                          { name: 'White', color: '#ffffff' },
+                          { name: 'Dark Gray', color: '#1a1a1a' },
+                          { name: 'Light Gray', color: '#f5f5f5' },
+                          { name: 'Navy', color: '#1e3a8a' },
+                          { name: 'Forest', color: '#166534' },
+                          { name: 'Burgundy', color: '#7f1d1d' },
+                          { name: 'Purple', color: '#581c87' },
+                        ].map((preset) => (
+                          <button
+                            key={preset.name}
+                            onClick={() => {
+                              setLocalCustomBackgroundColor(preset.color);
+                              setHasUnsavedChanges(true);
+                              
+                              // Apply immediately
+                              const rgb = hexToRgb(preset.color);
+                              if (rgb) {
+                                const { r, g, b } = rgb;
+                                const hsl = rgbToHsl(r, g, b);
+                                const lightness = hsl.l;
+                                
+                                document.documentElement.style.setProperty('--background', `${r} ${g} ${b}`);
+                                
+                                if (lightness > 0.5) {
+                                  document.documentElement.style.setProperty('--foreground', '0 0 0');
+                                } else {
+                                  document.documentElement.style.setProperty('--foreground', '255 255 255');
+                                }
+                              }
+                            }}
+                            className="w-8 h-8 rounded border-2 border-muted hover:border-primary transition-colors"
+                            style={{ backgroundColor: preset.color }}
+                            title={preset.name}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Current Status */}
                 <div className="p-3 bg-muted/30 rounded-lg">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Active Setting:</span>
+                    <span className="text-sm font-medium">Current Background:</span>
                     <div className="flex items-center gap-2">
                       {!localBackgroundOverride ? (
-                        <>
-                          <div className="w-4 h-4 rounded-full bg-gradient-to-r from-slate-800 to-slate-100 border"></div>
-                          <span className="text-sm">Theme default ({venueSettings?.theme.appearance})</span>
-                        </>
-                      ) : localAppearance === 'dark' ? (
-                        <>
-                          <Moon className="w-4 h-4" />
-                          <span className="text-sm">Forced dark background</span>
-                        </>
+                        <span className="text-sm">Using theme default</span>
                       ) : (
                         <>
-                          <Sun className="w-4 h-4" />
-                          <span className="text-sm">Forced light background</span>
+                          <div 
+                            className="w-4 h-4 rounded border"
+                            style={{ backgroundColor: localCustomBackgroundColor }}
+                          />
+                          <span className="text-sm font-mono">{localCustomBackgroundColor}</span>
                         </>
                       )}
                     </div>
@@ -1097,7 +1174,7 @@ export default function Admin() {
                 <div className="flex items-center justify-between p-3 bg-amber-50 border border-amber-200 rounded-lg">
                   <div className="flex items-center gap-2 text-sm text-amber-800">
                     <AlertCircle className="w-4 h-4" />
-                    Background override changes need to be saved
+                    Custom background color changes need to be saved
                   </div>
                   <div className="flex gap-2">
                     <Button
@@ -1106,10 +1183,11 @@ export default function Admin() {
                       onClick={() => {
                         if (venueSettings) {
                           setLocalBackgroundOverride(venueSettings.backgroundOverride || false);
-                          setLocalAppearance(venueSettings.theme.appearance as "dark" | "light");
+                          setLocalCustomBackgroundColor(venueSettings.customBackgroundColor || '#000000');
                           setHasUnsavedChanges(false);
                           // Reset preview
-                          document.documentElement.setAttribute('data-theme', JSON.stringify(venueSettings.theme));
+                          document.documentElement.style.removeProperty('--background');
+                          document.documentElement.style.removeProperty('--foreground');
                         }
                       }}
                     >
@@ -1122,12 +1200,7 @@ export default function Admin() {
                           updateSettings.mutate({
                             ...venueSettings,
                             backgroundOverride: localBackgroundOverride,
-                            theme: {
-                              primary: venueSettings.theme.primary,
-                              variant: venueSettings.theme.variant,
-                              appearance: localAppearance,
-                              radius: venueSettings.theme.radius,
-                            },
+                            customBackgroundColor: localCustomBackgroundColor,
                           });
                           setHasUnsavedChanges(false);
                         }

@@ -65,6 +65,7 @@ export const venueSettings = pgTable("venue_settings", {
   theme: json("theme").notNull(),
   themePresets: json("theme_presets"),
   backgroundOverride: boolean("background_override").default(false),
+  customBackgroundColor: text("custom_background_color").default("#000000"),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
@@ -101,6 +102,7 @@ export const venueSettingsSchema = z.object({
     radius: z.number(),
   })).optional(),
   backgroundOverride: z.boolean().optional(),
+  customBackgroundColor: z.string().optional(),
 });
 
 export const insertGameSchema = createInsertSchema(games).omit({ 
