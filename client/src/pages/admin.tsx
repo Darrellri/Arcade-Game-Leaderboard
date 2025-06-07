@@ -828,6 +828,39 @@ export default function Admin() {
                       )}
                     />
 
+                    {/* Logo Background Options - moved inside form */}
+                    {(logoPreview || animatedLogoPreview) && (
+                      <div className="space-y-3 pt-4 border-t">
+                        <h4 className="font-medium">Logo Display Options</h4>
+                        <FormField
+                          control={form.control}
+                          name="logoBackgroundColor"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Logo Background Color</FormLabel>
+                              <FormControl>
+                                <Select value={field.value || "transparent"} onValueChange={field.onChange}>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select background color" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="transparent">Transparent</SelectItem>
+                                    <SelectItem value="white">White</SelectItem>
+                                    <SelectItem value="black">Black</SelectItem>
+                                    <SelectItem value="theme">Theme Color</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </FormControl>
+                              <FormMessage />
+                              <p className="text-xs text-muted-foreground">
+                                Background color for the logo area (useful for transparent videos)
+                              </p>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    )}
+
                     <Button type="submit" disabled={updateSettings.isPending}>
                       {updateSettings.isPending ? "Saving..." : "Save Changes"}
                     </Button>
@@ -918,38 +951,7 @@ export default function Admin() {
                     </div>
                   )}
 
-                  {/* Logo Background Options */}
-                  {(logoPreview || animatedLogoPreview) && (
-                    <div className="space-y-3 pt-4 border-t">
-                      <h4 className="font-medium">Logo Display Options</h4>
-                      <FormField
-                        control={form.control}
-                        name="logoBackgroundColor"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Logo Background Color</FormLabel>
-                            <FormControl>
-                              <Select value={field.value || "transparent"} onValueChange={field.onChange}>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select background color" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="transparent">Transparent</SelectItem>
-                                  <SelectItem value="white">White</SelectItem>
-                                  <SelectItem value="black">Black</SelectItem>
-                                  <SelectItem value="theme">Theme Color</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                            <FormMessage />
-                            <p className="text-xs text-muted-foreground">
-                              Background color for the logo area (useful for transparent videos)
-                            </p>
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  )}
+
 
                   {animatedLogoPreview && logoPreview && (
                     <div className="text-xs text-muted-foreground mt-2 text-center bg-blue-50 dark:bg-blue-900/20 p-2 rounded">
