@@ -1198,73 +1198,237 @@ export default function Admin() {
                 </div>
               )}
 
-              {/* Scroll View Options */}
-              <div className="space-y-4">
+              {/* Display View Options */}
+              <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">Scroll View Options</h3>
+                  <h3 className="text-lg font-semibold mb-4">Display View Options</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Configure settings for the marquee scroll view mode
+                    Configure settings for the three display modes: Dual View, Single View, and Scroll View
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">Default Scroll Speed</Label>
-                    <select 
-                      defaultValue={30}
-                      className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
-                    >
-                      <option value={10}>Fast (10 seconds per game)</option>
-                      <option value={20}>Medium (20 seconds per game)</option>
-                      <option value={30}>Slow (30 seconds per game)</option>
-                      <option value={60}>Very Slow (60 seconds per game)</option>
-                    </select>
-                  </div>
+                {/* Dual View Settings */}
+                <div className="border rounded-lg p-4 space-y-4">
+                  <h4 className="font-medium text-base">Dual View (Two games side by side)</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Transition Speed</Label>
+                      <select 
+                        defaultValue={8}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value={5}>Fast (5 seconds)</option>
+                        <option value={8}>Medium (8 seconds)</option>
+                        <option value={12}>Slow (12 seconds)</option>
+                        <option value={15}>Very Slow (15 seconds)</option>
+                      </select>
+                    </div>
 
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">Default Width Mode</Label>
-                    <select 
-                      defaultValue="original"
-                      className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
-                    >
-                      <option value="original">Original Size</option>
-                      <option value="fullscreen">Full Screen Width</option>
-                    </select>
-                  </div>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        <input type="checkbox" defaultChecked className="rounded" />
+                        Enable Animations
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Random animation effects when games change</p>
+                    </div>
 
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">Auto-Start Delay</Label>
-                    <select 
-                      defaultValue={5}
-                      className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
-                    >
-                      <option value={0}>Start Immediately</option>
-                      <option value={3}>3 seconds</option>
-                      <option value={5}>5 seconds</option>
-                      <option value={10}>10 seconds</option>
-                      <option value={-1}>Manual Start Only</option>
-                    </select>
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        <input type="checkbox" className="rounded" />
+                        Hide Header/Navigation
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Hide leaderboard name and controls</p>
+                    </div>
                   </div>
+                </div>
 
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">Game Spacing</Label>
-                    <select 
-                      defaultValue={100}
-                      className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
-                    >
-                      <option value={50}>50 pixels</option>
-                      <option value={75}>75 pixels</option>
-                      <option value={100}>100 pixels</option>
-                      <option value={150}>150 pixels</option>
-                      <option value={200}>200 pixels</option>
-                    </select>
+                {/* Single View Settings */}
+                <div className="border rounded-lg p-4 space-y-4">
+                  <h4 className="font-medium text-base">Single View (One large game centered)</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Transition Speed</Label>
+                      <select 
+                        defaultValue={6}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value={4}>Fast (4 seconds)</option>
+                        <option value={6}>Medium (6 seconds)</option>
+                        <option value={10}>Slow (10 seconds)</option>
+                        <option value={15}>Very Slow (15 seconds)</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        <input type="checkbox" defaultChecked className="rounded" />
+                        Enable Animations
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Random animation effects when games change</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        <input type="checkbox" className="rounded" />
+                        Hide Header/Navigation
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Hide leaderboard name and controls</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Display Size</Label>
+                      <select 
+                        defaultValue="large"
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value="normal">Normal Size</option>
+                        <option value="large">Large (1.25x)</option>
+                        <option value="xl">Extra Large (1.5x)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Scroll View Settings */}
+                <div className="border rounded-lg p-4 space-y-4">
+                  <h4 className="font-medium text-base">Scroll View (Infinite vertical scroll)</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Scroll Speed</Label>
+                      <select 
+                        defaultValue={50}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value={25}>Very Fast (25ms)</option>
+                        <option value={50}>Fast (50ms)</option>
+                        <option value={75}>Medium (75ms)</option>
+                        <option value={100}>Slow (100ms)</option>
+                        <option value={150}>Very Slow (150ms)</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Game Spacing</Label>
+                      <input 
+                        type="number" 
+                        defaultValue={200}
+                        min={50}
+                        max={500}
+                        step={25}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      />
+                      <p className="text-xs text-muted-foreground">Pixels between games (50-500)</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        <input type="checkbox" defaultChecked className="rounded" />
+                        Enable Animations
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Fade-in effects as games scroll into view</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        <input type="checkbox" defaultChecked className="rounded" />
+                        Sticky Header
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Keep leaderboard header visible while scrolling</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        <input type="checkbox" className="rounded" />
+                        Lazy Load Images
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Load images only when needed for performance</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Animation System */}
+                <div className="border rounded-lg p-4 space-y-4">
+                  <h4 className="font-medium text-base">Animation System</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Configure the 60+ animation effects that randomly trigger when games change
+                  </p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Animation Categories</Label>
+                      <div className="space-y-2">
+                        <label className="flex items-center gap-2 text-sm">
+                          <input type="checkbox" defaultChecked className="rounded" />
+                          Fade Effects (fadeIn, fadeOut variants)
+                        </label>
+                        <label className="flex items-center gap-2 text-sm">
+                          <input type="checkbox" defaultChecked className="rounded" />
+                          Slide Effects (slideIn/Out from all directions)
+                        </label>
+                        <label className="flex items-center gap-2 text-sm">
+                          <input type="checkbox" defaultChecked className="rounded" />
+                          Zoom Effects (zoomIn, zoomOut variants)
+                        </label>
+                        <label className="flex items-center gap-2 text-sm">
+                          <input type="checkbox" defaultChecked className="rounded" />
+                          Bounce Effects (bounceIn from all directions)
+                        </label>
+                        <label className="flex items-center gap-2 text-sm">
+                          <input type="checkbox" defaultChecked className="rounded" />
+                          Rotation Effects (rotateIn, flipIn variants)
+                        </label>
+                        <label className="flex items-center gap-2 text-sm">
+                          <input type="checkbox" defaultChecked className="rounded" />
+                          Elastic & Back Effects (elasticIn, backIn variants)
+                        </label>
+                        <label className="flex items-center gap-2 text-sm">
+                          <input type="checkbox" defaultChecked className="rounded" />
+                          Fun Effects (pulse, shake, swing, wobble, jello)
+                        </label>
+                        <label className="flex items-center gap-2 text-sm">
+                          <input type="checkbox" defaultChecked className="rounded" />
+                          Dramatic Effects (tada, jackInTheBox, rollIn, lightSpeed)
+                        </label>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Animation Timing</Label>
+                      <select 
+                        defaultValue="0.8"
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value="0.5">Very Fast (0.5s)</option>
+                        <option value="0.8">Fast (0.8s)</option>
+                        <option value="1.0">Medium (1.0s)</option>
+                        <option value="1.5">Slow (1.5s)</option>
+                        <option value="2.0">Very Slow (2.0s)</option>
+                      </select>
+                      
+                      <Label className="text-sm font-medium mt-4 block">Animation Delay</Label>
+                      <select 
+                        defaultValue="0.3"
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value="0">No Delay</option>
+                        <option value="0.1">Short (0.1s)</option>
+                        <option value="0.3">Medium (0.3s)</option>
+                        <option value="0.5">Long (0.5s)</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 
                 <div className="p-3 bg-muted/30 rounded-lg">
                   <div className="text-sm text-muted-foreground">
-                    These settings control the default behavior of the marquee scroll view. 
-                    Users can still adjust speed and width mode using the controls in the scroll view.
+                    <strong>Display Modes:</strong>
+                    <br />• <strong>Dual View:</strong> Shows 2 games side by side, cycles through all game pairs
+                    <br />• <strong>Single View:</strong> Shows 1 large game centered, cycles through each game individually  
+                    <br />• <strong>Scroll View:</strong> Shows all games in infinite vertical scroll with configurable spacing
+                    <br /><br />All modes support animations, header hiding, and lazy loading for optimal performance.
                   </div>
                 </div>
               </div>

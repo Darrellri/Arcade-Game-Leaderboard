@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import GameCard from "@/components/game-card";
 import ShareScore from "@/components/share-score";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Gamepad2, Grid2X2, List, CircleDot, Trophy, GripVertical, MonitorSpeaker } from "lucide-react";
+import { Gamepad2, Grid2X2, List, CircleDot, Trophy, GripVertical, MonitorSpeaker, Play, Square } from "lucide-react";
 import ListMarquee from "@/components/list-marquee";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import {
@@ -32,87 +32,157 @@ import { formatDate, formatTime } from "@/lib/formatters";
 import { useTheme } from "@/contexts/ThemeContext";
 import GameMarquee from "@/components/game-marquee";
 
-type ViewMode = "grid" | "list" | "marquee";
+type ViewMode = "dual" | "single" | "scroll";
 
-// Marquee scroll view component
-function MarqueeScrollView({ games }: { games: Game[] }) {
-  const [isScrolling, setIsScrolling] = useState(false);
-  const [currentGameIndex, setCurrentGameIndex] = useState(0);
-  
-  // Default settings (can be configured in admin)
-  const scrollSpeed = 30; // seconds per game
-  const widthMode: "original" | "fullscreen" = "original";
-  const autoStartDelay = 5000; // 5 seconds
-  const gameSpacing = 100; // 100px spacing
+// Animation effects library
+const animationEffects = [
+  'fadeIn', 'slideInLeft', 'slideInRight', 'slideInUp', 'slideInDown',
+  'zoomIn', 'zoomOut', 'rotateIn', 'flipInX', 'flipInY',
+  'bounceIn', 'bounceInLeft', 'bounceInRight', 'bounceInUp', 'bounceInDown',
+  'elasticIn', 'backInLeft', 'backInRight', 'backInUp', 'backInDown',
+  'pulse', 'shake', 'swing', 'wobble', 'jello',
+  'heartBeat', 'flash', 'rubberBand', 'tada', 'jackInTheBox',
+  'rollIn', 'rollOut', 'lightSpeedInLeft', 'lightSpeedInRight', 'hinge',
+  'slideOutLeft', 'slideOutRight', 'slideOutUp', 'slideOutDown', 'rotateOut',
+  'flipOutX', 'flipOutY', 'bounceOut', 'zoomInLeft', 'zoomInRight',
+  'zoomInUp', 'zoomInDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp',
+  'zoomOutDown', 'fadeInLeft', 'fadeInRight', 'fadeInUp', 'fadeInDown',
+  'fadeOutLeft', 'fadeOutRight', 'fadeOutUp', 'fadeOutDown'
+];
 
-  // Auto-start scrolling after delay
-  useEffect(() => {
-    const startTimer = setTimeout(() => {
-      setIsScrolling(true);
-    }, autoStartDelay);
+// Dual View Component - Shows 2 games side by side
+function DualView({ games, animationsEnabled, hideHeader }: { 
+  games: Game[]; 
+  animationsEnabled: boolean; 
+  hideHeader: boolean; 
+}) {
+  const [currentPair, setCurrentPair] = useState(0);
+  const [currentAnimation, setCurrentAnimation] = useState('');
 
-    return () => clearTimeout(startTimer);
-  }, [autoStartDelay]);
-
-  // Handle scrolling through games
-  useEffect(() => {
-    if (!isScrolling || games.length === 0) return;
-
-    const scrollTimer = setInterval(() => {
-      setCurrentGameIndex((prev) => (prev + 1) % games.length);
-    }, scrollSpeed * 1000);
-
-    return () => clearInterval(scrollTimer);
-  }, [isScrolling, games.length, scrollSpeed]);
-
-  if (games.length === 0) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-muted-foreground">No games available</p>
-      </div>
-    );
+  const gamePairs = [];
+  for (let i = 0; i < games.length; i += 2) {
+    gamePairs.push(games.slice(i, i + 2));
   }
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentPair((prev) => (prev + 1) % gamePairs.length);
+      if (animationsEnabled) {
+        setCurrentAnimation(animationEffects[Math.floor(Math.random() * animationEffects.length)]);
+      }
+    }, 8000);
+
+    return () => clearInterval(timer);
+  }, [gamePairs.length, animationsEnabled]);
+
+  const currentGames = gamePairs[currentPair] || [];
+
   return (
-    <div className="space-y-6">
-
-      {/* Scrolling marquee display */}
-      <div className="relative overflow-hidden">
+    <div className="flex justify-center items-center min-h-[70vh] gap-8">
+      {currentGames.map((game, index) => (
         <div 
-          className="flex transition-transform duration-1000 ease-in-out"
-          style={{ 
-            transform: `translateX(calc(-${currentGameIndex} * (100% + ${gameSpacing}px)))`,
-            gap: `${gameSpacing}px`
-          }}
+          key={`${game.id}-${currentPair}`}
+          className={`max-w-lg ${animationsEnabled ? `animate-${currentAnimation}` : ''}`}
+          style={{ animationDelay: `${index * 0.3}s` }}
         >
-          {games.map((game, index) => (
-            <div 
-              key={game.id}
-              className={`flex-shrink-0 ${widthMode === "fullscreen" ? "w-screen" : "w-auto max-w-2xl"}`}
-            >
-              <div className="flex justify-center">
-                <GameMarquee 
-                  game={game} 
-                  className={widthMode === "fullscreen" ? "w-full" : ""}
-                />
-              </div>
-            </div>
-          ))}
+          <GameMarquee game={game} />
         </div>
-      </div>
+      ))}
+    </div>
+  );
+}
 
-      {/* Game navigation dots */}
-      <div className="flex justify-center gap-2">
-        {games.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentGameIndex(index)}
-            className={`w-3 h-3 rounded-full transition-colors ${
-              index === currentGameIndex 
-                ? "bg-primary" 
-                : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
-            }`}
-          />
+// Single View Component - Shows 1 large game centered
+function SingleView({ games, animationsEnabled, hideHeader }: { 
+  games: Game[]; 
+  animationsEnabled: boolean; 
+  hideHeader: boolean; 
+}) {
+  const [currentGameIndex, setCurrentGameIndex] = useState(0);
+  const [currentAnimation, setCurrentAnimation] = useState('');
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentGameIndex((prev) => (prev + 1) % games.length);
+      if (animationsEnabled) {
+        setCurrentAnimation(animationEffects[Math.floor(Math.random() * animationEffects.length)]);
+      }
+    }, 6000);
+
+    return () => clearInterval(timer);
+  }, [games.length, animationsEnabled]);
+
+  const currentGame = games[currentGameIndex];
+
+  if (!currentGame) return null;
+
+  return (
+    <div className="flex justify-center items-center min-h-[70vh]">
+      <div 
+        key={`${currentGame.id}-${currentGameIndex}`}
+        className={`max-w-4xl w-full ${animationsEnabled ? `animate-${currentAnimation}` : ''}`}
+      >
+        <GameMarquee game={currentGame} className="scale-125" />
+      </div>
+    </div>
+  );
+}
+
+// Scroll View Component - Shows all games vertically with infinite scroll
+function ScrollView({ games, animationsEnabled, hideHeader }: { 
+  games: Game[]; 
+  animationsEnabled: boolean; 
+  hideHeader: boolean; 
+}) {
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [visibleGames, setVisibleGames] = useState<Game[]>([]);
+  const gameSpacing = 200; // Default spacing, configurable in admin
+
+  // Create infinite loop of games
+  useEffect(() => {
+    const extendedGames = [...games, ...games, ...games]; // Triple the array for seamless loop
+    setVisibleGames(extendedGames);
+  }, [games]);
+
+  // Auto-scroll effect
+  useEffect(() => {
+    const scrollTimer = setInterval(() => {
+      setScrollPosition(prev => {
+        const newPosition = prev + 1;
+        const resetPoint = games.length * (gameSpacing + 400); // Approximate game height + spacing
+        return newPosition >= resetPoint ? 0 : newPosition;
+      });
+    }, 50); // Smooth scrolling at 20fps
+
+    return () => clearInterval(scrollTimer);
+  }, [games.length, gameSpacing]);
+
+  return (
+    <div className="relative overflow-hidden h-screen">
+      {hideHeader && (
+        <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b">
+          {/* Sticky header content would go here */}
+        </div>
+      )}
+      
+      <div 
+        className="space-y-4"
+        style={{ 
+          transform: `translateY(-${scrollPosition}px)`,
+          paddingTop: `${gameSpacing}px`
+        }}
+      >
+        {visibleGames.map((game, index) => (
+          <div 
+            key={`${game.id}-${index}`}
+            className={`flex justify-center ${animationsEnabled ? 'animate-fadeIn' : ''}`}
+            style={{ 
+              marginBottom: `${gameSpacing}px`,
+              animationDelay: `${(index % 3) * 0.2}s`
+            }}
+          >
+            <GameMarquee game={game} />
+          </div>
         ))}
       </div>
     </div>
@@ -240,7 +310,9 @@ function SortableGameListItem({ game }: { game: Game }) {
 }
 
 export default function Home() {
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [viewMode, setViewMode] = useState<ViewMode>("dual");
+  const [animationsEnabled, setAnimationsEnabled] = useState(true);
+  const [hideHeader, setHideHeader] = useState(false);
   const [localGames, setLocalGames] = useState<Game[]>([]);
 
   const { data: games, isLoading: gamesLoading } = useQuery<Game[]>({
@@ -439,28 +511,31 @@ export default function Home() {
         </div>
         <div className="flex items-start gap-2 self-start sm:self-center sm:items-center sm:gap-4 mt-2 sm:mt-0">
           <Button
-            variant={viewMode === "grid" ? "default" : "outline"}
+            variant={viewMode === "dual" ? "default" : "outline"}
             size="icon"
-            onClick={() => setViewMode("grid")}
+            onClick={() => setViewMode("dual")}
             className="shadow-sm hover:shadow-md transition-all duration-200"
+            title="Dual View - Two games side by side"
           >
             <Grid2X2 className="h-4 w-4" />
           </Button>
           <Button
-            variant={viewMode === "list" ? "default" : "outline"}
+            variant={viewMode === "single" ? "default" : "outline"}
             size="icon"
-            onClick={() => setViewMode("list")}
+            onClick={() => setViewMode("single")}
             className="shadow-sm hover:shadow-md transition-all duration-200"
+            title="Single View - One large game centered"
           >
-            <List className="h-4 w-4" />
+            <Square className="h-4 w-4" />
           </Button>
           <Button
-            variant={viewMode === "marquee" ? "default" : "outline"}
+            variant={viewMode === "scroll" ? "default" : "outline"}
             size="icon"
-            onClick={() => setViewMode("marquee")}
+            onClick={() => setViewMode("scroll")}
             className="shadow-sm hover:shadow-md transition-all duration-200"
+            title="Scroll View - Infinite vertical scroll"
           >
-            <MonitorSpeaker className="h-4 w-4" />
+            <List className="h-4 w-4" />
           </Button>
           
           <div className="flex space-x-2 ml-2">
@@ -477,44 +552,30 @@ export default function Home() {
         </div>
       </div>
       
-      {viewMode === "grid" ? (
-        <div 
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 responsive-game-grid"
-          style={{
-            '--desktop-spacing': `${parseInt(venueSettings?.gameSpacing || "30")}px`,
-            '--tablet-spacing': `${Math.max(12, Math.round(parseInt(venueSettings?.gameSpacing || "30") * 0.7))}px`,
-            '--mobile-spacing': `${Math.max(8, Math.round(parseInt(venueSettings?.gameSpacing || "30") * 0.5))}px`,
-            gap: `var(--desktop-spacing)`
-          } as React.CSSProperties}
-        >
-          {processedGames?.map((game) => (
-            <GameCard key={game.id} game={game} />
-          ))}
+      {!hideHeader && (
+        <div className="mb-6">
+          {/* Header content is rendered above */}
         </div>
-      ) : viewMode === "list" ? (
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext items={localGames} strategy={verticalListSortingStrategy}>
-            <div 
-              className="w-full flex flex-col responsive-game-list"
-              style={{
-                '--desktop-spacing': `${parseInt(venueSettings?.gameSpacing || "30")}px`,
-                '--tablet-spacing': `${Math.max(8, Math.round(parseInt(venueSettings?.gameSpacing || "30") * 0.6))}px`,
-                '--mobile-spacing': `${Math.max(6, Math.round(parseInt(venueSettings?.gameSpacing || "30") * 0.4))}px`,
-                gap: `var(--desktop-spacing)`
-              } as React.CSSProperties}
-            >
-              {localGames?.map((game) => (
-                <SortableGameListItem key={game.id} game={game} />
-              ))}
-            </div>
-          </SortableContext>
-        </DndContext>
+      )}
+
+      {viewMode === "dual" ? (
+        <DualView 
+          games={processedGames || []} 
+          animationsEnabled={animationsEnabled} 
+          hideHeader={hideHeader}
+        />
+      ) : viewMode === "single" ? (
+        <SingleView 
+          games={processedGames || []} 
+          animationsEnabled={animationsEnabled} 
+          hideHeader={hideHeader}
+        />
       ) : (
-        <MarqueeScrollView games={processedGames || []} />
+        <ScrollView 
+          games={processedGames || []} 
+          animationsEnabled={animationsEnabled} 
+          hideHeader={hideHeader}
+        />
       )}
 
       {/* Thin Footer Bar */}
