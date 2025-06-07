@@ -1018,8 +1018,8 @@ export default function Admin() {
                       
                       if (!checked && venueSettings) {
                         // Reset to theme default
-                        document.documentElement.style.removeProperty('--background');
-                        document.documentElement.style.removeProperty('--foreground');
+                        document.documentElement.style.removeProperty('background-color');
+                        document.documentElement.style.removeProperty('color');
                       }
                     }}
                   />
@@ -1042,22 +1042,21 @@ export default function Admin() {
                             setHasUnsavedChanges(true);
                             
                             // Apply immediately as preview
+                            document.documentElement.style.setProperty('background-color', e.target.value);
+                            
                             const rgb = hexToRgb(e.target.value);
                             if (rgb) {
                               const { r, g, b } = rgb;
                               const hsl = rgbToHsl(r, g, b);
                               const lightness = hsl.l;
                               
-                              // Set background color
-                              document.documentElement.style.setProperty('--background', `${r} ${g} ${b}`);
-                              
                               // Set foreground color based on lightness
                               if (lightness > 0.5) {
                                 // Light background, use dark text
-                                document.documentElement.style.setProperty('--foreground', '0 0 0');
+                                document.documentElement.style.setProperty('color', '#000000');
                               } else {
                                 // Dark background, use light text
-                                document.documentElement.style.setProperty('--foreground', '255 255 255');
+                                document.documentElement.style.setProperty('color', '#ffffff');
                               }
                             }
                           }}
@@ -1073,18 +1072,18 @@ export default function Admin() {
                               
                               // Apply immediately as preview if valid hex
                               if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
+                                document.documentElement.style.setProperty('background-color', e.target.value);
+                                
                                 const rgb = hexToRgb(e.target.value);
                                 if (rgb) {
                                   const { r, g, b } = rgb;
                                   const hsl = rgbToHsl(r, g, b);
                                   const lightness = hsl.l;
                                   
-                                  document.documentElement.style.setProperty('--background', `${r} ${g} ${b}`);
-                                  
                                   if (lightness > 0.5) {
-                                    document.documentElement.style.setProperty('--foreground', '0 0 0');
+                                    document.documentElement.style.setProperty('color', '#000000');
                                   } else {
-                                    document.documentElement.style.setProperty('--foreground', '255 255 255');
+                                    document.documentElement.style.setProperty('color', '#ffffff');
                                   }
                                 }
                               }
@@ -1127,18 +1126,18 @@ export default function Admin() {
                               setHasUnsavedChanges(true);
                               
                               // Apply immediately
+                              document.documentElement.style.setProperty('background-color', preset.color);
+                              
                               const rgb = hexToRgb(preset.color);
                               if (rgb) {
                                 const { r, g, b } = rgb;
                                 const hsl = rgbToHsl(r, g, b);
                                 const lightness = hsl.l;
                                 
-                                document.documentElement.style.setProperty('--background', `${r} ${g} ${b}`);
-                                
                                 if (lightness > 0.5) {
-                                  document.documentElement.style.setProperty('--foreground', '0 0 0');
+                                  document.documentElement.style.setProperty('color', '#000000');
                                 } else {
-                                  document.documentElement.style.setProperty('--foreground', '255 255 255');
+                                  document.documentElement.style.setProperty('color', '#ffffff');
                                 }
                               }
                             }}
@@ -1189,8 +1188,8 @@ export default function Admin() {
                           setLocalCustomBackgroundColor(venueSettings.customBackgroundColor || '#000000');
                           setHasUnsavedChanges(false);
                           // Reset preview
-                          document.documentElement.style.removeProperty('--background');
-                          document.documentElement.style.removeProperty('--foreground');
+                          document.documentElement.style.removeProperty('background-color');
+                          document.documentElement.style.removeProperty('color');
                         }
                       }}
                     >
