@@ -80,6 +80,29 @@ function FullSizeMarquee({ game, className = "" }: { game: Game; className?: str
     };
   }, [overlayImageUrl]);
 
+  // Parallax scrolling effect for overlay images
+  useEffect(() => {
+    if (!overlayImageUrl) return;
+
+    const parallaxTimer = setInterval(() => {
+      // Randomly choose to move ahead, lag behind, or snap back
+      const motion = Math.random();
+      
+      if (motion < 0.4) {
+        // Move ahead by 1-2 pixels
+        setOverlayOffset({ x: Math.random() * 2 + 1, y: Math.random() * 2 + 1 });
+      } else if (motion < 0.7) {
+        // Lag behind by 2 pixels
+        setOverlayOffset({ x: -(Math.random() * 2 + 1), y: -(Math.random() * 2 + 1) });
+      } else {
+        // Snap back to center
+        setOverlayOffset({ x: 0, y: 0 });
+      }
+    }, 150 + Math.random() * 200); // Random interval between 150-350ms
+
+    return () => clearInterval(parallaxTimer);
+  }, [overlayImageUrl]);
+
   if (imageUrl) {
     return (
       <div className={`w-[792px] h-[214px] relative overflow-hidden ${className}`} 
@@ -112,7 +135,9 @@ function FullSizeMarquee({ game, className = "" }: { game: Game; className?: str
                   maxWidth: '100%',
                   maxHeight: '100%',
                   objectFit: 'contain',
-                  borderRadius: '15px'
+                  borderRadius: '15px',
+                  transform: `translate(${overlayOffset.x}px, ${overlayOffset.y}px)`,
+                  transition: 'transform 0.1s ease-out'
                 }}
               />
             </div>
