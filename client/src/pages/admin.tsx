@@ -118,7 +118,7 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onIma
   };
 
   return (
-    <TableRow ref={setNodeRef} style={style}>
+    <TableRow ref={setNodeRef} style={style} className={game.hidden ? "opacity-50 bg-muted/30" : ""}>
       <TableCell className="p-2">
         <div className="flex items-center gap-2">
           <div 
