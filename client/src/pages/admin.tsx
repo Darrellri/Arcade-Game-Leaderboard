@@ -1431,6 +1431,20 @@ export default function Admin() {
                     <br /><br />All modes support animations, header hiding, and lazy loading for optimal performance.
                   </div>
                 </div>
+
+                {/* Save Button */}
+                <div className="flex justify-end pt-4 border-t">
+                  <Button 
+                    onClick={() => {
+                      // Handle save display settings
+                      console.log("Saving display view options...");
+                      // TODO: Implement save functionality
+                    }}
+                    className="px-6"
+                  >
+                    Save Display Settings
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>

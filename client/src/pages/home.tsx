@@ -34,15 +34,39 @@ import GameMarquee from "@/components/game-marquee";
 
 type ViewMode = "dual" | "single" | "scroll";
 
-// Animation effects library
+// Dramatic Animation Effects Library - 70+ Effects
 const animationEffects = [
+  // Basic fade and slide effects
   'fadeIn', 'slideInLeft', 'slideInRight', 'slideInUp', 'slideInDown',
+  
+  // Dramatic off-screen flying entries
+  'flyInFromLeft', 'flyInFromRight', 'flyInFromTop', 'flyInFromBottom',
+  
+  // Swooping dramatic entries
+  'swoopInLeft', 'swoopInRight', 'spiralIn',
+  
+  // Explosive and dynamic entries
+  'explodeIn', 'rocketIn', 'meteorIn',
+  
+  // Classic zoom and rotation effects
   'zoomIn', 'zoomOut', 'rotateIn', 'flipInX', 'flipInY',
+  
+  // Bouncing effects from all directions
   'bounceIn', 'bounceInLeft', 'bounceInRight', 'bounceInUp', 'bounceInDown',
+  
+  // Elastic and back effects
   'elasticIn', 'backInLeft', 'backInRight', 'backInUp', 'backInDown',
+  
+  // Fun and playful effects
   'pulse', 'shake', 'swing', 'wobble', 'jello',
+  
+  // Attention-grabbing effects
   'heartBeat', 'flash', 'rubberBand', 'tada', 'jackInTheBox',
+  
+  // Rolling and speed effects
   'rollIn', 'rollOut', 'lightSpeedInLeft', 'lightSpeedInRight', 'hinge',
+  
+  // Additional directional effects
   'slideOutLeft', 'slideOutRight', 'slideOutUp', 'slideOutDown', 'rotateOut',
   'flipOutX', 'flipOutY', 'bounceOut', 'zoomInLeft', 'zoomInRight',
   'zoomInUp', 'zoomInDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp',
@@ -50,14 +74,30 @@ const animationEffects = [
   'fadeOutLeft', 'fadeOutRight', 'fadeOutUp', 'fadeOutDown'
 ];
 
-// Dual View Component - Shows 2 games side by side
+// Pairs of complementary animations for dual view staggered timing
+const dualViewAnimationPairs = [
+  ['flyInFromLeft', 'flyInFromRight'],
+  ['swoopInLeft', 'swoopInRight'],
+  ['slideInLeft', 'slideInRight'],
+  ['bounceInLeft', 'bounceInRight'],
+  ['backInLeft', 'backInRight'],
+  ['lightSpeedInLeft', 'lightSpeedInRight'],
+  ['slideInUp', 'slideInDown'],
+  ['bounceInUp', 'bounceInDown'],
+  ['backInUp', 'backInDown'],
+  ['explodeIn', 'spiralIn'],
+  ['rocketIn', 'meteorIn'],
+  ['flyInFromTop', 'flyInFromBottom']
+];
+
+// Dual View Component - Shows 2 games side by side with staggered dramatic animations
 function DualView({ games, animationsEnabled, hideHeader }: { 
   games: Game[]; 
   animationsEnabled: boolean; 
   hideHeader: boolean; 
 }) {
   const [currentPair, setCurrentPair] = useState(0);
-  const [currentAnimation, setCurrentAnimation] = useState('');
+  const [currentAnimationPair, setCurrentAnimationPair] = useState(['', '']);
 
   const gamePairs = [];
   for (let i = 0; i < games.length; i += 2) {
@@ -68,7 +108,9 @@ function DualView({ games, animationsEnabled, hideHeader }: {
     const timer = setInterval(() => {
       setCurrentPair((prev) => (prev + 1) % gamePairs.length);
       if (animationsEnabled) {
-        setCurrentAnimation(animationEffects[Math.floor(Math.random() * animationEffects.length)]);
+        // Choose a random animation pair for dramatic synchronized effects
+        const randomPair = dualViewAnimationPairs[Math.floor(Math.random() * dualViewAnimationPairs.length)];
+        setCurrentAnimationPair(randomPair);
       }
     }, 8000);
 
@@ -82,8 +124,11 @@ function DualView({ games, animationsEnabled, hideHeader }: {
       {currentGames.map((game, index) => (
         <div 
           key={`${game.id}-${currentPair}`}
-          className={`max-w-lg ${animationsEnabled ? `animate-${currentAnimation}` : ''}`}
-          style={{ animationDelay: `${index * 0.3}s` }}
+          className={`max-w-lg ${animationsEnabled && currentAnimationPair[index] ? `animate-${currentAnimationPair[index]}` : ''}`}
+          style={{ 
+            animationDelay: `${index * 0.4}s`,
+            animationFillMode: 'both'
+          }}
         >
           <GameMarquee game={game} />
         </div>
@@ -92,7 +137,7 @@ function DualView({ games, animationsEnabled, hideHeader }: {
   );
 }
 
-// Single View Component - Shows 1 large game centered
+// Single View Component - Shows 1 large game centered with dramatic animations
 function SingleView({ games, animationsEnabled, hideHeader }: { 
   games: Game[]; 
   animationsEnabled: boolean; 
@@ -101,11 +146,22 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   const [currentGameIndex, setCurrentGameIndex] = useState(0);
   const [currentAnimation, setCurrentAnimation] = useState('');
 
+  // Prioritize the most dramatic single animations for solo display
+  const dramaticSingleAnimations = [
+    'flyInFromLeft', 'flyInFromRight', 'flyInFromTop', 'flyInFromBottom',
+    'swoopInLeft', 'swoopInRight', 'spiralIn', 'explodeIn', 'rocketIn', 'meteorIn',
+    'bounceInLeft', 'bounceInRight', 'bounceInUp', 'bounceInDown',
+    'backInLeft', 'backInRight', 'lightSpeedInLeft', 'lightSpeedInRight',
+    'rollIn', 'jackInTheBox', 'tada', 'rubberBand'
+  ];
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentGameIndex((prev) => (prev + 1) % games.length);
       if (animationsEnabled) {
-        setCurrentAnimation(animationEffects[Math.floor(Math.random() * animationEffects.length)]);
+        // Use more dramatic animations for single view
+        const randomAnimation = dramaticSingleAnimations[Math.floor(Math.random() * dramaticSingleAnimations.length)];
+        setCurrentAnimation(randomAnimation);
       }
     }, 6000);
 
@@ -121,6 +177,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
       <div 
         key={`${currentGame.id}-${currentGameIndex}`}
         className={`max-w-4xl w-full ${animationsEnabled ? `animate-${currentAnimation}` : ''}`}
+        style={{ animationFillMode: 'both' }}
       >
         <GameMarquee game={currentGame} className="scale-125" />
       </div>
@@ -128,7 +185,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   );
 }
 
-// Scroll View Component - Shows all games vertically with infinite scroll
+// Scroll View Component - Shows all games vertically with infinite scroll and staggered animations
 function ScrollView({ games, animationsEnabled, hideHeader }: { 
   games: Game[]; 
   animationsEnabled: boolean; 
@@ -157,11 +214,16 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
     return () => clearInterval(scrollTimer);
   }, [games.length, gameSpacing]);
 
+  // Scroll-appropriate animations - lighter effects that don't overwhelm
+  const scrollAnimations = ['fadeIn', 'slideInLeft', 'slideInRight', 'slideInUp', 'zoomIn', 'bounceIn'];
+
   return (
     <div className="relative overflow-hidden h-screen">
-      {hideHeader && (
-        <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b">
-          {/* Sticky header content would go here */}
+      {!hideHeader && (
+        <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b p-4">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold">Arcade Games</h2>
+          </div>
         </div>
       )}
       
@@ -172,18 +234,26 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
           paddingTop: `${gameSpacing}px`
         }}
       >
-        {visibleGames.map((game, index) => (
-          <div 
-            key={`${game.id}-${index}`}
-            className={`flex justify-center ${animationsEnabled ? 'animate-fadeIn' : ''}`}
-            style={{ 
-              marginBottom: `${gameSpacing}px`,
-              animationDelay: `${(index % 3) * 0.2}s`
-            }}
-          >
-            <GameMarquee game={game} />
-          </div>
-        ))}
+        {visibleGames.map((game, index) => {
+          // Use different animations for variety, cycling through the array
+          const animationClass = animationsEnabled 
+            ? `animate-${scrollAnimations[index % scrollAnimations.length]}` 
+            : '';
+          
+          return (
+            <div 
+              key={`${game.id}-${index}`}
+              className={`flex justify-center ${animationClass}`}
+              style={{ 
+                marginBottom: `${gameSpacing}px`,
+                animationDelay: `${(index % 5) * 0.15}s`,
+                animationFillMode: 'both'
+              }}
+            >
+              <GameMarquee game={game} />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

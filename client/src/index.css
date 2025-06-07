@@ -205,12 +205,71 @@
     50% { transform: translateY(-5px); }
   }
 
-  /* 60 Animation Effects for Game Display Views */
+  /* 60+ Dramatic Animation Effects for Game Display Views */
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes slideInLeft { from { transform: translateX(-100%); } to { transform: translateX(0); } }
-  @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
-  @keyframes slideInUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-  @keyframes slideInDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+  @keyframes slideInLeft { from { transform: translateX(-200vw); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  @keyframes slideInRight { from { transform: translateX(200vw); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+  @keyframes slideInUp { from { transform: translateY(200vh); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes slideInDown { from { transform: translateY(-200vh); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  
+  /* Dramatic Off-Screen Entries */
+  @keyframes flyInFromLeft { 
+    from { transform: translateX(-300vw) rotate(-45deg) scale(0.3); opacity: 0; } 
+    50% { transform: translateX(-50px) rotate(-10deg) scale(1.1); opacity: 0.8; }
+    to { transform: translateX(0) rotate(0deg) scale(1); opacity: 1; } 
+  }
+  @keyframes flyInFromRight { 
+    from { transform: translateX(300vw) rotate(45deg) scale(0.3); opacity: 0; } 
+    50% { transform: translateX(50px) rotate(10deg) scale(1.1); opacity: 0.8; }
+    to { transform: translateX(0) rotate(0deg) scale(1); opacity: 1; } 
+  }
+  @keyframes flyInFromTop { 
+    from { transform: translateY(-300vh) rotate(180deg) scale(0.2); opacity: 0; } 
+    50% { transform: translateY(-30px) rotate(20deg) scale(1.2); opacity: 0.7; }
+    to { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; } 
+  }
+  @keyframes flyInFromBottom { 
+    from { transform: translateY(300vh) rotate(-180deg) scale(0.2); opacity: 0; } 
+    50% { transform: translateY(30px) rotate(-20deg) scale(1.2); opacity: 0.7; }
+    to { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; } 
+  }
+  
+  /* Swooping Dramatic Entries */
+  @keyframes swoopInLeft { 
+    from { transform: translateX(-150vw) translateY(-100vh) rotate(-90deg) scale(0.1); opacity: 0; } 
+    30% { transform: translateX(-50vw) translateY(50vh) rotate(-45deg) scale(0.7); opacity: 0.5; }
+    70% { transform: translateX(20px) translateY(-20px) rotate(10deg) scale(1.1); opacity: 0.9; }
+    to { transform: translateX(0) translateY(0) rotate(0deg) scale(1); opacity: 1; } 
+  }
+  @keyframes swoopInRight { 
+    from { transform: translateX(150vw) translateY(-100vh) rotate(90deg) scale(0.1); opacity: 0; } 
+    30% { transform: translateX(50vw) translateY(50vh) rotate(45deg) scale(0.7); opacity: 0.5; }
+    70% { transform: translateX(-20px) translateY(-20px) rotate(-10deg) scale(1.1); opacity: 0.9; }
+    to { transform: translateX(0) translateY(0) rotate(0deg) scale(1); opacity: 1; } 
+  }
+  @keyframes spiralIn { 
+    from { transform: translateX(-200vw) translateY(-200vh) rotate(720deg) scale(0.1); opacity: 0; } 
+    50% { transform: translateX(0) translateY(0) rotate(360deg) scale(1.3); opacity: 0.8; }
+    to { transform: translateX(0) translateY(0) rotate(0deg) scale(1); opacity: 1; } 
+  }
+  
+  /* Explosive Entries */
+  @keyframes explodeIn { 
+    from { transform: scale(0.1) rotate(180deg); opacity: 0; filter: blur(10px); } 
+    30% { transform: scale(1.5) rotate(90deg); opacity: 0.7; filter: blur(5px); }
+    70% { transform: scale(0.9) rotate(-10deg); opacity: 0.9; filter: blur(1px); }
+    to { transform: scale(1) rotate(0deg); opacity: 1; filter: blur(0px); } 
+  }
+  @keyframes rocketIn { 
+    from { transform: translateY(200vh) translateX(-50vw) rotate(45deg) scale(0.2); opacity: 0; } 
+    50% { transform: translateY(-50px) translateX(20px) rotate(-10deg) scale(1.2); opacity: 0.8; }
+    to { transform: translateY(0) translateX(0) rotate(0deg) scale(1); opacity: 1; } 
+  }
+  @keyframes meteorIn { 
+    from { transform: translateX(200vw) translateY(-200vh) rotate(45deg) scale(0.3); opacity: 0; filter: brightness(3); } 
+    50% { transform: translateX(50px) translateY(50px) rotate(20deg) scale(1.1); opacity: 0.9; filter: brightness(1.5); }
+    to { transform: translateX(0) translateY(0) rotate(0deg) scale(1); opacity: 1; filter: brightness(1); } 
+  }
   @keyframes zoomIn { from { transform: scale(0); } to { transform: scale(1); } }
   @keyframes zoomOut { from { transform: scale(1.3); } to { transform: scale(1); } }
   @keyframes rotateIn { from { transform: rotate(-200deg); opacity: 0; } to { transform: rotate(0); opacity: 1; } }
@@ -399,10 +458,26 @@
 
   /* Apply animation classes */
   .animate-fadeIn { animation: fadeIn 0.8s ease-in-out; }
-  .animate-slideInLeft { animation: slideInLeft 0.8s ease-out; }
-  .animate-slideInRight { animation: slideInRight 0.8s ease-out; }
-  .animate-slideInUp { animation: slideInUp 0.8s ease-out; }
-  .animate-slideInDown { animation: slideInDown 0.8s ease-out; }
+  .animate-slideInLeft { animation: slideInLeft 1.2s ease-out; }
+  .animate-slideInRight { animation: slideInRight 1.2s ease-out; }
+  .animate-slideInUp { animation: slideInUp 1.2s ease-out; }
+  .animate-slideInDown { animation: slideInDown 1.2s ease-out; }
+  
+  /* Dramatic off-screen animation classes */
+  .animate-flyInFromLeft { animation: flyInFromLeft 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  .animate-flyInFromRight { animation: flyInFromRight 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  .animate-flyInFromTop { animation: flyInFromTop 1.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  .animate-flyInFromBottom { animation: flyInFromBottom 1.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  
+  /* Swooping dramatic entries */
+  .animate-swoopInLeft { animation: swoopInLeft 2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+  .animate-swoopInRight { animation: swoopInRight 2s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+  .animate-spiralIn { animation: spiralIn 2.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+  
+  /* Explosive entries */
+  .animate-explodeIn { animation: explodeIn 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
+  .animate-rocketIn { animation: rocketIn 1.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  .animate-meteorIn { animation: meteorIn 1.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
   .animate-zoomIn { animation: zoomIn 0.6s ease-out; }
   .animate-zoomOut { animation: zoomOut 0.6s ease-out; }
   .animate-rotateIn { animation: rotateIn 0.8s ease-out; }
