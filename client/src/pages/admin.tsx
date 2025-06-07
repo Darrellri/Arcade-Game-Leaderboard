@@ -791,9 +791,9 @@ export default function Admin() {
                       <TableHeader>
                         <TableRow>
                           <TableHead>Game</TableHead>
-                          <TableHead>Subtitle</TableHead>
-                          <TableHead>Type</TableHead>
-                          <TableHead>Images</TableHead>
+                          <TableHead className="text-center">Subtitle</TableHead>
+                          <TableHead className="text-center">Type</TableHead>
+                          <TableHead className="text-center">Marquee Images</TableHead>
                           <TableHead>Actions</TableHead>
                         </TableRow>
                       </TableHeader>

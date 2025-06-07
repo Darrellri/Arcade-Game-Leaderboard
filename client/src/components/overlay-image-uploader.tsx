@@ -113,7 +113,6 @@ export default function OverlayImageUploader({
 
   return (
     <div className="space-y-2">
-      <div className="text-xs font-medium text-muted-foreground">Overlay Image</div>
       
       {/* Image Preview Area */}
       <div 

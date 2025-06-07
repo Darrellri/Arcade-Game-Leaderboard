@@ -113,7 +113,6 @@ export default function MarqueeImageUploader({
 
   return (
     <div className="space-y-2">
-      <div className="text-xs font-medium text-muted-foreground">Marquee Image</div>
       
       {/* Image Preview Area */}
       <div 
