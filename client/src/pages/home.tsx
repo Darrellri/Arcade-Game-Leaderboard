@@ -287,18 +287,14 @@ function DualView({ games, animationsEnabled, hideHeader }: {
 
   return (
     <div className="flex justify-center items-center min-h-[70vh]">
-      <div className="relative">
+      <div className="flex flex-col items-center gap-5"> {/* 20px gap between images */}
         {currentGames.map((game, index) => (
           <div 
             key={`${game.id}-${currentPair}`}
             className={`${animationsEnabled && currentAnimationPair[index] ? `animate-${currentAnimationPair[index]}` : ''}`}
             style={{ 
               animationDelay: `${index * 0.4}s`,
-              animationFillMode: 'both',
-              position: index === 0 ? 'relative' : 'absolute',
-              top: index === 1 ? '-289px' : '0', // 90% of 321px height = 289px overlap
-              zIndex: index === 0 ? 1 : 2,
-              marginBottom: index === 0 ? '32px' : '0' // Reserve space for bottom image (321px - 289px overlap)
+              animationFillMode: 'both'
             }}
           >
             <FullSizeMarquee game={game} />
@@ -345,13 +341,15 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   if (!currentGame) return null;
 
   return (
-    <div className="flex justify-center items-center min-h-[70vh]">
+    <div className="flex justify-center items-center min-h-[70vh] w-full px-4">
       <div 
         key={`${currentGame.id}-${currentGameIndex}`}
-        className={`${animationsEnabled ? `animate-${currentAnimation}` : ''}`}
+        className={`w-full max-w-none ${animationsEnabled ? `animate-${currentAnimation}` : ''}`}
         style={{ animationFillMode: 'both' }}
       >
-        <FullSizeMarquee game={currentGame} />
+        <div className="w-full flex justify-center">
+          <FullSizeMarquee game={currentGame} className="max-w-full" />
+        </div>
       </div>
     </div>
   );
@@ -403,7 +401,7 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
         className="space-y-4"
         style={{ 
           transform: `translateY(-${scrollPosition}px)`,
-          paddingTop: `200px` // Start 200 pixels higher
+          paddingTop: `300px` // Start 300 pixels higher
         }}
       >
         {visibleGames.map((game, index) => {
