@@ -81,7 +81,8 @@ import {
   GripVertical,
   Palette,
   Sun,
-  Moon
+  Moon,
+  AlertCircle
 } from "lucide-react";
 import { 
   Dialog,
