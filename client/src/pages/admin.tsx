@@ -204,11 +204,16 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onIma
       </TableCell>
       
       <TableCell className="p-2">
-        <div className="flex gap-1">
+        <div className="space-y-1">
+          {game.hidden && (
+            <div className="text-center text-xs text-muted-foreground">
+              Not Displayed
+            </div>
+          )}
           <Button 
             variant={game.hidden ? "outline" : "secondary"} 
             size="sm"
-            className="text-xs h-6 px-2"
+            className="w-full text-xs h-6"
             onClick={() => onGameEdit(game.id, "hidden", !game.hidden)}
           >
             {game.hidden ? "Show" : "Hide"}
@@ -216,7 +221,7 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onIma
           <Button 
             variant="destructive" 
             size="sm"
-            className="text-xs h-6 px-2"
+            className="w-full text-xs h-6"
             onClick={() => {
               if (window.confirm(`Delete ${game.name}? This will remove the game and all scores.`)) {
                 onDelete(game.id);
