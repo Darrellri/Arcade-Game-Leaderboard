@@ -123,13 +123,13 @@ export default function Leaderboard() {
         {game.imageUrl && (
           <div className="relative w-full">
             <div 
-              className="relative rounded-[10px] overflow-hidden transition-all duration-300 group cursor-pointer hover:opacity-90"
+              className="relative w-full aspect-[792/214] rounded-[10px] overflow-hidden transition-all duration-300 group cursor-pointer hover:opacity-90"
               onClick={handleMarqueeClick}
             >
               <img 
                 src={game.imageUrl || ''} 
                 alt={game.name} 
-                className="w-full h-auto object-contain rounded-[10px] brightness-125"
+                className="w-full h-full object-cover rounded-[10px] brightness-125"
                 style={{
                   filter: marqueeBlurred ? 'blur(2px)' : 'blur(0px)',
                   transition: 'filter 0.3s ease-in-out'
@@ -144,7 +144,7 @@ export default function Leaderboard() {
                     src={game.overlayImageUrl}
                     alt={`${game.name} overlay`}
                     className={cn(
-                      "max-w-full max-h-full object-contain",
+                      "w-full h-full object-cover",
                       overlayAnimation,
                       // Add continuous floating when no animation is active
                       !overlayAnimation && "animate-[overlayFloat_4s_ease-in-out_infinite]"
@@ -157,10 +157,10 @@ export default function Leaderboard() {
                 </div>
               )}
               {/* Lighter overlay for better brightness */}
-              <div className="absolute inset-0 bg-black/30 rounded-[10px]"></div>
+              <div className="absolute inset-0 bg-black/30 rounded-[10px]" style={{ zIndex: 20 }}></div>
               
               {/* Desktop text overlay */}
-              <div className="hidden sm:absolute sm:inset-0 sm:flex sm:items-center p-6 sm:pl-[30px]">
+              <div className="hidden sm:absolute sm:inset-0 sm:flex sm:items-center p-6 sm:pl-[30px]" style={{ zIndex: 30 }}>
                 <div className="text-center sm:text-left">
                   <h1 className="text-3xl md:text-5xl lg:text-5xl font-black tracking-wide uppercase text-white drop-shadow-2xl" 
                       style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5)' }}>
