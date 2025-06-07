@@ -78,7 +78,8 @@ import {
   Camera,
   Info,
   Building2,
-  GripVertical
+  GripVertical,
+  Palette
 } from "lucide-react";
 import { 
   Dialog,
@@ -755,6 +756,68 @@ export default function Admin() {
                     </Table>
                   </SortableContext>
                 </DndContext>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Color Schemes Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Palette className="h-5 w-5" />
+                Color Schemes
+              </CardTitle>
+              <CardDescription>
+                Choose a color scheme for your arcade leaderboard
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {venueSettings?.themePresets?.map((preset) => (
+                  <Card
+                    key={preset.name}
+                    className={`cursor-pointer transition-all hover:scale-105 ${
+                      venueSettings.theme.primary === preset.primary
+                        ? "ring-2 ring-primary shadow-lg"
+                        : "hover:shadow-md"
+                    }`}
+                    onClick={() => {
+                      updateSettings.mutate({
+                        theme: {
+                          name: preset.name,
+                          primary: preset.primary,
+                          variant: preset.variant,
+                          appearance: preset.appearance,
+                          radius: preset.radius,
+                        },
+                      });
+                    }}
+                  >
+                    <CardContent className="p-4">
+                      <div
+                        className="w-full h-16 rounded mb-3 relative overflow-hidden"
+                        style={{
+                          background: `linear-gradient(135deg, ${preset.primary}, ${preset.primary}90)`,
+                        }}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
+                        {venueSettings.theme.primary === preset.primary && (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                              <div className="w-3 h-3 bg-green-500 rounded-full" />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="text-center">
+                        <p className="font-medium text-sm mb-1">{preset.name}</p>
+                        <p className="text-xs text-muted-foreground capitalize">
+                          {preset.variant} • {preset.appearance}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </CardContent>
           </Card>
