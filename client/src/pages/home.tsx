@@ -37,18 +37,22 @@ type ViewMode = "grid" | "list" | "marquee";
 // Marquee scroll view component
 function MarqueeScrollView({ games }: { games: Game[] }) {
   const [isScrolling, setIsScrolling] = useState(false);
-  const [scrollSpeed, setScrollSpeed] = useState(30); // seconds per game
-  const [widthMode, setWidthMode] = useState<"original" | "fullscreen">("original");
   const [currentGameIndex, setCurrentGameIndex] = useState(0);
+  
+  // Default settings (can be configured in admin)
+  const scrollSpeed = 30; // seconds per game
+  const widthMode: "original" | "fullscreen" = "original";
+  const autoStartDelay = 5000; // 5 seconds
+  const gameSpacing = 100; // 100px spacing
 
-  // Auto-start scrolling after 5 seconds
+  // Auto-start scrolling after delay
   useEffect(() => {
     const startTimer = setTimeout(() => {
       setIsScrolling(true);
-    }, 5000);
+    }, autoStartDelay);
 
     return () => clearTimeout(startTimer);
-  }, []);
+  }, [autoStartDelay]);
 
   // Handle scrolling through games
   useEffect(() => {
@@ -71,70 +75,14 @@ function MarqueeScrollView({ games }: { games: Game[] }) {
 
   return (
     <div className="space-y-6">
-      {/* Controls */}
-      <div className="flex flex-wrap items-center justify-center gap-4 p-4 bg-card/50 rounded-lg border">
-        <Button
-          variant={isScrolling ? "destructive" : "default"}
-          size="sm"
-          onClick={() => setIsScrolling(!isScrolling)}
-        >
-          {isScrolling ? "Stop Scroll" : "Start Scroll"}
-        </Button>
-        
-        <div className="flex items-center gap-2">
-          <label className="text-sm font-medium">Speed:</label>
-          <select 
-            value={scrollSpeed} 
-            onChange={(e) => setScrollSpeed(Number(e.target.value))}
-            className="px-2 py-1 border rounded text-sm bg-background"
-          >
-            <option value={10}>Fast (10s)</option>
-            <option value={20}>Medium (20s)</option>
-            <option value={30}>Slow (30s)</option>
-            <option value={60}>Very Slow (60s)</option>
-          </select>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <label className="text-sm font-medium">Width:</label>
-          <select 
-            value={widthMode} 
-            onChange={(e) => setWidthMode(e.target.value as "original" | "fullscreen")}
-            className="px-2 py-1 border rounded text-sm bg-background"
-          >
-            <option value="original">Original Size</option>
-            <option value="fullscreen">Full Screen</option>
-          </select>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentGameIndex((prev) => prev > 0 ? prev - 1 : games.length - 1)}
-          >
-            ← Previous
-          </Button>
-          <span className="text-sm text-muted-foreground">
-            {currentGameIndex + 1} of {games.length}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentGameIndex((prev) => (prev + 1) % games.length)}
-          >
-            Next →
-          </Button>
-        </div>
-      </div>
 
       {/* Scrolling marquee display */}
       <div className="relative overflow-hidden">
         <div 
           className="flex transition-transform duration-1000 ease-in-out"
           style={{ 
-            transform: `translateX(-${currentGameIndex * 100}%)`,
-            gap: "100px"
+            transform: `translateX(calc(-${currentGameIndex} * (100% + ${gameSpacing}px)))`,
+            gap: `${gameSpacing}px`
           }}
         >
           {games.map((game, index) => (

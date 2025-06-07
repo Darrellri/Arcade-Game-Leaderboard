@@ -1197,6 +1197,77 @@ export default function Admin() {
                   </div>
                 </div>
               )}
+
+              {/* Scroll View Options */}
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Scroll View Options</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Configure settings for the marquee scroll view mode
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Default Scroll Speed</Label>
+                    <select 
+                      defaultValue={30}
+                      className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                    >
+                      <option value={10}>Fast (10 seconds per game)</option>
+                      <option value={20}>Medium (20 seconds per game)</option>
+                      <option value={30}>Slow (30 seconds per game)</option>
+                      <option value={60}>Very Slow (60 seconds per game)</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Default Width Mode</Label>
+                    <select 
+                      defaultValue="original"
+                      className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                    >
+                      <option value="original">Original Size</option>
+                      <option value="fullscreen">Full Screen Width</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Auto-Start Delay</Label>
+                    <select 
+                      defaultValue={5}
+                      className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                    >
+                      <option value={0}>Start Immediately</option>
+                      <option value={3}>3 seconds</option>
+                      <option value={5}>5 seconds</option>
+                      <option value={10}>10 seconds</option>
+                      <option value={-1}>Manual Start Only</option>
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Game Spacing</Label>
+                    <select 
+                      defaultValue={100}
+                      className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                    >
+                      <option value={50}>50 pixels</option>
+                      <option value={75}>75 pixels</option>
+                      <option value={100}>100 pixels</option>
+                      <option value={150}>150 pixels</option>
+                      <option value={200}>200 pixels</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="p-3 bg-muted/30 rounded-lg">
+                  <div className="text-sm text-muted-foreground">
+                    These settings control the default behavior of the marquee scroll view. 
+                    Users can still adjust speed and width mode using the controls in the scroll view.
+                  </div>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
