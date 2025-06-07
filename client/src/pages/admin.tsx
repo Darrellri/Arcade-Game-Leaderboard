@@ -259,6 +259,7 @@ export default function Admin() {
   // Local state for background override functionality
   const [localBackgroundOverride, setLocalBackgroundOverride] = useState(false);
   const [localAppearance, setLocalAppearance] = useState<"dark" | "light">("dark");
+  const [localDarknessLevel, setLocalDarknessLevel] = useState(20); // 0-100 scale
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   // Fetch venue settings
@@ -277,6 +278,7 @@ export default function Admin() {
     if (venueSettings) {
       setLocalBackgroundOverride(venueSettings.backgroundOverride || false);
       setLocalAppearance(venueSettings.theme.appearance as "dark" | "light");
+      setLocalDarknessLevel(venueSettings.theme.appearance === 'dark' ? 20 : 80);
       setHasUnsavedChanges(false);
     }
   }, [venueSettings]);
@@ -997,61 +999,82 @@ export default function Admin() {
                     </span>
                   </div>
 
-                  <div className="space-y-3">
-                    {/* Toggle Buttons */}
-                    <div className="flex rounded-lg border p-1 bg-muted/50">
-                      <Button
-                        variant={localAppearance === 'dark' ? 'default' : 'ghost'}
-                        size="sm"
-                        className="flex-1 flex items-center gap-2"
-                        onClick={() => {
-                          if (localAppearance !== 'dark') {
-                            setLocalAppearance('dark');
-                            setHasUnsavedChanges(true);
+                  <div className="space-y-4">
+                    {/* Color Intensity Selector */}
+                    <div className="space-y-3">
+                      <div className="text-sm font-medium">Background Darkness Level</div>
+                      <div className="flex justify-between items-center px-2">
+                        {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map((level) => {
+                          const isSelected = localDarknessLevel === level;
+                          const backgroundColor = `hsl(0, 0%, ${level}%)`;
+                          
+                          return (
+                            <button
+                              key={level}
+                              className={`w-8 h-8 rounded-full border-2 transition-all duration-200 hover:scale-110 ${
+                                isSelected
+                                  ? 'border-primary ring-2 ring-primary/50 scale-110' 
+                                  : 'border-muted hover:border-primary/50'
+                              }`}
+                              style={{ backgroundColor }}
+                              onClick={() => {
+                                const newAppearance = level < 50 ? 'dark' : 'light';
+                                setLocalDarknessLevel(level);
+                                setLocalAppearance(newAppearance);
+                                setHasUnsavedChanges(true);
 
-                            // Apply real-time preview to the admin page
-                            if (venueSettings) {
-                              const previewTheme = {
-                                primary: venueSettings.theme.primary,
-                                variant: venueSettings.theme.variant,
-                                appearance: 'dark' as const,
-                                radius: venueSettings.theme.radius,
-                              };
-                              // Apply theme immediately for preview
-                              document.documentElement.setAttribute('data-theme', JSON.stringify(previewTheme));
-                            }
-                          }
-                        }}
-                      >
-                        <Moon className="w-4 h-4" />
-                        Dark (7 themes)
-                      </Button>
-                      <Button
-                        variant={localAppearance === 'light' ? 'default' : 'ghost'}
-                        size="sm"
-                        className="flex-1 flex items-center gap-2"
-                        onClick={() => {
-                          if (localAppearance !== 'light') {
-                            setLocalAppearance('light');
-                            setHasUnsavedChanges(true);
-
-                            // Apply real-time preview to the admin page
-                            if (venueSettings) {
-                              const previewTheme = {
-                                primary: venueSettings.theme.primary,
-                                variant: venueSettings.theme.variant,
-                                appearance: 'light' as const,
-                                radius: venueSettings.theme.radius,
-                              };
-                              // Apply theme immediately for preview
-                              document.documentElement.setAttribute('data-theme', JSON.stringify(previewTheme));
-                            }
-                          }
-                        }}
-                      >
-                        <Sun className="w-4 h-4" />
-                        Light (3 themes)
-                      </Button>
+                                // Apply real-time preview to the admin page
+                                if (venueSettings) {
+                                  const previewTheme = {
+                                    primary: venueSettings.theme.primary,
+                                    variant: venueSettings.theme.variant,
+                                    appearance: newAppearance,
+                                    radius: venueSettings.theme.radius,
+                                  };
+                                  // Apply theme immediately for preview
+                                  document.documentElement.setAttribute('data-theme', JSON.stringify(previewTheme));
+                                }
+                              }}
+                              title={`${level}% darkness - ${level < 50 ? 'Dark' : 'Light'} mode`}
+                            />
+                          );
+                        })}
+                      </div>
+                      <div className="flex justify-between text-xs text-muted-foreground px-2">
+                        <span className="flex items-center gap-1">
+                          <Moon className="w-3 h-3" />
+                          Very Dark
+                        </span>
+                        <span>50%</span>
+                        <span className="flex items-center gap-1">
+                          <Sun className="w-3 h-3" />
+                          Very Light
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Current Selection Display */}
+                    <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+                      <span className="text-sm font-medium">Selected:</span>
+                      <div className="flex items-center gap-3">
+                        <div 
+                          className="w-6 h-6 rounded-full border-2 border-primary"
+                          style={{ backgroundColor: `hsl(0, 0%, ${localDarknessLevel}%)` }}
+                        />
+                        <div className="flex items-center gap-2">
+                          {localAppearance === 'dark' ? (
+                            <>
+                              <Moon className="w-4 h-4" />
+                              <span className="font-medium">{localDarknessLevel}% Dark</span>
+                            </>
+                          ) : (
+                            <>
+                              <Sun className="w-4 h-4" />
+                              <span className="font-medium">{localDarknessLevel}% Light</span>
+                            </>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
 
