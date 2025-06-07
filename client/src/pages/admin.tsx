@@ -79,7 +79,9 @@ import {
   Info,
   Building2,
   GripVertical,
-  Palette
+  Palette,
+  Sun,
+  Moon
 } from "lucide-react";
 import { 
   Dialog,
@@ -772,14 +774,14 @@ export default function Admin() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {venueSettings?.themePresets?.map((preset) => (
                   <Card
                     key={preset.name}
-                    className={`cursor-pointer transition-all hover:scale-105 ${
+                    className={`cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-lg ${
                       venueSettings.theme.primary === preset.primary
-                        ? "ring-2 ring-primary shadow-lg"
-                        : "hover:shadow-md"
+                        ? "ring-2 ring-primary shadow-xl border-primary/50"
+                        : "hover:shadow-md border-border"
                     }`}
                     onClick={() => {
                       updateSettings.mutate({
@@ -794,26 +796,98 @@ export default function Admin() {
                     }}
                   >
                     <CardContent className="p-4">
-                      <div
-                        className="w-full h-16 rounded mb-3 relative overflow-hidden"
-                        style={{
-                          background: `linear-gradient(135deg, ${preset.primary}, ${preset.primary}90)`,
-                        }}
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
-                        {venueSettings.theme.primary === preset.primary && (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
-                              <div className="w-3 h-3 bg-green-500 rounded-full" />
-                            </div>
+                      {/* Enhanced Color Swatch */}
+                      <div className="relative mb-4">
+                        <div
+                          className="w-full h-20 rounded-lg overflow-hidden shadow-inner border-2 border-white/20"
+                          style={{
+                            background: `linear-gradient(135deg, ${preset.primary}, ${preset.primary}CC, ${preset.primary}80)`,
+                          }}
+                        >
+                          {/* Variant indicator pattern overlay */}
+                          {preset.variant === 'vibrant' && (
+                            <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-white/10" />
+                          )}
+                          {preset.variant === 'tint' && (
+                            <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-white/20" />
+                          )}
+                          {preset.variant === 'professional' && (
+                            <div className="absolute inset-0 bg-gradient-to-b from-white/15 to-black/10" />
+                          )}
+                          
+                          {/* Theme indicator icons */}
+                          <div className="absolute top-2 right-2 flex items-center gap-1">
+                            {preset.appearance === 'dark' ? (
+                              <div className="w-6 h-6 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center">
+                                <Moon className="w-3 h-3 text-white" />
+                              </div>
+                            ) : (
+                              <div className="w-6 h-6 bg-white/70 backdrop-blur-sm rounded-full flex items-center justify-center">
+                                <Sun className="w-3 h-3 text-yellow-600" />
+                              </div>
+                            )}
                           </div>
-                        )}
+
+                          {/* Active selection indicator */}
+                          {venueSettings.theme.primary === preset.primary && (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="w-8 h-8 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg">
+                                <div className="w-4 h-4 bg-green-500 rounded-full animate-pulse" />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Color value display */}
+                        <div className="absolute bottom-1 left-1 right-1">
+                          <div className="bg-black/70 backdrop-blur-sm rounded px-2 py-1">
+                            <code className="text-white text-xs font-mono">{preset.primary}</code>
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-center">
-                        <p className="font-medium text-sm mb-1">{preset.name}</p>
-                        <p className="text-xs text-muted-foreground capitalize">
-                          {preset.variant} • {preset.appearance}
-                        </p>
+
+                      {/* Theme information */}
+                      <div className="space-y-2">
+                        <div className="text-center">
+                          <h4 className="font-semibold text-sm leading-tight">{preset.name}</h4>
+                        </div>
+                        
+                        <div className="flex items-center justify-between text-xs">
+                          <div className="flex items-center gap-1">
+                            <div 
+                              className="w-2 h-2 rounded-full"
+                              style={{ backgroundColor: preset.primary }}
+                            />
+                            <span className="text-muted-foreground capitalize font-medium">
+                              {preset.variant}
+                            </span>
+                          </div>
+                          
+                          <div className="flex items-center gap-1">
+                            {preset.appearance === 'dark' ? (
+                              <>
+                                <Moon className="w-3 h-3 text-muted-foreground" />
+                                <span className="text-muted-foreground">Dark</span>
+                              </>
+                            ) : (
+                              <>
+                                <Sun className="w-3 h-3 text-muted-foreground" />
+                                <span className="text-muted-foreground">Light</span>
+                              </>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Border radius indicator */}
+                        <div className="flex items-center justify-center pt-1">
+                          <div className="text-xs text-muted-foreground flex items-center gap-1">
+                            <div 
+                              className="w-3 h-3 border border-current"
+                              style={{ borderRadius: `${preset.radius * 4}px` }}
+                            />
+                            <span>Radius: {preset.radius}</span>
+                          </div>
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
