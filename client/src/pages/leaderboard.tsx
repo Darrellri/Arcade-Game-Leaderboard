@@ -28,17 +28,32 @@ export default function Leaderboard() {
   
   // Always sort by score in descending order for individual game pages
 
-  const { data: game } = useQuery<Game>({
+  const { data: game, isLoading: gameLoading } = useQuery<Game>({
     queryKey: [`/api/games/${id}`],
   });
 
-  const { data: scores, isLoading } = useQuery<Score[]>({
+  const { data: scores, isLoading: scoresLoading } = useQuery<Score[]>({
     queryKey: [`/api/games/${id}/scores`],
   });
+
+  if (gameLoading) {
+    return (
+      <div className="space-y-4">
+        <Skeleton className="h-64 w-full" />
+        <div className="space-y-4">
+          {[...Array(3)].map((_, i) => (
+            <Skeleton key={i} className="h-24 w-full" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   if (!game) {
     return <div>Game not found</div>;
   }
+
+  const isLoading = scoresLoading;
 
   // Always sort by score (highest to lowest) and exclude the champion (first place)
   const sortedScores = [...(scores || [])].sort((a, b) => b.score - a.score);
