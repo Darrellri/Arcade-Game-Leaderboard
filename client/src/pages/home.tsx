@@ -32,6 +32,112 @@ import { formatDate, formatTime } from "@/lib/formatters";
 import { useTheme } from "@/contexts/ThemeContext";
 import GameMarquee from "@/components/game-marquee";
 
+// Full-size marquee component for new views with 15px radius
+function FullSizeMarquee({ game, className = "" }: { game: Game; className?: string }) {
+  const [overlayAnimation, setOverlayAnimation] = useState<string>("");
+  const [animationKey, setAnimationKey] = useState(0);
+  const [marqueeBlurred, setMarqueeBlurred] = useState(false);
+  
+  const imageUrl = game.imageUrl;
+  const overlayImageUrl = game.overlayImageUrl;
+
+  const animations = [
+    "animate-[overlayGrowShrink_0.72s_ease-in-out]",
+    "animate-[overlayJello_0.65s_ease-in-out]", 
+    "animate-[overlaySkewWobble_0.8s_ease-in-out]",
+    "animate-[overlayPulseScale_0.55s_ease-in-out]",
+    "animate-[overlayElastic_0.91s_ease-out]",
+    "animate-[overlayBreath_1.09s_ease-in-out]",
+    "animate-[overlaySquish_0.72s_ease-in-out]",
+    "animate-[overlayGlow_0.91s_ease-in-out]"
+  ];
+
+  useEffect(() => {
+    if (!overlayImageUrl) return;
+
+    const triggerRandomAnimation = () => {
+      const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
+      setOverlayAnimation(randomAnimation);
+      setAnimationKey(prev => prev + 1);
+      setMarqueeBlurred(true);
+      
+      setTimeout(() => {
+        setOverlayAnimation("");
+        setMarqueeBlurred(false);
+      }, 2500);
+    };
+
+    const initialDelay = Math.random() * 5000 + 5000;
+    const initialTimer = setTimeout(triggerRandomAnimation, initialDelay);
+    const recurringTimer = setInterval(() => {
+      triggerRandomAnimation();
+    }, Math.random() * 10000 + 20000);
+
+    return () => {
+      clearTimeout(initialTimer);
+      clearInterval(recurringTimer);
+    };
+  }, [overlayImageUrl]);
+
+  if (imageUrl) {
+    return (
+      <div className={`w-[792px] h-[214px] relative overflow-hidden ${className}`} 
+           style={{ borderRadius: '15px' }}>
+        <div className="w-full h-full bg-black flex items-center justify-center" 
+             style={{ borderRadius: '15px' }}>
+          <img 
+            src={imageUrl} 
+            alt={`${game.name} marquee`}
+            className="w-full h-full object-cover"
+            style={{
+              filter: marqueeBlurred ? 'blur(2px)' : 'blur(0px)',
+              transition: 'filter 0.3s ease-in-out',
+              borderRadius: '15px'
+            }}
+          />
+          
+          {overlayImageUrl && (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <img
+                key={animationKey}
+                src={overlayImageUrl}
+                alt={`${game.name} overlay`}
+                className={overlayAnimation || "animate-[overlayFloat_4s_ease-in-out_infinite]"}
+                style={{ 
+                  filter: "drop-shadow(2px 2px 4px rgba(0,0,0,0.5))",
+                  zIndex: 10,
+                  width: 'auto',
+                  height: 'auto',
+                  maxWidth: '100%',
+                  maxHeight: '100%',
+                  objectFit: 'contain',
+                  borderRadius: '15px'
+                }}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`w-[792px] h-[214px] flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40 ${className}`}
+         style={{ borderRadius: '15px' }}>
+      <div className="text-center">
+        <h2 className="text-2xl md:text-3xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground drop-shadow-lg">
+          {game.name}
+        </h2>
+        {game.subtitle && (
+          <p className="text-sm md:text-base text-muted-foreground mt-2">
+            {game.subtitle}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 type ViewMode = "dual" | "single" | "scroll" | "grid" | "list";
 
 // Grid View Component - Traditional grid layout
@@ -164,7 +270,7 @@ function DualView({ games, animationsEnabled, hideHeader }: {
             animationFillMode: 'both'
           }}
         >
-          <GameMarquee game={game} />
+          <FullSizeMarquee game={game} />
         </div>
       ))}
     </div>
@@ -213,7 +319,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
         className={`max-w-4xl w-full ${animationsEnabled ? `animate-${currentAnimation}` : ''}`}
         style={{ animationFillMode: 'both' }}
       >
-        <GameMarquee game={currentGame} className="scale-125" />
+        <FullSizeMarquee game={currentGame} />
       </div>
     </div>
   );
@@ -284,7 +390,7 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
                 animationFillMode: 'both'
               }}
             >
-              <GameMarquee game={game} />
+              <FullSizeMarquee game={game} />
             </div>
           );
         })}
