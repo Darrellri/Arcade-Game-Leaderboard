@@ -1110,13 +1110,15 @@ export default function Admin() {
                       <div className="flex gap-2 flex-wrap">
                         {[
                           { name: 'Black', color: '#000000' },
-                          { name: 'White', color: '#ffffff' },
-                          { name: 'Dark Gray', color: '#1a1a1a' },
-                          { name: 'Light Gray', color: '#f5f5f5' },
-                          { name: 'Navy', color: '#1e3a8a' },
-                          { name: 'Forest', color: '#166534' },
-                          { name: 'Burgundy', color: '#7f1d1d' },
-                          { name: 'Purple', color: '#581c87' },
+                          { name: 'Very Dark Gray', color: '#1C1C1C' },
+                          { name: 'Dark Gray', color: '#383838' },
+                          { name: 'Medium Dark', color: '#555555' },
+                          { name: 'Medium', color: '#717171' },
+                          { name: 'Medium Light', color: '#8D8D8D' },
+                          { name: 'Light Gray', color: '#AAAAAA' },
+                          { name: 'Very Light', color: '#C6C6C6' },
+                          { name: 'Almost White', color: '#E2E2E2' },
+                          { name: 'White', color: '#FFFFFF' },
                         ].map((preset) => (
                           <button
                             key={preset.name}
