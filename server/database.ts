@@ -271,7 +271,8 @@ export class DatabaseStorage implements IStorage {
       name: defaultSettings.name,
       leaderboardName: "THE LEADERBOARD",
       theme: defaultSettings.theme,
-      themePresets: defaultSettings.themePresets
+      themePresets: defaultSettings.themePresets,
+      backgroundOverride: defaultSettings.backgroundOverride
     });
     
     return defaultSettings;
@@ -329,7 +330,8 @@ export class DatabaseStorage implements IStorage {
         phone: updated.phone || undefined,
         hours: updated.hours || undefined,
         theme: updated.theme as VenueSettings['theme'],
-        themePresets: updated.themePresets as VenueSettings['themePresets']
+        themePresets: updated.themePresets as VenueSettings['themePresets'],
+        backgroundOverride: updated.backgroundOverride || false
       };
       
       return updatedSettings;

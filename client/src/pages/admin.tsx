@@ -280,6 +280,8 @@ export default function Admin() {
       setLocalAppearance(venueSettings.theme.appearance as "dark" | "light");
       setLocalDarknessLevel(venueSettings.theme.appearance === 'dark' ? 20 : 80);
       setHasUnsavedChanges(false);
+      
+      console.log("Initialized background override:", venueSettings.backgroundOverride);
     }
   }, [venueSettings]);
 
