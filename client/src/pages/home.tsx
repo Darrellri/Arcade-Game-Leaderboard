@@ -37,6 +37,7 @@ function FullSizeMarquee({ game, className = "" }: { game: Game; className?: str
   const [overlayAnimation, setOverlayAnimation] = useState<string>("");
   const [animationKey, setAnimationKey] = useState(0);
   const [marqueeBlurred, setMarqueeBlurred] = useState(false);
+  const [overlayOffset, setOverlayOffset] = useState({ x: 0, y: 0 });
   
   const imageUrl = game.imageUrl;
   const overlayImageUrl = game.overlayImageUrl;
