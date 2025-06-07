@@ -1020,6 +1020,8 @@ export default function Admin() {
                         // Reset to theme default
                         document.documentElement.style.removeProperty('background-color');
                         document.documentElement.style.removeProperty('color');
+                        document.body.style.removeProperty('background-color');
+                        document.body.style.removeProperty('color');
                       }
                     }}
                   />
@@ -1041,8 +1043,9 @@ export default function Admin() {
                             setLocalCustomBackgroundColor(e.target.value);
                             setHasUnsavedChanges(true);
                             
-                            // Apply immediately as preview
+                            // Apply immediately as preview to both html and body
                             document.documentElement.style.setProperty('background-color', e.target.value);
+                            document.body.style.setProperty('background-color', e.target.value);
                             
                             const rgb = hexToRgb(e.target.value);
                             if (rgb) {
@@ -1051,13 +1054,9 @@ export default function Admin() {
                               const lightness = hsl.l;
                               
                               // Set foreground color based on lightness
-                              if (lightness > 0.5) {
-                                // Light background, use dark text
-                                document.documentElement.style.setProperty('color', '#000000');
-                              } else {
-                                // Dark background, use light text
-                                document.documentElement.style.setProperty('color', '#ffffff');
-                              }
+                              const textColor = lightness > 0.5 ? '#000000' : '#ffffff';
+                              document.documentElement.style.setProperty('color', textColor);
+                              document.body.style.setProperty('color', textColor);
                             }
                           }}
                           className="w-12 h-12 rounded border cursor-pointer"
@@ -1073,6 +1072,7 @@ export default function Admin() {
                               // Apply immediately as preview if valid hex
                               if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
                                 document.documentElement.style.setProperty('background-color', e.target.value);
+                                document.body.style.setProperty('background-color', e.target.value);
                                 
                                 const rgb = hexToRgb(e.target.value);
                                 if (rgb) {
@@ -1080,11 +1080,9 @@ export default function Admin() {
                                   const hsl = rgbToHsl(r, g, b);
                                   const lightness = hsl.l;
                                   
-                                  if (lightness > 0.5) {
-                                    document.documentElement.style.setProperty('color', '#000000');
-                                  } else {
-                                    document.documentElement.style.setProperty('color', '#ffffff');
-                                  }
+                                  const textColor = lightness > 0.5 ? '#000000' : '#ffffff';
+                                  document.documentElement.style.setProperty('color', textColor);
+                                  document.body.style.setProperty('color', textColor);
                                 }
                               }
                             }}
@@ -1125,8 +1123,9 @@ export default function Admin() {
                               setLocalCustomBackgroundColor(preset.color);
                               setHasUnsavedChanges(true);
                               
-                              // Apply immediately as preview
+                              // Apply immediately as preview to both html and body
                               document.documentElement.style.setProperty('background-color', preset.color);
+                              document.body.style.setProperty('background-color', preset.color);
                               
                               const rgb = hexToRgb(preset.color);
                               if (rgb) {
@@ -1134,11 +1133,9 @@ export default function Admin() {
                                 const hsl = rgbToHsl(r, g, b);
                                 const lightness = hsl.l;
                                 
-                                if (lightness > 0.5) {
-                                  document.documentElement.style.setProperty('color', '#000000');
-                                } else {
-                                  document.documentElement.style.setProperty('color', '#ffffff');
-                                }
+                                const textColor = lightness > 0.5 ? '#000000' : '#ffffff';
+                                document.documentElement.style.setProperty('color', textColor);
+                                document.body.style.setProperty('color', textColor);
                               }
                             }}
                             className="w-8 h-8 rounded border-2 border-muted hover:border-primary transition-colors"
@@ -1190,6 +1187,8 @@ export default function Admin() {
                           // Reset preview
                           document.documentElement.style.removeProperty('background-color');
                           document.documentElement.style.removeProperty('color');
+                          document.body.style.removeProperty('background-color');
+                          document.body.style.removeProperty('color');
                         }
                       }}
                     >
