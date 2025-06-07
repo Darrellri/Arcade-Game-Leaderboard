@@ -262,19 +262,40 @@ export default function Leaderboard() {
           {nonChampionScores.map((score, index) => (
             <Card key={score.id} className="overflow-hidden">
               <CardContent className="p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
+                <div className="grid grid-cols-4 gap-4 items-center">
+                  {/* Marquee Image Column */}
+                  <div className="flex justify-center">
+                    {game.imageUrl ? (
+                      <img 
+                        src={game.imageUrl} 
+                        alt={game.name}
+                        className="w-24 h-auto object-contain rounded-[10px]"
+                        style={{ transform: 'scale(1.5)' }}
+                      />
+                    ) : (
+                      <div className="w-24 h-16 bg-muted rounded-[10px] flex items-center justify-center">
+                        <span className="text-xs text-muted-foreground">No Image</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Rank Column */}
+                  <div className="flex justify-center">
                     <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold text-sm">
                       #{index + 2}
                     </div>
-                    <div className="text-center">
-                      <h3 className="font-semibold text-2xl">{score.playerName}</h3>
-                      <p className="text-xs text-muted-foreground">
-                        {formatDate(new Date(score.submittedAt))} {formatTime(new Date(score.submittedAt))}
-                      </p>
-                    </div>
                   </div>
-                  <div className="flex items-center gap-4">
+                  
+                  {/* Champion Name Column */}
+                  <div className="text-center">
+                    <h3 className="font-semibold text-2xl">{score.playerName}</h3>
+                    <p className="text-xs text-muted-foreground">
+                      {formatDate(new Date(score.submittedAt))} {formatTime(new Date(score.submittedAt))}
+                    </p>
+                  </div>
+                  
+                  {/* Score Column */}
+                  <div className="flex items-center justify-center gap-4">
                     <p className="text-3xl font-bold text-primary tabular-nums">
                       {score.score.toLocaleString()}
                     </p>
