@@ -907,57 +907,7 @@ export default function Admin() {
                           </code>
                         </div>
 
-                        {/* Background Darkness/Lightness Slider */}
-                        <div className="mt-3 pt-2 border-t border-border/50">
-                          <div className="text-xs text-muted-foreground mb-2 text-center">
-                            Background Override
-                          </div>
-                          <div className="px-1">
-                            <Slider
-                              value={[
-                                venueSettings.theme.primary === preset.primary 
-                                  ? (venueSettings.theme.appearance === 'dark' ? 0 : 100)
-                                  : (preset.appearance === 'dark' ? 0 : 100)
-                              ]}
-                              max={100}
-                              step={25}
-                              className="w-full"
-                              onValueChange={(value) => {
-                                // Save immediately when slider changes
-                                if (venueSettings.theme.primary === preset.primary) {
-                                  const bgValue = value[0];
-                                  const newAppearance = bgValue < 50 ? "dark" : "light";
-                                  
-                                  // Only update if appearance actually changed
-                                  if (newAppearance !== venueSettings.theme.appearance) {
-                                    updateSettings.mutate({
-                                      theme: {
-                                        primary: venueSettings.theme.primary,
-                                        variant: venueSettings.theme.variant,
-                                        appearance: newAppearance,
-                                        radius: venueSettings.theme.radius,
-                                      },
-                                    });
-                                  }
-                                }
-                              }}
-                              disabled={venueSettings.theme.primary !== preset.primary}
-                            />
-                            <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                              <span className="flex items-center gap-1">
-                                <Moon className="w-2 h-2" />
-                                Dark
-                              </span>
-                              <span className="text-xs">
-                                {venueSettings.theme.primary === preset.primary ? "Drag to change" : "Select theme first"}
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <Sun className="w-2 h-2" />
-                                Light
-                              </span>
-                            </div>
-                          </div>
-                        </div>
+
 
                         {/* Active indicator */}
                         {venueSettings.theme.primary === preset.primary && (
@@ -983,6 +933,113 @@ export default function Admin() {
                   <Badge variant="secondary" className="text-xs">
                     {venueSettings?.themePresets?.length || 0} themes available
                   </Badge>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Background Color Override Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-secondary/50">
+                  <Sun className="h-4 w-4" />
+                </div>
+                Background Color
+              </CardTitle>
+              <CardDescription>
+                Override the background appearance for any selected theme
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="backgroundOverride"
+                  checked={false}
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      // Enable override with smart default based on current theme type
+                      const isDarkTheme = venueSettings?.themePresets?.filter(p => p.appearance === 'dark').some(p => p.primary === venueSettings.theme.primary);
+                      const defaultAppearance = isDarkTheme ? 'dark' : 'light';
+                      
+                      updateSettings.mutate({
+                        theme: {
+                          primary: venueSettings.theme.primary,
+                          variant: venueSettings.theme.variant,
+                          appearance: defaultAppearance,
+                          radius: venueSettings.theme.radius,
+                        },
+                        backgroundOverride: true,
+                      });
+                    } else {
+                      // Disable override and revert to original theme setting
+                      const originalPreset = venueSettings?.themePresets?.find(p => p.primary === venueSettings.theme.primary);
+                      if (originalPreset) {
+                        updateSettings.mutate({
+                          theme: {
+                            primary: originalPreset.primary,
+                            variant: originalPreset.variant,
+                            appearance: originalPreset.appearance,
+                            radius: originalPreset.radius,
+                          },
+                          backgroundOverride: false,
+                        });
+                      }
+                    }
+                  }}
+                />
+                <Label htmlFor="backgroundOverride" className="text-sm font-medium">
+                  Enable background color override
+                </Label>
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">Background Mode</span>
+                  <span className="font-medium capitalize">
+                    {venueSettings.theme.appearance}
+                  </span>
+                </div>
+
+                <div className="px-2">
+                  <Slider
+                    value={[venueSettings.theme.appearance === 'dark' ? 0 : 100]}
+                    max={100}
+                    step={50}
+                    className="w-full"
+                    onValueChange={(value) => {
+                      const bgValue = value[0];
+                      const newAppearance = bgValue < 50 ? "dark" : "light";
+                      
+                      if (newAppearance !== venueSettings.theme.appearance) {
+                        updateSettings.mutate({
+                          theme: {
+                            primary: venueSettings.theme.primary,
+                            variant: venueSettings.theme.variant,
+                            appearance: newAppearance,
+                            radius: venueSettings.theme.radius,
+                          },
+                          backgroundOverride: true,
+                        });
+                      }
+                    }}
+                    disabled={false}
+                  />
+                  <div className="flex justify-between text-xs text-muted-foreground mt-2">
+                    <span className="flex items-center gap-1">
+                      <Moon className="w-3 h-3" />
+                      Dark (7 themes)
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Sun className="w-3 h-3" />
+                      Light (3 themes)
+                    </span>
+                  </div>
+                </div>
+
+                <div className="text-xs text-muted-foreground bg-muted/50 rounded p-2">
+                  <strong>How it works:</strong> When enabled, this setting overrides the background color of any active theme. 
+                  The slider starts at the appropriate position based on whether you have a dark theme (7 available) or light theme (3 available) selected.
                 </div>
               </div>
             </CardContent>
