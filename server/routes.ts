@@ -90,12 +90,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Update venue settings
-  app.patch("/api/admin/settings", async (req, res) => {
+  // Update venue settings (both PATCH and PUT for compatibility)
+  const updateVenueSettingsHandler = async (req: Request, res: Response) => {
     try {
+      console.log("Updating venue settings:", req.body);
       const settings = await storage.updateVenueSettings(req.body);
+      console.log("Settings updated successfully:", settings);
       res.json(settings);
     } catch (error) {
+      console.error("Error updating venue settings:", error);
       if (error instanceof ZodError) {
         return res.status(400).json({ 
           message: "Invalid settings data",
@@ -104,7 +107,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       res.status(500).json({ message: "Failed to update venue settings" });
     }
-  });
+  };
+
+  app.patch("/api/admin/settings", updateVenueSettingsHandler);
+  app.put("/api/admin/settings", updateVenueSettingsHandler);
 
   // Upload animated logo
   app.post("/api/admin/upload-animated-logo", uploadAnimatedLogo.single('animatedLogo'), async (req, res) => {

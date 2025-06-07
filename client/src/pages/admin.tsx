@@ -557,7 +557,11 @@ export default function Admin() {
   // Update settings mutation
   const updateSettings = useMutation({
     mutationFn: async (data: any) => {
-      const response = await apiRequest("PUT", "/api/admin/settings", data);
+      const response = await apiRequest("PATCH", "/api/admin/settings", data);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server error: ${response.status} - ${errorText}`);
+      }
       return response.json();
     },
     onSuccess: () => {
