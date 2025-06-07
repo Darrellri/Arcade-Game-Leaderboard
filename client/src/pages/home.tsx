@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import GameCard from "@/components/game-card";
 import ShareScore from "@/components/share-score";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Gamepad2, Grid2X2, List, CircleDot, Trophy, GripVertical } from "lucide-react";
+import { Gamepad2, Grid2X2, List, CircleDot, Trophy, GripVertical, MonitorSpeaker } from "lucide-react";
 import ListMarquee from "@/components/list-marquee";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import {
@@ -30,8 +30,146 @@ import { CSS } from '@dnd-kit/utilities';
 
 import { formatDate, formatTime } from "@/lib/formatters";
 import { useTheme } from "@/contexts/ThemeContext";
+import GameMarquee from "@/components/game-marquee";
 
-type ViewMode = "grid" | "list";
+type ViewMode = "grid" | "list" | "marquee";
+
+// Marquee scroll view component
+function MarqueeScrollView({ games }: { games: Game[] }) {
+  const [isScrolling, setIsScrolling] = useState(false);
+  const [scrollSpeed, setScrollSpeed] = useState(30); // seconds per game
+  const [widthMode, setWidthMode] = useState<"original" | "fullscreen">("original");
+  const [currentGameIndex, setCurrentGameIndex] = useState(0);
+
+  // Auto-start scrolling after 5 seconds
+  useEffect(() => {
+    const startTimer = setTimeout(() => {
+      setIsScrolling(true);
+    }, 5000);
+
+    return () => clearTimeout(startTimer);
+  }, []);
+
+  // Handle scrolling through games
+  useEffect(() => {
+    if (!isScrolling || games.length === 0) return;
+
+    const scrollTimer = setInterval(() => {
+      setCurrentGameIndex((prev) => (prev + 1) % games.length);
+    }, scrollSpeed * 1000);
+
+    return () => clearInterval(scrollTimer);
+  }, [isScrolling, games.length, scrollSpeed]);
+
+  if (games.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-muted-foreground">No games available</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Controls */}
+      <div className="flex flex-wrap items-center justify-center gap-4 p-4 bg-card/50 rounded-lg border">
+        <Button
+          variant={isScrolling ? "destructive" : "default"}
+          size="sm"
+          onClick={() => setIsScrolling(!isScrolling)}
+        >
+          {isScrolling ? "Stop Scroll" : "Start Scroll"}
+        </Button>
+        
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium">Speed:</label>
+          <select 
+            value={scrollSpeed} 
+            onChange={(e) => setScrollSpeed(Number(e.target.value))}
+            className="px-2 py-1 border rounded text-sm bg-background"
+          >
+            <option value={10}>Fast (10s)</option>
+            <option value={20}>Medium (20s)</option>
+            <option value={30}>Slow (30s)</option>
+            <option value={60}>Very Slow (60s)</option>
+          </select>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium">Width:</label>
+          <select 
+            value={widthMode} 
+            onChange={(e) => setWidthMode(e.target.value as "original" | "fullscreen")}
+            className="px-2 py-1 border rounded text-sm bg-background"
+          >
+            <option value="original">Original Size</option>
+            <option value="fullscreen">Full Screen</option>
+          </select>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentGameIndex((prev) => prev > 0 ? prev - 1 : games.length - 1)}
+          >
+            ← Previous
+          </Button>
+          <span className="text-sm text-muted-foreground">
+            {currentGameIndex + 1} of {games.length}
+          </span>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCurrentGameIndex((prev) => (prev + 1) % games.length)}
+          >
+            Next →
+          </Button>
+        </div>
+      </div>
+
+      {/* Scrolling marquee display */}
+      <div className="relative overflow-hidden">
+        <div 
+          className="flex transition-transform duration-1000 ease-in-out"
+          style={{ 
+            transform: `translateX(-${currentGameIndex * 100}%)`,
+            gap: "100px"
+          }}
+        >
+          {games.map((game, index) => (
+            <div 
+              key={game.id}
+              className={`flex-shrink-0 ${widthMode === "fullscreen" ? "w-screen" : "w-auto max-w-2xl"}`}
+            >
+              <div className="flex justify-center">
+                <GameMarquee 
+                  game={game} 
+                  className={widthMode === "fullscreen" ? "w-full" : ""}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Game navigation dots */}
+      <div className="flex justify-center gap-2">
+        {games.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentGameIndex(index)}
+            className={`w-3 h-3 rounded-full transition-colors ${
+              index === currentGameIndex 
+                ? "bg-primary" 
+                : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 // Sortable list item component for drag-and-drop
 function SortableGameListItem({ game }: { game: Game }) {
@@ -368,6 +506,14 @@ export default function Home() {
           >
             <List className="h-4 w-4" />
           </Button>
+          <Button
+            variant={viewMode === "marquee" ? "default" : "outline"}
+            size="icon"
+            onClick={() => setViewMode("marquee")}
+            className="shadow-sm hover:shadow-md transition-all duration-200"
+          >
+            <MonitorSpeaker className="h-4 w-4" />
+          </Button>
           
           <div className="flex space-x-2 ml-2">
             <Button variant="outline" size="sm" asChild className="h-8 px-3">
@@ -397,7 +543,7 @@ export default function Home() {
             <GameCard key={game.id} game={game} />
           ))}
         </div>
-      ) : (
+      ) : viewMode === "list" ? (
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
@@ -419,6 +565,8 @@ export default function Home() {
             </div>
           </SortableContext>
         </DndContext>
+      ) : (
+        <MarqueeScrollView games={processedGames || []} />
       )}
 
       {/* Thin Footer Bar */}
