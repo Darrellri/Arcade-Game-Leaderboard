@@ -865,7 +865,8 @@ export default function Admin() {
                         autoPlay 
                         muted 
                         loop 
-                        className="max-w-xs max-h-24 object-contain border rounded"
+                        className="max-w-xs max-h-24 object-contain bg-transparent"
+                        style={{ backgroundColor: 'transparent' }}
                       />
                       <Button 
                         variant="outline" 
