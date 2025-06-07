@@ -166,7 +166,8 @@ export class DatabaseStorage implements IStorage {
         phone: settings.phone || undefined,
         hours: settings.hours || undefined,
         theme: settings.theme as VenueSettings['theme'],
-        themePresets: settings.themePresets as VenueSettings['themePresets']
+        themePresets: settings.themePresets as VenueSettings['themePresets'],
+        backgroundOverride: settings.backgroundOverride || false
       };
     }
     
@@ -184,6 +185,7 @@ export class DatabaseStorage implements IStorage {
       gameSubtitleItalic: "false",
       titleboxSpacing: "20",
       gameSpacing: "30",
+      backgroundOverride: false,
       theme: {
         primary: "hsl(280, 100%, 50%)",
         variant: "vibrant" as const,
@@ -302,6 +304,7 @@ export class DatabaseStorage implements IStorage {
           hours: settings.hours || existingSettings.hours,
           theme: settings.theme ? settings.theme : existingSettings.theme,
           themePresets: settings.themePresets ? settings.themePresets : existingSettings.themePresets,
+          backgroundOverride: settings.backgroundOverride !== undefined ? settings.backgroundOverride : existingSettings.backgroundOverride,
           updatedAt: new Date()
         })
         .where(eq(venueSettings.id, existingSettings.id))

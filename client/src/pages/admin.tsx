@@ -589,7 +589,7 @@ export default function Admin() {
 
   // Update settings mutation
   const updateSettings = useMutation({
-    mutationFn: async (data: any) => {
+    mutationFn: async (data: Partial<VenueSettings>) => {
       const response = await apiRequest("PATCH", "/api/admin/settings", data);
       if (!response.ok) {
         const errorText = await response.text();
@@ -1099,6 +1099,7 @@ export default function Admin() {
                         if (venueSettings) {
                           setLocalBackgroundOverride(venueSettings.backgroundOverride || false);
                           setLocalAppearance(venueSettings.theme.appearance as "dark" | "light");
+                          setLocalDarknessLevel(venueSettings.theme.appearance === 'dark' ? 20 : 80);
                           setHasUnsavedChanges(false);
                           // Reset preview
                           document.documentElement.setAttribute('data-theme', JSON.stringify(venueSettings.theme));
@@ -1112,6 +1113,7 @@ export default function Admin() {
                       onClick={() => {
                         if (venueSettings) {
                           updateSettings.mutate({
+                            ...venueSettings,
                             backgroundOverride: localBackgroundOverride,
                             theme: {
                               primary: venueSettings.theme.primary,
