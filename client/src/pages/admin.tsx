@@ -150,18 +150,38 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onIma
       </TableCell>
       
       <TableCell className="p-2">
-        <Select 
-          value={game.type} 
-          onValueChange={(value) => onGameEdit(game.id, "type", value)}
-        >
-          <SelectTrigger className="w-full h-6 text-xs">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="arcade">Arcade</SelectItem>
-            <SelectItem value="pinball">Pinball</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="space-y-1">
+          <div className="flex items-center space-x-2">
+            <input
+              type="radio"
+              id={`arcade-${game.id}`}
+              name={`type-${game.id}`}
+              value="arcade"
+              checked={game.type === "arcade"}
+              onChange={() => onGameEdit(game.id, "type", "arcade")}
+              className="w-3 h-3 text-primary focus:ring-primary"
+            />
+            <label htmlFor={`arcade-${game.id}`} className="flex items-center gap-1 text-xs cursor-pointer">
+              <Gamepad2 className="h-3 w-3" />
+              Arcade
+            </label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <input
+              type="radio"
+              id={`pinball-${game.id}`}
+              name={`type-${game.id}`}
+              value="pinball"
+              checked={game.type === "pinball"}
+              onChange={() => onGameEdit(game.id, "type", "pinball")}
+              className="w-3 h-3 text-primary focus:ring-primary"
+            />
+            <label htmlFor={`pinball-${game.id}`} className="flex items-center gap-1 text-xs cursor-pointer">
+              <CircleDot className="h-3 w-3" />
+              Pinball
+            </label>
+          </div>
+        </div>
       </TableCell>
       
       <TableCell className="p-2">
@@ -180,16 +200,6 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onIma
               queryClient.invalidateQueries({ queryKey: ["/api/games"] });
             }}
           />
-        </div>
-      </TableCell>
-      
-      <TableCell className="p-2">
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            checked={!game.hidden}
-            onCheckedChange={(checked) => onGameEdit(game.id, "hidden", !checked)}
-          />
-          <label className="text-xs">Visible</label>
         </div>
       </TableCell>
       
@@ -722,7 +732,6 @@ export default function Admin() {
                           <TableHead>Subtitle</TableHead>
                           <TableHead>Type</TableHead>
                           <TableHead>Images</TableHead>
-                          <TableHead>Visibility</TableHead>
                           <TableHead>Actions</TableHead>
                         </TableRow>
                       </TableHeader>
