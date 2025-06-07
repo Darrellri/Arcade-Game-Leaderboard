@@ -32,7 +32,41 @@ import { formatDate, formatTime } from "@/lib/formatters";
 import { useTheme } from "@/contexts/ThemeContext";
 import GameMarquee from "@/components/game-marquee";
 
-type ViewMode = "dual" | "single" | "scroll";
+type ViewMode = "dual" | "single" | "scroll" | "grid" | "list";
+
+// Grid View Component - Traditional grid layout
+function GridView({ games, animationsEnabled, hideHeader }: { 
+  games: Game[]; 
+  animationsEnabled: boolean; 
+  hideHeader: boolean;
+}) {
+  return (
+    <div className="container mx-auto px-4 space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {games.map((game) => (
+          <GameCard key={game.id} game={game} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// List View Component - Traditional vertical list with drag and drop
+function ListView({ games, animationsEnabled, hideHeader }: { 
+  games: Game[]; 
+  animationsEnabled: boolean; 
+  hideHeader: boolean;
+}) {
+  return (
+    <div className="container mx-auto px-4 space-y-4">
+      <div className="space-y-3">
+        {games.map((game) => (
+          <SortableGameListItem key={game.id} game={game} />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 // Dramatic Animation Effects Library - 70+ Effects
 const animationEffects = [
@@ -607,6 +641,24 @@ export default function Home() {
           >
             <List className="h-4 w-4" />
           </Button>
+          <Button
+            variant={viewMode === "grid" ? "default" : "outline"}
+            size="icon"
+            onClick={() => setViewMode("grid")}
+            className="shadow-sm hover:shadow-md transition-all duration-200"
+            title="Grid View - Games in a grid layout"
+          >
+            <Grid2X2 className="h-4 w-4" />
+          </Button>
+          <Button
+            variant={viewMode === "list" ? "default" : "outline"}
+            size="icon"
+            onClick={() => setViewMode("list")}
+            className="shadow-sm hover:shadow-md transition-all duration-200"
+            title="List View - Games in a vertical list"
+          >
+            <CircleDot className="h-4 w-4" />
+          </Button>
           
           <div className="flex space-x-2 ml-2">
             <Button variant="outline" size="sm" asChild className="h-8 px-3">
@@ -640,8 +692,20 @@ export default function Home() {
           animationsEnabled={animationsEnabled} 
           hideHeader={hideHeader}
         />
-      ) : (
+      ) : viewMode === "scroll" ? (
         <ScrollView 
+          games={processedGames || []} 
+          animationsEnabled={animationsEnabled} 
+          hideHeader={hideHeader}
+        />
+      ) : viewMode === "grid" ? (
+        <GridView 
+          games={processedGames || []} 
+          animationsEnabled={animationsEnabled} 
+          hideHeader={hideHeader}
+        />
+      ) : (
+        <ListView 
           games={processedGames || []} 
           animationsEnabled={animationsEnabled} 
           hideHeader={hideHeader}
