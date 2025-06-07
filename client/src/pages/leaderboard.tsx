@@ -44,8 +44,6 @@ export default function Leaderboard() {
     "animate-[overlayGlow_0.46s_ease-in-out]"
   ];
 
-  // Always sort by score in descending order for individual game pages
-
   const { data: game, isLoading: gameLoading } = useQuery<Game>({
     queryKey: [`/api/games/${id}`],
   });

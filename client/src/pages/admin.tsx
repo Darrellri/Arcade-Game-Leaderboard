@@ -318,10 +318,10 @@ export default function Admin() {
           themePresentData = JSON.parse(themePresentData);
         } catch (e) {
           themePresentData = [
-            { primary: "hsl(280, 100%, 70%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
-            { primary: "hsl(15, 86%, 67%)", variant: "tint", appearance: "light", radius: 0.75 },
-            { primary: "hsl(142, 76%, 36%)", variant: "vibrant", appearance: "dark", radius: 0.75 },
-            { primary: "hsl(221, 83%, 53%)", variant: "professional", appearance: "light", radius: 0.75 },
+            { name: "Purple Vibrant", primary: "hsl(280, 100%, 70%)", variant: "vibrant" as const, appearance: "dark" as const, radius: 0.75 },
+            { name: "Orange Tint", primary: "hsl(15, 86%, 67%)", variant: "tint" as const, appearance: "light" as const, radius: 0.75 },
+            { name: "Green Vibrant", primary: "hsl(142, 76%, 36%)", variant: "vibrant" as const, appearance: "dark" as const, radius: 0.75 },
+            { name: "Blue Professional", primary: "hsl(221, 83%, 53%)", variant: "professional" as const, appearance: "light" as const, radius: 0.75 },
           ];
         }
       }
