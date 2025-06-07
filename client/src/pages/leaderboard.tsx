@@ -32,16 +32,16 @@ export default function Leaderboard() {
     setLocation("/");
   };
 
-  // Array of faster animations with reduced travel distance (175% faster)
+  // Array of faster animations with reduced travel distance (50% faster than before)
   const animations = [
-    "animate-[overlayGrowShrink_0.72s_ease-in-out]",
-    "animate-[overlayJello_0.65s_ease-in-out]",
-    "animate-[overlaySkewWobble_0.8s_ease-in-out]",
-    "animate-[overlayPulseScale_0.55s_ease-in-out]",
-    "animate-[overlayElastic_0.91s_ease-out]",
-    "animate-[overlayBreath_1.09s_ease-in-out]",
-    "animate-[overlaySquish_0.72s_ease-in-out]",
-    "animate-[overlayGlow_0.91s_ease-in-out]"
+    "animate-[overlayGrowShrink_0.36s_ease-in-out]",
+    "animate-[overlayJello_0.33s_ease-in-out]",
+    "animate-[overlaySkewWobble_0.4s_ease-in-out]",
+    "animate-[overlayPulseScale_0.28s_ease-in-out]",
+    "animate-[overlayElastic_0.46s_ease-out]",
+    "animate-[overlayBreath_0.55s_ease-in-out]",
+    "animate-[overlaySquish_0.36s_ease-in-out]",
+    "animate-[overlayGlow_0.46s_ease-in-out]"
   ];
 
   // Always sort by score in descending order for individual game pages
@@ -70,7 +70,7 @@ export default function Leaderboard() {
       setTimeout(() => {
         setOverlayAnimation("");
         setMarqueeBlurred(false);
-      }, 2500);
+      }, 1250);
     };
 
     // Trigger first animation after a random delay (8-15 seconds)
