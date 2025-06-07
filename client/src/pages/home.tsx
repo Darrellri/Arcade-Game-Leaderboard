@@ -286,19 +286,25 @@ function DualView({ games, animationsEnabled, hideHeader }: {
   const currentGames = gamePairs[currentPair] || [];
 
   return (
-    <div className="flex justify-center items-center min-h-[70vh] gap-12">
-      {currentGames.map((game, index) => (
-        <div 
-          key={`${game.id}-${currentPair}`}
-          className={`${animationsEnabled && currentAnimationPair[index] ? `animate-${currentAnimationPair[index]}` : ''}`}
-          style={{ 
-            animationDelay: `${index * 0.4}s`,
-            animationFillMode: 'both'
-          }}
-        >
-          <FullSizeMarquee game={game} />
-        </div>
-      ))}
+    <div className="flex justify-center items-center min-h-[70vh]">
+      <div className="relative">
+        {currentGames.map((game, index) => (
+          <div 
+            key={`${game.id}-${currentPair}`}
+            className={`${animationsEnabled && currentAnimationPair[index] ? `animate-${currentAnimationPair[index]}` : ''}`}
+            style={{ 
+              animationDelay: `${index * 0.4}s`,
+              animationFillMode: 'both',
+              position: index === 0 ? 'relative' : 'absolute',
+              top: index === 1 ? '-64px' : '0', // 20% of 321px height = 64px overlap
+              zIndex: index === 0 ? 1 : 2,
+              marginBottom: index === 0 ? '257px' : '0' // Reserve space for bottom image (321px - 64px overlap)
+            }}
+          >
+            <FullSizeMarquee game={game} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
