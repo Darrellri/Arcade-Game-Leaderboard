@@ -90,6 +90,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import MarqueeImageUploader from "@/components/marquee-image-uploader";
 import OverlayImageUploader from "@/components/overlay-image-uploader";
 
@@ -836,24 +837,35 @@ export default function Admin() {
                           control={form.control}
                           name="logoBackgroundColor"
                           render={({ field }) => (
-                            <FormItem>
+                            <FormItem className="space-y-3">
                               <FormLabel>Logo Background Color</FormLabel>
                               <FormControl>
-                                <Select value={field.value || "transparent"} onValueChange={field.onChange}>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Select background color" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="transparent">Transparent</SelectItem>
-                                    <SelectItem value="white">White</SelectItem>
-                                    <SelectItem value="black">Black</SelectItem>
-                                    <SelectItem value="theme">Theme Color</SelectItem>
-                                  </SelectContent>
-                                </Select>
+                                <RadioGroup
+                                  onValueChange={field.onChange}
+                                  value={field.value || "transparent"}
+                                  className="flex flex-col space-y-2"
+                                >
+                                  <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="transparent" id="transparent" />
+                                    <Label htmlFor="transparent">Transparent</Label>
+                                  </div>
+                                  <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="white" id="white" />
+                                    <Label htmlFor="white">White</Label>
+                                  </div>
+                                  <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="black" id="black" />
+                                    <Label htmlFor="black">Black</Label>
+                                  </div>
+                                  <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="theme" id="theme" />
+                                    <Label htmlFor="theme">Theme Color</Label>
+                                  </div>
+                                </RadioGroup>
                               </FormControl>
                               <FormMessage />
                               <p className="text-xs text-muted-foreground">
-                                Background color for the logo area (useful for transparent videos)
+                                Background color for the logo area (works with both images and videos)
                               </p>
                             </FormItem>
                           )}
