@@ -105,7 +105,7 @@ function FullSizeMarquee({ game, className = "" }: { game: Game; className?: str
 
   if (imageUrl) {
     return (
-      <div className={`w-[792px] h-[214px] relative overflow-hidden ${className}`} 
+      <div className={`w-[1188px] h-[321px] relative overflow-hidden ${className}`} 
            style={{ borderRadius: '15px' }}>
         <div className="w-full h-full bg-black flex items-center justify-center" 
              style={{ borderRadius: '15px' }}>
@@ -148,7 +148,7 @@ function FullSizeMarquee({ game, className = "" }: { game: Game; className?: str
   }
 
   return (
-    <div className={`w-[792px] h-[214px] flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40 ${className}`}
+    <div className={`w-[1188px] h-[321px] flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40 ${className}`}
          style={{ borderRadius: '15px' }}>
       <div className="text-center">
         <h2 className="text-2xl md:text-3xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground drop-shadow-lg">
@@ -286,11 +286,11 @@ function DualView({ games, animationsEnabled, hideHeader }: {
   const currentGames = gamePairs[currentPair] || [];
 
   return (
-    <div className="flex justify-center items-center min-h-[70vh] gap-8">
+    <div className="flex justify-center items-center min-h-[70vh] gap-12">
       {currentGames.map((game, index) => (
         <div 
           key={`${game.id}-${currentPair}`}
-          className={`max-w-lg ${animationsEnabled && currentAnimationPair[index] ? `animate-${currentAnimationPair[index]}` : ''}`}
+          className={`${animationsEnabled && currentAnimationPair[index] ? `animate-${currentAnimationPair[index]}` : ''}`}
           style={{ 
             animationDelay: `${index * 0.4}s`,
             animationFillMode: 'both'
@@ -342,7 +342,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
     <div className="flex justify-center items-center min-h-[70vh]">
       <div 
         key={`${currentGame.id}-${currentGameIndex}`}
-        className={`max-w-4xl w-full ${animationsEnabled ? `animate-${currentAnimation}` : ''}`}
+        className={`${animationsEnabled ? `animate-${currentAnimation}` : ''}`}
         style={{ animationFillMode: 'both' }}
       >
         <FullSizeMarquee game={currentGame} />
@@ -359,7 +359,7 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
 }) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [visibleGames, setVisibleGames] = useState<Game[]>([]);
-  const gameSpacing = 200; // Default spacing, configurable in admin
+  const gameSpacing = 300; // Increased spacing for larger marquee images
 
   // Create infinite loop of games
   useEffect(() => {
