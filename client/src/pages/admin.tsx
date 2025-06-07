@@ -1066,8 +1066,9 @@ export default function Admin() {
                           <input
                             type="text"
                             value={localCustomBackgroundColor}
-                            onChange={async (e) => {
+                            onChange={(e) => {
                               setLocalCustomBackgroundColor(e.target.value);
+                              setHasUnsavedChanges(true);
                               
                               // Apply immediately as preview if valid hex
                               if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
@@ -1083,19 +1084,6 @@ export default function Admin() {
                                     document.documentElement.style.setProperty('color', '#000000');
                                   } else {
                                     document.documentElement.style.setProperty('color', '#ffffff');
-                                  }
-                                }
-                                
-                                // Auto-save to database when valid hex color is entered
-                                if (venueSettings) {
-                                  try {
-                                    await updateSettings.mutateAsync({
-                                      ...venueSettings,
-                                      backgroundOverride: localBackgroundOverride,
-                                      customBackgroundColor: e.target.value
-                                    });
-                                  } catch (error) {
-                                    console.error('Failed to save background color:', error);
                                   }
                                 }
                               }
@@ -1133,10 +1121,11 @@ export default function Admin() {
                         ].map((preset) => (
                           <button
                             key={preset.name}
-                            onClick={async () => {
+                            onClick={() => {
                               setLocalCustomBackgroundColor(preset.color);
+                              setHasUnsavedChanges(true);
                               
-                              // Apply immediately
+                              // Apply immediately as preview
                               document.documentElement.style.setProperty('background-color', preset.color);
                               
                               const rgb = hexToRgb(preset.color);
@@ -1149,19 +1138,6 @@ export default function Admin() {
                                   document.documentElement.style.setProperty('color', '#000000');
                                 } else {
                                   document.documentElement.style.setProperty('color', '#ffffff');
-                                }
-                              }
-                              
-                              // Auto-save to database
-                              if (venueSettings) {
-                                try {
-                                  await updateSettings.mutateAsync({
-                                    ...venueSettings,
-                                    backgroundOverride: localBackgroundOverride,
-                                    customBackgroundColor: preset.color
-                                  });
-                                } catch (error) {
-                                  console.error('Failed to save background color:', error);
                                 }
                               }
                             }}
