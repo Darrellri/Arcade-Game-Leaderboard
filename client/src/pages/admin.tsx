@@ -1309,7 +1309,8 @@ export default function Admin() {
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Transition Speed</Label>
                       <select 
-                        defaultValue={8}
+                        value={displayViewSettings.dualViewSpeed}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, dualViewSpeed: Number(e.target.value) }))}
                         className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
                       >
                         <option value={5}>Fast (5 seconds)</option>
@@ -1321,7 +1322,12 @@ export default function Admin() {
 
                     <div className="space-y-2">
                       <Label className="text-sm font-medium flex items-center gap-2">
-                        <input type="checkbox" defaultChecked className="rounded" />
+                        <input 
+                          type="checkbox" 
+                          checked={displayViewSettings.dualViewAnimations}
+                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, dualViewAnimations: e.target.checked }))}
+                          className="rounded" 
+                        />
                         Enable Animations
                       </Label>
                       <p className="text-xs text-muted-foreground">Random animation effects when games change</p>
@@ -1329,7 +1335,12 @@ export default function Admin() {
 
                     <div className="space-y-2">
                       <Label className="text-sm font-medium flex items-center gap-2">
-                        <input type="checkbox" className="rounded" />
+                        <input 
+                          type="checkbox" 
+                          checked={displayViewSettings.dualViewHideHeader}
+                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, dualViewHideHeader: e.target.checked }))}
+                          className="rounded" 
+                        />
                         Hide Header/Navigation
                       </Label>
                       <p className="text-xs text-muted-foreground">Hide leaderboard name and controls</p>
@@ -1345,7 +1356,8 @@ export default function Admin() {
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Transition Speed</Label>
                       <select 
-                        defaultValue={6}
+                        value={displayViewSettings.singleViewSpeed}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, singleViewSpeed: Number(e.target.value) }))}
                         className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
                       >
                         <option value={4}>Fast (4 seconds)</option>
@@ -1357,7 +1369,12 @@ export default function Admin() {
 
                     <div className="space-y-2">
                       <Label className="text-sm font-medium flex items-center gap-2">
-                        <input type="checkbox" defaultChecked className="rounded" />
+                        <input 
+                          type="checkbox" 
+                          checked={displayViewSettings.singleViewAnimations}
+                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, singleViewAnimations: e.target.checked }))}
+                          className="rounded" 
+                        />
                         Enable Animations
                       </Label>
                       <p className="text-xs text-muted-foreground">Random animation effects when games change</p>
@@ -1365,7 +1382,12 @@ export default function Admin() {
 
                     <div className="space-y-2">
                       <Label className="text-sm font-medium flex items-center gap-2">
-                        <input type="checkbox" className="rounded" />
+                        <input 
+                          type="checkbox" 
+                          checked={displayViewSettings.singleViewHideHeader}
+                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, singleViewHideHeader: e.target.checked }))}
+                          className="rounded" 
+                        />
                         Hide Header/Navigation
                       </Label>
                       <p className="text-xs text-muted-foreground">Hide leaderboard name and controls</p>
@@ -1374,7 +1396,8 @@ export default function Admin() {
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Display Size</Label>
                       <select 
-                        defaultValue="large"
+                        value={displayViewSettings.singleViewSize}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, singleViewSize: e.target.value }))}
                         className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
                       >
                         <option value="normal">Normal Size</option>
@@ -1393,7 +1416,8 @@ export default function Admin() {
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Scroll Speed</Label>
                       <select 
-                        defaultValue={50}
+                        value={displayViewSettings.scrollViewSpeed}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, scrollViewSpeed: Number(e.target.value) }))}
                         className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
                       >
                         <option value={25}>Very Fast (25ms)</option>
@@ -1408,7 +1432,8 @@ export default function Admin() {
                       <Label className="text-sm font-medium">Game Spacing</Label>
                       <input 
                         type="number" 
-                        defaultValue={200}
+                        value={displayViewSettings.scrollViewSpacing}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, scrollViewSpacing: Number(e.target.value) }))}
                         min={50}
                         max={500}
                         step={25}
@@ -1419,7 +1444,12 @@ export default function Admin() {
 
                     <div className="space-y-2">
                       <Label className="text-sm font-medium flex items-center gap-2">
-                        <input type="checkbox" defaultChecked className="rounded" />
+                        <input 
+                          type="checkbox" 
+                          checked={displayViewSettings.scrollViewAnimations}
+                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, scrollViewAnimations: e.target.checked }))}
+                          className="rounded" 
+                        />
                         Enable Animations
                       </Label>
                       <p className="text-xs text-muted-foreground">Fade-in effects as games scroll into view</p>
@@ -1427,7 +1457,12 @@ export default function Admin() {
 
                     <div className="space-y-2">
                       <Label className="text-sm font-medium flex items-center gap-2">
-                        <input type="checkbox" defaultChecked className="rounded" />
+                        <input 
+                          type="checkbox" 
+                          checked={displayViewSettings.scrollViewStickyHeader}
+                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, scrollViewStickyHeader: e.target.checked }))}
+                          className="rounded" 
+                        />
                         Sticky Header
                       </Label>
                       <p className="text-xs text-muted-foreground">Keep leaderboard header visible while scrolling</p>
@@ -1435,7 +1470,12 @@ export default function Admin() {
 
                     <div className="space-y-2">
                       <Label className="text-sm font-medium flex items-center gap-2">
-                        <input type="checkbox" className="rounded" />
+                        <input 
+                          type="checkbox" 
+                          checked={displayViewSettings.scrollViewLazyLoad}
+                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, scrollViewLazyLoad: e.target.checked }))}
+                          className="rounded" 
+                        />
                         Lazy Load Images
                       </Label>
                       <p className="text-xs text-muted-foreground">Load images only when needed for performance</p>
@@ -1530,14 +1570,12 @@ export default function Admin() {
                 <div className="flex justify-end pt-4 border-t">
                   <Button 
                     onClick={() => {
-                      toast({
-                        title: "Display Settings Saved",
-                        description: "All display view settings have been saved successfully. The new dramatic animations and view modes are now active.",
-                      });
+                      updateDisplayViewSettings.mutate(displayViewSettings);
                     }}
+                    disabled={updateDisplayViewSettings.isPending}
                     className="px-6"
                   >
-                    Save Display Settings
+                    {updateDisplayViewSettings.isPending ? "Saving..." : "Save Display Settings"}
                   </Button>
                 </div>
               </div>
