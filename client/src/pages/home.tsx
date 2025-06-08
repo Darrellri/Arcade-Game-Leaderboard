@@ -33,15 +33,47 @@ import { useTheme } from "@/contexts/ThemeContext";
 import GameMarquee from "@/components/game-marquee";
 import { TrophyIcon } from "@/components/trophy-icon";
 
-// Full-size marquee component for new views with 15px radius
-function FullSizeMarquee({ game, className = "" }: { game: Game; className?: string }) {
+// Animation classes for dynamic effects
+const animationClasses = [
+  // Fade animations
+  'animate-fade-in-up', 'animate-fade-in-down', 'animate-fade-in-left', 'animate-fade-in-right',
+  // Slide animations
+  'animate-slide-in-up', 'animate-slide-in-down', 'animate-slide-in-left', 'animate-slide-in-right',
+  // Zoom animations
+  'animate-zoom-in', 'animate-zoom-out', 'animate-zoom-in-up', 'animate-zoom-out-down',
+  // Bounce animations
+  'animate-bounce-in', 'animate-bounce-in-up', 'animate-bounce-in-down', 'animate-bounce-in-left', 'animate-bounce-in-right',
+  // Rotation animations
+  'animate-rotate-in', 'animate-rotate-in-up-left', 'animate-rotate-in-up-right', 'animate-rotate-in-down-left', 'animate-rotate-in-down-right',
+  // Elastic animations
+  'animate-elastic-in', 'animate-elastic-in-up', 'animate-elastic-in-down', 'animate-elastic-in-left', 'animate-elastic-in-right',
+  // Fun animations
+  'animate-jello', 'animate-wobble', 'animate-swing', 'animate-rubberBand', 'animate-tada',
+  // Dramatic animations
+  'animate-flip-in-x', 'animate-flip-in-y', 'animate-light-speed-in', 'animate-roll-in', 'animate-hinge'
+];
+
+// Get random animation class
+function getRandomAnimation() {
+  return animationClasses[Math.floor(Math.random() * animationClasses.length)];
+}
+
+// Full-size marquee component for new views with 15px radius - MARQUEE ONLY
+function FullSizeMarquee({ game, className = "", animationKey = 0 }: { game: Game; className?: string; animationKey?: number }) {
   const imageUrl = game.imageUrl;
-  const overlayImageUrl = game.overlayImageUrl;
+  const [currentAnimation, setCurrentAnimation] = useState('');
+  const [badgeAnimation, setBadgeAnimation] = useState('');
+
+  // Set random animations when component mounts or animationKey changes
+  useEffect(() => {
+    setCurrentAnimation(getRandomAnimation());
+    setBadgeAnimation(getRandomAnimation());
+  }, [animationKey]);
 
   if (imageUrl) {
     return (
-      <div className={`w-[1188px] h-[321px] relative overflow-hidden ${className}`} 
-           style={{ borderRadius: '15px' }}>
+      <div className={`w-[1188px] h-[321px] relative overflow-hidden ${className} ${currentAnimation}`} 
+           style={{ borderRadius: '15px', animationDuration: '0.8s', animationDelay: '0.2s' }}>
         <div className="w-full h-full bg-black flex items-center justify-center" 
              style={{ borderRadius: '15px' }}>
           <img 
@@ -53,28 +85,10 @@ function FullSizeMarquee({ game, className = "" }: { game: Game; className?: str
             }}
           />
           
-          {overlayImageUrl && (
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <img
-                src={overlayImageUrl}
-                alt={`${game.name} overlay`}
-                style={{ 
-                  filter: "drop-shadow(2px 2px 4px rgba(0,0,0,0.5))",
-                  zIndex: 10,
-                  width: 'auto',
-                  height: 'auto',
-                  maxWidth: '100%',
-                  maxHeight: '100%',
-                  objectFit: 'contain',
-                  borderRadius: '15px'
-                }}
-              />
-            </div>
-          )}
-          
-          {/* High Score Information Overlay */}
+          {/* High Score Information Overlay with animation */}
           {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
-            <div className="absolute bottom-6 left-6 flex items-center gap-6 bg-black/80 backdrop-blur-sm rounded-2xl px-8 py-6 border border-primary/40" style={{ zIndex: 100 }}>
+            <div className={`absolute bottom-6 left-6 flex items-center gap-6 bg-black/80 backdrop-blur-sm rounded-2xl px-8 py-6 border border-primary/40 ${badgeAnimation}`} 
+                 style={{ zIndex: 100, animationDuration: '1.2s', animationDelay: '0.6s' }}>
               <TrophyIcon size={64} className="text-yellow-400" />
               <div className="text-white">
                 <div className="text-2xl font-bold text-yellow-400 mb-1">#1 PINWIZARD</div>
@@ -211,7 +225,7 @@ function DualView({ games, animationsEnabled, hideHeader }: {
   hideHeader: boolean; 
 }) {
   const [currentPair, setCurrentPair] = useState(0);
-  const [currentAnimationPair, setCurrentAnimationPair] = useState(['', '']);
+  const [animationKey, setAnimationKey] = useState(0);
 
   const gamePairs = [];
   for (let i = 0; i < games.length; i += 2) {
@@ -221,15 +235,11 @@ function DualView({ games, animationsEnabled, hideHeader }: {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentPair((prev) => (prev + 1) % gamePairs.length);
-      if (animationsEnabled) {
-        // Choose a random animation pair for dramatic synchronized effects
-        const randomPair = dualViewAnimationPairs[Math.floor(Math.random() * dualViewAnimationPairs.length)];
-        setCurrentAnimationPair(randomPair);
-      }
+      setAnimationKey(prev => prev + 1); // Trigger new random animations
     }, 8000);
 
     return () => clearInterval(timer);
-  }, [gamePairs.length, animationsEnabled]);
+  }, [gamePairs.length]);
 
   const currentGames = gamePairs[currentPair] || [];
 
@@ -237,15 +247,12 @@ function DualView({ games, animationsEnabled, hideHeader }: {
     <div className="flex justify-center items-center min-h-[70vh]">
       <div className="flex flex-col items-center gap-5"> {/* 20px gap between images */}
         {currentGames.map((game, index) => (
-          <div 
-            key={`${game.id}-${currentPair}`}
-            className={`${animationsEnabled && currentAnimationPair[index] ? `animate-${currentAnimationPair[index]}` : ''}`}
-            style={{ 
-              animationDelay: `${index * 0.4}s`,
-              animationFillMode: 'both'
-            }}
-          >
-            <FullSizeMarquee game={game} />
+          <div key={`${game.id}-${currentPair}-${animationKey}`}>
+            <FullSizeMarquee 
+              game={game} 
+              animationKey={animationKey + index}
+              className={animationsEnabled ? '' : 'animation-none'}
+            />
           </div>
         ))}
       </div>
@@ -260,29 +267,16 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   hideHeader: boolean; 
 }) {
   const [currentGameIndex, setCurrentGameIndex] = useState(0);
-  const [currentAnimation, setCurrentAnimation] = useState('');
-
-  // Prioritize the most dramatic single animations for solo display
-  const dramaticSingleAnimations = [
-    'flyInFromLeft', 'flyInFromRight', 'flyInFromTop', 'flyInFromBottom',
-    'swoopInLeft', 'swoopInRight', 'spiralIn', 'explodeIn', 'rocketIn', 'meteorIn',
-    'bounceInLeft', 'bounceInRight', 'bounceInUp', 'bounceInDown',
-    'backInLeft', 'backInRight', 'lightSpeedInLeft', 'lightSpeedInRight',
-    'rollIn', 'jackInTheBox', 'tada', 'rubberBand'
-  ];
+  const [animationKey, setAnimationKey] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentGameIndex((prev) => (prev + 1) % games.length);
-      if (animationsEnabled) {
-        // Use more dramatic animations for single view
-        const randomAnimation = dramaticSingleAnimations[Math.floor(Math.random() * dramaticSingleAnimations.length)];
-        setCurrentAnimation(randomAnimation);
-      }
+      setAnimationKey(prev => prev + 1); // Trigger new random animations
     }, 6000);
 
     return () => clearInterval(timer);
-  }, [games.length, animationsEnabled]);
+  }, [games.length]);
 
   const currentGame = games[currentGameIndex];
 
@@ -290,13 +284,13 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
 
   return (
     <div className="flex justify-center items-center min-h-[70vh] w-full px-4">
-      <div 
-        key={`${currentGame.id}-${currentGameIndex}`}
-        className={`w-full max-w-none ${animationsEnabled ? `animate-${currentAnimation}` : ''}`}
-        style={{ animationFillMode: 'both' }}
-      >
+      <div key={`${currentGame.id}-${currentGameIndex}-${animationKey}`}>
         <div className="w-full flex justify-center">
-          <FullSizeMarquee game={currentGame} className="max-w-full" />
+          <FullSizeMarquee 
+            game={currentGame} 
+            animationKey={animationKey}
+            className={`max-w-full ${animationsEnabled ? '' : 'animation-none'}`}
+          />
         </div>
       </div>
     </div>
@@ -311,7 +305,8 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
 }) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [visibleGames, setVisibleGames] = useState<Game[]>([]);
-  const gameSpacing = 120; // Reduced spacing between images
+  const [animationKey, setAnimationKey] = useState(0);
+  const gameSpacing = 200; // Configurable spacing between images
 
   // Create infinite loop of games
   useEffect(() => {
@@ -324,16 +319,22 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
     const scrollTimer = setInterval(() => {
       setScrollPosition(prev => {
         const newPosition = prev + 1;
-        const resetPoint = games.length * (gameSpacing + 400); // Approximate game height + spacing
+        const resetPoint = games.length * (gameSpacing + 321); // Game height + spacing
         return newPosition >= resetPoint ? 0 : newPosition;
       });
-    }, 50); // Smooth scrolling at 20fps
+    }, 50); // Smooth scrolling
 
     return () => clearInterval(scrollTimer);
   }, [games.length, gameSpacing]);
 
-  // Scroll-appropriate animations - lighter effects that don't overwhelm
-  const scrollAnimations = ['fadeIn', 'slideInLeft', 'slideInRight', 'slideInUp', 'zoomIn', 'bounceIn'];
+  // Trigger new animations periodically
+  useEffect(() => {
+    const animationTimer = setInterval(() => {
+      setAnimationKey(prev => prev + 1);
+    }, 3000); // New animations every 3 seconds
+
+    return () => clearInterval(animationTimer);
+  }, []);
 
   return (
     <div className="relative overflow-hidden h-screen">
@@ -352,26 +353,21 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
           paddingTop: `300px` // Start 300 pixels higher
         }}
       >
-        {visibleGames.map((game, index) => {
-          // Use different animations for variety, cycling through the array
-          const animationClass = animationsEnabled 
-            ? `animate-${scrollAnimations[index % scrollAnimations.length]}` 
-            : '';
-          
-          return (
-            <div 
-              key={`${game.id}-${index}`}
-              className={`flex justify-center ${animationClass}`}
-              style={{ 
-                marginBottom: `${gameSpacing}px`,
-                animationDelay: `${(index % 5) * 0.15}s`,
-                animationFillMode: 'both'
-              }}
-            >
-              <FullSizeMarquee game={game} />
-            </div>
-          );
-        })}
+        {visibleGames.map((game, index) => (
+          <div 
+            key={`${game.id}-${index}-${animationKey}`}
+            className="flex justify-center"
+            style={{ 
+              marginBottom: `${gameSpacing}px`
+            }}
+          >
+            <FullSizeMarquee 
+              game={game} 
+              animationKey={animationKey + index}
+              className={animationsEnabled ? '' : 'animation-none'}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
