@@ -146,16 +146,16 @@ function FullSizeMarquee({ game, className = "" }: { game: Game; className?: str
           
           {/* High Score Information Overlay */}
           {game.currentHighScore && game.topScorerName && (
-            <div className="absolute bottom-4 left-4 flex items-center gap-3 bg-black/70 backdrop-blur-sm rounded-lg px-4 py-2 border border-primary/30">
-              <TrophyIcon size={32} className="text-yellow-400" />
+            <div className="absolute bottom-6 left-6 flex items-center gap-6 bg-black/80 backdrop-blur-sm rounded-2xl px-8 py-6 border border-primary/40" style={{ zIndex: 100 }}>
+              <TrophyIcon size={64} className="text-yellow-400" />
               <div className="text-white">
-                <div className="text-sm font-bold text-yellow-400">#1 PINWIZARD</div>
-                <div className="text-lg font-bold">{game.topScorerName}</div>
-                <div className="text-2xl font-bold text-primary">
+                <div className="text-2xl font-bold text-yellow-400 mb-1">#1 PINWIZARD</div>
+                <div className="text-3xl font-bold mb-2">{game.topScorerName}</div>
+                <div className="text-5xl font-bold text-primary mb-1">
                   {game.currentHighScore?.toLocaleString()}
                 </div>
                 {game.topScoreDate && (
-                  <div className="text-xs text-gray-300">
+                  <div className="text-lg text-gray-300">
                     {formatDate(new Date(game.topScoreDate))}
                   </div>
                 )}
