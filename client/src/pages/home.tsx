@@ -31,6 +31,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { formatDate, formatTime } from "@/lib/formatters";
 import { useTheme } from "@/contexts/ThemeContext";
 import GameMarquee from "@/components/game-marquee";
+import { TrophyIcon } from "@/components/trophy-icon";
 
 // Full-size marquee component for new views with 15px radius
 function FullSizeMarquee({ game, className = "" }: { game: Game; className?: string }) {
@@ -140,6 +141,25 @@ function FullSizeMarquee({ game, className = "" }: { game: Game; className?: str
                   transition: 'transform 0.1s ease-out'
                 }}
               />
+            </div>
+          )}
+          
+          {/* High Score Information Overlay */}
+          {game.currentHighScore && game.topScorerName && (
+            <div className="absolute bottom-4 left-4 flex items-center gap-3 bg-black/70 backdrop-blur-sm rounded-lg px-4 py-2 border border-primary/30">
+              <TrophyIcon size={32} className="text-yellow-400" />
+              <div className="text-white">
+                <div className="text-sm font-bold text-yellow-400">#1 PINWIZARD</div>
+                <div className="text-lg font-bold">{game.topScorerName}</div>
+                <div className="text-2xl font-bold text-primary">
+                  {game.currentHighScore?.toLocaleString()}
+                </div>
+                {game.topScoreDate && (
+                  <div className="text-xs text-gray-300">
+                    {formatDate(new Date(game.topScoreDate))}
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
