@@ -35,74 +35,8 @@ import { TrophyIcon } from "@/components/trophy-icon";
 
 // Full-size marquee component for new views with 15px radius
 function FullSizeMarquee({ game, className = "" }: { game: Game; className?: string }) {
-  const [overlayAnimation, setOverlayAnimation] = useState<string>("");
-  const [animationKey, setAnimationKey] = useState(0);
-  const [marqueeBlurred, setMarqueeBlurred] = useState(false);
-  const [overlayOffset, setOverlayOffset] = useState({ x: 0, y: 0 });
-  
   const imageUrl = game.imageUrl;
   const overlayImageUrl = game.overlayImageUrl;
-
-  const animations = [
-    "animate-[overlayGrowShrink_0.72s_ease-in-out]",
-    "animate-[overlayJello_0.65s_ease-in-out]", 
-    "animate-[overlaySkewWobble_0.8s_ease-in-out]",
-    "animate-[overlayPulseScale_0.55s_ease-in-out]",
-    "animate-[overlayElastic_0.91s_ease-out]",
-    "animate-[overlayBreath_1.09s_ease-in-out]",
-    "animate-[overlaySquish_0.72s_ease-in-out]",
-    "animate-[overlayGlow_0.91s_ease-in-out]"
-  ];
-
-  useEffect(() => {
-    if (!overlayImageUrl) return;
-
-    const triggerRandomAnimation = () => {
-      const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
-      setOverlayAnimation(randomAnimation);
-      setAnimationKey(prev => prev + 1);
-      setMarqueeBlurred(true);
-      
-      setTimeout(() => {
-        setOverlayAnimation("");
-        setMarqueeBlurred(false);
-      }, 2500);
-    };
-
-    const initialDelay = Math.random() * 5000 + 5000;
-    const initialTimer = setTimeout(triggerRandomAnimation, initialDelay);
-    const recurringTimer = setInterval(() => {
-      triggerRandomAnimation();
-    }, Math.random() * 10000 + 20000);
-
-    return () => {
-      clearTimeout(initialTimer);
-      clearInterval(recurringTimer);
-    };
-  }, [overlayImageUrl]);
-
-  // Parallax scrolling effect for overlay images
-  useEffect(() => {
-    if (!overlayImageUrl) return;
-
-    const parallaxTimer = setInterval(() => {
-      // Randomly choose to move ahead, lag behind, or snap back
-      const motion = Math.random();
-      
-      if (motion < 0.4) {
-        // Move ahead by 1-2 pixels
-        setOverlayOffset({ x: Math.random() * 2 + 1, y: Math.random() * 2 + 1 });
-      } else if (motion < 0.7) {
-        // Lag behind by 2 pixels
-        setOverlayOffset({ x: -(Math.random() * 2 + 1), y: -(Math.random() * 2 + 1) });
-      } else {
-        // Snap back to center
-        setOverlayOffset({ x: 0, y: 0 });
-      }
-    }, 150 + Math.random() * 200); // Random interval between 150-350ms
-
-    return () => clearInterval(parallaxTimer);
-  }, [overlayImageUrl]);
 
   if (imageUrl) {
     return (
@@ -115,8 +49,6 @@ function FullSizeMarquee({ game, className = "" }: { game: Game; className?: str
             alt={`${game.name} marquee`}
             className="w-full h-full object-contain"
             style={{
-              filter: marqueeBlurred ? 'blur(2px)' : 'blur(0px)',
-              transition: 'filter 0.3s ease-in-out',
               borderRadius: '15px'
             }}
           />
@@ -124,10 +56,8 @@ function FullSizeMarquee({ game, className = "" }: { game: Game; className?: str
           {overlayImageUrl && (
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <img
-                key={animationKey}
                 src={overlayImageUrl}
                 alt={`${game.name} overlay`}
-                className={overlayAnimation || "animate-[overlayFloat_4s_ease-in-out_infinite]"}
                 style={{ 
                   filter: "drop-shadow(2px 2px 4px rgba(0,0,0,0.5))",
                   zIndex: 10,
@@ -136,23 +66,21 @@ function FullSizeMarquee({ game, className = "" }: { game: Game; className?: str
                   maxWidth: '100%',
                   maxHeight: '100%',
                   objectFit: 'contain',
-                  borderRadius: '15px',
-                  transform: `translate(${overlayOffset.x}px, ${overlayOffset.y}px)`,
-                  transition: 'transform 0.1s ease-out'
+                  borderRadius: '15px'
                 }}
               />
             </div>
           )}
           
           {/* High Score Information Overlay */}
-          {game.currentHighScore && game.topScorerName && (
+          {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
             <div className="absolute bottom-6 left-6 flex items-center gap-6 bg-black/80 backdrop-blur-sm rounded-2xl px-8 py-6 border border-primary/40" style={{ zIndex: 100 }}>
               <TrophyIcon size={64} className="text-yellow-400" />
               <div className="text-white">
                 <div className="text-2xl font-bold text-yellow-400 mb-1">#1 PINWIZARD</div>
-                <div className="text-3xl font-bold mb-2">{game.topScorerName}</div>
+                <div className="text-3xl font-bold mb-2">{game.topScorerName || "No Name"}</div>
                 <div className="text-5xl font-bold text-primary mb-1">
-                  {game.currentHighScore?.toLocaleString()}
+                  {game.currentHighScore ? game.currentHighScore.toLocaleString() : "0"}
                 </div>
                 {game.topScoreDate && (
                   <div className="text-lg text-gray-300">
