@@ -295,6 +295,27 @@ export default function Admin() {
   const [localCustomBackgroundColor, setLocalCustomBackgroundColor] = useState('#000000');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
+  // Display View Options state
+  const [displayViewSettings, setDisplayViewSettings] = useState({
+    // Dual View Settings
+    dualViewSpeed: 8,
+    dualViewAnimations: true,
+    dualViewHideHeader: false,
+    
+    // Single View Settings
+    singleViewSpeed: 6,
+    singleViewAnimations: true,
+    singleViewHideHeader: false,
+    singleViewSize: "large",
+    
+    // Scroll View Settings
+    scrollViewSpeed: 50,
+    scrollViewSpacing: 200,
+    scrollViewAnimations: true,
+    scrollViewStickyHeader: true,
+    scrollViewLazyLoad: false,
+  });
+
   // Fetch venue settings
   const { data: venueSettings, isLoading: settingsLoading } = useQuery<VenueSettings>({
     queryKey: ["/api/admin/settings"],
@@ -314,6 +335,24 @@ export default function Admin() {
       setLocalDarknessLevel(venueSettings.theme.appearance === 'dark' ? 20 : 80);
       setLocalCustomBackgroundColor(venueSettings.customBackgroundColor || '#000000');
       setHasUnsavedChanges(false);
+      
+      // Initialize display view settings from database
+      setDisplayViewSettings({
+        dualViewSpeed: venueSettings.dualViewSpeed || 8,
+        dualViewAnimations: venueSettings.dualViewAnimations !== false,
+        dualViewHideHeader: venueSettings.dualViewHideHeader || false,
+        
+        singleViewSpeed: venueSettings.singleViewSpeed || 6,
+        singleViewAnimations: venueSettings.singleViewAnimations !== false,
+        singleViewHideHeader: venueSettings.singleViewHideHeader || false,
+        singleViewSize: venueSettings.singleViewSize || "large",
+        
+        scrollViewSpeed: venueSettings.scrollViewSpeed || 50,
+        scrollViewSpacing: venueSettings.scrollViewSpacing || 200,
+        scrollViewAnimations: venueSettings.scrollViewAnimations !== false,
+        scrollViewStickyHeader: venueSettings.scrollViewStickyHeader !== false,
+        scrollViewLazyLoad: venueSettings.scrollViewLazyLoad || false,
+      });
       
       console.log("Initialized background override:", venueSettings.backgroundOverride);
     }
@@ -633,6 +672,32 @@ export default function Admin() {
       toast({
         title: "Settings Updated",
         description: "Your venue settings have been saved successfully.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message,
+      });
+    },
+  });
+
+  // Display View Settings mutation
+  const updateDisplayViewSettings = useMutation({
+    mutationFn: async (settings: typeof displayViewSettings) => {
+      const response = await apiRequest("PATCH", "/api/admin/settings", settings);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server error: ${response.status} - ${errorText}`);
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/settings"] });
+      toast({
+        title: "Display Settings Saved",
+        description: "All display view settings have been saved successfully.",
       });
     },
     onError: (error) => {
