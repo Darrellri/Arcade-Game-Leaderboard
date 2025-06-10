@@ -58,22 +58,96 @@ function getRandomAnimation() {
   return animationClasses[Math.floor(Math.random() * animationClasses.length)];
 }
 
+// Get exit animation for a given entrance animation
+function getExitAnimation(entranceAnimation: string): string {
+  const exitMap: { [key: string]: string } = {
+    'animate-slide-in-left': 'animate-slide-out-right',
+    'animate-slide-in-right': 'animate-slide-out-left',
+    'animate-slide-in-up': 'animate-slide-out-down',
+    'animate-slide-in-down': 'animate-slide-out-up',
+    'animate-bounce-in': 'animate-bounce-out',
+    'animate-zoom-in': 'animate-zoom-out',
+    'animate-fade-in': 'animate-fade-out',
+    'animate-rotate-in': 'animate-rotate-out',
+    'animate-flip-in-x': 'animate-flip-out-x',
+    'animate-flip-in-y': 'animate-flip-out-y',
+    'animate-light-speed-in': 'animate-light-speed-out',
+    'animate-roll-in': 'animate-roll-out',
+    'animate-back-in-up': 'animate-back-out-up',
+    'animate-back-in-down': 'animate-back-out-down',
+    'animate-back-in-left': 'animate-back-out-left',
+    'animate-back-in-right': 'animate-back-out-right',
+    'animate-fly-in-from-left': 'animate-fly-out-left',
+    'animate-fly-in-from-right': 'animate-fly-out-right',
+    'animate-fly-in-from-top': 'animate-fly-out-top',
+    'animate-fly-in-from-bottom': 'animate-fly-out-bottom',
+    'animate-swoop-in-left': 'animate-swoop-out-left',
+    'animate-swoop-in-right': 'animate-swoop-out-right',
+    'animate-spiral-in': 'animate-spiral-out',
+    'animate-explode-in': 'animate-explode-out',
+    'animate-rocket-in': 'animate-rocket-out',
+    'animate-meteor-in': 'animate-meteor-out'
+  };
+  
+  return exitMap[entranceAnimation] || 'animate-fade-out';
+}
+
 // Full-size marquee component for new views with 15px radius - MARQUEE ONLY
-function FullSizeMarquee({ game, className = "", animationKey = 0 }: { game: Game; className?: string; animationKey?: number }) {
+function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000, overlayDelay, exitDelay = 6000 }: { 
+  game: Game; 
+  className?: string; 
+  animationKey?: number;
+  delay?: number;
+  overlayDelay?: number;
+  exitDelay?: number;
+}) {
   const imageUrl = game.imageUrl;
   const [currentAnimation, setCurrentAnimation] = useState('');
   const [badgeAnimation, setBadgeAnimation] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
+  const [overlayVisible, setOverlayVisible] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
+  const [exitAnimation, setExitAnimation] = useState('');
 
   // Set random animations when component mounts or animationKey changes
   useEffect(() => {
-    setCurrentAnimation(getRandomAnimation());
+    const entranceAnim = getRandomAnimation();
+    setCurrentAnimation(entranceAnim);
+    setExitAnimation(getExitAnimation(entranceAnim));
     setBadgeAnimation(getRandomAnimation());
-  }, [animationKey]);
+    setIsVisible(false);
+    setOverlayVisible(false);
+    setIsExiting(false);
+
+    // Start main animation after specified delay
+    const mainTimer = setTimeout(() => {
+      setIsVisible(true);
+    }, delay);
+
+    // Start overlay animation with random delay between 1.5-3 seconds after main animation
+    const finalOverlayDelay = overlayDelay || (1500 + Math.random() * 1500);
+    const overlayTimer = setTimeout(() => {
+      setOverlayVisible(true);
+    }, delay + finalOverlayDelay);
+
+    // Start exit animation before the component cycles
+    const exitTimer = setTimeout(() => {
+      setIsExiting(true);
+    }, delay + exitDelay);
+
+    return () => {
+      clearTimeout(mainTimer);
+      clearTimeout(overlayTimer);
+      clearTimeout(exitTimer);
+    };
+  }, [animationKey, delay, overlayDelay, exitDelay]);
 
   if (imageUrl) {
+    const animationClass = isExiting ? exitAnimation : (isVisible ? currentAnimation : 'opacity-0');
+    
     return (
-      <div className={`w-[1188px] h-[321px] relative overflow-hidden ${className} ${currentAnimation}`} 
-           style={{ borderRadius: '15px', animationDuration: '0.8s', animationDelay: '0.2s' }}>
+      <div className={`w-[1188px] h-[321px] relative overflow-hidden ${className} ${animationClass}`} 
+           style={{ borderRadius: '15px', animationDuration: '0.8s' }}>
         <div className="w-full h-full bg-black flex items-center justify-center" 
              style={{ borderRadius: '15px' }}>
           <img 
@@ -87,8 +161,8 @@ function FullSizeMarquee({ game, className = "", animationKey = 0 }: { game: Gam
           
           {/* High Score Information Overlay with animation */}
           {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
-            <div className={`absolute bottom-6 left-6 flex items-center gap-6 bg-black/80 backdrop-blur-sm rounded-2xl px-8 py-6 border border-primary/40 ${badgeAnimation}`} 
-                 style={{ zIndex: 100, animationDuration: '1.2s', animationDelay: '0.6s' }}>
+            <div className={`absolute bottom-6 left-6 flex items-center gap-6 bg-black/80 backdrop-blur-sm rounded-2xl px-8 py-6 border border-primary/40 ${overlayVisible && !isExiting ? badgeAnimation : 'opacity-0'}`} 
+                 style={{ zIndex: 100, animationDuration: '1.2s' }}>
               <TrophyIcon size={64} className="text-yellow-400" />
               <div className="text-white">
                 <div className="text-2xl font-bold text-yellow-400 mb-1">#1 PINWIZARD</div>
@@ -251,6 +325,7 @@ function DualView({ games, animationsEnabled, hideHeader }: {
             <FullSizeMarquee 
               game={game} 
               animationKey={animationKey + index}
+              delay={index === 0 ? 1000 : 2000} // First game after 1s, second after 2s
               className={animationsEnabled ? '' : 'animation-none'}
             />
           </div>
@@ -289,6 +364,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
           <FullSizeMarquee 
             game={currentGame} 
             animationKey={animationKey}
+            delay={1000} // Single view starts after 1 second
             className={`max-w-full ${animationsEnabled ? '' : 'animation-none'}`}
           />
         </div>
@@ -364,6 +440,7 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
             <FullSizeMarquee 
               game={game} 
               animationKey={animationKey + index}
+              delay={1000 + (index % games.length) * 500} // Staggered delay: 1s, 1.5s, 2s, 2.5s, etc.
               className={animationsEnabled ? '' : 'animation-none'}
             />
           </div>

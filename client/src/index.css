@@ -296,6 +296,34 @@
 
   .animation-none { animation: none !important; }
 
+  /* Exit animations */
+  .animate-slide-out-left { animation: slideOutLeft 0.8s ease-in forwards; }
+  .animate-slide-out-right { animation: slideOutRight 0.8s ease-in forwards; }
+  .animate-slide-out-up { animation: slideOutUp 0.8s ease-in forwards; }
+  .animate-slide-out-down { animation: slideOutDown 0.8s ease-in forwards; }
+  .animate-bounce-out { animation: bounceOut 0.8s ease-in forwards; }
+  .animate-zoom-out { animation: zoomOut 0.5s ease-in forwards; }
+  .animate-fade-out { animation: fadeOut 0.5s ease-in forwards; }
+  .animate-rotate-out { animation: rotateOut 0.6s ease-in forwards; }
+  .animate-flip-out-x { animation: flipOutX 0.8s ease-in forwards; }
+  .animate-flip-out-y { animation: flipOutY 0.8s ease-in forwards; }
+  .animate-light-speed-out { animation: lightSpeedOut 0.8s ease-in forwards; }
+  .animate-roll-out { animation: rollOut 0.8s ease-in forwards; }
+  .animate-back-out-up { animation: backOutUp 0.8s ease-in forwards; }
+  .animate-back-out-down { animation: backOutDown 0.8s ease-in forwards; }
+  .animate-back-out-left { animation: backOutLeft 0.8s ease-in forwards; }
+  .animate-back-out-right { animation: backOutRight 0.8s ease-in forwards; }
+  .animate-fly-out-left { animation: flyOutLeft 1.2s ease-in forwards; }
+  .animate-fly-out-right { animation: flyOutRight 1.2s ease-in forwards; }
+  .animate-fly-out-top { animation: flyOutTop 1.2s ease-in forwards; }
+  .animate-fly-out-bottom { animation: flyOutBottom 1.2s ease-in forwards; }
+  .animate-swoop-out-left { animation: swoopOutLeft 1.5s ease-in forwards; }
+  .animate-swoop-out-right { animation: swoopOutRight 1.5s ease-in forwards; }
+  .animate-spiral-out { animation: spiralOut 1s ease-in forwards; }
+  .animate-explode-out { animation: explodeOut 1s ease-in forwards; }
+  .animate-rocket-out { animation: rocketOut 1.2s ease-in forwards; }
+  .animate-meteor-out { animation: meteorOut 1.2s ease-in forwards; }
+
   /* Responsive design utilities */
   @media (max-width: 1024px) {
     .responsive-game-grid {
