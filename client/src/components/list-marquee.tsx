@@ -29,11 +29,14 @@ export default function ListMarquee({ game, className }: ListMarqueeProps) {
     "animate-[overlayGlow_0.91s_ease-in-out]"
   ];
 
-  // Set up random animation timer for overlay
+  // Set up new animation timing system for overlay
   useEffect(() => {
     if (!overlayImageUrl) return;
 
-    const triggerRandomAnimation = () => {
+    let animationCycle = 0; // 0 = 2sec animation, 1 = 1.5sec animation
+    let currentTimer: NodeJS.Timeout;
+
+    const triggerRandomAnimation = (duration: number) => {
       const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
       setOverlayAnimation(randomAnimation);
       setAnimationKey(prev => prev + 1);
@@ -45,21 +48,40 @@ export default function ListMarquee({ game, className }: ListMarqueeProps) {
       setTimeout(() => {
         setOverlayAnimation("");
         setMarqueeBlurred(false);
-      }, 2500);
+      }, duration);
     };
 
-    // Initial delay before first animation (5-10 seconds)
-    const initialDelay = Math.random() * 5000 + 5000;
-    const initialTimer = setTimeout(triggerRandomAnimation, initialDelay);
+    const scheduleNextAnimation = () => {
+      if (animationCycle === 0) {
+        // First animation: 2 seconds
+        triggerRandomAnimation(2000);
+        
+        // Wait 8.25-12 seconds (randomly chosen) before next animation
+        const pauseDuration = Math.random() * (12000 - 8250) + 8250;
+        currentTimer = setTimeout(() => {
+          animationCycle = 1;
+          scheduleNextAnimation();
+        }, pauseDuration);
+      } else {
+        // Second animation: 1.5 seconds
+        triggerRandomAnimation(1500);
+        
+        // Wait 8.25-12 seconds (randomly chosen) before cycling back
+        const pauseDuration = Math.random() * (12000 - 8250) + 8250;
+        currentTimer = setTimeout(() => {
+          animationCycle = 0;
+          scheduleNextAnimation();
+        }, pauseDuration);
+      }
+    };
 
-    // Set up recurring timer (20-30 seconds)
-    const recurringTimer = setInterval(() => {
-      triggerRandomAnimation();
-    }, Math.random() * 10000 + 20000);
+    // Start the animation cycle
+    scheduleNextAnimation();
 
     return () => {
-      clearTimeout(initialTimer);
-      clearInterval(recurringTimer);
+      if (currentTimer) {
+        clearTimeout(currentTimer);
+      }
     };
   }, [overlayImageUrl]);
 
