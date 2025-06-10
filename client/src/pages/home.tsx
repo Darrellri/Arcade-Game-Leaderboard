@@ -92,6 +92,95 @@ function getExitAnimation(entranceAnimation: string): string {
   return exitMap[entranceAnimation] || 'animate-fade-out';
 }
 
+// Scroll-specific marquee component without background and with proper animations
+function ScrollMarquee({ game, className = "", animationKey = 0, delay = 0, isInView = true }: { 
+  game: Game; 
+  className?: string; 
+  animationKey?: number;
+  delay?: number;
+  isInView?: boolean;
+}) {
+  const imageUrl = game.imageUrl;
+  const [currentAnimation, setCurrentAnimation] = useState('');
+  const [badgeAnimation, setBadgeAnimation] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
+  const [overlayVisible, setOverlayVisible] = useState(false);
+  const [hasTriggered, setHasTriggered] = useState(false);
+
+  // Set random animations when component mounts or animationKey changes
+  useEffect(() => {
+    setCurrentAnimation(getRandomAnimation());
+    setBadgeAnimation(getRandomAnimation());
+    setHasTriggered(false);
+  }, [animationKey]);
+
+  // Trigger animations when in view
+  useEffect(() => {
+    if (isInView && !hasTriggered) {
+      setHasTriggered(true);
+      setIsVisible(false);
+      setOverlayVisible(false);
+
+      // Start main animation immediately when in view
+      const mainTimer = setTimeout(() => {
+        setIsVisible(true);
+      }, 100);
+
+      // Start overlay animation with random delay between 1.5-3 seconds after main animation
+      const finalOverlayDelay = 1500 + Math.random() * 1500;
+      const overlayTimer = setTimeout(() => {
+        setOverlayVisible(true);
+      }, 100 + finalOverlayDelay);
+
+      return () => {
+        clearTimeout(mainTimer);
+        clearTimeout(overlayTimer);
+      };
+    } else if (!isInView) {
+      setIsVisible(false);
+      setOverlayVisible(false);
+    }
+  }, [isInView, hasTriggered]);
+
+  if (imageUrl) {
+    return (
+      <div className={`w-[1188px] h-[321px] relative overflow-hidden ${className} ${isVisible ? currentAnimation : 'opacity-0'}`} 
+           style={{ borderRadius: '15px', animationDuration: '0.8s' }}>
+        <img 
+          src={imageUrl} 
+          alt={`${game.name} marquee`}
+          className="w-full h-full object-contain"
+          style={{
+            borderRadius: '15px'
+          }}
+        />
+        
+        {/* High Score Information Overlay with animation */}
+        {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
+          <div className={`absolute bottom-6 left-6 flex items-center gap-6 bg-black/80 backdrop-blur-sm rounded-2xl px-8 py-6 border border-primary/40 ${overlayVisible ? badgeAnimation : 'opacity-0'}`} 
+               style={{ zIndex: 100, animationDuration: '1.2s' }}>
+            <TrophyIcon size={64} className="text-yellow-400" />
+            <div className="text-white">
+              <div className="text-2xl font-bold text-yellow-400 mb-1">#1 PINWIZARD</div>
+              <div className="text-3xl font-bold mb-2">{game.topScorerName || "No Name"}</div>
+              <div className="text-5xl font-bold text-primary mb-1">
+                {game.currentHighScore ? game.currentHighScore.toLocaleString() : "0"}
+              </div>
+              {game.topScoreDate && (
+                <div className="text-lg text-gray-300">
+                  {formatDate(new Date(game.topScoreDate))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+  
+  return null;
+}
+
 // Full-size marquee component for new views with 15px radius - MARQUEE ONLY
 function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000, overlayDelay, exitDelay = 6000 }: { 
   game: Game; 
@@ -390,24 +479,24 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
     setVisibleGames(extendedGames);
   }, [games]);
 
-  // Auto-scroll effect
+  // Auto-scroll effect - 20% faster
   useEffect(() => {
     const scrollTimer = setInterval(() => {
       setScrollPosition(prev => {
-        const newPosition = prev + 1;
+        const newPosition = prev + 1.2; // 20% faster
         const resetPoint = games.length * (gameSpacing + 321); // Game height + spacing
         return newPosition >= resetPoint ? 0 : newPosition;
       });
-    }, 50); // Smooth scrolling
+    }, 40); // Smoother and faster scrolling
 
     return () => clearInterval(scrollTimer);
   }, [games.length, gameSpacing]);
 
-  // Trigger new animations periodically
+  // Trigger new animations every time a new game comes into view
   useEffect(() => {
     const animationTimer = setInterval(() => {
       setAnimationKey(prev => prev + 1);
-    }, 3000); // New animations every 3 seconds
+    }, 2000); // More frequent animations for scroll view
 
     return () => clearInterval(animationTimer);
   }, []);
@@ -429,22 +518,28 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
           paddingTop: `300px` // Start 300 pixels higher
         }}
       >
-        {visibleGames.map((game, index) => (
-          <div 
-            key={`${game.id}-${index}-${animationKey}`}
-            className="flex justify-center"
-            style={{ 
-              marginBottom: `${gameSpacing}px`
-            }}
-          >
-            <FullSizeMarquee 
-              game={game} 
-              animationKey={animationKey + index}
-              delay={1000 + (index % games.length) * 500} // Staggered delay: 1s, 1.5s, 2s, 2.5s, etc.
-              className={animationsEnabled ? '' : 'animation-none'}
-            />
-          </div>
-        ))}
+        {visibleGames.map((game, index) => {
+          // Calculate if this game is currently in view
+          const gamePosition = index * (321 + gameSpacing) - scrollPosition;
+          const isInView = gamePosition > -400 && gamePosition < window.innerHeight + 200;
+          
+          return (
+            <div 
+              key={`${game.id}-${index}-${animationKey}`}
+              className="flex justify-center"
+              style={{ 
+                marginBottom: `${gameSpacing}px`
+              }}
+            >
+              <ScrollMarquee 
+                game={game} 
+                animationKey={animationKey + index}
+                isInView={isInView}
+                className={animationsEnabled ? '' : 'animation-none'}
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );
