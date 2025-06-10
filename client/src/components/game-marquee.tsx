@@ -29,14 +29,13 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
     "animate-[overlayGlow_0.91s_ease-in-out]"
   ];
 
-  // Set up new animation timing system for overlay
+  // Set up 20-second cycle animation system for overlay
   useEffect(() => {
     if (!overlayImageUrl) return;
 
-    let animationCycle = 0; // 0 = 2sec animation, 1 = 1.5sec animation
-    let currentTimer: NodeJS.Timeout;
+    let cycleTimer: NodeJS.Timeout;
 
-    const triggerRandomAnimation = (duration: number) => {
+    const triggerRandomAnimation = () => {
       const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
       setOverlayAnimation(randomAnimation);
       setAnimationKey(prev => prev + 1);
@@ -44,39 +43,31 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
       // Blur marquee image when overlay animation starts
       setMarqueeBlurred(true);
       
-      // Clear animation and remove blur after it completes
+      // Clear animation and remove blur after 2 seconds
       setTimeout(() => {
         setOverlayAnimation("");
         setMarqueeBlurred(false);
-      }, duration);
+      }, 2000);
     };
 
-    const scheduleNextAnimation = () => {
-      // Always wait for stillness period before any animation
-      const stillnessDuration = Math.random() * (12000 - 8250) + 8250;
+    const start20SecondCycle = () => {
+      // Choose random time within 20-second window (0-18 seconds to allow for 2-second animation)
+      const randomStartTime = Math.random() * 18000;
       
-      currentTimer = setTimeout(() => {
-        if (animationCycle === 0) {
-          // First animation: 2 seconds
-          triggerRandomAnimation(2000);
-          animationCycle = 1;
-        } else {
-          // Second animation: 1.5 seconds
-          triggerRandomAnimation(1500);
-          animationCycle = 0;
-        }
-        
-        // Schedule next cycle (which will start with stillness again)
-        scheduleNextAnimation();
-      }, stillnessDuration);
+      setTimeout(() => {
+        triggerRandomAnimation();
+      }, randomStartTime);
+      
+      // Schedule next 20-second cycle
+      cycleTimer = setTimeout(start20SecondCycle, 20000);
     };
 
-    // Start with initial stillness period
-    scheduleNextAnimation();
+    // Start the first cycle
+    start20SecondCycle();
 
     return () => {
-      if (currentTimer) {
-        clearTimeout(currentTimer);
+      if (cycleTimer) {
+        clearTimeout(cycleTimer);
       }
     };
   }, [overlayImageUrl]);
