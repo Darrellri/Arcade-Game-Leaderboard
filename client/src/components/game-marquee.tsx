@@ -52,30 +52,26 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
     };
 
     const scheduleNextAnimation = () => {
-      if (animationCycle === 0) {
-        // First animation: 2 seconds
-        triggerRandomAnimation(2000);
-        
-        // Wait 8.25-12 seconds (randomly chosen) before next animation
-        const pauseDuration = Math.random() * (12000 - 8250) + 8250;
-        currentTimer = setTimeout(() => {
+      // Always wait for stillness period before any animation
+      const stillnessDuration = Math.random() * (12000 - 8250) + 8250;
+      
+      currentTimer = setTimeout(() => {
+        if (animationCycle === 0) {
+          // First animation: 2 seconds
+          triggerRandomAnimation(2000);
           animationCycle = 1;
-          scheduleNextAnimation();
-        }, pauseDuration);
-      } else {
-        // Second animation: 1.5 seconds
-        triggerRandomAnimation(1500);
-        
-        // Wait 8.25-12 seconds (randomly chosen) before cycling back
-        const pauseDuration = Math.random() * (12000 - 8250) + 8250;
-        currentTimer = setTimeout(() => {
+        } else {
+          // Second animation: 1.5 seconds
+          triggerRandomAnimation(1500);
           animationCycle = 0;
-          scheduleNextAnimation();
-        }, pauseDuration);
-      }
+        }
+        
+        // Schedule next cycle (which will start with stillness again)
+        scheduleNextAnimation();
+      }, stillnessDuration);
     };
 
-    // Start the animation cycle
+    // Start with initial stillness period
     scheduleNextAnimation();
 
     return () => {
