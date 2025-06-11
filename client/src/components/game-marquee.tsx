@@ -95,10 +95,10 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
     return () => clearInterval(parallaxTimer);
   }, [overlayImageUrl]);
   
-  // Using the exact 792x214 aspect ratio (3.7:1) for marquee images
+  // Using the exact 792x214 aspect ratio (3.7:1) for marquee images with mobile responsiveness
   if (imageUrl) {
     return (
-      <div className={cn("w-full aspect-[792/214] relative overflow-hidden rounded-t-lg", className)}>
+      <div className={cn("w-full max-w-full aspect-[792/214] relative overflow-hidden rounded-t-lg", className)}>
         <div className="w-full h-full bg-black rounded-t-lg flex items-center justify-center">
           <img 
             src={imageUrl} 
@@ -107,7 +107,9 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
             style={{
               filter: marqueeBlurred ? 'blur(2px)' : 'blur(0px)',
               transition: 'filter 0.3s ease-in-out',
-              aspectRatio: '792/214'
+              aspectRatio: '792/214',
+              maxWidth: '100%',
+              height: 'auto'
             }}
           />
           

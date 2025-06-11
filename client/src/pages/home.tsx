@@ -144,14 +144,16 @@ function ScrollMarquee({ game, className = "", animationKey = 0, delay = 0, isIn
 
   if (imageUrl) {
     return (
-      <div className={`w-[1188px] h-[321px] relative overflow-hidden ${className} ${isVisible ? currentAnimation : 'opacity-0'}`} 
+      <div className={`w-full max-w-[1188px] aspect-[1188/321] relative overflow-hidden ${className} ${isVisible ? currentAnimation : 'opacity-0'}`} 
            style={{ borderRadius: '15px', animationDuration: '0.8s' }}>
         <img 
           src={imageUrl} 
           alt={`${game.name} marquee`}
           className="w-full h-full object-contain"
           style={{
-            borderRadius: '15px'
+            borderRadius: '15px',
+            maxWidth: '100%',
+            height: 'auto'
           }}
         />
         
@@ -235,7 +237,7 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
     const animationClass = isExiting ? exitAnimation : (isVisible ? currentAnimation : 'opacity-0');
     
     return (
-      <div className={`w-[1188px] h-[321px] relative overflow-hidden ${className} ${animationClass}`} 
+      <div className={`w-full max-w-[1188px] aspect-[1188/321] relative overflow-hidden ${className} ${animationClass}`} 
            style={{ borderRadius: '15px', animationDuration: '0.8s' }}>
         <div className="w-full h-full bg-black flex items-center justify-center" 
              style={{ borderRadius: '15px' }}>
@@ -244,7 +246,9 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
             alt={`${game.name} marquee`}
             className="w-full h-full object-contain"
             style={{
-              borderRadius: '15px'
+              borderRadius: '15px',
+              maxWidth: '100%',
+              height: 'auto'
             }}
           />
           
@@ -273,14 +277,14 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
   }
 
   return (
-    <div className={`w-[1188px] h-[321px] flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40 ${className}`}
+    <div className={`w-full max-w-[1188px] aspect-[1188/321] flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40 ${className}`}
          style={{ borderRadius: '15px' }}>
-      <div className="text-center">
-        <h2 className="text-2xl md:text-3xl font-bold tracking-wider text-center px-4 uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground drop-shadow-lg">
+      <div className="text-center px-4">
+        <h2 className="text-lg sm:text-2xl md:text-3xl font-bold tracking-wider text-center uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground drop-shadow-lg">
           {game.name}
         </h2>
         {game.subtitle && (
-          <p className="text-sm md:text-base text-muted-foreground mt-2">
+          <p className="text-xs sm:text-sm md:text-base text-muted-foreground mt-2">
             {game.subtitle}
           </p>
         )}
@@ -407,15 +411,15 @@ function DualView({ games, animationsEnabled, hideHeader }: {
   const currentGames = gamePairs[currentPair] || [];
 
   return (
-    <div className="flex justify-center items-center min-h-[70vh]">
-      <div className="flex flex-col items-center gap-5"> {/* 20px gap between images */}
+    <div className="flex justify-center items-center min-h-[70vh] px-4">
+      <div className="flex flex-col items-center gap-5 w-full max-w-[1200px]"> {/* 20px gap between images */}
         {currentGames.map((game, index) => (
-          <div key={`${game.id}-${currentPair}-${animationKey}`}>
+          <div key={`${game.id}-${currentPair}-${animationKey}`} className="w-full flex justify-center">
             <FullSizeMarquee 
               game={game} 
               animationKey={animationKey + index}
               delay={index === 0 ? 1000 : 2000} // First game after 1s, second after 2s
-              className={animationsEnabled ? '' : 'animation-none'}
+              className={`w-full ${animationsEnabled ? '' : 'animation-none'}`}
             />
           </div>
         ))}
@@ -448,15 +452,13 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
 
   return (
     <div className="flex justify-center items-center min-h-[70vh] w-full px-4">
-      <div key={`${currentGame.id}-${currentGameIndex}-${animationKey}`}>
-        <div className="w-full flex justify-center">
-          <FullSizeMarquee 
-            game={currentGame} 
-            animationKey={animationKey}
-            delay={1000} // Single view starts after 1 second
-            className={`max-w-full ${animationsEnabled ? '' : 'animation-none'}`}
-          />
-        </div>
+      <div key={`${currentGame.id}-${currentGameIndex}-${animationKey}`} className="w-full max-w-[1200px] flex justify-center">
+        <FullSizeMarquee 
+          game={currentGame} 
+          animationKey={animationKey}
+          delay={1000} // Single view starts after 1 second
+          className={`w-full ${animationsEnabled ? '' : 'animation-none'}`}
+        />
       </div>
     </div>
   );
@@ -865,61 +867,65 @@ export default function Home() {
             </h2>
           </div>
         </div>
-        <div className="flex items-start gap-2 self-start sm:self-center sm:items-center sm:gap-4 mt-2 sm:mt-0">
-          <Button
-            variant={viewMode === "dual" ? "default" : "outline"}
-            size="icon"
-            onClick={() => setViewMode("dual")}
-            className="shadow-sm hover:shadow-md transition-all duration-200"
-            title="Dual View - Two games side by side"
-          >
-            <Grid2X2 className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={viewMode === "single" ? "default" : "outline"}
-            size="icon"
-            onClick={() => setViewMode("single")}
-            className="shadow-sm hover:shadow-md transition-all duration-200"
-            title="Single View - One large game centered"
-          >
-            <Square className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={viewMode === "scroll" ? "default" : "outline"}
-            size="icon"
-            onClick={() => setViewMode("scroll")}
-            className="shadow-sm hover:shadow-md transition-all duration-200"
-            title="Scroll View - Infinite vertical scroll"
-          >
-            <List className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={viewMode === "grid" ? "default" : "outline"}
-            size="icon"
-            onClick={() => setViewMode("grid")}
-            className="shadow-sm hover:shadow-md transition-all duration-200"
-            title="Grid View - Games in a grid layout"
-          >
-            <Grid2X2 className="h-4 w-4" />
-          </Button>
-          <Button
-            variant={viewMode === "list" ? "default" : "outline"}
-            size="icon"
-            onClick={() => setViewMode("list")}
-            className="shadow-sm hover:shadow-md transition-all duration-200"
-            title="List View - Games in a vertical list"
-          >
-            <CircleDot className="h-4 w-4" />
-          </Button>
+        <div className="flex flex-col gap-2 self-start sm:self-center mt-2 sm:mt-0">
+          {/* View Mode Buttons Row */}
+          <div className="flex items-center gap-1 sm:gap-2">
+            <Button
+              variant={viewMode === "dual" ? "default" : "outline"}
+              size="icon"
+              onClick={() => setViewMode("dual")}
+              className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
+              title="Dual View - Two games side by side"
+            >
+              <Grid2X2 className="h-3 w-3 sm:h-4 sm:w-4" />
+            </Button>
+            <Button
+              variant={viewMode === "single" ? "default" : "outline"}
+              size="icon"
+              onClick={() => setViewMode("single")}
+              className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
+              title="Single View - One large game centered"
+            >
+              <Square className="h-3 w-3 sm:h-4 sm:w-4" />
+            </Button>
+            <Button
+              variant={viewMode === "scroll" ? "default" : "outline"}
+              size="icon"
+              onClick={() => setViewMode("scroll")}
+              className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
+              title="Scroll View - Infinite vertical scroll"
+            >
+              <List className="h-3 w-3 sm:h-4 sm:w-4" />
+            </Button>
+            <Button
+              variant={viewMode === "grid" ? "default" : "outline"}
+              size="icon"
+              onClick={() => setViewMode("grid")}
+              className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
+              title="Grid View - Games in a grid layout"
+            >
+              <Grid2X2 className="h-3 w-3 sm:h-4 sm:w-4" />
+            </Button>
+            <Button
+              variant={viewMode === "list" ? "default" : "outline"}
+              size="icon"
+              onClick={() => setViewMode("list")}
+              className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
+              title="List View - Games in a vertical list"
+            >
+              <CircleDot className="h-3 w-3 sm:h-4 sm:w-4" />
+            </Button>
+          </div>
           
-          <div className="flex space-x-2 ml-2">
-            <Button variant="outline" size="sm" asChild className="h-8 px-3">
+          {/* Navigation Buttons Row */}
+          <div className="flex gap-1 sm:gap-2">
+            <Button variant="outline" size="sm" asChild className="h-7 px-2 text-xs sm:h-8 sm:px-3 sm:text-sm">
               <Link href="/">Home</Link>
             </Button>
-            <Button variant="outline" size="sm" asChild className="h-8 px-3">
+            <Button variant="outline" size="sm" asChild className="h-7 px-2 text-xs sm:h-8 sm:px-3 sm:text-sm">
               <Link href="/scan">Scan</Link>
             </Button>
-            <Button variant="outline" size="sm" asChild className="h-8 px-3">
+            <Button variant="outline" size="sm" asChild className="h-7 px-2 text-xs sm:h-8 sm:px-3 sm:text-sm">
               <Link href="/admin">Admin</Link>
             </Button>
           </div>
