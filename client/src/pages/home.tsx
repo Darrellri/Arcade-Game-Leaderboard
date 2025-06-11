@@ -504,17 +504,17 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
   }, []);
 
   return (
-    <div className="relative overflow-hidden h-screen">
+    <div className="relative overflow-hidden h-screen px-4">
       {!hideHeader && (
         <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b p-4">
           <div className="text-center">
-            <h2 className="text-2xl font-bold">Arcade Games</h2>
+            <h2 className="text-xl md:text-2xl font-bold">Arcade Games</h2>
           </div>
         </div>
       )}
       
       <div 
-        className="space-y-4"
+        className="space-y-4 w-full max-w-[1200px] mx-auto"
         style={{ 
           transform: `translateY(-${scrollPosition}px)`,
           paddingTop: `300px` // Start 300 pixels higher
@@ -528,7 +528,7 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
           return (
             <div 
               key={`${game.id}-${index}-${animationKey}`}
-              className="flex justify-center"
+              className="flex justify-center w-full"
               style={{ 
                 marginBottom: `${gameSpacing}px`
               }}
@@ -537,7 +537,7 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
                 game={game} 
                 animationKey={animationKey + index}
                 isInView={isInView}
-                className={animationsEnabled ? '' : 'animation-none'}
+                className={`w-full ${animationsEnabled ? '' : 'animation-none'}`}
               />
             </div>
           );
