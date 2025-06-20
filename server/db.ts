@@ -1,12 +1,6 @@
-import { Pool, neonConfig } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-serverless';
-import ws from "ws";
+import { neon, neonConfig } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-http';
 import * as schema from "@shared/schema";
-
-// Configure WebSocket for Neon in Node.js environment
-if (typeof globalThis.WebSocket === 'undefined') {
-  neonConfig.webSocketConstructor = ws;
-}
 
 if (!process.env.DATABASE_URL) {
   throw new Error(
@@ -14,5 +8,6 @@ if (!process.env.DATABASE_URL) {
   );
 }
 
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-export const db = drizzle({ client: pool, schema });
+// Use HTTP connection instead of WebSocket for better stability
+const sql = neon(process.env.DATABASE_URL);
+export const db = drizzle(sql, { schema });
