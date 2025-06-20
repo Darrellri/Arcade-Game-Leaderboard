@@ -72,27 +72,44 @@ export default function GameMarquee({ game, className }: GameMarqueeProps) {
     };
   }, [overlayImageUrl]);
 
-  // Parallax scrolling effect for overlay images
+  // Subtle overlay movement effect - 2 pixels max, once per 10-second period
   useEffect(() => {
     if (!overlayImageUrl) return;
 
-    const parallaxTimer = setInterval(() => {
-      // Randomly choose to move ahead, lag behind, or snap back
-      const motion = Math.random();
+    const scheduleMovement = () => {
+      // Choose random time within 10-second window (0-10 seconds)
+      const randomTime = Math.random() * 10000;
       
-      if (motion < 0.4) {
-        // Move ahead by 1-2 pixels
-        setOverlayOffset({ x: Math.random() * 2 + 1, y: Math.random() * 2 + 1 });
-      } else if (motion < 0.7) {
-        // Lag behind by 2 pixels
-        setOverlayOffset({ x: -(Math.random() * 2 + 1), y: -(Math.random() * 2 + 1) });
-      } else {
-        // Snap back to center
-        setOverlayOffset({ x: 0, y: 0 });
-      }
-    }, 150 + Math.random() * 200); // Random interval between 150-350ms
+      setTimeout(() => {
+        // Randomly choose direction: vertical or horizontal
+        const isVertical = Math.random() < 0.5;
+        
+        if (isVertical) {
+          // Move up or down by 2 pixels
+          const direction = Math.random() < 0.5 ? -2 : 2;
+          setOverlayOffset({ x: 0, y: direction });
+        } else {
+          // Move left or right by 2 pixels
+          const direction = Math.random() < 0.5 ? -2 : 2;
+          setOverlayOffset({ x: direction, y: 0 });
+        }
+        
+        // Return to center after 1 second
+        setTimeout(() => {
+          setOverlayOffset({ x: 0, y: 0 });
+        }, 1000);
+        
+        // Schedule next movement in 10 seconds
+        setTimeout(scheduleMovement, 10000);
+      }, randomTime);
+    };
 
-    return () => clearInterval(parallaxTimer);
+    // Start the movement cycle
+    scheduleMovement();
+
+    return () => {
+      // Cleanup handled by setTimeout chains
+    };
   }, [overlayImageUrl]);
   
   // Using the exact 792x214 aspect ratio (3.7:1) for marquee images with mobile responsiveness
