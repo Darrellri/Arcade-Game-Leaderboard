@@ -725,11 +725,18 @@ export default function Admin() {
   return (
     <div className="container mx-auto p-6 max-w-7xl space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <p className="text-muted-foreground">
-            Manage your arcade games and venue settings
-          </p>
+        <div className="flex items-center gap-4">
+          <img 
+            src="/arcade-leaderboard-logo.svg" 
+            alt="Arcade Leaderboard" 
+            className="h-16 w-auto"
+          />
+          <div>
+            <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+            <p className="text-muted-foreground">
+              Manage your arcade games and venue settings
+            </p>
+          </div>
         </div>
         <Link href="/" className="inline-flex">
           <Button variant="outline">
