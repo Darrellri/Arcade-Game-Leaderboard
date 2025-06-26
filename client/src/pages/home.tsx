@@ -974,7 +974,7 @@ export default function Home() {
       <div className="mt-12 py-6 border-t border-border/20 bg-card/30">
         <div className="max-w-4xl mx-auto px-4 text-center space-y-3">
           <img 
-            src="/arcade-leaderboard-logo.svg" 
+            src="/arcade-leaderboard-logo.png" 
             alt="Arcade Leaderboard" 
             className="h-12 w-auto mx-auto"
           />

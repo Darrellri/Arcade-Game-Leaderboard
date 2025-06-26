@@ -727,7 +727,7 @@ export default function Admin() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <img 
-            src="/arcade-leaderboard-logo.svg" 
+            src="/arcade-leaderboard-logo.png" 
             alt="Arcade Leaderboard" 
             className="h-16 w-auto"
           />
