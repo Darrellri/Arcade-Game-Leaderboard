@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 240" width="500" height="240">
+  <!-- Background with gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a8a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e2e8f0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main background -->
+  <rect x="10" y="30" width="480" height="180" rx="20" ry="20" fill="url(#bgGradient)" stroke="#334155" stroke-width="3"/>
+  
+  <!-- Decorative stars -->
+  <polygon points="50,50 55,65 70,65 58,75 63,90 50,80 37,90 42,75 30,65 45,65" fill="#fbbf24"/>
+  <polygon points="110,180 115,190 125,190 118,197 123,207 110,200 97,207 102,197 95,190 105,190" fill="#ef4444"/>
+  <polygon points="180,45 185,55 195,55 188,62 193,72 180,65 167,72 172,62 165,55 175,55" fill="#22c55e"/>
+  <polygon points="420,60 425,70 435,70 428,77 433,87 420,80 407,87 412,77 405,70 415,70" fill="#fbbf24"/>
+  <polygon points="450,170 455,180 465,180 458,187 463,197 450,190 437,197 442,187 435,180 445,180" fill="#ef4444"/>
+  <polygon points="380,190 385,200 395,200 388,207 393,217 380,210 367,217 372,207 365,200 375,200" fill="#22c55e"/>
+  
+  <!-- Joystick -->
+  <circle cx="460" cy="100" r="25" fill="#0ea5e9" stroke="#1e40af" stroke-width="3"/>
+  <circle cx="460" cy="100" r="15" fill="#06b6d4" stroke="#0284c7" stroke-width="2"/>
+  <rect x="452" y="70" width="16" height="25" rx="8" ry="8" fill="#0284c7" stroke="#1e40af" stroke-width="2"/>
+  
+  <!-- Main text "Arcade" -->
+  <text x="60" y="120" font-family="Arial Black, sans-serif" font-size="48" font-weight="900" fill="url(#textGradient)" stroke="#1e40af" stroke-width="2">Arcade</text>
+  
+  <!-- Subtitle "LEADERBOARD" -->
+  <text x="80" y="170" font-family="Arial Black, sans-serif" font-size="32" font-weight="700" fill="#0ea5e9" stroke="#1e40af" stroke-width="1">LEADERBOARD</text>
+</svg>
