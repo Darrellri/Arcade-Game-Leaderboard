@@ -1852,127 +1852,127 @@ export default function Admin() {
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold mb-3">Venue Customization</h3>
-                  <ul className="space-y-2">
-                    <li><strong>Logo Support:</strong> Static images and animated videos (MP4/WebM)</li>
-                    <li><strong>Theme System:</strong> Multiple color schemes with click-to-cycle functionality</li>
-                    <li><strong>Layout Controls:</strong> Customizable spacing, typography, and visual styling</li>
-                    <li><strong>Branding Options:</strong> Venue name, leaderboard titles, and address display</li>
+                  <h3 className="text-xl font-bold mb-4 text-foreground">Venue Customization</h3>
+                  <ul className="space-y-3">
+                    <li className="text-base text-foreground"><strong className="text-primary">Logo Support:</strong> Static images and animated videos (MP4/WebM)</li>
+                    <li className="text-base text-foreground"><strong className="text-primary">Theme System:</strong> Multiple color schemes with click-to-cycle functionality</li>
+                    <li className="text-base text-foreground"><strong className="text-primary">Layout Controls:</strong> Customizable spacing, typography, and visual styling</li>
+                    <li className="text-base text-foreground"><strong className="text-primary">Branding Options:</strong> Venue name, leaderboard titles, and address display</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold mb-3">Admin Capabilities</h3>
-                  <ul className="space-y-2">
-                    <li><strong>Drag & Drop Reordering:</strong> Intuitive game organization</li>
-                    <li><strong>Image Management:</strong> Marquee and overlay image uploads per game</li>
-                    <li><strong>Visibility Controls:</strong> Show/hide games from public view</li>
-                    <li><strong>Bulk Operations:</strong> Filter and sort games by type or name</li>
+                  <h3 className="text-xl font-bold mb-4 text-foreground">Admin Capabilities</h3>
+                  <ul className="space-y-3">
+                    <li className="text-base text-foreground"><strong className="text-primary">Drag & Drop Reordering:</strong> Intuitive game organization</li>
+                    <li className="text-base text-foreground"><strong className="text-primary">Image Management:</strong> Marquee and overlay image uploads per game</li>
+                    <li className="text-base text-foreground"><strong className="text-primary">Visibility Controls:</strong> Show/hide games from public view</li>
+                    <li className="text-base text-foreground"><strong className="text-primary">Bulk Operations:</strong> Filter and sort games by type or name</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold mb-3">Player Experience</h3>
-                  <ul className="space-y-2">
-                    <li><strong>Score Submission:</strong> Photo evidence required for verification</li>
-                    <li><strong>Champion Recognition:</strong> Special highlighting for #1 scores</li>
-                    <li><strong>Social Features:</strong> Score sharing and friendly competition</li>
-                    <li><strong>Game Discovery:</strong> Grid and list view modes</li>
+                  <h3 className="text-xl font-bold mb-4 text-foreground">Player Experience</h3>
+                  <ul className="space-y-3">
+                    <li className="text-base text-foreground"><strong className="text-primary">Score Submission:</strong> Photo evidence required for verification</li>
+                    <li className="text-base text-foreground"><strong className="text-primary">Champion Recognition:</strong> Special highlighting for #1 scores</li>
+                    <li className="text-base text-foreground"><strong className="text-primary">Social Features:</strong> Score sharing and friendly competition</li>
+                    <li className="text-base text-foreground"><strong className="text-primary">Game Discovery:</strong> Grid and list view modes</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold mb-3">Technical Stack</h3>
-                  <ul className="space-y-2">
-                    <li><strong>Frontend:</strong> React, TypeScript, Tailwind CSS</li>
-                    <li><strong>Backend:</strong> Express.js, Node.js</li>
-                    <li><strong>Database:</strong> PostgreSQL with Drizzle ORM</li>
-                    <li><strong>UI Components:</strong> Shadcn/ui with custom arcade theming</li>
-                    <li><strong>File Storage:</strong> Local upload system for images/videos</li>
+                  <h3 className="text-xl font-bold mb-4 text-foreground">Technical Stack</h3>
+                  <ul className="space-y-3">
+                    <li className="text-base text-foreground"><strong className="text-primary">Frontend:</strong> React, TypeScript, Tailwind CSS</li>
+                    <li className="text-base text-foreground"><strong className="text-primary">Backend:</strong> Express.js, Node.js</li>
+                    <li className="text-base text-foreground"><strong className="text-primary">Database:</strong> PostgreSQL with Drizzle ORM</li>
+                    <li className="text-base text-foreground"><strong className="text-primary">UI Components:</strong> Shadcn/ui with custom arcade theming</li>
+                    <li className="text-base text-foreground"><strong className="text-primary">File Storage:</strong> Local upload system for images/videos</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h3 className="text-lg font-semibold mb-3">Rules & Guidelines</h3>
+                  <h3 className="text-xl font-bold mb-4 text-foreground">Rules & Guidelines</h3>
                   
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     <div>
-                      <h4 className="font-medium mb-2">Marquee Image Specifications</h4>
-                      <ul className="space-y-1 text-sm">
-                        <li><strong>Recommended Size:</strong> 400x600px (2:3 aspect ratio)</li>
-                        <li><strong>Maximum File Size:</strong> 2MB per image</li>
-                        <li><strong>Supported Formats:</strong> JPG, PNG, WebP</li>
-                        <li><strong>Display Context:</strong> Grid view cards, list view thumbnails</li>
-                        <li><strong>Responsive Behavior:</strong> Auto-scales for mobile devices</li>
+                      <h4 className="text-lg font-semibold mb-3 text-foreground">Marquee Image Specifications</h4>
+                      <ul className="space-y-2 text-base">
+                        <li className="text-foreground"><strong className="text-primary">Recommended Size:</strong> 400x600px (2:3 aspect ratio)</li>
+                        <li className="text-foreground"><strong className="text-primary">Maximum File Size:</strong> 2MB per image</li>
+                        <li className="text-foreground"><strong className="text-primary">Supported Formats:</strong> JPG, PNG, WebP</li>
+                        <li className="text-foreground"><strong className="text-primary">Display Context:</strong> Grid view cards, list view thumbnails</li>
+                        <li className="text-foreground"><strong className="text-primary">Responsive Behavior:</strong> Auto-scales for mobile devices</li>
                       </ul>
                     </div>
 
                     <div>
-                      <h4 className="font-medium mb-2">Overlay Image System</h4>
-                      <ul className="space-y-1 text-sm">
-                        <li><strong>Purpose:</strong> Additional branding or promotional overlays</li>
-                        <li><strong>Layering:</strong> Displays over marquee image with transparency support</li>
-                        <li><strong>Recommended Size:</strong> Same dimensions as marquee (400x600px)</li>
-                        <li><strong>Transparency:</strong> PNG format recommended for alpha channels</li>
-                        <li><strong>Use Cases:</strong> "Coming Soon" badges, special event promotions</li>
+                      <h4 className="text-lg font-semibold mb-3 text-foreground">Overlay Image System</h4>
+                      <ul className="space-y-2 text-base">
+                        <li className="text-foreground"><strong className="text-primary">Purpose:</strong> Additional branding or promotional overlays</li>
+                        <li className="text-foreground"><strong className="text-primary">Layering:</strong> Displays over marquee image with transparency support</li>
+                        <li className="text-foreground"><strong className="text-primary">Recommended Size:</strong> Same dimensions as marquee (400x600px)</li>
+                        <li className="text-foreground"><strong className="text-primary">Transparency:</strong> PNG format recommended for alpha channels</li>
+                        <li className="text-foreground"><strong className="text-primary">Use Cases:</strong> "Coming Soon" badges, special event promotions</li>
                       </ul>
                     </div>
 
                     <div>
-                      <h4 className="font-medium mb-2">Animation Sequences & Timing</h4>
-                      <ul className="space-y-1 text-sm">
-                        <li><strong>Hover Effects:</strong> 300ms smooth transitions on game cards</li>
-                        <li><strong>Loading States:</strong> Skeleton animations during data fetch</li>
-                        <li><strong>Score Celebrations:</strong> Particle bursts and floating animations</li>
-                        <li><strong>Theme Transitions:</strong> Color scheme changes with 200ms easing</li>
-                        <li><strong>Drag & Drop:</strong> Visual feedback with opacity and transform effects</li>
+                      <h4 className="text-lg font-semibold mb-3 text-foreground">Animation Sequences & Timing</h4>
+                      <ul className="space-y-2 text-base">
+                        <li className="text-foreground"><strong className="text-primary">Hover Effects:</strong> 300ms smooth transitions on game cards</li>
+                        <li className="text-foreground"><strong className="text-primary">Loading States:</strong> Skeleton animations during data fetch</li>
+                        <li className="text-foreground"><strong className="text-primary">Score Celebrations:</strong> Particle bursts and floating animations</li>
+                        <li className="text-foreground"><strong className="text-primary">Theme Transitions:</strong> Color scheme changes with 200ms easing</li>
+                        <li className="text-foreground"><strong className="text-primary">Drag & Drop:</strong> Visual feedback with opacity and transform effects</li>
                       </ul>
                     </div>
 
                     <div>
-                      <h4 className="font-medium mb-2">Content Guidelines</h4>
-                      <ul className="space-y-1 text-sm">
-                        <li><strong>Game Names:</strong> Keep concise, avoid special characters</li>
-                        <li><strong>Subtitles:</strong> Optional additional game information or taglines</li>
-                        <li><strong>Image Quality:</strong> High-resolution, clear visibility at thumbnail sizes</li>
-                        <li><strong>Consistency:</strong> Maintain similar visual style across all game images</li>
-                        <li><strong>Accessibility:</strong> Ensure sufficient contrast for text overlays</li>
+                      <h4 className="text-lg font-semibold mb-3 text-foreground">Content Guidelines</h4>
+                      <ul className="space-y-2 text-base">
+                        <li className="text-foreground"><strong className="text-primary">Game Names:</strong> Keep concise, avoid special characters</li>
+                        <li className="text-foreground"><strong className="text-primary">Subtitles:</strong> Optional additional game information or taglines</li>
+                        <li className="text-foreground"><strong className="text-primary">Image Quality:</strong> High-resolution, clear visibility at thumbnail sizes</li>
+                        <li className="text-foreground"><strong className="text-primary">Consistency:</strong> Maintain similar visual style across all game images</li>
+                        <li className="text-foreground"><strong className="text-primary">Accessibility:</strong> Ensure sufficient contrast for text overlays</li>
                       </ul>
                     </div>
 
                     <div>
-                      <h4 className="font-medium mb-2">Performance Considerations</h4>
-                      <ul className="space-y-1 text-sm">
-                        <li><strong>Image Optimization:</strong> Compress images without quality loss</li>
-                        <li><strong>Lazy Loading:</strong> Images load as they come into viewport</li>
-                        <li><strong>Caching:</strong> Browser caching enabled for static assets</li>
-                        <li><strong>Mobile Optimization:</strong> Responsive images for different screen sizes</li>
-                        <li><strong>Loading Priority:</strong> Above-fold content loads first</li>
+                      <h4 className="text-lg font-semibold mb-3 text-foreground">Performance Considerations</h4>
+                      <ul className="space-y-2 text-base">
+                        <li className="text-foreground"><strong className="text-primary">Image Optimization:</strong> Compress images without quality loss</li>
+                        <li className="text-foreground"><strong className="text-primary">Lazy Loading:</strong> Images load as they come into viewport</li>
+                        <li className="text-foreground"><strong className="text-primary">Caching:</strong> Browser caching enabled for static assets</li>
+                        <li className="text-foreground"><strong className="text-primary">Mobile Optimization:</strong> Responsive images for different screen sizes</li>
+                        <li className="text-foreground"><strong className="text-primary">Loading Priority:</strong> Above-fold content loads first</li>
                       </ul>
                     </div>
 
                     <div>
-                      <h4 className="font-medium mb-2">Video Logo Specifications</h4>
-                      <ul className="space-y-1 text-sm">
-                        <li><strong>Supported Formats:</strong> MP4, WebM (WebM preferred for transparency)</li>
-                        <li><strong>Maximum File Size:</strong> 5MB for optimal loading</li>
-                        <li><strong>Recommended Duration:</strong> 2-5 seconds for seamless looping</li>
-                        <li><strong>Dimensions:</strong> 300x100px or similar aspect ratio</li>
-                        <li><strong>Transparency:</strong> WebM with alpha channel for true transparency</li>
-                        <li><strong>Fallback:</strong> Static logo image serves as backup</li>
+                      <h4 className="text-lg font-semibold mb-3 text-foreground">Video Logo Specifications</h4>
+                      <ul className="space-y-2 text-base">
+                        <li className="text-foreground"><strong className="text-primary">Supported Formats:</strong> MP4, WebM (WebM preferred for transparency)</li>
+                        <li className="text-foreground"><strong className="text-primary">Maximum File Size:</strong> 5MB for optimal loading</li>
+                        <li className="text-foreground"><strong className="text-primary">Recommended Duration:</strong> 2-5 seconds for seamless looping</li>
+                        <li className="text-foreground"><strong className="text-primary">Dimensions:</strong> 300x100px or similar aspect ratio</li>
+                        <li className="text-foreground"><strong className="text-primary">Transparency:</strong> WebM with alpha channel for true transparency</li>
+                        <li className="text-foreground"><strong className="text-primary">Fallback:</strong> Static logo image serves as backup</li>
                       </ul>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-muted p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2">Venue Information</h4>
-                  <p><strong>Winona Axe and Arcade</strong></p>
-                  <p>Operating Hours:</p>
-                  <ul className="ml-4">
-                    <li>Wednesday-Friday: 4pm-10pm</li>
-                    <li>Saturday: 11am-10pm</li>
-                    <li>Sunday: noon-6pm</li>
+                <div className="bg-muted p-6 rounded-lg border">
+                  <h4 className="text-lg font-bold mb-4 text-foreground">Venue Information</h4>
+                  <p className="text-base text-foreground mb-3"><strong className="text-primary">Winona Axe and Arcade</strong></p>
+                  <p className="text-base text-foreground mb-2"><strong className="text-primary">Operating Hours:</strong></p>
+                  <ul className="ml-6 space-y-1">
+                    <li className="text-base text-foreground">Wednesday-Friday: 4pm-10pm</li>
+                    <li className="text-base text-foreground">Saturday: 11am-10pm</li>
+                    <li className="text-base text-foreground">Sunday: noon-6pm</li>
                   </ul>
                 </div>
               </div>
