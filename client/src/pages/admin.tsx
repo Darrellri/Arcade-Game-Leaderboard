@@ -948,7 +948,6 @@ export default function Admin() {
                     onClick={() => {
                       updateSettings.mutate({
                         theme: {
-                          name: preset.name,
                           primary: preset.primary,
                           variant: preset.variant,
                           appearance: preset.appearance,
@@ -1604,7 +1603,15 @@ export default function Admin() {
             <CardContent>
               <div className="grid md:grid-cols-[2fr_1fr] gap-6">
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit((data) => updateSettings.mutate(data))} className="space-y-6">
+                  <form onSubmit={form.handleSubmit((data) => {
+                    // Include uploaded logo URLs in the form data
+                    const settingsData = {
+                      ...data,
+                      logoUrl: logoPreview || data.logoUrl,
+                      animatedLogoUrl: animatedLogoPreview || data.animatedLogoUrl
+                    };
+                    updateSettings.mutate(settingsData);
+                  })} className="space-y-6">
                     {/* Venue Name and Leaderboard Name - 50/50 grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <FormField
@@ -1830,16 +1837,17 @@ export default function Admin() {
                 Documentation of platform capabilities and features
               </CardDescription>
             </CardHeader>
-            <CardContent className="prose prose-sm max-w-none dark:prose-invert">
-              <div className="space-y-6">
+            <CardContent className="prose prose-base max-w-none dark:prose-invert">
+              <div className="space-y-6 text-foreground text-base"
+                   style={{ color: 'var(--foreground)' }}>
                 <div>
-                  <h3 className="text-lg font-semibold mb-3">Core Features</h3>
-                  <ul className="space-y-2">
-                    <li><strong>Game Management:</strong> Add, edit, reorder, and delete arcade/pinball games</li>
-                    <li><strong>Score Tracking:</strong> Players can submit scores with photo validation</li>
-                    <li><strong>QR Code System:</strong> Venue-specific QR codes for score submission</li>
-                    <li><strong>Real-time Leaderboards:</strong> Dynamic ranking system with high score tracking</li>
-                    <li><strong>Mobile Responsive:</strong> Optimized for all device sizes</li>
+                  <h3 className="text-xl font-bold mb-4 text-foreground">Core Features</h3>
+                  <ul className="space-y-3">
+                    <li className="text-base text-foreground"><strong className="text-primary">Game Management:</strong> Add, edit, reorder, and delete arcade/pinball games</li>
+                    <li className="text-base text-foreground"><strong className="text-primary">Score Tracking:</strong> Players can submit scores with photo validation</li>
+                    <li className="text-base text-foreground"><strong className="text-primary">QR Code System:</strong> Venue-specific QR codes for score submission</li>
+                    <li className="text-base text-foreground"><strong className="text-primary">Real-time Leaderboards:</strong> Dynamic ranking system with high score tracking</li>
+                    <li className="text-base text-foreground"><strong className="text-primary">Mobile Responsive:</strong> Optimized for all device sizes</li>
                   </ul>
                 </div>
 
