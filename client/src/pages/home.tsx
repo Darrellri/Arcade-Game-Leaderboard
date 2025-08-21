@@ -142,45 +142,57 @@ function ScrollMarquee({ game, className = "", animationKey = 0, delay = 0, isIn
     }
   }, [isInView, hasTriggered]);
 
-  if (imageUrl) {
-    return (
-      <div className={`w-full max-w-[1188px] aspect-[1188/321] relative overflow-hidden ${className} ${isVisible ? currentAnimation : 'opacity-0'}`} 
-           style={{ borderRadius: '15px', animationDuration: '0.8s' }}>
+  return (
+    <div className={`w-full max-w-[1188px] aspect-[1188/321] relative overflow-hidden ${className} ${isVisible ? currentAnimation : 'opacity-0'}`} 
+         style={{ borderRadius: '15px', animationDuration: '0.8s' }}>
+      {imageUrl ? (
         <img 
           src={imageUrl} 
           alt={`${game.name} marquee`}
-          className="w-full h-full object-contain"
+          className="w-full h-full object-contain bg-black"
           style={{
             borderRadius: '15px',
             maxWidth: '100%',
             height: 'auto'
           }}
         />
-        
-        {/* High Score Information Overlay with animation */}
-        {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
-          <div className={`absolute bottom-6 left-6 flex items-center gap-6 bg-black/80 backdrop-blur-sm rounded-2xl px-8 py-6 border border-primary/40 ${overlayVisible ? badgeAnimation : 'opacity-0'}`} 
-               style={{ zIndex: 100, animationDuration: '1.2s' }}>
-            <TrophyIcon size={64} className="text-yellow-400" />
-            <div className="text-white">
-              <div className="text-2xl font-bold text-yellow-400 mb-1">#1 PINWIZARD</div>
-              <div className="text-3xl font-bold mb-2">{game.topScorerName || "No Name"}</div>
-              <div className="text-5xl font-bold text-primary mb-1">
-                {game.currentHighScore ? game.currentHighScore.toLocaleString() : "0"}
-              </div>
-              {game.topScoreDate && (
-                <div className="text-lg text-gray-300">
-                  {formatDate(new Date(game.topScoreDate))}
-                </div>
-              )}
-            </div>
+      ) : (
+        <div className="w-full h-full bg-gradient-to-r from-primary/20 to-primary/40 flex items-center justify-center"
+             style={{ borderRadius: '15px' }}>
+          <div className="text-center px-4">
+            <h2 className="text-lg sm:text-2xl md:text-3xl font-bold tracking-wider text-center uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground drop-shadow-lg">
+              {game.name}
+            </h2>
+            {game.subtitle && (
+              <p className="text-xs sm:text-sm md:text-base text-muted-foreground mt-2">
+                {game.subtitle}
+              </p>
+            )}
           </div>
-        )}
-      </div>
-    );
-  }
-  
-  return null;
+        </div>
+      )}
+      
+      {/* High Score Information Overlay with animation */}
+      {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
+        <div className={`absolute bottom-6 left-6 flex items-center gap-6 bg-black/80 backdrop-blur-sm rounded-2xl px-8 py-6 border border-primary/40 ${overlayVisible ? badgeAnimation : 'opacity-0'}`} 
+             style={{ zIndex: 100, animationDuration: '1.2s' }}>
+          <TrophyIcon size={64} className="text-yellow-400" />
+          <div className="text-white">
+            <div className="text-2xl font-bold text-yellow-400 mb-1">#1 PINWIZARD</div>
+            <div className="text-3xl font-bold mb-2">{game.topScorerName || "No Name"}</div>
+            <div className="text-5xl font-bold text-primary mb-1">
+              {game.currentHighScore ? game.currentHighScore.toLocaleString() : "0"}
+            </div>
+            {game.topScoreDate && (
+              <div className="text-lg text-gray-300">
+                {formatDate(new Date(game.topScoreDate))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 // Full-size marquee component for new views with 15px radius - MARQUEE ONLY
@@ -523,7 +535,8 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
         {visibleGames.map((game, index) => {
           // Calculate if this game is currently in view
           const gamePosition = index * (321 + gameSpacing) - scrollPosition;
-          const isInView = gamePosition > -400 && gamePosition < window.innerHeight + 200;
+          const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
+          const isInView = gamePosition > -400 && gamePosition < viewportHeight + 200;
           
           return (
             <div 
