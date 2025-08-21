@@ -103,47 +103,26 @@ function ScrollMarquee({ game, className = "", animationKey = 0, delay = 0, isIn
   const imageUrl = game.imageUrl;
   const [currentAnimation, setCurrentAnimation] = useState('');
   const [badgeAnimation, setBadgeAnimation] = useState('');
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true); // Always start visible for scroll view
   const [overlayVisible, setOverlayVisible] = useState(false);
-  const [hasTriggered, setHasTriggered] = useState(false);
 
   // Set random animations when component mounts or animationKey changes
   useEffect(() => {
     setCurrentAnimation(getRandomAnimation());
     setBadgeAnimation(getRandomAnimation());
-    setHasTriggered(false);
   }, [animationKey]);
 
-  // Trigger animations when in view
+  // Show overlay after a delay
   useEffect(() => {
-    if (isInView && !hasTriggered) {
-      setHasTriggered(true);
-      setIsVisible(false);
-      setOverlayVisible(false);
+    const overlayTimer = setTimeout(() => {
+      setOverlayVisible(true);
+    }, 1500 + Math.random() * 1500);
 
-      // Start main animation immediately when in view
-      const mainTimer = setTimeout(() => {
-        setIsVisible(true);
-      }, 100);
-
-      // Start overlay animation with random delay between 1.5-3 seconds after main animation
-      const finalOverlayDelay = 1500 + Math.random() * 1500;
-      const overlayTimer = setTimeout(() => {
-        setOverlayVisible(true);
-      }, 100 + finalOverlayDelay);
-
-      return () => {
-        clearTimeout(mainTimer);
-        clearTimeout(overlayTimer);
-      };
-    } else if (!isInView) {
-      setIsVisible(false);
-      setOverlayVisible(false);
-    }
-  }, [isInView, hasTriggered]);
+    return () => clearTimeout(overlayTimer);
+  }, [animationKey]);
 
   return (
-    <div className={`w-full max-w-[1188px] aspect-[1188/321] relative overflow-hidden ${className} ${isVisible ? currentAnimation : 'opacity-0'}`} 
+    <div className={`w-full max-w-[1188px] aspect-[1188/321] relative overflow-hidden ${className} ${currentAnimation}`} 
          style={{ borderRadius: '15px', animationDuration: '0.8s' }}>
       {imageUrl ? (
         <img 
@@ -489,8 +468,12 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
 
   // Create infinite loop of games
   useEffect(() => {
-    const extendedGames = [...games, ...games, ...games]; // Triple the array for seamless loop
-    setVisibleGames(extendedGames);
+    console.log('ScrollView: Setting up games', games.length);
+    if (games.length > 0) {
+      const extendedGames = [...games, ...games, ...games]; // Triple the array for seamless loop
+      setVisibleGames(extendedGames);
+      console.log('ScrollView: Extended games count', extendedGames.length);
+    }
   }, [games]);
 
   // Auto-scroll effect - 20% faster
@@ -515,47 +498,57 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
     return () => clearInterval(animationTimer);
   }, []);
 
+  console.log('ScrollView rendering with', visibleGames.length, 'games');
+
   return (
-    <div className="relative overflow-hidden h-screen px-4">
+    <div className="relative overflow-hidden h-screen px-4 bg-background">
       {!hideHeader && (
         <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b p-4">
           <div className="text-center">
-            <h2 className="text-xl md:text-2xl font-bold">Arcade Games</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-foreground">Arcade Games</h2>
           </div>
         </div>
       )}
       
-      <div 
-        className="space-y-4 w-full max-w-[1200px] mx-auto"
-        style={{ 
-          transform: `translateY(-${scrollPosition}px)`,
-          paddingTop: `300px` // Start 300 pixels higher
-        }}
-      >
-        {visibleGames.map((game, index) => {
-          // Calculate if this game is currently in view
-          const gamePosition = index * (321 + gameSpacing) - scrollPosition;
-          const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
-          const isInView = gamePosition > -400 && gamePosition < viewportHeight + 200;
-          
-          return (
-            <div 
-              key={`${game.id}-${index}-${animationKey}`}
-              className="flex justify-center w-full"
-              style={{ 
-                marginBottom: `${gameSpacing}px`
-              }}
-            >
-              <ScrollMarquee 
-                game={game} 
-                animationKey={animationKey + index}
-                isInView={isInView}
-                className={`w-full ${animationsEnabled ? '' : 'animation-none'}`}
-              />
-            </div>
-          );
-        })}
-      </div>
+      {visibleGames.length === 0 ? (
+        <div className="flex items-center justify-center h-full">
+          <div className="text-center">
+            <h3 className="text-lg font-semibold text-muted-foreground">Loading games...</h3>
+          </div>
+        </div>
+      ) : (
+        <div 
+          className="space-y-4 w-full max-w-[1200px] mx-auto"
+          style={{ 
+            transform: `translateY(-${scrollPosition}px)`,
+            paddingTop: `300px` // Start 300 pixels higher
+          }}
+        >
+          {visibleGames.map((game, index) => {
+            // Calculate if this game is currently in view
+            const gamePosition = index * (321 + gameSpacing) - scrollPosition;
+            const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
+            const isInView = gamePosition > -400 && gamePosition < viewportHeight + 200;
+            
+            return (
+              <div 
+                key={`${game.id}-${index}-${animationKey}`}
+                className="flex justify-center w-full"
+                style={{ 
+                  marginBottom: `${gameSpacing}px`
+                }}
+              >
+                <ScrollMarquee 
+                  game={game} 
+                  animationKey={animationKey + index}
+                  isInView={isInView}
+                  className={`w-full ${animationsEnabled ? '' : 'animation-none'}`}
+                />
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
