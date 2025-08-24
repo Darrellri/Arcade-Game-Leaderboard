@@ -98,6 +98,19 @@ function ScrollMarquee({ game, className = "" }: {
   className?: string; 
 }) {
   const imageUrl = game.imageUrl;
+  const [topOverlayVisible, setTopOverlayVisible] = useState(false);
+
+  // Show overlay after component mounts, then fade after 1 second
+  useEffect(() => {
+    const showTimer = setTimeout(() => {
+      setTopOverlayVisible(true);
+      setTimeout(() => {
+        setTopOverlayVisible(false);
+      }, 1000);
+    }, 500); // Show after 0.5 seconds
+
+    return () => clearTimeout(showTimer);
+  }, []);
 
   return (
     <div className={`w-full max-w-[1188px] aspect-[1188/321] relative overflow-hidden ${className}`} 
@@ -126,6 +139,23 @@ function ScrollMarquee({ game, className = "" }: {
               </p>
             )}
           </div>
+        </div>
+      )}
+      
+      {/* Top Overlay for Scroll View - Uses layer image if available */}
+      {topOverlayVisible && game.overlayImageUrl && (
+        <div className="absolute inset-0 transition-opacity duration-500"
+             style={{ zIndex: 110, borderRadius: '15px' }}>
+          <img 
+            src={game.overlayImageUrl} 
+            alt={`${game.name} overlay`}
+            className="w-full h-full object-contain"
+            style={{
+              borderRadius: '15px',
+              maxWidth: '100%',
+              height: 'auto'
+            }}
+          />
         </div>
       )}
       
@@ -261,16 +291,20 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
             onLoad={handleImageLoad}
           />
           
-          {/* Top Overlay - Appears after marquee animation stops */}
-          {topOverlayVisible && (
-            <div className="absolute inset-0 bg-primary/20 backdrop-blur-sm flex items-center justify-center transition-opacity duration-500"
+          {/* Top Overlay - Appears after marquee animation stops using layer image */}
+          {topOverlayVisible && game.overlayImageUrl && (
+            <div className="absolute inset-0 transition-opacity duration-500"
                  style={{ zIndex: 110, borderRadius: '15px' }}>
-              <div className="text-center text-white">
-                <div className="text-4xl font-bold mb-2">🎮</div>
-                <div className="text-xl font-semibold tracking-wide">
-                  {game.name}
-                </div>
-              </div>
+              <img 
+                src={game.overlayImageUrl} 
+                alt={`${game.name} overlay`}
+                className="w-full h-full object-contain"
+                style={{
+                  borderRadius: '15px',
+                  maxWidth: '100%',
+                  height: 'auto'
+                }}
+              />
             </div>
           )}
           
