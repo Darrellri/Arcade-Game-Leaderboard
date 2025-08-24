@@ -136,20 +136,20 @@ function ScrollMarquee({ game, className = "" }: {
           <div className="flex items-center justify-between w-full">
             {/* Left side - Champion info */}
             <div className="flex items-center gap-4">
-              <TrophyIcon size={48} className="text-yellow-400 flex-shrink-0" />
+              <TrophyIcon size={62} className="text-yellow-400 flex-shrink-0" />
               <div className="text-white">
-                <div className="text-lg font-bold text-yellow-400">#1 CHAMPION</div>
-                <div className="text-2xl font-bold">{game.topScorerName || "No Name"}</div>
+                <div className="text-2xl font-bold text-yellow-400">#1 CHAMPION</div>
+                <div className="text-4xl font-bold">{game.topScorerName || "No Name"}</div>
               </div>
             </div>
             
             {/* Center - Game name */}
             <div className="text-center flex-1 px-4">
-              <div className="text-xl font-bold text-primary uppercase tracking-wide">
+              <div className="text-3xl font-bold text-primary uppercase tracking-wide">
                 {game.name}
               </div>
               {game.subtitle && (
-                <div className="text-sm text-gray-300 mt-1">
+                <div className="text-lg text-gray-300 mt-1">
                   {game.subtitle}
                 </div>
               )}
@@ -157,11 +157,11 @@ function ScrollMarquee({ game, className = "" }: {
             
             {/* Right side - Score and date */}
             <div className="text-right">
-              <div className="text-3xl font-bold text-primary">
+              <div className="text-5xl font-bold text-primary">
                 {game.currentHighScore ? game.currentHighScore.toLocaleString() : "0"}
               </div>
               {game.topScoreDate && (
-                <div className="text-sm text-gray-300 mt-1">
+                <div className="text-lg text-gray-300 mt-1">
                   {formatDate(new Date(game.topScoreDate))}
                 </div>
               )}
@@ -249,20 +249,20 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
               <div className="flex items-center justify-between w-full">
                 {/* Left side - Champion info */}
                 <div className="flex items-center gap-4">
-                  <TrophyIcon size={48} className="text-yellow-400 flex-shrink-0" />
+                  <TrophyIcon size={62} className="text-yellow-400 flex-shrink-0" />
                   <div className="text-white">
-                    <div className="text-lg font-bold text-yellow-400">#1 CHAMPION</div>
-                    <div className="text-2xl font-bold">{game.topScorerName || "No Name"}</div>
+                    <div className="text-2xl font-bold text-yellow-400">#1 CHAMPION</div>
+                    <div className="text-4xl font-bold">{game.topScorerName || "No Name"}</div>
                   </div>
                 </div>
                 
                 {/* Center - Game name */}
                 <div className="text-center flex-1 px-4">
-                  <div className="text-xl font-bold text-primary uppercase tracking-wide">
+                  <div className="text-3xl font-bold text-primary uppercase tracking-wide">
                     {game.name}
                   </div>
                   {game.subtitle && (
-                    <div className="text-sm text-gray-300 mt-1">
+                    <div className="text-lg text-gray-300 mt-1">
                       {game.subtitle}
                     </div>
                   )}
@@ -270,11 +270,11 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
                 
                 {/* Right side - Score and date */}
                 <div className="text-right">
-                  <div className="text-3xl font-bold text-primary">
+                  <div className="text-5xl font-bold text-primary">
                     {game.currentHighScore ? game.currentHighScore.toLocaleString() : "0"}
                   </div>
                   {game.topScoreDate && (
-                    <div className="text-sm text-gray-300 mt-1">
+                    <div className="text-lg text-gray-300 mt-1">
                       {formatDate(new Date(game.topScoreDate))}
                     </div>
                   )}
