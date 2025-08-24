@@ -964,9 +964,7 @@ export default function Home() {
             <Button variant="outline" size="sm" asChild className="h-7 px-2 text-xs sm:h-8 sm:px-3 sm:text-sm">
               <Link href="/">Home</Link>
             </Button>
-            <Button variant="outline" size="sm" asChild className="h-7 px-2 text-xs sm:h-8 sm:px-3 sm:text-sm">
-              <Link href="/scan">Scan</Link>
-            </Button>
+
             <Button variant="outline" size="sm" asChild className="h-7 px-2 text-xs sm:h-8 sm:px-3 sm:text-sm">
               <Link href="/admin">Admin</Link>
             </Button>
@@ -1020,7 +1018,7 @@ export default function Home() {
             alt="Arcade Leaderboard" 
             className="h-12 w-auto mx-auto"
           />
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-primary">
             {venueSettings?.name || "Winona Axe and Arcade"} • High Score Tracking
           </p>
         </div>
