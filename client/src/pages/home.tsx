@@ -92,38 +92,16 @@ function getExitAnimation(entranceAnimation: string): string {
   return exitMap[entranceAnimation] || 'animate-fade-out';
 }
 
-// Scroll-specific marquee component without background and with proper animations
-function ScrollMarquee({ game, className = "", animationKey = 0, delay = 0, isInView = true }: { 
+// Scroll-specific marquee component - no individual animations, just static display
+function ScrollMarquee({ game, className = "" }: { 
   game: Game; 
   className?: string; 
-  animationKey?: number;
-  delay?: number;
-  isInView?: boolean;
 }) {
   const imageUrl = game.imageUrl;
-  const [currentAnimation, setCurrentAnimation] = useState('');
-  const [badgeAnimation, setBadgeAnimation] = useState('');
-  const [isVisible, setIsVisible] = useState(true); // Always start visible for scroll view
-  const [overlayVisible, setOverlayVisible] = useState(false);
-
-  // Set random animations when component mounts or animationKey changes
-  useEffect(() => {
-    setCurrentAnimation(getRandomAnimation());
-    setBadgeAnimation(getRandomAnimation());
-  }, [animationKey]);
-
-  // Show overlay after a delay
-  useEffect(() => {
-    const overlayTimer = setTimeout(() => {
-      setOverlayVisible(true);
-    }, 1500 + Math.random() * 1500);
-
-    return () => clearTimeout(overlayTimer);
-  }, [animationKey]);
 
   return (
-    <div className={`w-full max-w-[1188px] aspect-[1188/321] relative overflow-hidden ${className} ${currentAnimation}`} 
-         style={{ borderRadius: '15px', animationDuration: '0.8s' }}>
+    <div className={`w-full max-w-[1188px] aspect-[1188/321] relative overflow-hidden ${className}`} 
+         style={{ borderRadius: '15px' }}>
       {imageUrl ? (
         <img 
           src={imageUrl} 
@@ -151,10 +129,10 @@ function ScrollMarquee({ game, className = "", animationKey = 0, delay = 0, isIn
         </div>
       )}
       
-      {/* High Score Information Overlay with animation */}
+      {/* High Score Information Overlay - always visible, no animation */}
       {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
-        <div className={`absolute bottom-6 left-6 flex items-center gap-6 bg-black/80 backdrop-blur-sm rounded-2xl px-8 py-6 border border-primary/40 ${overlayVisible ? badgeAnimation : 'opacity-0'}`} 
-             style={{ zIndex: 100, animationDuration: '1.2s' }}>
+        <div className="absolute bottom-6 left-6 flex items-center gap-6 bg-black/80 backdrop-blur-sm rounded-2xl px-8 py-6 border border-primary/40" 
+             style={{ zIndex: 100 }}>
           <TrophyIcon size={64} className="text-yellow-400" />
           <div className="text-white">
             <div className="text-2xl font-bold text-yellow-400 mb-1">#1 PINWIZARD</div>
@@ -455,7 +433,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   );
 }
 
-// Scroll View Component - Shows all games vertically with infinite scroll and staggered animations
+// Scroll View Component - Shows all games vertically with infinite scroll (no individual animations)
 function ScrollView({ games, animationsEnabled, hideHeader }: { 
   games: Game[]; 
   animationsEnabled: boolean; 
@@ -463,45 +441,91 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
 }) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [visibleGames, setVisibleGames] = useState<Game[]>([]);
-  const [animationKey, setAnimationKey] = useState(0);
-  const gameSpacing = 200; // Configurable spacing between images
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
+  const [scrollSpeed, setScrollSpeed] = useState(1); // 1 = normal, 0.5 = slow, 2 = fast
+  const gameSpacing = 50; // Much closer together - reduced from 200 to 50
 
   // Create infinite loop of games
   useEffect(() => {
-    console.log('ScrollView: Setting up games', games.length);
     if (games.length > 0) {
       const extendedGames = [...games, ...games, ...games]; // Triple the array for seamless loop
       setVisibleGames(extendedGames);
-      console.log('ScrollView: Extended games count', extendedGames.length);
     }
   }, [games]);
 
-  // Auto-scroll effect - 20% faster
+  // Auto-scroll effect with configurable direction and speed
   useEffect(() => {
     const scrollTimer = setInterval(() => {
       setScrollPosition(prev => {
-        const newPosition = prev + 1.2; // 20% faster
+        const baseSpeed = 1.2;
+        const adjustedSpeed = baseSpeed * scrollSpeed;
+        const movement = scrollDirection === 'up' ? adjustedSpeed : -adjustedSpeed;
+        const newPosition = prev + movement;
         const resetPoint = games.length * (gameSpacing + 321); // Game height + spacing
-        return newPosition >= resetPoint ? 0 : newPosition;
+        
+        if (scrollDirection === 'up') {
+          return newPosition >= resetPoint ? 0 : newPosition;
+        } else {
+          return newPosition <= -resetPoint ? 0 : newPosition;
+        }
       });
-    }, 40); // Smoother and faster scrolling
+    }, 40); // Smooth scrolling
 
     return () => clearInterval(scrollTimer);
-  }, [games.length, gameSpacing]);
-
-  // Trigger new animations every time a new game comes into view
-  useEffect(() => {
-    const animationTimer = setInterval(() => {
-      setAnimationKey(prev => prev + 1);
-    }, 2000); // More frequent animations for scroll view
-
-    return () => clearInterval(animationTimer);
-  }, []);
-
-  console.log('ScrollView rendering with', visibleGames.length, 'games');
+  }, [games.length, gameSpacing, scrollDirection, scrollSpeed]);
 
   return (
     <div className="relative overflow-hidden h-screen px-4 bg-background">
+      {/* Scroll Controls */}
+      <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 bg-background/90 backdrop-blur-sm border rounded-lg p-3">
+        <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+          Direction:
+          <Button
+            variant={scrollDirection === 'up' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setScrollDirection('up')}
+            className="h-7 px-2"
+          >
+            ↑ Up
+          </Button>
+          <Button
+            variant={scrollDirection === 'down' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setScrollDirection('down')}
+            className="h-7 px-2"
+          >
+            ↓ Down
+          </Button>
+        </div>
+        <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+          Speed:
+          <Button
+            variant={scrollSpeed === 0.5 ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setScrollSpeed(0.5)}
+            className="h-7 px-2"
+          >
+            Slow
+          </Button>
+          <Button
+            variant={scrollSpeed === 1 ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setScrollSpeed(1)}
+            className="h-7 px-2"
+          >
+            Normal
+          </Button>
+          <Button
+            variant={scrollSpeed === 2 ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setScrollSpeed(2)}
+            className="h-7 px-2"
+          >
+            Fast
+          </Button>
+        </div>
+      </div>
+
       {!hideHeader && (
         <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b p-4">
           <div className="text-center">
@@ -524,29 +548,20 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
             paddingTop: `300px` // Start 300 pixels higher
           }}
         >
-          {visibleGames.map((game, index) => {
-            // Calculate if this game is currently in view
-            const gamePosition = index * (321 + gameSpacing) - scrollPosition;
-            const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
-            const isInView = gamePosition > -400 && gamePosition < viewportHeight + 200;
-            
-            return (
-              <div 
-                key={`${game.id}-${index}-${animationKey}`}
-                className="flex justify-center w-full"
-                style={{ 
-                  marginBottom: `${gameSpacing}px`
-                }}
-              >
-                <ScrollMarquee 
-                  game={game} 
-                  animationKey={animationKey + index}
-                  isInView={isInView}
-                  className={`w-full ${animationsEnabled ? '' : 'animation-none'}`}
-                />
-              </div>
-            );
-          })}
+          {visibleGames.map((game, index) => (
+            <div 
+              key={`${game.id}-${index}`}
+              className="flex justify-center w-full"
+              style={{ 
+                marginBottom: `${gameSpacing}px`
+              }}
+            >
+              <ScrollMarquee 
+                game={game} 
+                className="w-full"
+              />
+            </div>
+          ))}
         </div>
       )}
     </div>
