@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Home, QrCode, Trophy, Settings } from "lucide-react";
+import { Home, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function NavMenu() {
@@ -7,7 +7,6 @@ export default function NavMenu() {
 
   const navItems = [
     { href: "/", icon: Home, label: "Home" },
-    { href: "/scan", icon: QrCode, label: "Scan" },
     { href: "/admin", icon: Settings, label: "Admin" },
   ];
 

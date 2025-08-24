@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import GameMarquee from "./game-marquee";
-import ShareScore from "./share-score";
+
 import { formatDate, formatTime } from "@/lib/formatters";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/retro-tooltip";
 import { useTheme } from "@/contexts/ThemeContext";
@@ -147,20 +147,7 @@ export default function GameCard({ game }: GameCardProps) {
               </Tooltip>
             </TooltipProvider>
             
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <ShareScore 
-                    game={game} 
-                    variant="secondary" 
-                    className="w-full shadow-sm hover:shadow-md" 
-                  />
-                </TooltipTrigger>
-                <TooltipContent variant="powerup">
-                  Share your epic high score!
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+
           </div>
         </div>
       </div>
