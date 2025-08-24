@@ -120,33 +120,80 @@ function getExitAnimation(entranceAnimation: string): string {
 }
 
 // Scroll-specific marquee component - no individual animations, just static display
-function ScrollMarquee({ game, className = "" }: { 
+function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSpacing, gameHeight }: { 
   game: Game; 
-  className?: string; 
+  className?: string;
+  scrollPosition?: number;
+  gameIndex?: number;
+  gameSpacing?: number;
+  gameHeight?: number;
 }) {
   const imageUrl = game.imageUrl;
   const [topOverlayVisible, setTopOverlayVisible] = useState(false);
+  const [fadeOpacity, setFadeOpacity] = useState(0);
 
-  // Show overlay after component mounts, then fade after 1 second
+  // Calculate if this marquee is centered on screen for layer animation trigger
   useEffect(() => {
-    const showTimer = setTimeout(() => {
-      setTopOverlayVisible(true);
-      setTimeout(() => {
-        setTopOverlayVisible(false);
-      }, 1000);
-    }, 500); // Show after 0.5 seconds
-
-    return () => clearTimeout(showTimer);
-  }, []);
+    if (scrollPosition !== undefined && gameIndex !== undefined && gameSpacing !== undefined && gameHeight !== undefined) {
+      const screenHeight = window.innerHeight;
+      const screenCenter = screenHeight / 2;
+      
+      // Calculate this game's position on screen
+      const gameTopPosition = (gameIndex * (gameHeight + gameSpacing)) - scrollPosition;
+      const gameBottomPosition = gameTopPosition + gameHeight;
+      const gameCenterPosition = gameTopPosition + (gameHeight / 2);
+      
+      // Calculate visibility and opacity for fade effect
+      const visibilityBuffer = 100; // Start fading in/out 100px before/after screen edges
+      const topEdge = -visibilityBuffer;
+      const bottomEdge = screenHeight + visibilityBuffer;
+      
+      // Fade calculation
+      let opacity = 0;
+      if (gameTopPosition > bottomEdge || gameBottomPosition < topEdge) {
+        opacity = 0; // Completely off screen
+      } else if (gameTopPosition >= topEdge && gameBottomPosition <= bottomEdge) {
+        opacity = 1; // Completely on screen
+      } else {
+        // Partially on screen - calculate fade
+        const fadeDistance = visibilityBuffer;
+        if (gameTopPosition < topEdge) {
+          // Fading in from top
+          opacity = Math.max(0, Math.min(1, (gameBottomPosition - topEdge) / fadeDistance));
+        } else if (gameBottomPosition > bottomEdge) {
+          // Fading out to bottom
+          opacity = Math.max(0, Math.min(1, (bottomEdge - gameTopPosition) / fadeDistance));
+        }
+      }
+      
+      setFadeOpacity(opacity);
+      
+      // Check if game center is near screen center for layer animation
+      const centerThreshold = 50; // Pixels from center to trigger animation
+      const isNearCenter = Math.abs(gameCenterPosition - screenCenter) < centerThreshold;
+      
+      // Only show overlay when near center and has overlay image
+      if (isNearCenter && game.overlayImageUrl && !topOverlayVisible) {
+        setTopOverlayVisible(true);
+        // Hide overlay after animation duration
+        setTimeout(() => {
+          setTopOverlayVisible(false);
+        }, 1500);
+      }
+    }
+  }, [scrollPosition, gameIndex, gameSpacing, gameHeight, game.overlayImageUrl, topOverlayVisible]);
 
   return (
-    <div className={`w-full max-w-[1188px] aspect-[1188/321] relative overflow-hidden ${className}`} 
-         style={{ borderRadius: '15px' }}>
+    <div className={`w-full max-w-[1188px] aspect-[1188/321] relative overflow-hidden transition-opacity duration-500 ${className}`} 
+         style={{ 
+           borderRadius: '15px',
+           opacity: fadeOpacity
+         }}>
       {imageUrl ? (
         <img 
           src={imageUrl} 
           alt={`${game.name} marquee`}
-          className="w-full h-full object-contain bg-black"
+          className="w-full h-full object-contain bg-black transition-opacity duration-500"
           style={{
             borderRadius: '15px',
             maxWidth: '100%',
@@ -154,7 +201,7 @@ function ScrollMarquee({ game, className = "" }: {
           }}
         />
       ) : (
-        <div className="w-full h-full bg-gradient-to-r from-primary/20 to-primary/40 flex items-center justify-center"
+        <div className="w-full h-full bg-gradient-to-r from-primary/20 to-primary/40 flex items-center justify-center transition-opacity duration-500"
              style={{ borderRadius: '15px' }}>
           <div className="text-center px-4">
             <h2 className="text-lg sm:text-2xl md:text-3xl font-bold tracking-wider text-center uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground drop-shadow-lg">
@@ -776,6 +823,10 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
               <ScrollMarquee 
                 game={game} 
                 className="w-full"
+                scrollPosition={scrollPosition}
+                gameIndex={index}
+                gameSpacing={gameSpacing}
+                gameHeight={gameHeight}
               />
             </div>
           ))}
