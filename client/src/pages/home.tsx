@@ -340,28 +340,39 @@ function ListView({ games, animationsEnabled, hideHeader }: {
   );
 }
 
-// Dramatic Animation Effects Library - 70+ Effects
+// Marquee Animation Effects Library - No vertical rotations, horizontal movements and creative effects
 const animationEffects = [
-  // Basic fade and slide effects
-  'fadeIn', 'slideInLeft', 'slideInRight', 'slideInUp', 'slideInDown',
+  // Basic slide effects
+  'slideInLeft', 'slideInRight', 'slideInUp', 'slideInDown',
+  // Fade effects
+  'fadeIn', 'fadeInLeft', 'fadeInRight', 'fadeInUp', 'fadeInDown',
+  // Zoom effects (horizontal preferred)
+  'zoomIn', 'zoomInLeft', 'zoomInRight', 'zoomInUp', 'zoomInDown',
+  // Bounce effects
+  'bounceIn', 'bounceInUp', 'bounceInDown', 'bounceInLeft', 'bounceInRight',
+  // Back effects
+  'backInUp', 'backInDown', 'backInLeft', 'backInRight',
+  // Light speed effects (horizontal only)
+  'lightSpeedInLeft', 'lightSpeedInRight',
+  // Wobble and shake effects (no rotation)
+  'wobble', 'shake', 'swing', 'jello', 'pulse',
+  // Attention effects
+  'heartBeat', 'flash', 'rubberBand', 'tada', 'jackInTheBox',
+  // Roll effects (horizontal only)
+  'rollIn',
   
-  // Dramatic off-screen flying entries
-  'flyInFromLeft', 'flyInFromRight', 'flyInFromTop', 'flyInFromBottom',
+  // NEW: 5 Clever Animation Effects
+  'slideInBounce',    // Slides in with a bounce at the end
+  'zoomInPulse',      // Zooms in with a pulsing effect
+  'swipeInLeft',      // Fast swipe from left with ease-out
+  'popInScale',       // Pops in with scaling effect
+  'glideInSmooth',    // Smooth gliding entrance
   
-  // Swooping dramatic entries
-  'swoopInLeft', 'swoopInRight', 'spiralIn',
+  // Dramatic off-screen flying entries (horizontal only)
+  'flyInFromLeft', 'flyInFromRight',
   
-  // Explosive and dynamic entries
-  'explodeIn', 'rocketIn', 'meteorIn',
-  
-  // Classic zoom and rotation effects
-  'zoomIn', 'zoomOut', 'rotateIn', 'flipInX', 'flipInY',
-  
-  // Bouncing effects from all directions
-  'bounceIn', 'bounceInLeft', 'bounceInRight', 'bounceInUp', 'bounceInDown',
-  
-  // Elastic and back effects
-  'elasticIn', 'backInLeft', 'backInRight', 'backInUp', 'backInDown',
+  // Swooping dramatic entries (horizontal only)
+  'swoopInLeft', 'swoopInRight',
   
   // Fun and playful effects
   'pulse', 'shake', 'swing', 'wobble', 'jello',
@@ -380,7 +391,7 @@ const animationEffects = [
   'fadeOutLeft', 'fadeOutRight', 'fadeOutUp', 'fadeOutDown'
 ];
 
-// Pairs of complementary animations for dual view staggered timing
+// Pairs of complementary animations for dual view staggered timing (no vertical rotations)
 const dualViewAnimationPairs = [
   ['flyInFromLeft', 'flyInFromRight'],
   ['swoopInLeft', 'swoopInRight'],
@@ -391,9 +402,11 @@ const dualViewAnimationPairs = [
   ['slideInUp', 'slideInDown'],
   ['bounceInUp', 'bounceInDown'],
   ['backInUp', 'backInDown'],
-  ['explodeIn', 'spiralIn'],
-  ['rocketIn', 'meteorIn'],
-  ['flyInFromTop', 'flyInFromBottom']
+  ['fadeInLeft', 'fadeInRight'],
+  ['zoomInLeft', 'zoomInRight'],
+  ['slideInBounce', 'popInScale'],
+  ['swipeInLeft', 'glideInSmooth'],
+  ['zoomInPulse', 'slideInBounce']
 ];
 
 // Dual View Component - Shows 2 games side by side with staggered dramatic animations
