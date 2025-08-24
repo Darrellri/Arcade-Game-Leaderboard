@@ -733,11 +733,34 @@ export default function Admin() {
             alt="Arcade Leaderboard" 
             className="h-16 w-auto"
           />
-          <div>
-            <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-            <p className="text-muted-foreground">
-              Manage your arcade games and venue settings
-            </p>
+          <div className="relative">
+            {/* Watermark logo behind the text */}
+            {(venueSettings?.animatedLogoUrl || venueSettings?.logoUrl) && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+                {venueSettings.animatedLogoUrl ? (
+                  <video 
+                    src={venueSettings.animatedLogoUrl} 
+                    autoPlay 
+                    loop 
+                    muted
+                    className="w-32 h-32 object-contain opacity-50 transparent-video" 
+                  />
+                ) : (
+                  <img 
+                    src={venueSettings.logoUrl} 
+                    alt={`${venueSettings.name} watermark`} 
+                    className="w-32 h-32 object-contain opacity-50" 
+                  />
+                )}
+              </div>
+            )}
+            
+            <div className="relative z-10">
+              <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+              <p className="text-muted-foreground">
+                Manage your arcade games and venue settings
+              </p>
+            </div>
           </div>
         </div>
         <Link href="/" className="inline-flex">

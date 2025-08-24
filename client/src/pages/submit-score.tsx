@@ -5,11 +5,13 @@ import ScoreForm from "@/components/score-form";
 import { apiRequest } from "@/lib/queryClient";
 import type { Game, InsertScore, Score } from "@shared/schema";
 import { Trophy } from "lucide-react";
+import { useTheme } from "@/contexts/ThemeContext";
 
 export default function SubmitScore() {
   const { gameId } = useParams();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { venueSettings } = useTheme();
   const id = parseInt(gameId || "0");
 
   const { data: game } = useQuery<Game>({
@@ -63,8 +65,33 @@ export default function SubmitScore() {
       </div>
       
       <div className="section-header px-6 py-4 rounded-lg mb-6">
-        <h1 className="text-3xl font-bold tracking-tight uppercase drop-shadow-sm">{game.name}</h1>
-        {game.subtitle && <p className="subtitle text-muted-foreground">{game.subtitle}</p>}
+        <div className="relative">
+          {/* Watermark logo behind the text */}
+          {(venueSettings?.animatedLogoUrl || venueSettings?.logoUrl) && (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+              {venueSettings.animatedLogoUrl ? (
+                <video 
+                  src={venueSettings.animatedLogoUrl} 
+                  autoPlay 
+                  loop 
+                  muted
+                  className="w-32 h-32 object-contain opacity-50 transparent-video" 
+                />
+              ) : (
+                <img 
+                  src={venueSettings.logoUrl} 
+                  alt={`${venueSettings.name} watermark`} 
+                  className="w-32 h-32 object-contain opacity-50" 
+                />
+              )}
+            </div>
+          )}
+          
+          <div className="relative z-10">
+            <h1 className="text-3xl font-bold tracking-tight uppercase drop-shadow-sm">{game.name}</h1>
+            {game.subtitle && <p className="subtitle text-muted-foreground">{game.subtitle}</p>}
+          </div>
+        </div>
         <div className="flex items-center gap-2 mt-3">
           <div className="champion-icon p-1">
             <Trophy className="h-5 w-5" />

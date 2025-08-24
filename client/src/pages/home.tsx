@@ -1120,40 +1120,63 @@ export default function Home() {
               )}
             </div>
           )}
-          <div className="flex-1 min-w-0">
-            <h1 className="text-lg sm:text-3xl font-black tracking-tight text-foreground uppercase text-outline leading-tight lg:px-5" style={{ letterSpacing: '1px' }}>
-              {venueSettings?.leaderboardName || "THE LEADERBOARD"}
-            </h1>
-            <h2 
-              className={`text-sm sm:text-lg md:text-2xl tracking-tight leading-tight lg:px-5 ${
-                venueSettings?.subtitleBold === "true" ? "font-bold" : "font-normal"
-              } ${
-                venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
-              }`}
-              style={{ 
-                letterSpacing: '2px',
-                color: venueSettings?.subtitleWhite === "true" 
-                  ? "white" 
-                  : (() => {
-                      // For lighter color schemes, use primary color (same as game titles)
-                      const isLightScheme = venueSettings?.theme?.appearance === "light" || 
-                        (venueSettings?.theme?.variant === "tint" && venueSettings?.theme?.appearance !== "dark") ||
-                        (venueSettings?.theme?.primary && parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "0") > 60);
-                      
-                      if (isLightScheme) {
-                        // Use the same color as game titles (primary color)
-                        return venueSettings?.theme?.primary || "hsl(280, 100%, 50%)";
-                      } else {
-                        // For darker schemes, use the lighter version as before
-                        return venueSettings?.theme?.primary
-                          ? `hsl(${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[1] || 280}, ${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[2] || 100}%, ${Math.min(100, parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "50") + 25)}%)`
-                          : "hsl(280, 100%, 75%)";
-                      }
-                    })()
-              }}
-            >
-              {venueSettings?.name || "Arcade"}
-            </h2>
+          <div className="flex-1 min-w-0 relative">
+            {/* Watermark logo behind the text */}
+            {(venueSettings?.animatedLogoUrl || venueSettings?.logoUrl) && (
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+                {venueSettings.animatedLogoUrl ? (
+                  <video 
+                    src={venueSettings.animatedLogoUrl} 
+                    autoPlay 
+                    loop 
+                    muted
+                    className="w-32 h-32 sm:w-48 sm:h-48 object-contain opacity-50 transparent-video" 
+                  />
+                ) : (
+                  <img 
+                    src={venueSettings.logoUrl} 
+                    alt={`${venueSettings.name} watermark`} 
+                    className="w-32 h-32 sm:w-48 sm:h-48 object-contain opacity-50" 
+                  />
+                )}
+              </div>
+            )}
+            
+            <div className="relative z-10">
+              <h1 className="text-lg sm:text-3xl font-black tracking-tight text-foreground uppercase text-outline leading-tight lg:px-5" style={{ letterSpacing: '1px' }}>
+                {venueSettings?.leaderboardName || "THE LEADERBOARD"}
+              </h1>
+              <h2 
+                className={`text-sm sm:text-lg md:text-2xl tracking-tight leading-tight lg:px-5 ${
+                  venueSettings?.subtitleBold === "true" ? "font-bold" : "font-normal"
+                } ${
+                  venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
+                }`}
+                style={{ 
+                  letterSpacing: '2px',
+                  color: venueSettings?.subtitleWhite === "true" 
+                    ? "white" 
+                    : (() => {
+                        // For lighter color schemes, use primary color (same as game titles)
+                        const isLightScheme = venueSettings?.theme?.appearance === "light" || 
+                          (venueSettings?.theme?.variant === "tint" && venueSettings?.theme?.appearance !== "dark") ||
+                          (venueSettings?.theme?.primary && parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "0") > 60);
+                        
+                        if (isLightScheme) {
+                          // Use the same color as game titles (primary color)
+                          return venueSettings?.theme?.primary || "hsl(280, 100%, 50%)";
+                        } else {
+                          // For darker schemes, use the lighter version as before
+                          return venueSettings?.theme?.primary
+                            ? `hsl(${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[1] || 280}, ${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[2] || 100}%, ${Math.min(100, parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "50") + 25)}%)`
+                            : "hsl(280, 100%, 75%)";
+                        }
+                      })()
+                }}
+              >
+                {venueSettings?.name || "Arcade"}
+              </h2>
+            </div>
           </div>
         </div>
         <div className="flex flex-col gap-2 self-start sm:self-center mt-2 sm:mt-0">

@@ -159,7 +159,28 @@ export default function Leaderboard() {
               
               {/* Desktop text overlay */}
               <div className="hidden sm:absolute sm:inset-0 sm:flex sm:items-center p-6 sm:pl-[30px]" style={{ zIndex: 30 }}>
-                <div className="text-center sm:text-left">
+                {/* Watermark logo behind the text */}
+                {(venueSettings?.animatedLogoUrl || venueSettings?.logoUrl) && (
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+                    {venueSettings.animatedLogoUrl ? (
+                      <video 
+                        src={venueSettings.animatedLogoUrl} 
+                        autoPlay 
+                        loop 
+                        muted
+                        className="w-48 h-48 md:w-64 md:h-64 object-contain opacity-50 transparent-video" 
+                      />
+                    ) : (
+                      <img 
+                        src={venueSettings.logoUrl} 
+                        alt={`${venueSettings.name} watermark`} 
+                        className="w-48 h-48 md:w-64 md:h-64 object-contain opacity-50" 
+                      />
+                    )}
+                  </div>
+                )}
+                
+                <div className="text-center sm:text-left relative z-10">
                   <h1 className="text-3xl md:text-5xl lg:text-5xl font-black tracking-wide uppercase text-white drop-shadow-2xl" 
                       style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5)' }}>
                     {game.name}
