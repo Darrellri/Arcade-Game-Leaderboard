@@ -17,16 +17,9 @@ export default function ListMarquee({ game, className }: ListMarqueeProps) {
   const imageUrl = game.imageUrl;
   const overlayImageUrl = game.overlayImageUrl;
 
-  // Array of faster animations with reduced travel distance (175% faster)
+  // Array with the new expand-all-directions animation
   const animations = [
-    "animate-[overlayGrowShrink_0.72s_ease-in-out]",
-    "animate-[overlayJello_0.65s_ease-in-out]",
-    "animate-[overlaySkewWobble_0.8s_ease-in-out]",
-    "animate-[overlayPulseScale_0.55s_ease-in-out]",
-    "animate-[overlayElastic_0.91s_ease-out]",
-    "animate-[overlayBreath_1.09s_ease-in-out]",
-    "animate-[overlaySquish_0.72s_ease-in-out]",
-    "animate-[overlayGlow_0.91s_ease-in-out]"
+    "animate-expand-all-directions"
   ];
 
   // Set up 20-second cycle animation system for overlay
@@ -36,17 +29,20 @@ export default function ListMarquee({ game, className }: ListMarqueeProps) {
     let cycleTimer: NodeJS.Timeout;
 
     const triggerRandomAnimation = () => {
-      const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
-      setOverlayAnimation(randomAnimation);
-      setAnimationKey(prev => prev + 1);
-      
-      // Blur marquee image when overlay animation starts
-      setMarqueeBlurred(true);
-      
-      // Clear animation and remove blur after 2 seconds
+      // Pause for 2 seconds after marquee appears, then start animation
       setTimeout(() => {
-        setOverlayAnimation("");
-        setMarqueeBlurred(false);
+        const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
+        setOverlayAnimation(randomAnimation);
+        setAnimationKey(prev => prev + 1);
+        
+        // Blur marquee image when overlay animation starts
+        setMarqueeBlurred(true);
+        
+        // Clear animation and remove blur after animation completes (2.5 seconds)
+        setTimeout(() => {
+          setOverlayAnimation("");
+          setMarqueeBlurred(false);
+        }, 2500);
       }, 2000);
     };
 
