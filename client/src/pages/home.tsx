@@ -913,15 +913,6 @@ export default function Home() {
           {/* View Mode Buttons Row */}
           <div className="flex items-center gap-1 sm:gap-2">
             <Button
-              variant={viewMode === "dual" ? "default" : "outline"}
-              size="icon"
-              onClick={() => setViewMode("dual")}
-              className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
-              title="Dual View - Two games side by side"
-            >
-              <Grid2X2 className="h-3 w-3 sm:h-4 sm:w-4" />
-            </Button>
-            <Button
               variant={viewMode === "single" ? "default" : "outline"}
               size="icon"
               onClick={() => setViewMode("single")}
@@ -929,6 +920,15 @@ export default function Home() {
               title="Single View - One large game centered"
             >
               <Square className="h-3 w-3 sm:h-4 sm:w-4" />
+            </Button>
+            <Button
+              variant={viewMode === "dual" ? "default" : "outline"}
+              size="icon"
+              onClick={() => setViewMode("dual")}
+              className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
+              title="Dual View - Two games side by side"
+            >
+              <MonitorSpeaker className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
             <Button
               variant={viewMode === "scroll" ? "default" : "outline"}
@@ -940,15 +940,6 @@ export default function Home() {
               <List className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
             <Button
-              variant={viewMode === "grid" ? "default" : "outline"}
-              size="icon"
-              onClick={() => setViewMode("grid")}
-              className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
-              title="Grid View - Games in a grid layout"
-            >
-              <Grid2X2 className="h-3 w-3 sm:h-4 sm:w-4" />
-            </Button>
-            <Button
               variant={viewMode === "list" ? "default" : "outline"}
               size="icon"
               onClick={() => setViewMode("list")}
@@ -956,6 +947,15 @@ export default function Home() {
               title="List View - Games in a vertical list"
             >
               <CircleDot className="h-3 w-3 sm:h-4 sm:w-4" />
+            </Button>
+            <Button
+              variant={viewMode === "grid" ? "default" : "outline"}
+              size="icon"
+              onClick={() => setViewMode("grid")}
+              className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
+              title="Grid View - Games in a grid layout"
+            >
+              <Grid2X2 className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
           </div>
           
