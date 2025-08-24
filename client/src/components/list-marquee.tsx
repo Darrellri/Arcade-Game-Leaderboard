@@ -38,11 +38,11 @@ export default function ListMarquee({ game, className }: ListMarqueeProps) {
         // Blur marquee image when overlay animation starts
         setMarqueeBlurred(true);
         
-        // Clear animation and remove blur after animation completes (2.5 seconds)
+        // Clear animation and remove blur after animation completes (3 seconds)
         setTimeout(() => {
           setOverlayAnimation("");
           setMarqueeBlurred(false);
-        }, 2500);
+        }, 3000);
       }, 2000);
     };
 
