@@ -1033,8 +1033,13 @@ export default function Home() {
       } as React.CSSProperties}
     >
       {/* Header with venue name and view mode controls */}
-      <div className="themed-header px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-lg mb-2 w-full">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+      <div className="themed-header px-5 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-lg mb-2 w-full backdrop-blur-sm border border-border/20 shadow-sm"
+           style={{
+             backgroundColor: 'rgba(255, 255, 255, 0.93)',
+             color: '#333333',
+             '--logo-padding': '25px'
+           } as React.CSSProperties}>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4" style={{ padding: '25px 0' }}>
           {(venueSettings?.animatedLogoUrl || venueSettings?.logoUrl) && (
             <div 
               className={`logo-container flex-shrink-0 overflow-hidden cursor-pointer hover:opacity-80 transition-opacity w-24 h-12 sm:w-48 sm:h-24 ${
@@ -1070,7 +1075,11 @@ export default function Home() {
             </div>
           )}
           <div className="flex-1 min-w-0">
-            <h1 className="text-lg sm:text-3xl font-black tracking-tight text-foreground uppercase text-outline leading-tight lg:px-5" style={{ letterSpacing: '1px' }}>
+            <h1 className="text-lg sm:text-3xl font-black tracking-tight uppercase text-outline leading-tight lg:px-5" 
+                style={{ 
+                  letterSpacing: '1px',
+                  color: '#333333'
+                }}>
               {venueSettings?.leaderboardName || "THE LEADERBOARD"}
             </h1>
             <h2 
@@ -1082,23 +1091,8 @@ export default function Home() {
               style={{ 
                 letterSpacing: '2px',
                 color: venueSettings?.subtitleWhite === "true" 
-                  ? "white" 
-                  : (() => {
-                      // For lighter color schemes, use primary color (same as game titles)
-                      const isLightScheme = venueSettings?.theme?.appearance === "light" || 
-                        (venueSettings?.theme?.variant === "tint" && venueSettings?.theme?.appearance !== "dark") ||
-                        (venueSettings?.theme?.primary && parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "0") > 60);
-                      
-                      if (isLightScheme) {
-                        // Use the same color as game titles (primary color)
-                        return venueSettings?.theme?.primary || "hsl(280, 100%, 50%)";
-                      } else {
-                        // For darker schemes, use the lighter version as before
-                        return venueSettings?.theme?.primary
-                          ? `hsl(${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[1] || 280}, ${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[2] || 100}%, ${Math.min(100, parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "50") + 25)}%)`
-                          : "hsl(280, 100%, 75%)";
-                      }
-                    })()
+                  ? "#666666" 
+                  : venueSettings?.theme?.primary || "#666666"
               }}
             >
               {venueSettings?.name || "Arcade"}
