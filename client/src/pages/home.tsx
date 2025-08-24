@@ -129,10 +129,10 @@ function ScrollMarquee({ game, className = "" }: {
         </div>
       )}
       
-      {/* Horizontal Score Overlay - Stretches across bottom */}
+      {/* Horizontal Score Overlay - Animated slide up from bottom */}
       {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
-        <div className="absolute bottom-0 left-0 right-0 bg-black/85 backdrop-blur-sm border-t border-primary/40 px-6 py-4" 
-             style={{ zIndex: 100, borderBottomLeftRadius: '15px', borderBottomRightRadius: '15px' }}>
+        <div className="absolute bottom-0 left-0 right-0 bg-black/85 backdrop-blur-sm border-t border-primary/40 px-6 py-4 animate-slideUpSmooth" 
+             style={{ zIndex: 100, borderBottomLeftRadius: '15px', borderBottomRightRadius: '15px', animationDelay: '0.5s', animationFillMode: 'both' }}>
           <div className="flex items-center justify-between w-full">
             {/* Left side - Champion info */}
             <div className="flex items-center gap-4">
@@ -184,7 +184,7 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
 }) {
   const imageUrl = game.imageUrl;
   const [currentAnimation, setCurrentAnimation] = useState('');
-  const [badgeAnimation, setBadgeAnimation] = useState('');
+  const [scoreAnimation, setScoreAnimation] = useState('');
   const [isVisible, setIsVisible] = useState(false);
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
@@ -193,9 +193,10 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
   // Set random animations when component mounts or animationKey changes
   useEffect(() => {
     const entranceAnim = getRandomAnimation();
+    const randomScoreAnim = scoreOverlayAnimations[Math.floor(Math.random() * scoreOverlayAnimations.length)];
     setCurrentAnimation(entranceAnim);
     setExitAnimation(getExitAnimation(entranceAnim));
-    setBadgeAnimation(getRandomAnimation());
+    setScoreAnimation(randomScoreAnim);
     setIsVisible(false);
     setOverlayVisible(false);
     setIsExiting(false);
@@ -205,8 +206,8 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
       setIsVisible(true);
     }, delay);
 
-    // Start overlay animation with random delay between 1.5-3 seconds after main animation
-    const finalOverlayDelay = overlayDelay || (1500 + Math.random() * 1500);
+    // Start score overlay slide-up animation with random delay after marquee loads
+    const finalOverlayDelay = overlayDelay || (800 + Math.random() * 1200); // 0.8-2.0 seconds after marquee
     const overlayTimer = setTimeout(() => {
       setOverlayVisible(true);
     }, delay + finalOverlayDelay);
@@ -242,10 +243,10 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
             }}
           />
           
-          {/* Horizontal Score Overlay - Stretches across bottom */}
+          {/* Horizontal Score Overlay - Slides up from bottom */}
           {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
-            <div className={`absolute bottom-0 left-0 right-0 bg-black/85 backdrop-blur-sm border-t border-primary/40 px-6 py-4 ${overlayVisible && !isExiting ? badgeAnimation : 'opacity-0'}`} 
-                 style={{ zIndex: 100, animationDuration: '1.2s', borderBottomLeftRadius: '15px', borderBottomRightRadius: '15px' }}>
+            <div className={`absolute bottom-0 left-0 right-0 bg-black/85 backdrop-blur-sm border-t border-primary/40 px-6 py-4 ${overlayVisible && !isExiting ? `animate-${scoreAnimation}` : 'transform translate-y-full opacity-0'}`} 
+                 style={{ zIndex: 100, animationDuration: '0.8s', borderBottomLeftRadius: '15px', borderBottomRightRadius: '15px' }}>
               <div className="flex items-center justify-between w-full">
                 {/* Left side - Champion info */}
                 <div className="flex items-center gap-4">
@@ -303,6 +304,17 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
     </div>
   );
 }
+
+// Score overlay slide-up animations with random variations
+const scoreOverlayAnimations = [
+  'slideUpBounce',      // Slides up with bounce
+  'slideUpWobble',      // Slides up with wobble
+  'slideUpFast',        // Fast slide up
+  'slideUpSlow',        // Slow slide up
+  'slideUpSpring',      // Spring-like slide up
+  'slideUpElastic',     // Elastic slide up
+  'slideUpSmooth'       // Smooth slide up
+];
 
 type ViewMode = "dual" | "single" | "scroll" | "grid" | "list";
 
