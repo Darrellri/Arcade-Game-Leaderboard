@@ -1406,8 +1406,8 @@ export default function Admin() {
                         onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, singleViewSize: e.target.value }))}
                         className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
                       >
-                        <option value="normal">Normal Size</option>
-                        <option value="large">Large (1.25x)</option>
+                        <option value="normal">Regular Size</option>
+                        <option value="large">Large (1.3x) - Default</option>
                         <option value="xl">Extra Large (1.5x)</option>
                       </select>
                     </div>

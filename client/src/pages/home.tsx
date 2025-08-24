@@ -405,6 +405,9 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
 }) {
   const [currentGameIndex, setCurrentGameIndex] = useState(0);
   const [animationKey, setAnimationKey] = useState(0);
+  const { data: venueSettings } = useQuery<VenueSettings>({
+    queryKey: ["/api/admin/settings"],
+  });
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -416,12 +419,30 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   }, [games.length]);
 
   const currentGame = games[currentGameIndex];
+  
+  // Determine size based on venue settings
+  const getSizeMultiplier = () => {
+    switch (venueSettings?.singleViewSize) {
+      case 'normal': return 1;
+      case 'large': return 1.3; // 30% larger (default)
+      case 'xl': return 1.5; // 50% larger  
+      default: return 1.3; // Default to 30% larger
+    }
+  };
+  
+  const sizeMultiplier = getSizeMultiplier();
+  const baseWidth = 1200;
+  const maxWidth = `${Math.round(baseWidth * sizeMultiplier)}px`;
 
   if (!currentGame) return null;
 
   return (
     <div className="flex justify-center items-center min-h-[70vh] w-full px-4">
-      <div key={`${currentGame.id}-${currentGameIndex}-${animationKey}`} className="w-full max-w-[1200px] flex justify-center">
+      <div 
+        key={`${currentGame.id}-${currentGameIndex}-${animationKey}`} 
+        className="w-full flex justify-center"
+        style={{ maxWidth }}
+      >
         <FullSizeMarquee 
           game={currentGame} 
           animationKey={animationKey}
