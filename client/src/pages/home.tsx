@@ -185,8 +185,9 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
   const imageUrl = game.imageUrl;
   const [currentAnimation, setCurrentAnimation] = useState('');
   const [scoreAnimation, setScoreAnimation] = useState('');
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [overlayVisible, setOverlayVisible] = useState(false);
+  const [scoreOverlayVisible, setScoreOverlayVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [exitAnimation, setExitAnimation] = useState('');
 
@@ -197,20 +198,15 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
     setCurrentAnimation(entranceAnim);
     setExitAnimation(getExitAnimation(entranceAnim));
     setScoreAnimation(randomScoreAnim);
+    setImageLoaded(false);
     setIsVisible(false);
-    setOverlayVisible(false);
+    setScoreOverlayVisible(false);
     setIsExiting(false);
 
-    // Start main animation after specified delay
+    // Start main animation immediately when component mounts
     const mainTimer = setTimeout(() => {
       setIsVisible(true);
     }, delay);
-
-    // Start score overlay slide-up animation with random delay after marquee loads
-    const finalOverlayDelay = overlayDelay || (800 + Math.random() * 1200); // 0.8-2.0 seconds after marquee
-    const overlayTimer = setTimeout(() => {
-      setOverlayVisible(true);
-    }, delay + finalOverlayDelay);
 
     // Start exit animation before the component cycles
     const exitTimer = setTimeout(() => {
@@ -219,10 +215,19 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
 
     return () => {
       clearTimeout(mainTimer);
-      clearTimeout(overlayTimer);
       clearTimeout(exitTimer);
     };
-  }, [animationKey, delay, overlayDelay, exitDelay]);
+  }, [animationKey, delay, exitDelay]);
+
+  // Handle image load event to trigger score overlay
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+    // Start score overlay animation after image loads with random delay
+    const scoreDelay = overlayDelay || (800 + Math.random() * 1200); // 0.8-2.0 seconds after image loads
+    setTimeout(() => {
+      setScoreOverlayVisible(true);
+    }, scoreDelay);
+  };
 
   if (imageUrl) {
     const animationClass = isExiting ? exitAnimation : (isVisible ? currentAnimation : 'opacity-0');
@@ -241,11 +246,12 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
               maxWidth: '100%',
               height: 'auto'
             }}
+            onLoad={handleImageLoad}
           />
           
-          {/* Horizontal Score Overlay - Slides up from bottom */}
+          {/* Horizontal Score Overlay - Slides up from bottom after image loads */}
           {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
-            <div className={`absolute bottom-0 left-0 right-0 bg-black/85 backdrop-blur-sm border-t border-primary/40 px-6 py-4 ${overlayVisible && !isExiting ? `animate-${scoreAnimation}` : 'transform translate-y-full opacity-0'}`} 
+            <div className={`absolute bottom-0 left-0 right-0 bg-black/85 backdrop-blur-sm border-t border-primary/40 px-6 py-4 ${scoreOverlayVisible && !isExiting ? `animate-${scoreAnimation}` : 'transform translate-y-full opacity-0'}`} 
                  style={{ zIndex: 100, animationDuration: '0.8s', borderBottomLeftRadius: '15px', borderBottomRightRadius: '15px' }}>
               <div className="flex items-center justify-between w-full">
                 {/* Left side - Champion info */}
