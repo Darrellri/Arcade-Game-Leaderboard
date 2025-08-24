@@ -1351,6 +1351,19 @@ export default function Admin() {
                       </Label>
                       <p className="text-xs text-muted-foreground">Hide leaderboard name and controls</p>
                     </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Display Size</Label>
+                      <select 
+                        value={displayViewSettings.dualViewSize}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, dualViewSize: e.target.value }))}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value="normal">Regular Size</option>
+                        <option value="large">Large (1.3x)</option>
+                        <option value="extra-large">Extra Large (1.5x) - Default</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 
@@ -1407,8 +1420,8 @@ export default function Admin() {
                         className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
                       >
                         <option value="normal">Regular Size</option>
-                        <option value="large">Large (1.3x) - Default</option>
-                        <option value="xl">Extra Large (1.5x)</option>
+                        <option value="large">Large (1.3x)</option>
+                        <option value="extra-large">Extra Large (1.5x) - Default</option>
                       </select>
                     </div>
                   </div>
@@ -1485,6 +1498,19 @@ export default function Admin() {
                         Lazy Load Images
                       </Label>
                       <p className="text-xs text-muted-foreground">Load images only when needed for performance</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Display Size</Label>
+                      <select 
+                        value={displayViewSettings.scrollViewSize}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, scrollViewSize: e.target.value }))}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value="normal">Regular Size</option>
+                        <option value="large">Large (1.3x)</option>
+                        <option value="extra-large">Extra Large (1.5x) - Default</option>
+                      </select>
                     </div>
                   </div>
                 </div>

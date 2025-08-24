@@ -71,17 +71,19 @@ export const venueSettings = pgTable("venue_settings", {
   dualViewSpeed: integer("dual_view_speed").default(8),
   dualViewAnimations: boolean("dual_view_animations").default(true),
   dualViewHideHeader: boolean("dual_view_hide_header").default(false),
+  dualViewSize: text("dual_view_size").default("extra-large"),
   
   singleViewSpeed: integer("single_view_speed").default(6),
   singleViewAnimations: boolean("single_view_animations").default(true),
   singleViewHideHeader: boolean("single_view_hide_header").default(false),
-  singleViewSize: text("single_view_size").default("large"),
+  singleViewSize: text("single_view_size").default("extra-large"),
   
   scrollViewSpeed: integer("scroll_view_speed").default(50),
   scrollViewSpacing: integer("scroll_view_spacing").default(200),
   scrollViewAnimations: boolean("scroll_view_animations").default(true),
   scrollViewStickyHeader: boolean("scroll_view_sticky_header").default(true),
   scrollViewLazyLoad: boolean("scroll_view_lazy_load").default(false),
+  scrollViewSize: text("scroll_view_size").default("extra-large"),
   
   // Animation System Settings
   animationCategories: json("animation_categories"),
