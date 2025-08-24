@@ -129,22 +129,43 @@ function ScrollMarquee({ game, className = "" }: {
         </div>
       )}
       
-      {/* High Score Information Overlay - always visible, no animation */}
+      {/* Horizontal Score Overlay - Stretches across bottom */}
       {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
-        <div className="absolute bottom-6 left-6 flex items-center gap-6 bg-black/80 backdrop-blur-sm rounded-2xl px-8 py-6 border border-primary/40" 
-             style={{ zIndex: 100 }}>
-          <TrophyIcon size={64} className="text-yellow-400" />
-          <div className="text-white">
-            <div className="text-2xl font-bold text-yellow-400 mb-1">#1 PINWIZARD</div>
-            <div className="text-3xl font-bold mb-2">{game.topScorerName || "No Name"}</div>
-            <div className="text-5xl font-bold text-primary mb-1">
-              {game.currentHighScore ? game.currentHighScore.toLocaleString() : "0"}
-            </div>
-            {game.topScoreDate && (
-              <div className="text-lg text-gray-300">
-                {formatDate(new Date(game.topScoreDate))}
+        <div className="absolute bottom-0 left-0 right-0 bg-black/85 backdrop-blur-sm border-t border-primary/40 px-6 py-4" 
+             style={{ zIndex: 100, borderBottomLeftRadius: '15px', borderBottomRightRadius: '15px' }}>
+          <div className="flex items-center justify-between w-full">
+            {/* Left side - Champion info */}
+            <div className="flex items-center gap-4">
+              <TrophyIcon size={48} className="text-yellow-400 flex-shrink-0" />
+              <div className="text-white">
+                <div className="text-lg font-bold text-yellow-400">#1 CHAMPION</div>
+                <div className="text-2xl font-bold">{game.topScorerName || "No Name"}</div>
               </div>
-            )}
+            </div>
+            
+            {/* Center - Game name */}
+            <div className="text-center flex-1 px-4">
+              <div className="text-xl font-bold text-primary uppercase tracking-wide">
+                {game.name}
+              </div>
+              {game.subtitle && (
+                <div className="text-sm text-gray-300 mt-1">
+                  {game.subtitle}
+                </div>
+              )}
+            </div>
+            
+            {/* Right side - Score and date */}
+            <div className="text-right">
+              <div className="text-3xl font-bold text-primary">
+                {game.currentHighScore ? game.currentHighScore.toLocaleString() : "0"}
+              </div>
+              {game.topScoreDate && (
+                <div className="text-sm text-gray-300 mt-1">
+                  {formatDate(new Date(game.topScoreDate))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -221,22 +242,43 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
             }}
           />
           
-          {/* High Score Information Overlay with animation */}
+          {/* Horizontal Score Overlay - Stretches across bottom */}
           {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
-            <div className={`absolute bottom-6 left-6 flex items-center gap-6 bg-black/80 backdrop-blur-sm rounded-2xl px-8 py-6 border border-primary/40 ${overlayVisible && !isExiting ? badgeAnimation : 'opacity-0'}`} 
-                 style={{ zIndex: 100, animationDuration: '1.2s' }}>
-              <TrophyIcon size={64} className="text-yellow-400" />
-              <div className="text-white">
-                <div className="text-2xl font-bold text-yellow-400 mb-1">#1 PINWIZARD</div>
-                <div className="text-3xl font-bold mb-2">{game.topScorerName || "No Name"}</div>
-                <div className="text-5xl font-bold text-primary mb-1">
-                  {game.currentHighScore ? game.currentHighScore.toLocaleString() : "0"}
-                </div>
-                {game.topScoreDate && (
-                  <div className="text-lg text-gray-300">
-                    {formatDate(new Date(game.topScoreDate))}
+            <div className={`absolute bottom-0 left-0 right-0 bg-black/85 backdrop-blur-sm border-t border-primary/40 px-6 py-4 ${overlayVisible && !isExiting ? badgeAnimation : 'opacity-0'}`} 
+                 style={{ zIndex: 100, animationDuration: '1.2s', borderBottomLeftRadius: '15px', borderBottomRightRadius: '15px' }}>
+              <div className="flex items-center justify-between w-full">
+                {/* Left side - Champion info */}
+                <div className="flex items-center gap-4">
+                  <TrophyIcon size={48} className="text-yellow-400 flex-shrink-0" />
+                  <div className="text-white">
+                    <div className="text-lg font-bold text-yellow-400">#1 CHAMPION</div>
+                    <div className="text-2xl font-bold">{game.topScorerName || "No Name"}</div>
                   </div>
-                )}
+                </div>
+                
+                {/* Center - Game name */}
+                <div className="text-center flex-1 px-4">
+                  <div className="text-xl font-bold text-primary uppercase tracking-wide">
+                    {game.name}
+                  </div>
+                  {game.subtitle && (
+                    <div className="text-sm text-gray-300 mt-1">
+                      {game.subtitle}
+                    </div>
+                  )}
+                </div>
+                
+                {/* Right side - Score and date */}
+                <div className="text-right">
+                  <div className="text-3xl font-bold text-primary">
+                    {game.currentHighScore ? game.currentHighScore.toLocaleString() : "0"}
+                  </div>
+                  {game.topScoreDate && (
+                    <div className="text-sm text-gray-300 mt-1">
+                      {formatDate(new Date(game.topScoreDate))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           )}
