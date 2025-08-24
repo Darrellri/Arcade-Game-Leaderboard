@@ -188,6 +188,7 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [scoreOverlayVisible, setScoreOverlayVisible] = useState(false);
+  const [topOverlayVisible, setTopOverlayVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [exitAnimation, setExitAnimation] = useState('');
 
@@ -201,12 +202,22 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
     setImageLoaded(false);
     setIsVisible(false);
     setScoreOverlayVisible(false);
+    setTopOverlayVisible(false);
     setIsExiting(false);
 
     // Start main animation immediately when component mounts
     const mainTimer = setTimeout(() => {
       setIsVisible(true);
     }, delay);
+
+    // Show top overlay after marquee animation completes (0.8s animation + 0.2s buffer)
+    const topOverlayTimer = setTimeout(() => {
+      setTopOverlayVisible(true);
+      // Hide top overlay after 1 second
+      setTimeout(() => {
+        setTopOverlayVisible(false);
+      }, 1000);
+    }, delay + 1000);
 
     // Start exit animation before the component cycles
     const exitTimer = setTimeout(() => {
@@ -215,6 +226,7 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
 
     return () => {
       clearTimeout(mainTimer);
+      clearTimeout(topOverlayTimer);
       clearTimeout(exitTimer);
     };
   }, [animationKey, delay, exitDelay]);
@@ -248,6 +260,19 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
             }}
             onLoad={handleImageLoad}
           />
+          
+          {/* Top Overlay - Appears after marquee animation stops */}
+          {topOverlayVisible && (
+            <div className="absolute inset-0 bg-primary/20 backdrop-blur-sm flex items-center justify-center transition-opacity duration-500"
+                 style={{ zIndex: 110, borderRadius: '15px' }}>
+              <div className="text-center text-white">
+                <div className="text-4xl font-bold mb-2">🎮</div>
+                <div className="text-xl font-semibold tracking-wide">
+                  {game.name}
+                </div>
+              </div>
+            </div>
+          )}
           
           {/* Horizontal Score Overlay - Slides up into marquee with transparency */}
           {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
