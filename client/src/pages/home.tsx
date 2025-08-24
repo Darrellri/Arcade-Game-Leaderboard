@@ -55,11 +55,9 @@ const animationClasses = [
 
 // Dynamic overlay animation functions based on game ID for consistency
 function getOverlayAnimation(gameId: number): string {
+  // Layer animations that grow 20% then bounce back
   const overlayAnimations = [
-    'animate-bounce-in', 'animate-zoom-in', 'animate-slide-in-up', 'animate-fade-in-up',
-    'animate-slide-in-down', 'animate-bounce-in-up', 'animate-elastic-in',
-    'animate-wobble', 'animate-tada', 'animate-jello', 'animate-flip-in-x',
-    'animate-rotate-in', 'animate-swing', 'animate-rubberBand'
+    'animate-pulse-grow', 'animate-bounce-grow', 'animate-elastic-grow', 'animate-zoom-grow'
   ];
   return overlayAnimations[gameId % overlayAnimations.length];
 }
@@ -72,6 +70,14 @@ function getOverlaySpeed(gameId: number): string {
 function getOverlayDelay(gameId: number): number {
   const delays = [0, 100, 200, 300, 500];
   return delays[gameId % delays.length];
+}
+
+// Score overlay animation functions - random selection each time
+function getRandomScoreAnimation(): string {
+  const scoreAnimations = [
+    'animate-slide-in-up', 'animate-slide-in-left', 'animate-slide-in-right', 'animate-flip-in-up'
+  ];
+  return scoreAnimations[Math.floor(Math.random() * scoreAnimations.length)];
 }
 
 // Get random animation class
@@ -185,10 +191,17 @@ function ScrollMarquee({ game, className = "" }: {
         </div>
       )}
       
-      {/* Horizontal Score Overlay - Animated slide up with darker transparency */}
+      {/* Horizontal Score Overlay - Random animation with darker transparency */}
       {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
-        <div className="absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm border-t border-primary/20 px-6 py-4 animate-slideUpSmooth" 
-             style={{ zIndex: 100, borderBottomLeftRadius: '15px', borderBottomRightRadius: '15px', animationDelay: '0.5s', animationFillMode: 'both' }}>
+        <div className={`absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm border-t border-primary/20 px-6 py-4 ${getRandomScoreAnimation()}`} 
+             style={{ 
+               zIndex: 100, 
+               borderBottomLeftRadius: '15px', 
+               borderBottomRightRadius: '15px', 
+               animationDelay: '0.5s', 
+               animationFillMode: 'both',
+               animationDuration: '0.8s'
+             }}>
           <div className="flex items-center justify-between w-full">
             {/* Left side - Champion info */}
             <div className="flex items-center gap-4">
@@ -249,14 +262,16 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
   const [topOverlayVisible, setTopOverlayVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [exitAnimation, setExitAnimation] = useState('');
+  const [scoreAnimationClass, setScoreAnimationClass] = useState('');
 
   // Set random animations when component mounts or animationKey changes
   useEffect(() => {
     const entranceAnim = getRandomAnimation();
-    const randomScoreAnim = scoreOverlayAnimations[Math.floor(Math.random() * scoreOverlayAnimations.length)];
+    const randomScoreAnim = getRandomScoreAnimation();
     setCurrentAnimation(entranceAnim);
     setExitAnimation(getExitAnimation(entranceAnim));
     setScoreAnimation(randomScoreAnim);
+    setScoreAnimationClass(randomScoreAnim);
     setImageLoaded(false);
     setIsVisible(false);
     setScoreOverlayVisible(false);
@@ -341,10 +356,16 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
             </div>
           )}
           
-          {/* Horizontal Score Overlay - Slides up into marquee with darker transparency */}
+          {/* Horizontal Score Overlay - Random animation with darker transparency */}
           {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
-            <div className={`absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm border-t border-primary/20 px-6 py-4 transition-all duration-800 ease-out ${scoreOverlayVisible && !isExiting ? 'transform translate-y-0 opacity-100' : 'transform translate-y-full opacity-0'}`} 
-                 style={{ zIndex: 100, borderBottomLeftRadius: '15px', borderBottomRightRadius: '15px' }}>
+            <div className={`absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm border-t border-primary/20 px-6 py-4 ${scoreOverlayVisible && !isExiting ? `${scoreAnimationClass} opacity-100` : 'opacity-0'}`} 
+                 style={{ 
+                   zIndex: 100, 
+                   borderBottomLeftRadius: '15px', 
+                   borderBottomRightRadius: '15px',
+                   animationDuration: '0.8s',
+                   animationFillMode: 'both'
+                 }}>
               <div className="flex items-center justify-between w-full">
                 {/* Left side - Champion info */}
                 <div className="flex items-center gap-4">

@@ -2,6 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom layer overlay animations that grow 20% then bounce back */
+@keyframes pulse-grow {
+  0% { transform: scale(0) rotate(0deg); opacity: 0; }
+  50% { transform: scale(1.2) rotate(5deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes bounce-grow {
+  0% { transform: scale(0) translateY(20px); opacity: 0; }
+  50% { transform: scale(1.2) translateY(-10px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes elastic-grow {
+  0% { transform: scale(0) skew(10deg); opacity: 0; }
+  50% { transform: scale(1.2) skew(-5deg); opacity: 1; }
+  100% { transform: scale(1) skew(0deg); opacity: 1; }
+}
+
+@keyframes zoom-grow {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes flip-in-up {
+  0% { transform: perspective(400px) rotateX(90deg) translateY(100%); opacity: 0; }
+  40% { transform: perspective(400px) rotateX(-20deg) translateY(0); }
+  60% { transform: perspective(400px) rotateX(10deg); }
+  80% { transform: perspective(400px) rotateX(-5deg); }
+  100% { transform: perspective(400px) rotateX(0deg); opacity: 1; }
+}
+
+.animate-pulse-grow {
+  animation: pulse-grow 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.animate-bounce-grow {
+  animation: bounce-grow 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.animate-elastic-grow {
+  animation: elastic-grow 1s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.animate-zoom-grow {
+  animation: zoom-grow 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.animate-flip-in-up {
+  animation: flip-in-up 0.8s ease-out;
+}
+
 @layer base {
   * {
     @apply border-border;
