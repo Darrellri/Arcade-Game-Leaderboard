@@ -777,7 +777,7 @@ function SortableGameListItem({ game }: { game: Game }) {
 }
 
 export default function Home() {
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [viewMode, setViewMode] = useState<ViewMode>("single");
   const [animationsEnabled, setAnimationsEnabled] = useState(true);
   const [hideHeader, setHideHeader] = useState(false);
   const [localGames, setLocalGames] = useState<Game[]>([]);
