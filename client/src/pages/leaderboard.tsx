@@ -162,9 +162,11 @@ export default function Leaderboard() {
                 {/* Watermark Arcade Leaderboard logo behind the text */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
                   <img 
-                    src="/attached_assets/arcadeleaderboard logo_1756054640479.png" 
+                    src="/arcade-leaderboard-watermark.png" 
                     alt="Arcade Leaderboard watermark" 
-                    className="w-48 h-48 md:w-64 md:h-64 object-contain opacity-50" 
+                    className="w-48 h-48 md:w-64 md:h-64 object-contain opacity-75" 
+                    style={{ filter: 'brightness(0.8)' }}
+                    onError={(e) => { console.log('Image failed to load:', e); }}
                   />
                 </div>
                 
