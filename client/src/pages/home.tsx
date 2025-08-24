@@ -129,9 +129,9 @@ function ScrollMarquee({ game, className = "" }: {
         </div>
       )}
       
-      {/* Horizontal Score Overlay - Animated slide up from bottom */}
+      {/* Horizontal Score Overlay - Animated slide up with transparency */}
       {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
-        <div className="absolute bottom-0 left-0 right-0 bg-black/85 backdrop-blur-sm border-t border-primary/40 px-6 py-4 animate-slideUpSmooth" 
+        <div className="absolute bottom-0 left-0 right-0 bg-black/42 backdrop-blur-sm border-t border-primary/20 px-6 py-4 animate-slideUpSmooth" 
              style={{ zIndex: 100, borderBottomLeftRadius: '15px', borderBottomRightRadius: '15px', animationDelay: '0.5s', animationFillMode: 'both' }}>
           <div className="flex items-center justify-between w-full">
             {/* Left side - Champion info */}
@@ -249,10 +249,10 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
             onLoad={handleImageLoad}
           />
           
-          {/* Horizontal Score Overlay - Slides up from bottom after image loads */}
+          {/* Horizontal Score Overlay - Slides up into marquee with transparency */}
           {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
-            <div className={`absolute bottom-0 left-0 right-0 bg-black/85 backdrop-blur-sm border-t border-primary/40 px-6 py-4 ${scoreOverlayVisible && !isExiting ? `animate-${scoreAnimation}` : 'transform translate-y-full opacity-0'}`} 
-                 style={{ zIndex: 100, animationDuration: '0.8s', borderBottomLeftRadius: '15px', borderBottomRightRadius: '15px' }}>
+            <div className={`absolute bottom-0 left-0 right-0 bg-black/42 backdrop-blur-sm border-t border-primary/20 px-6 py-4 transition-all duration-800 ease-out ${scoreOverlayVisible && !isExiting ? 'transform translate-y-0 opacity-100' : 'transform translate-y-full opacity-0'}`} 
+                 style={{ zIndex: 100, borderBottomLeftRadius: '15px', borderBottomRightRadius: '15px' }}>
               <div className="flex items-center justify-between w-full">
                 {/* Left side - Champion info */}
                 <div className="flex items-center gap-4">
