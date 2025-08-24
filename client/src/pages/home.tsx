@@ -679,13 +679,7 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
         </div>
       </div>
 
-      {!hideHeader && (
-        <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b p-4">
-          <div className="text-center">
-            <h2 className="text-xl md:text-2xl font-bold text-foreground">Arcade Games</h2>
-          </div>
-        </div>
-      )}
+
       
       {visibleGames.length === 0 ? (
         <div className="flex items-center justify-center h-full">
