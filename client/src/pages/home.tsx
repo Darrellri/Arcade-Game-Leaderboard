@@ -53,6 +53,27 @@ const animationClasses = [
   'animate-flip-in-x', 'animate-flip-in-y', 'animate-light-speed-in', 'animate-roll-in', 'animate-hinge'
 ];
 
+// Dynamic overlay animation functions based on game ID for consistency
+function getOverlayAnimation(gameId: number): string {
+  const overlayAnimations = [
+    'animate-bounce-in', 'animate-zoom-in', 'animate-slide-in-up', 'animate-fade-in-up',
+    'animate-slide-in-down', 'animate-bounce-in-up', 'animate-elastic-in',
+    'animate-wobble', 'animate-tada', 'animate-jello', 'animate-flip-in-x',
+    'animate-rotate-in', 'animate-swing', 'animate-rubberBand'
+  ];
+  return overlayAnimations[gameId % overlayAnimations.length];
+}
+
+function getOverlaySpeed(gameId: number): string {
+  const speeds = ['300', '500', '700', '1000', '1200'];
+  return speeds[gameId % speeds.length];
+}
+
+function getOverlayDelay(gameId: number): number {
+  const delays = [0, 100, 200, 300, 500];
+  return delays[gameId % delays.length];
+}
+
 // Get random animation class
 function getRandomAnimation() {
   return animationClasses[Math.floor(Math.random() * animationClasses.length)];
@@ -142,10 +163,15 @@ function ScrollMarquee({ game, className = "" }: {
         </div>
       )}
       
-      {/* Top Overlay for Scroll View - Uses layer image if available */}
+      {/* Top Overlay for Scroll View - Uses layer image with dynamic animation effects */}
       {topOverlayVisible && game.overlayImageUrl && (
-        <div className="absolute inset-0 transition-opacity duration-500"
-             style={{ zIndex: 110, borderRadius: '15px' }}>
+        <div className={`absolute inset-0 ${getOverlayAnimation(game.id)} transition-all duration-${getOverlaySpeed(game.id)}`}
+             style={{ 
+               zIndex: 110, 
+               borderRadius: '15px',
+               animationDelay: `${getOverlayDelay(game.id)}ms`,
+               animationFillMode: 'both'
+             }}>
           <img 
             src={game.overlayImageUrl} 
             alt={`${game.name} overlay`}
@@ -291,10 +317,15 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
             onLoad={handleImageLoad}
           />
           
-          {/* Top Overlay - Appears after marquee animation stops using layer image */}
+          {/* Top Overlay - Appears after marquee animation stops using layer image with dynamic effects */}
           {topOverlayVisible && game.overlayImageUrl && (
-            <div className="absolute inset-0 transition-opacity duration-500"
-                 style={{ zIndex: 110, borderRadius: '15px' }}>
+            <div className={`absolute inset-0 ${getOverlayAnimation(game.id)} transition-all duration-${getOverlaySpeed(game.id)}`}
+                 style={{ 
+                   zIndex: 110, 
+                   borderRadius: '15px',
+                   animationDelay: `${getOverlayDelay(game.id)}ms`,
+                   animationFillMode: 'both'
+                 }}>
               <img 
                 src={game.overlayImageUrl} 
                 alt={`${game.name} overlay`}
