@@ -1169,17 +1169,19 @@ export default function Home() {
         <div className="flex flex-col gap-2 self-start sm:self-center mt-2 sm:mt-0 relative">
           {/* Navigation Elements with Timed Fade */}
           <div 
-            className={`flex flex-col gap-2 transition-opacity duration-1000 ${
-              showLogoOverlay ? 'opacity-20' : 'opacity-100'
+            className={`flex flex-col gap-2 transition-opacity duration-1000 group ${
+              showLogoOverlay ? 'opacity-20 hover:opacity-100' : 'opacity-100'
             }`}
           >
             {/* View Mode Buttons Row */}
             <div className="flex items-center gap-1 sm:gap-2">
               <Button
-                variant={viewMode === "single" ? "default" : "outline"}
+                variant={viewMode === "single" ? (showLogoOverlay ? "outline" : "default") : "outline"}
                 size="icon"
                 onClick={() => setViewMode("single")}
-                className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
+                className={`shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10 ${
+                  showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
+                }`}
                 title="Single View - One large game centered"
               >
                 <Square className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -1188,7 +1190,9 @@ export default function Home() {
                 variant={viewMode === "dual" ? "default" : "outline"}
                 size="icon"
                 onClick={() => setViewMode("dual")}
-                className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
+                className={`shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10 ${
+                  showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
+                }`}
                 title="Dual View - Two games side by side"
               >
                 <MonitorSpeaker className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -1197,7 +1201,9 @@ export default function Home() {
                 variant={viewMode === "scroll" ? "default" : "outline"}
                 size="icon"
                 onClick={() => setViewMode("scroll")}
-                className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
+                className={`shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10 ${
+                  showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
+                }`}
                 title="Scroll View - Infinite vertical scroll"
               >
                 <List className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -1206,7 +1212,9 @@ export default function Home() {
                 variant={viewMode === "list" ? "default" : "outline"}
                 size="icon"
                 onClick={() => setViewMode("list")}
-                className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
+                className={`shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10 ${
+                  showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
+                }`}
                 title="List View - Games in a vertical list"
               >
                 <CircleDot className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -1215,7 +1223,9 @@ export default function Home() {
                 variant={viewMode === "grid" ? "default" : "outline"}
                 size="icon"
                 onClick={() => setViewMode("grid")}
-                className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
+                className={`shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10 ${
+                  showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
+                }`}
                 title="Grid View - Games in a grid layout"
               >
                 <Grid2X2 className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -1224,11 +1234,25 @@ export default function Home() {
             
             {/* Navigation Buttons Row */}
             <div className="flex gap-1 sm:gap-2">
-              <Button variant="outline" size="sm" asChild className="h-7 px-2 text-xs sm:h-8 sm:px-3 sm:text-sm">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                asChild 
+                className={`h-7 px-2 text-xs sm:h-8 sm:px-3 sm:text-sm ${
+                  showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
+                }`}
+              >
                 <Link href="/">Home</Link>
               </Button>
 
-              <Button variant="outline" size="sm" asChild className="h-7 px-2 text-xs sm:h-8 sm:px-3 sm:text-sm">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                asChild 
+                className={`h-7 px-2 text-xs sm:h-8 sm:px-3 sm:text-sm ${
+                  showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
+                }`}
+              >
                 <Link href="/admin">Admin</Link>
               </Button>
             </div>
@@ -1237,13 +1261,13 @@ export default function Home() {
           {/* Centered Arcade Leaderboard Logo Overlay */}
           <div 
             className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-1000 ${
-              showLogoOverlay ? 'opacity-100' : 'opacity-0'
+              showLogoOverlay ? 'opacity-50' : 'opacity-0'
             }`}
           >
             <img 
               src="/arcade-leaderboard-logo.png" 
               alt="Arcade Leaderboard" 
-              className="w-20 h-20 sm:w-24 sm:h-24 object-contain" 
+              className="w-40 h-40 sm:w-48 sm:h-48 object-contain" 
             />
           </div>
         </div>
