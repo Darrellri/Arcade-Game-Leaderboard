@@ -960,6 +960,7 @@ export default function Home() {
   const [viewMode, setViewMode] = useState<ViewMode>("single");
   const [animationsEnabled, setAnimationsEnabled] = useState(true);
   const [hideHeader, setHideHeader] = useState(false);
+  const [showLogoOverlay, setShowLogoOverlay] = useState(false);
   const [localGames, setLocalGames] = useState<Game[]>([]);
 
   const { data: games, isLoading: gamesLoading } = useQuery<Game[]>({
@@ -977,6 +978,15 @@ export default function Home() {
       setLocalGames(games);
     }
   }, [games]);
+
+  // Timed UI transition - fade out nav elements and fade in logo after 10 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowLogoOverlay(true);
+    }, 10000); // 10 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
 
   // Drag and drop sensors
   const sensors = useSensors(
@@ -1120,114 +1130,121 @@ export default function Home() {
               )}
             </div>
           )}
-          <div className="flex-1 min-w-0 relative">
-            {/* Watermark Arcade Leaderboard logo behind the text */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-              <img 
-                src="/arcade-leaderboard-watermark.png" 
-                alt="Arcade Leaderboard watermark" 
-                className="w-32 h-32 sm:w-48 sm:h-48 object-contain opacity-75" 
-                style={{ filter: 'brightness(0.8)' }}
-                onError={(e) => { console.log('Image failed to load:', e); }}
-              />
-            </div>
-            
-            <div className="relative z-10">
-              <h1 className="text-lg sm:text-3xl font-black tracking-tight text-foreground uppercase text-outline leading-tight lg:px-5" style={{ letterSpacing: '1px' }}>
-                {venueSettings?.leaderboardName || "THE LEADERBOARD"}
-              </h1>
-              <h2 
-                className={`text-sm sm:text-lg md:text-2xl tracking-tight leading-tight lg:px-5 ${
-                  venueSettings?.subtitleBold === "true" ? "font-bold" : "font-normal"
-                } ${
-                  venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
-                }`}
-                style={{ 
-                  letterSpacing: '2px',
-                  color: venueSettings?.subtitleWhite === "true" 
-                    ? "white" 
-                    : (() => {
-                        // For lighter color schemes, use primary color (same as game titles)
-                        const isLightScheme = venueSettings?.theme?.appearance === "light" || 
-                          (venueSettings?.theme?.variant === "tint" && venueSettings?.theme?.appearance !== "dark") ||
-                          (venueSettings?.theme?.primary && parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "0") > 60);
-                        
-                        if (isLightScheme) {
-                          // Use the same color as game titles (primary color)
-                          return venueSettings?.theme?.primary || "hsl(280, 100%, 50%)";
-                        } else {
-                          // For darker schemes, use the lighter version as before
-                          return venueSettings?.theme?.primary
-                            ? `hsl(${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[1] || 280}, ${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[2] || 100}%, ${Math.min(100, parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "50") + 25)}%)`
-                            : "hsl(280, 100%, 75%)";
-                        }
-                      })()
-                }}
-              >
-                {venueSettings?.name || "Arcade"}
-              </h2>
-            </div>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-lg sm:text-3xl font-black tracking-tight text-foreground uppercase text-outline leading-tight lg:px-5" style={{ letterSpacing: '1px' }}>
+              {venueSettings?.leaderboardName || "THE LEADERBOARD"}
+            </h1>
+            <h2 
+              className={`text-sm sm:text-lg md:text-2xl tracking-tight leading-tight lg:px-5 ${
+                venueSettings?.subtitleBold === "true" ? "font-bold" : "font-normal"
+              } ${
+                venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
+              }`}
+              style={{ 
+                letterSpacing: '2px',
+                color: venueSettings?.subtitleWhite === "true" 
+                  ? "white" 
+                  : (() => {
+                      // For lighter color schemes, use primary color (same as game titles)
+                      const isLightScheme = venueSettings?.theme?.appearance === "light" || 
+                        (venueSettings?.theme?.variant === "tint" && venueSettings?.theme?.appearance !== "dark") ||
+                        (venueSettings?.theme?.primary && parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "0") > 60);
+                      
+                      if (isLightScheme) {
+                        // Use the same color as game titles (primary color)
+                        return venueSettings?.theme?.primary || "hsl(280, 100%, 50%)";
+                      } else {
+                        // For darker schemes, use the lighter version as before
+                        return venueSettings?.theme?.primary
+                          ? `hsl(${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[1] || 280}, ${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[2] || 100}%, ${Math.min(100, parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "50") + 25)}%)`
+                          : "hsl(280, 100%, 75%)";
+                      }
+                    })()
+              }}
+            >
+              {venueSettings?.name || "Arcade"}
+            </h2>
           </div>
         </div>
-        <div className="flex flex-col gap-2 self-start sm:self-center mt-2 sm:mt-0">
-          {/* View Mode Buttons Row */}
-          <div className="flex items-center gap-1 sm:gap-2">
-            <Button
-              variant={viewMode === "single" ? "default" : "outline"}
-              size="icon"
-              onClick={() => setViewMode("single")}
-              className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
-              title="Single View - One large game centered"
-            >
-              <Square className="h-3 w-3 sm:h-4 sm:w-4" />
-            </Button>
-            <Button
-              variant={viewMode === "dual" ? "default" : "outline"}
-              size="icon"
-              onClick={() => setViewMode("dual")}
-              className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
-              title="Dual View - Two games side by side"
-            >
-              <MonitorSpeaker className="h-3 w-3 sm:h-4 sm:w-4" />
-            </Button>
-            <Button
-              variant={viewMode === "scroll" ? "default" : "outline"}
-              size="icon"
-              onClick={() => setViewMode("scroll")}
-              className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
-              title="Scroll View - Infinite vertical scroll"
-            >
-              <List className="h-3 w-3 sm:h-4 sm:w-4" />
-            </Button>
-            <Button
-              variant={viewMode === "list" ? "default" : "outline"}
-              size="icon"
-              onClick={() => setViewMode("list")}
-              className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
-              title="List View - Games in a vertical list"
-            >
-              <CircleDot className="h-3 w-3 sm:h-4 sm:w-4" />
-            </Button>
-            <Button
-              variant={viewMode === "grid" ? "default" : "outline"}
-              size="icon"
-              onClick={() => setViewMode("grid")}
-              className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
-              title="Grid View - Games in a grid layout"
-            >
-              <Grid2X2 className="h-3 w-3 sm:h-4 sm:w-4" />
-            </Button>
-          </div>
-          
-          {/* Navigation Buttons Row */}
-          <div className="flex gap-1 sm:gap-2">
-            <Button variant="outline" size="sm" asChild className="h-7 px-2 text-xs sm:h-8 sm:px-3 sm:text-sm">
-              <Link href="/">Home</Link>
-            </Button>
+        <div className="flex flex-col gap-2 self-start sm:self-center mt-2 sm:mt-0 relative">
+          {/* Navigation Elements with Timed Fade */}
+          <div 
+            className={`flex flex-col gap-2 transition-opacity duration-1000 ${
+              showLogoOverlay ? 'opacity-20' : 'opacity-100'
+            }`}
+          >
+            {/* View Mode Buttons Row */}
+            <div className="flex items-center gap-1 sm:gap-2">
+              <Button
+                variant={viewMode === "single" ? "default" : "outline"}
+                size="icon"
+                onClick={() => setViewMode("single")}
+                className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
+                title="Single View - One large game centered"
+              >
+                <Square className="h-3 w-3 sm:h-4 sm:w-4" />
+              </Button>
+              <Button
+                variant={viewMode === "dual" ? "default" : "outline"}
+                size="icon"
+                onClick={() => setViewMode("dual")}
+                className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
+                title="Dual View - Two games side by side"
+              >
+                <MonitorSpeaker className="h-3 w-3 sm:h-4 sm:w-4" />
+              </Button>
+              <Button
+                variant={viewMode === "scroll" ? "default" : "outline"}
+                size="icon"
+                onClick={() => setViewMode("scroll")}
+                className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
+                title="Scroll View - Infinite vertical scroll"
+              >
+                <List className="h-3 w-3 sm:h-4 sm:w-4" />
+              </Button>
+              <Button
+                variant={viewMode === "list" ? "default" : "outline"}
+                size="icon"
+                onClick={() => setViewMode("list")}
+                className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
+                title="List View - Games in a vertical list"
+              >
+                <CircleDot className="h-3 w-3 sm:h-4 sm:w-4" />
+              </Button>
+              <Button
+                variant={viewMode === "grid" ? "default" : "outline"}
+                size="icon"
+                onClick={() => setViewMode("grid")}
+                className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10"
+                title="Grid View - Games in a grid layout"
+              >
+                <Grid2X2 className="h-3 w-3 sm:h-4 sm:w-4" />
+              </Button>
+            </div>
+            
+            {/* Navigation Buttons Row */}
+            <div className="flex gap-1 sm:gap-2">
+              <Button variant="outline" size="sm" asChild className="h-7 px-2 text-xs sm:h-8 sm:px-3 sm:text-sm">
+                <Link href="/">Home</Link>
+              </Button>
 
-            <Button variant="outline" size="sm" asChild className="h-7 px-2 text-xs sm:h-8 sm:px-3 sm:text-sm">
-              <Link href="/admin">Admin</Link>
-            </Button>
+              <Button variant="outline" size="sm" asChild className="h-7 px-2 text-xs sm:h-8 sm:px-3 sm:text-sm">
+                <Link href="/admin">Admin</Link>
+              </Button>
+            </div>
+          </div>
+
+          {/* Centered Arcade Leaderboard Logo Overlay */}
+          <div 
+            className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-1000 ${
+              showLogoOverlay ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <img 
+              src="/arcade-leaderboard-logo.png" 
+              alt="Arcade Leaderboard" 
+              className="w-20 h-20 sm:w-24 sm:h-24 object-contain" 
+            />
           </div>
         </div>
       </div>

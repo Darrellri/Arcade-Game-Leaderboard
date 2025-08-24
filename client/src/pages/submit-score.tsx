@@ -65,22 +65,9 @@ export default function SubmitScore() {
       </div>
       
       <div className="section-header px-6 py-4 rounded-lg mb-6">
-        <div className="relative">
-          {/* Watermark Arcade Leaderboard logo behind the text */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-            <img 
-              src="/arcade-leaderboard-watermark.png" 
-              alt="Arcade Leaderboard watermark" 
-              className="w-32 h-32 object-contain opacity-75" 
-              style={{ filter: 'brightness(0.8)' }}
-              onError={(e) => { console.log('Image failed to load:', e); }}
-            />
-          </div>
-          
-          <div className="relative z-10">
-            <h1 className="text-3xl font-bold tracking-tight uppercase drop-shadow-sm">{game.name}</h1>
-            {game.subtitle && <p className="subtitle text-muted-foreground">{game.subtitle}</p>}
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight uppercase drop-shadow-sm">{game.name}</h1>
+          {game.subtitle && <p className="subtitle text-muted-foreground">{game.subtitle}</p>}
         </div>
         <div className="flex items-center gap-2 mt-3">
           <div className="champion-icon p-1">

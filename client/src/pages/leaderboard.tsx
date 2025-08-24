@@ -159,18 +159,7 @@ export default function Leaderboard() {
               
               {/* Desktop text overlay */}
               <div className="hidden sm:absolute sm:inset-0 sm:flex sm:items-center p-6 sm:pl-[30px]" style={{ zIndex: 30 }}>
-                {/* Watermark Arcade Leaderboard logo behind the text */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-                  <img 
-                    src="/arcade-leaderboard-watermark.png" 
-                    alt="Arcade Leaderboard watermark" 
-                    className="w-48 h-48 md:w-64 md:h-64 object-contain opacity-75" 
-                    style={{ filter: 'brightness(0.8)' }}
-                    onError={(e) => { console.log('Image failed to load:', e); }}
-                  />
-                </div>
-                
-                <div className="text-center sm:text-left relative z-10">
+                <div className="text-center sm:text-left">
                   <h1 className="text-3xl md:text-5xl lg:text-5xl font-black tracking-wide uppercase text-white drop-shadow-2xl" 
                       style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(0,0,0,0.5)' }}>
                     {game.name}
