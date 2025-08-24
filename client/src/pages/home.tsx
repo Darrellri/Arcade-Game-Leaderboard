@@ -1121,26 +1121,14 @@ export default function Home() {
             </div>
           )}
           <div className="flex-1 min-w-0 relative">
-            {/* Watermark logo behind the text */}
-            {(venueSettings?.animatedLogoUrl || venueSettings?.logoUrl) && (
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
-                {venueSettings.animatedLogoUrl ? (
-                  <video 
-                    src={venueSettings.animatedLogoUrl} 
-                    autoPlay 
-                    loop 
-                    muted
-                    className="w-32 h-32 sm:w-48 sm:h-48 object-contain opacity-50 transparent-video" 
-                  />
-                ) : (
-                  <img 
-                    src={venueSettings.logoUrl} 
-                    alt={`${venueSettings.name} watermark`} 
-                    className="w-32 h-32 sm:w-48 sm:h-48 object-contain opacity-50" 
-                  />
-                )}
-              </div>
-            )}
+            {/* Watermark Arcade Leaderboard logo behind the text */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+              <img 
+                src="/attached_assets/arcadeleaderboard logo_1756054640479.png" 
+                alt="Arcade Leaderboard watermark" 
+                className="w-32 h-32 sm:w-48 sm:h-48 object-contain opacity-50" 
+              />
+            </div>
             
             <div className="relative z-10">
               <h1 className="text-lg sm:text-3xl font-black tracking-tight text-foreground uppercase text-outline leading-tight lg:px-5" style={{ letterSpacing: '1px' }}>

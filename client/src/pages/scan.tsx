@@ -14,10 +14,23 @@ export default function Scan() {
   return (
     <div className="space-y-8 pb-20 md:pb-0">
       <div className="section-header px-6 py-4 rounded-lg">
-        <h1 className="text-3xl font-bold tracking-tight">Scan Top Score</h1>
-        <p className="subtitle mt-2">
-          Scan the QR code on your arcade game or enter the game ID manually
-        </p>
+        <div className="relative">
+          {/* Watermark Arcade Leaderboard logo behind the text */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+            <img 
+              src="/attached_assets/arcadeleaderboard logo_1756054640479.png" 
+              alt="Arcade Leaderboard watermark" 
+              className="w-32 h-32 object-contain opacity-50" 
+            />
+          </div>
+          
+          <div className="relative z-10">
+            <h1 className="text-3xl font-bold tracking-tight">Scan Top Score</h1>
+            <p className="subtitle mt-2">
+              Scan the QR code on your arcade game or enter the game ID manually
+            </p>
+          </div>
+        </div>
       </div>
       
 
