@@ -652,25 +652,39 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
   const [visibleGames, setVisibleGames] = useState<Game[]>([]);
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
   const [scrollSpeed, setScrollSpeed] = useState(1); // 1 = normal, 0.5 = slow, 2 = fast
+  const [isInitialized, setIsInitialized] = useState(false);
   const gameSpacing = 50; // Much closer together - reduced from 200 to 50
+  const gameHeight = 321; // Height of each marquee
 
-  // Create infinite loop of games
+  // Create infinite loop of games and initialize centered position
   useEffect(() => {
     if (games.length > 0) {
       const extendedGames = [...games, ...games, ...games]; // Triple the array for seamless loop
       setVisibleGames(extendedGames);
+      
+      // Calculate center position for first game
+      const screenHeight = window.innerHeight;
+      const centerPosition = (screenHeight / 2) - (gameHeight / 2) - 300; // 300 is the padding offset
+      setScrollPosition(-centerPosition);
+      
+      // Start fade-in animation after a brief delay
+      setTimeout(() => {
+        setIsInitialized(true);
+      }, 100);
     }
-  }, [games]);
+  }, [games, gameHeight]);
 
-  // Auto-scroll effect with configurable direction and speed
+  // Auto-scroll effect with configurable direction and speed - starts after initialization
   useEffect(() => {
+    if (!isInitialized) return;
+    
     const scrollTimer = setInterval(() => {
       setScrollPosition(prev => {
         const baseSpeed = 1.2;
         const adjustedSpeed = baseSpeed * scrollSpeed;
         const movement = scrollDirection === 'up' ? adjustedSpeed : -adjustedSpeed;
         const newPosition = prev + movement;
-        const resetPoint = games.length * (gameSpacing + 321); // Game height + spacing
+        const resetPoint = games.length * (gameSpacing + gameHeight); // Game height + spacing
         
         if (scrollDirection === 'up') {
           return newPosition >= resetPoint ? 0 : newPosition;
@@ -681,7 +695,7 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
     }, 40); // Smooth scrolling
 
     return () => clearInterval(scrollTimer);
-  }, [games.length, gameSpacing, scrollDirection, scrollSpeed]);
+  }, [games.length, gameSpacing, scrollDirection, scrollSpeed, isInitialized, gameHeight]);
 
   return (
     <div className="relative overflow-hidden h-screen px-4 bg-background">
@@ -745,7 +759,7 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
         </div>
       ) : (
         <div 
-          className="space-y-4 w-full max-w-[1200px] mx-auto"
+          className={`space-y-4 w-full max-w-[1200px] mx-auto transition-opacity duration-1000 ${isInitialized ? 'opacity-100' : 'opacity-0'}`}
           style={{ 
             transform: `translateY(-${scrollPosition}px)`,
             paddingTop: `300px` // Start 300 pixels higher
