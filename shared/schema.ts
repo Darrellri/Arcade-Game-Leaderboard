@@ -132,6 +132,7 @@ export const venueSettingsSchema = z.object({
   dualViewSpeed: z.number().optional(),
   dualViewAnimations: z.boolean().optional(),
   dualViewHideHeader: z.boolean().optional(),
+  dualViewSize: z.string().optional(),
   
   singleViewSpeed: z.number().optional(),
   singleViewAnimations: z.boolean().optional(),
@@ -143,6 +144,7 @@ export const venueSettingsSchema = z.object({
   scrollViewAnimations: z.boolean().optional(),
   scrollViewStickyHeader: z.boolean().optional(),
   scrollViewLazyLoad: z.boolean().optional(),
+  scrollViewSize: z.string().optional(),
   
   // Animation System Settings
   animationCategories: z.object({

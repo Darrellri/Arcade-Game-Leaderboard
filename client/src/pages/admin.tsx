@@ -341,17 +341,19 @@ export default function Admin() {
         dualViewSpeed: venueSettings.dualViewSpeed || 8,
         dualViewAnimations: venueSettings.dualViewAnimations !== false,
         dualViewHideHeader: venueSettings.dualViewHideHeader || false,
+        dualViewSize: venueSettings.dualViewSize || "extra-large",
         
         singleViewSpeed: venueSettings.singleViewSpeed || 6,
         singleViewAnimations: venueSettings.singleViewAnimations !== false,
         singleViewHideHeader: venueSettings.singleViewHideHeader || false,
-        singleViewSize: venueSettings.singleViewSize || "large",
+        singleViewSize: venueSettings.singleViewSize || "extra-large",
         
         scrollViewSpeed: venueSettings.scrollViewSpeed || 50,
         scrollViewSpacing: venueSettings.scrollViewSpacing || 200,
         scrollViewAnimations: venueSettings.scrollViewAnimations !== false,
         scrollViewStickyHeader: venueSettings.scrollViewStickyHeader !== false,
         scrollViewLazyLoad: venueSettings.scrollViewLazyLoad || false,
+        scrollViewSize: venueSettings.scrollViewSize || "extra-large",
       });
       
       console.log("Initialized background override:", venueSettings.backgroundOverride);
@@ -755,9 +757,18 @@ export default function Admin() {
         <TabsContent value="games" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Gamepad2 className="h-5 w-5" />
-                Games Management
+              <CardTitle className="flex items-center gap-4">
+                {venueSettings?.logoUrl && (
+                  <img 
+                    src={venueSettings.logoUrl} 
+                    alt="Venue Logo"
+                    className="w-[150px] h-auto object-contain"
+                  />
+                )}
+                <div className="flex items-center gap-2">
+                  <Gamepad2 className="h-5 w-5" />
+                  Games Management
+                </div>
               </CardTitle>
               <CardDescription>
                 Add, edit, and organize your arcade games
@@ -903,14 +914,23 @@ export default function Admin() {
           {/* Color Schemes Section */}
           <Card id="color-schemes-section" className="overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-muted/50 to-background border-b">
-              <CardTitle className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-primary/10">
-                  <Palette className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <div className="text-lg font-bold">Color Schemes</div>
-                  <div className="text-sm text-muted-foreground font-normal">
-                    Transform your arcade's visual identity
+              <CardTitle className="flex items-center gap-4">
+                {venueSettings?.logoUrl && (
+                  <img 
+                    src={venueSettings.logoUrl} 
+                    alt="Venue Logo"
+                    className="w-[150px] h-auto object-contain"
+                  />
+                )}
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-primary/10">
+                    <Palette className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold">Color Schemes</div>
+                    <div className="text-sm text-muted-foreground font-normal">
+                      Transform your arcade's visual identity
+                    </div>
                   </div>
                 </div>
               </CardTitle>
@@ -1079,11 +1099,20 @@ export default function Admin() {
           {/* Custom Background Color */}
           <Card id="background-color-section">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-secondary/50">
-                  <Palette className="h-4 w-4" />
+              <CardTitle className="flex items-center gap-4">
+                {venueSettings?.logoUrl && (
+                  <img 
+                    src={venueSettings.logoUrl} 
+                    alt="Venue Logo"
+                    className="w-[150px] h-auto object-contain"
+                  />
+                )}
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-secondary/50">
+                    <Palette className="h-4 w-4" />
+                  </div>
+                  Custom Background Color
                 </div>
-                Custom Background Color
               </CardTitle>
               <CardDescription>
                 Set a specific background color that overrides any theme
@@ -1300,11 +1329,20 @@ export default function Admin() {
 
               {/* Display View Options */}
               <div id="display-view-section" className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">Display View Options</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Configure settings for the three display modes: Dual View, Single View, and Scroll View
-                  </p>
+                <div className="flex items-center gap-4">
+                  {venueSettings?.logoUrl && (
+                    <img 
+                      src={venueSettings.logoUrl} 
+                      alt="Venue Logo"
+                      className="w-[150px] h-auto object-contain"
+                    />
+                  )}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Display View Options</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Configure settings for the three display modes: Dual View, Single View, and Scroll View
+                    </p>
+                  </div>
                 </div>
 
                 {/* Dual View Settings */}
@@ -1350,6 +1388,19 @@ export default function Admin() {
                         Hide Header/Navigation
                       </Label>
                       <p className="text-xs text-muted-foreground">Hide leaderboard name and controls</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Display Size</Label>
+                      <select 
+                        value={displayViewSettings.dualViewSize}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, dualViewSize: e.target.value }))}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value="normal">Regular Size</option>
+                        <option value="large">Large (1.3x)</option>
+                        <option value="extra-large">Extra Large (1.5x) - Default</option>
+                      </select>
                     </div>
 
                     <div className="space-y-2">
@@ -1498,6 +1549,19 @@ export default function Admin() {
                         Lazy Load Images
                       </Label>
                       <p className="text-xs text-muted-foreground">Load images only when needed for performance</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Display Size</Label>
+                      <select 
+                        value={displayViewSettings.scrollViewSize}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, scrollViewSize: e.target.value }))}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value="normal">Regular Size</option>
+                        <option value="large">Large (1.3x)</option>
+                        <option value="extra-large">Extra Large (1.5x) - Default</option>
+                      </select>
                     </div>
 
                     <div className="space-y-2">
@@ -1856,66 +1920,168 @@ export default function Admin() {
         </TabsContent>
 
         <TabsContent value="notes" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>System Notes & Features</CardTitle>
-              <CardDescription>
-                Documentation of platform capabilities and features
-              </CardDescription>
+          <Card className="overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-primary/5 via-secondary/10 to-primary/5 border-b">
+              <CardTitle className="flex items-center gap-4">
+                {venueSettings?.logoUrl && (
+                  <img 
+                    src={venueSettings.logoUrl} 
+                    alt="Venue Logo"
+                    className="w-[150px] h-auto object-contain"
+                  />
+                )}
+                <div>
+                  <h2 className="text-2xl font-bold text-primary">System Documentation</h2>
+                  <p className="text-muted-foreground text-base mt-1">
+                    Complete platform features and technical specifications
+                  </p>
+                </div>
+              </CardTitle>
             </CardHeader>
-            <CardContent className="prose prose-base max-w-none dark:prose-invert">
-              <div className="space-y-6 text-foreground text-base"
-                   style={{ color: 'var(--foreground)' }}>
-                <div>
-                  <h3 className="text-xl font-bold mb-4 text-foreground">Core Features</h3>
-                  <ul className="space-y-3">
-                    <li className="text-base text-foreground"><strong className="text-primary">Game Management:</strong> Add, edit, reorder, and delete arcade/pinball games</li>
-                    <li className="text-base text-foreground"><strong className="text-primary">Score Tracking:</strong> Players can submit scores with photo validation</li>
-                    <li className="text-base text-foreground"><strong className="text-primary">QR Code System:</strong> Venue-specific QR codes for score submission</li>
-                    <li className="text-base text-foreground"><strong className="text-primary">Real-time Leaderboards:</strong> Dynamic ranking system with high score tracking</li>
-                    <li className="text-base text-foreground"><strong className="text-primary">Mobile Responsive:</strong> Optimized for all device sizes</li>
-                  </ul>
+            <CardContent className="p-8">
+              <div className="grid gap-8">
+                {/* Core Features Section */}
+                <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-lg p-6 border border-primary/10">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 rounded-lg bg-primary/10">
+                      <Gamepad2 className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="text-xl font-bold text-primary">Core Platform Features</h3>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                        <div>
+                          <h4 className="font-semibold text-foreground">Game Management System</h4>
+                          <p className="text-sm text-muted-foreground">Add, edit, reorder, and organize arcade/pinball games with drag-and-drop functionality</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                        <div>
+                          <h4 className="font-semibold text-foreground">Score Tracking & Validation</h4>
+                          <p className="text-sm text-muted-foreground">Players submit scores with photo evidence for verification and leaderboard updates</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                        <div>
+                          <h4 className="font-semibold text-foreground">QR Code Integration</h4>
+                          <p className="text-sm text-muted-foreground">Venue-specific QR codes for quick score submission and game identification</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                        <div>
+                          <h4 className="font-semibold text-foreground">Real-time Leaderboards</h4>
+                          <p className="text-sm text-muted-foreground">Dynamic ranking system with automatic high score tracking and champion highlighting</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                        <div>
+                          <h4 className="font-semibold text-foreground">Mobile Responsive Design</h4>
+                          <p className="text-sm text-muted-foreground">Optimized interface for smartphones, tablets, and desktop screens</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
+                        <div>
+                          <h4 className="font-semibold text-foreground">Advanced Display Modes</h4>
+                          <p className="text-sm text-muted-foreground">Single, Dual, and Scroll view options with customizable animations and sizing</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <h3 className="text-xl font-bold mb-4 text-foreground">Venue Customization</h3>
-                  <ul className="space-y-3">
-                    <li className="text-base text-foreground"><strong className="text-primary">Logo Support:</strong> Static images and animated videos (MP4/WebM)</li>
-                    <li className="text-base text-foreground"><strong className="text-primary">Theme System:</strong> Multiple color schemes with click-to-cycle functionality</li>
-                    <li className="text-base text-foreground"><strong className="text-primary">Layout Controls:</strong> Customizable spacing, typography, and visual styling</li>
-                    <li className="text-base text-foreground"><strong className="text-primary">Branding Options:</strong> Venue name, leaderboard titles, and address display</li>
-                  </ul>
+                {/* Venue Customization Section */}
+                <div className="bg-gradient-to-br from-secondary/5 to-primary/5 rounded-lg p-6 border border-secondary/10">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 rounded-lg bg-secondary/10">
+                      <Settings className="h-6 w-6 text-secondary" />
+                    </div>
+                    <h3 className="text-xl font-bold text-secondary">Venue Customization</h3>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 rounded-full bg-secondary mt-2 flex-shrink-0"></div>
+                        <div>
+                          <h4 className="font-semibold text-foreground">Logo & Branding</h4>
+                          <p className="text-sm text-muted-foreground">Static images and animated videos (MP4/WebM) with custom background options</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 rounded-full bg-secondary mt-2 flex-shrink-0"></div>
+                        <div>
+                          <h4 className="font-semibold text-foreground">Theme System</h4>
+                          <p className="text-sm text-muted-foreground">Multiple color schemes with professional, tint, and vibrant variants</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 rounded-full bg-secondary mt-2 flex-shrink-0"></div>
+                        <div>
+                          <h4 className="font-semibold text-foreground">Layout Controls</h4>
+                          <p className="text-sm text-muted-foreground">Customizable spacing, typography, and visual styling options</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="w-2 h-2 rounded-full bg-secondary mt-2 flex-shrink-0"></div>
+                        <div>
+                          <h4 className="font-semibold text-foreground">Display Size Options</h4>
+                          <p className="text-sm text-muted-foreground">Regular, Large (1.3x), and Extra Large (1.5x) sizing for all view modes</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <h3 className="text-xl font-bold mb-4 text-foreground">Admin Capabilities</h3>
-                  <ul className="space-y-3">
-                    <li className="text-base text-foreground"><strong className="text-primary">Drag & Drop Reordering:</strong> Intuitive game organization</li>
-                    <li className="text-base text-foreground"><strong className="text-primary">Image Management:</strong> Marquee and overlay image uploads per game</li>
-                    <li className="text-base text-foreground"><strong className="text-primary">Visibility Controls:</strong> Show/hide games from public view</li>
-                    <li className="text-base text-foreground"><strong className="text-primary">Bulk Operations:</strong> Filter and sort games by type or name</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="text-xl font-bold mb-4 text-foreground">Player Experience</h3>
-                  <ul className="space-y-3">
-                    <li className="text-base text-foreground"><strong className="text-primary">Score Submission:</strong> Photo evidence required for verification</li>
-                    <li className="text-base text-foreground"><strong className="text-primary">Champion Recognition:</strong> Special highlighting for #1 scores</li>
-                    <li className="text-base text-foreground"><strong className="text-primary">Social Features:</strong> Score sharing and friendly competition</li>
-                    <li className="text-base text-foreground"><strong className="text-primary">Game Discovery:</strong> Grid and list view modes</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h3 className="text-xl font-bold mb-4 text-foreground">Technical Stack</h3>
-                  <ul className="space-y-3">
-                    <li className="text-base text-foreground"><strong className="text-primary">Frontend:</strong> React, TypeScript, Tailwind CSS</li>
-                    <li className="text-base text-foreground"><strong className="text-primary">Backend:</strong> Express.js, Node.js</li>
-                    <li className="text-base text-foreground"><strong className="text-primary">Database:</strong> PostgreSQL with Drizzle ORM</li>
-                    <li className="text-base text-foreground"><strong className="text-primary">UI Components:</strong> Shadcn/ui with custom arcade theming</li>
-                    <li className="text-base text-foreground"><strong className="text-primary">File Storage:</strong> Local upload system for images/videos</li>
-                  </ul>
+                {/* Technical Specifications Section */}
+                <div className="bg-gradient-to-br from-muted/30 to-secondary/10 rounded-lg p-6 border border-muted/20">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 rounded-lg bg-muted/20">
+                      <CircleDot className="h-6 w-6 text-muted-foreground" />
+                    </div>
+                    <h3 className="text-xl font-bold text-foreground">Technical Specifications</h3>
+                  </div>
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <div>
+                      <h4 className="font-semibold text-foreground mb-3">Frontend Stack</h4>
+                      <ul className="space-y-2 text-sm text-muted-foreground">
+                        <li>• React 18 with TypeScript</li>
+                        <li>• Tailwind CSS + Shadcn/ui</li>
+                        <li>• TanStack Query</li>
+                        <li>• Wouter routing</li>
+                        <li>• Framer Motion animations</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-foreground mb-3">Backend Stack</h4>
+                      <ul className="space-y-2 text-sm text-muted-foreground">
+                        <li>• Express.js + Node.js</li>
+                        <li>• PostgreSQL database</li>
+                        <li>• Drizzle ORM</li>
+                        <li>• Multer file uploads</li>
+                        <li>• Session management</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-foreground mb-3">Deployment</h4>
+                      <ul className="space-y-2 text-sm text-muted-foreground">
+                        <li>• Replit hosting platform</li>
+                        <li>• Vite build optimization</li>
+                        <li>• Static asset serving</li>
+                        <li>• Environment configuration</li>
+                        <li>• Database migrations</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
 
                 <div>
