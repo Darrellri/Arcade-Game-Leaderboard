@@ -89,16 +89,25 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       document.head.appendChild(styleEl);
     }
 
+    // Calculate background colors based on theme
+    const backgroundLight = newTheme.appearance === 'light' 
+      ? `${hue} ${Math.max(10, saturation * 0.25)}% 96%` // 10% tint: low saturation, very high lightness
+      : '0 0% 100%'; // fallback white
+    
+    const backgroundDark = newTheme.appearance === 'dark' 
+      ? `${hue} ${Math.max(15, saturation * 0.6)}% 8%` // Very dark: moderate saturation, very low lightness
+      : '240 10% 3.9%'; // fallback dark gray
+
     // Create CSS with all necessary variables
     const css = `
       :root {
         --primary: ${hue} ${saturation}% ${lightness}%;
         --primary-foreground: ${newTheme.appearance === 'dark' ? '0 0% 98%' : '0 0% 10%'};
         
-        --background: ${newTheme.appearance === 'dark' ? '240 10% 3.9%' : '0 0% 100%'};
+        --background: ${newTheme.appearance === 'dark' ? backgroundDark : backgroundLight};
         --foreground: ${newTheme.appearance === 'dark' ? '0 0% 98%' : '240 10% 3.9%'};
         
-        --card: ${newTheme.appearance === 'dark' ? '240 10% 3.9%' : '0 0% 100%'};
+        --card: ${newTheme.appearance === 'dark' ? backgroundDark : backgroundLight};
         --card-foreground: ${newTheme.appearance === 'dark' ? '0 0% 98%' : '240 10% 3.9%'};
         
         --secondary: ${newTheme.appearance === 'dark' ? '240 3.7% 15.9%' : '240 4.8% 95.9%'};
