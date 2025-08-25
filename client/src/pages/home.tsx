@@ -701,6 +701,8 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down' | 'left' | 'right'>('up');
   const [scrollSpeed, setScrollSpeed] = useState(1); // 1 = normal, 0.5 = slow, 2 = fast
   const [isInitialized, setIsInitialized] = useState(false);
+  const [showControls, setShowControls] = useState(true);
+  const [isHoveringControls, setIsHoveringControls] = useState(false);
   const gameSpacing = 50; // Much closer together - reduced from 200 to 50
   const gameHeight = 321; // Height of each marquee
   const gameWidth = 1200; // Width of each marquee
@@ -768,10 +770,46 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
     return () => clearInterval(scrollTimer);
   }, [games.length, gameSpacing, scrollDirection, scrollSpeed, isInitialized, gameHeight, gameWidth]);
 
+  // Timed fade for controls - fade after 10 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowControls(false);
+    }, 10000); // 10 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Timer for fading controls after mouse leaves
+  useEffect(() => {
+    if (!isHoveringControls && showControls) {
+      const timer = setTimeout(() => {
+        setShowControls(false);
+      }, 10000); // 10 seconds after mouse leaves
+
+      return () => clearTimeout(timer);
+    }
+  }, [isHoveringControls, showControls]);
+
+  // Handle mouse events for controls
+  const handleControlsMouseEnter = () => {
+    setIsHoveringControls(true);
+    setShowControls(true);
+  };
+
+  const handleControlsMouseLeave = () => {
+    setIsHoveringControls(false);
+  };
+
   return (
     <div className="relative overflow-hidden h-screen px-4 bg-background">
       {/* Scroll Controls */}
-      <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 bg-background/90 backdrop-blur-sm border rounded-lg p-3">
+      <div 
+        className={`absolute top-4 right-4 z-20 flex flex-col gap-2 bg-background/90 backdrop-blur-sm border rounded-lg p-3 transition-opacity duration-1000 ${
+          showControls ? 'opacity-100' : 'opacity-5'
+        }`}
+        onMouseEnter={handleControlsMouseEnter}
+        onMouseLeave={handleControlsMouseLeave}
+      >
         <div className="flex items-center gap-2 text-sm font-medium text-foreground">
           Direction:
           <Button
