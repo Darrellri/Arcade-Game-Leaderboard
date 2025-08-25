@@ -698,7 +698,7 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
   const [scrollPositionX, setScrollPositionX] = useState(0);
   const [scrollPositionY, setScrollPositionY] = useState(0);
   const [visibleGames, setVisibleGames] = useState<Game[]>([]);
-  const [scrollDirection, setScrollDirection] = useState<'up' | 'down' | 'left' | 'right'>('up');
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
   const [scrollSpeed, setScrollSpeed] = useState(1); // 1 = normal, 0.5 = slow, 2 = fast
   const [isInitialized, setIsInitialized] = useState(false);
   const [showControls, setShowControls] = useState(true);
@@ -710,65 +710,43 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
   // Create infinite loop of games and initialize centered position
   useEffect(() => {
     if (games.length > 0) {
-      // Create a larger grid for multi-directional infinite scrolling
-      const extendedGames = [];
-      for (let i = 0; i < 9; i++) { // 3x3 grid of game arrays
-        extendedGames.push(...games);
-      }
+      const extendedGames = [...games, ...games, ...games]; // Triple the array for seamless loop
       setVisibleGames(extendedGames);
       
       // Calculate center position for first game
       const screenHeight = window.innerHeight;
-      const screenWidth = window.innerWidth;
-      const centerPositionY = (screenHeight / 2) - (gameHeight / 2) - 300;
-      const centerPositionX = (screenWidth / 2) - (gameWidth / 2);
-      setScrollPositionY(-centerPositionY);
-      setScrollPositionX(-centerPositionX);
+      const centerPosition = (screenHeight / 2) - (gameHeight / 2) - 300; // 300 is the padding offset
+      setScrollPositionY(-centerPosition);
       
       // Start fade-in animation after a brief delay
       setTimeout(() => {
         setIsInitialized(true);
       }, 100);
     }
-  }, [games, gameHeight, gameWidth]);
+  }, [games, gameHeight]);
 
   // Auto-scroll effect with configurable direction and speed - starts after initialization
   useEffect(() => {
     if (!isInitialized) return;
     
     const scrollTimer = setInterval(() => {
-      const baseSpeed = 1.2;
-      const adjustedSpeed = baseSpeed * scrollSpeed;
-      const resetPoint = games.length * (gameSpacing + gameHeight); // Reset point for seamless loop
-      const resetPointX = games.length * (gameSpacing + gameWidth);
-      
-      if (scrollDirection === 'up' || scrollDirection === 'down') {
-        setScrollPositionY(prev => {
-          const movement = scrollDirection === 'up' ? adjustedSpeed : -adjustedSpeed;
-          const newPosition = prev + movement;
-          
-          if (scrollDirection === 'up') {
-            return newPosition >= resetPoint ? 0 : newPosition;
-          } else {
-            return newPosition <= -resetPoint ? 0 : newPosition;
-          }
-        });
-      } else {
-        setScrollPositionX(prev => {
-          const movement = scrollDirection === 'left' ? adjustedSpeed : -adjustedSpeed;
-          const newPosition = prev + movement;
-          
-          if (scrollDirection === 'left') {
-            return newPosition >= resetPointX ? 0 : newPosition;
-          } else {
-            return newPosition <= -resetPointX ? 0 : newPosition;
-          }
-        });
-      }
+      setScrollPositionY(prev => {
+        const baseSpeed = 1.2;
+        const adjustedSpeed = baseSpeed * scrollSpeed;
+        const movement = scrollDirection === 'up' ? adjustedSpeed : -adjustedSpeed;
+        const newPosition = prev + movement;
+        const resetPoint = games.length * (gameSpacing + gameHeight); // Game height + spacing
+        
+        if (scrollDirection === 'up') {
+          return newPosition >= resetPoint ? 0 : newPosition;
+        } else {
+          return newPosition <= -resetPoint ? 0 : newPosition;
+        }
+      });
     }, 40); // Smooth scrolling
 
     return () => clearInterval(scrollTimer);
-  }, [games.length, gameSpacing, scrollDirection, scrollSpeed, isInitialized, gameHeight, gameWidth]);
+  }, [games.length, gameSpacing, scrollDirection, scrollSpeed, isInitialized, gameHeight]);
 
   // Timed fade for controls - fade after 10 seconds
   useEffect(() => {
@@ -828,22 +806,6 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
           >
             ↓ Down
           </Button>
-          <Button
-            variant={scrollDirection === 'left' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setScrollDirection('left')}
-            className="h-7 px-2"
-          >
-            ← Left
-          </Button>
-          <Button
-            variant={scrollDirection === 'right' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setScrollDirection('right')}
-            className="h-7 px-2"
-          >
-            → Right
-          </Button>
         </div>
         <div className="flex items-center gap-2 text-sm font-medium text-foreground">
           Speed:
@@ -884,40 +846,30 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
         </div>
       ) : (
         <div 
-          className={`transition-opacity duration-1000 ${isInitialized ? 'opacity-100' : 'opacity-0'}`}
+          className={`space-y-4 w-full max-w-[1200px] mx-auto transition-opacity duration-1000 ${isInitialized ? 'opacity-100' : 'opacity-0'}`}
           style={{ 
-            transform: `translate(-${scrollPositionX}px, -${scrollPositionY}px)`,
-            paddingTop: `300px`, // Start 300 pixels higher
-            paddingLeft: `300px`, // Start 300 pixels left for horizontal scrolling
-            display: 'grid',
-            gridTemplateColumns: `repeat(${Math.ceil(Math.sqrt(visibleGames.length))}, 1fr)`,
-            gap: `${gameSpacing}px`,
-            width: 'max-content'
+            transform: `translateY(-${scrollPositionY}px)`,
+            paddingTop: `300px` // Start 300 pixels higher
           }}
         >
-          {visibleGames.map((game, index) => {
-            const row = Math.floor(index / Math.ceil(Math.sqrt(visibleGames.length)));
-            const col = index % Math.ceil(Math.sqrt(visibleGames.length));
-            return (
-              <div 
-                key={`${game.id}-${index}`}
-                className="flex justify-center"
-                style={{ 
-                  width: `${gameWidth}px`,
-                  minWidth: `${gameWidth}px`
-                }}
-              >
-                <ScrollMarquee 
-                  game={game} 
-                  className="w-full max-w-[1188px]"
-                  scrollPosition={scrollDirection === 'up' || scrollDirection === 'down' ? scrollPositionY : scrollPositionX}
-                  gameIndex={index}
-                  gameSpacing={gameSpacing}
-                  gameHeight={gameHeight}
-                />
-              </div>
-            );
-          })}
+          {visibleGames.map((game, index) => (
+            <div 
+              key={`${game.id}-${index}`}
+              className="flex justify-center w-full"
+              style={{ 
+                marginBottom: `${gameSpacing}px`
+              }}
+            >
+              <ScrollMarquee 
+                game={game} 
+                className="w-full"
+                scrollPosition={scrollPositionY}
+                gameIndex={index}
+                gameSpacing={gameSpacing}
+                gameHeight={gameHeight}
+              />
+            </div>
+          ))}
         </div>
       )}
     </div>
