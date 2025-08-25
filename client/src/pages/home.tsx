@@ -1298,7 +1298,7 @@ export default function Home() {
             <img 
               src="/arcade-leaderboard-logo.png" 
               alt="Arcade Leaderboard" 
-              className="w-48 h-48 sm:w-58 sm:h-58 object-contain" 
+              className="w-48 h-48 sm:w-58 sm:h-58 md:w-72 md:h-72 object-contain" 
             />
           </div>
         </div>
@@ -1349,7 +1349,7 @@ export default function Home() {
             <img 
               src="/arcade-leaderboard-logo.png" 
               alt="Arcade Leaderboard" 
-              className="h-12 w-auto"
+              className="h-12 w-auto md:h-18"
             />
             <p className="text-sm text-primary">
               {venueSettings?.name || "Winona Axe and Arcade"} • High Score Tracking
