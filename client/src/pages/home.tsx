@@ -622,7 +622,7 @@ function DualView({ games, animationsEnabled, hideHeader }: {
             <FullSizeMarquee 
               game={game} 
               animationKey={animationKey + index}
-              delay={index === 0 ? 1000 : 2000} // First game after 1s, second after 2s
+              delay={index === 0 ? 1000 : 2500} // First game after 1s, second after 2.5s (1.5s gap)
               className={`w-full ${animationsEnabled ? '' : 'animation-none'}`}
             />
           </div>
