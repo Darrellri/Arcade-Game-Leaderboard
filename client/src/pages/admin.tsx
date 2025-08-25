@@ -316,6 +316,23 @@ export default function Admin() {
     scrollViewStickyHeader: true,
     scrollViewLazyLoad: false,
     scrollViewSize: "extra-large",
+    
+    // List View Settings
+    listViewScrollDirection: "up",
+    listViewSpeed: 50,
+    listViewSpacing: 20,
+    listViewAnimations: true,
+    listViewHideHeader: false,
+    listViewSize: "large",
+    
+    // Grid View Settings
+    gridViewScrollDirection: "up",
+    gridViewSpeed: 75,
+    gridViewColumns: 3,
+    gridViewSpacing: 25,
+    gridViewAnimations: true,
+    gridViewHideHeader: false,
+    gridViewSize: "normal",
   });
 
   // Fetch venue settings
@@ -356,6 +373,21 @@ export default function Admin() {
         scrollViewStickyHeader: venueSettings.scrollViewStickyHeader !== false,
         scrollViewLazyLoad: venueSettings.scrollViewLazyLoad || false,
         scrollViewSize: venueSettings.scrollViewSize || "extra-large",
+        
+        listViewScrollDirection: venueSettings.listViewScrollDirection || "up",
+        listViewSpeed: venueSettings.listViewSpeed || 50,
+        listViewSpacing: venueSettings.listViewSpacing || 20,
+        listViewAnimations: venueSettings.listViewAnimations !== false,
+        listViewHideHeader: venueSettings.listViewHideHeader || false,
+        listViewSize: venueSettings.listViewSize || "large",
+        
+        gridViewScrollDirection: venueSettings.gridViewScrollDirection || "up",
+        gridViewSpeed: venueSettings.gridViewSpeed || 75,
+        gridViewColumns: venueSettings.gridViewColumns || 3,
+        gridViewSpacing: venueSettings.gridViewSpacing || 25,
+        gridViewAnimations: venueSettings.gridViewAnimations !== false,
+        gridViewHideHeader: venueSettings.gridViewHideHeader || false,
+        gridViewSize: venueSettings.gridViewSize || "normal",
       });
       
       console.log("Initialized background override:", venueSettings.backgroundOverride);
@@ -1328,6 +1360,196 @@ export default function Admin() {
                   </div>
                 </div>
 
+                {/* List View Settings */}
+                <div className="border rounded-lg p-4 space-y-4">
+                  <h4 className="font-medium text-base">List View (Vertical list layout)</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Scroll Direction</Label>
+                      <select 
+                        value={displayViewSettings.listViewScrollDirection || 'up'}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, listViewScrollDirection: e.target.value }))}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value="up">Scroll Up</option>
+                        <option value="down">Scroll Down</option>
+                        <option value="up-down">Scroll Up then Down</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Scroll Speed</Label>
+                      <select 
+                        value={displayViewSettings.listViewSpeed || 50}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, listViewSpeed: Number(e.target.value) }))}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value={25}>Very Fast (25ms)</option>
+                        <option value={50}>Fast (50ms)</option>
+                        <option value={75}>Medium (75ms)</option>
+                        <option value={100}>Slow (100ms)</option>
+                        <option value={150}>Very Slow (150ms)</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Item Spacing</Label>
+                      <input 
+                        type="number" 
+                        value={displayViewSettings.listViewSpacing || 20}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, listViewSpacing: Number(e.target.value) }))}
+                        min={10}
+                        max={100}
+                        step={5}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      />
+                      <p className="text-xs text-muted-foreground">Pixels between list items (10-100)</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        <input 
+                          type="checkbox" 
+                          checked={displayViewSettings.listViewAnimations !== false}
+                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, listViewAnimations: e.target.checked }))}
+                          className="rounded" 
+                        />
+                        Enable Animations
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Fade-in effects as items scroll into view</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        <input 
+                          type="checkbox" 
+                          checked={displayViewSettings.listViewHideHeader || false}
+                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, listViewHideHeader: e.target.checked }))}
+                          className="rounded" 
+                        />
+                        Hide Header/Navigation
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Hide leaderboard name and controls</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Display Size</Label>
+                      <select 
+                        value={displayViewSettings.listViewSize || 'large'}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, listViewSize: e.target.value }))}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value="normal">Regular Size</option>
+                        <option value="large">Large (1.3x) - Default</option>
+                        <option value="extra-large">Extra Large (1.5x)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Grid View Settings */}
+                <div className="border rounded-lg p-4 space-y-4">
+                  <h4 className="font-medium text-base">Grid View (Card grid layout)</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Scroll Direction</Label>
+                      <select 
+                        value={displayViewSettings.gridViewScrollDirection || 'up'}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, gridViewScrollDirection: e.target.value }))}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value="up">Scroll Up</option>
+                        <option value="down">Scroll Down</option>
+                        <option value="up-down">Scroll Up then Down</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Scroll Speed</Label>
+                      <select 
+                        value={displayViewSettings.gridViewSpeed || 75}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, gridViewSpeed: Number(e.target.value) }))}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value={25}>Very Fast (25ms)</option>
+                        <option value={50}>Fast (50ms)</option>
+                        <option value={75}>Medium (75ms)</option>
+                        <option value={100}>Slow (100ms)</option>
+                        <option value={150}>Very Slow (150ms)</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Grid Columns</Label>
+                      <select 
+                        value={displayViewSettings.gridViewColumns || 3}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, gridViewColumns: Number(e.target.value) }))}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value={2}>2 Columns</option>
+                        <option value={3}>3 Columns - Default</option>
+                        <option value={4}>4 Columns</option>
+                        <option value={5}>5 Columns</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Card Spacing</Label>
+                      <input 
+                        type="number" 
+                        value={displayViewSettings.gridViewSpacing || 25}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, gridViewSpacing: Number(e.target.value) }))}
+                        min={10}
+                        max={50}
+                        step={5}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      />
+                      <p className="text-xs text-muted-foreground">Pixels between cards (10-50)</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        <input 
+                          type="checkbox" 
+                          checked={displayViewSettings.gridViewAnimations !== false}
+                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, gridViewAnimations: e.target.checked }))}
+                          className="rounded" 
+                        />
+                        Enable Animations
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Hover and scroll animation effects</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        <input 
+                          type="checkbox" 
+                          checked={displayViewSettings.gridViewHideHeader || false}
+                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, gridViewHideHeader: e.target.checked }))}
+                          className="rounded" 
+                        />
+                        Hide Header/Navigation
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Hide leaderboard name and controls</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Display Size</Label>
+                      <select 
+                        value={displayViewSettings.gridViewSize || 'normal'}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, gridViewSize: e.target.value }))}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value="normal">Regular Size - Default</option>
+                        <option value="large">Large (1.3x)</option>
+                        <option value="extra-large">Extra Large (1.5x)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Animation System */}
                 <div className="border rounded-lg p-4 space-y-4">
                   <h4 className="font-medium text-base">Animation System</h4>
@@ -1407,7 +1629,9 @@ export default function Admin() {
                     <br />• <strong>Dual View:</strong> Shows 2 games side by side, cycles through all game pairs
                     <br />• <strong>Single View:</strong> Shows 1 large game centered, cycles through each game individually  
                     <br />• <strong>Scroll View:</strong> Shows all games in infinite vertical scroll with configurable spacing
-                    <br /><br />All modes support animations, header hiding, and lazy loading for optimal performance.
+                    <br />• <strong>List View:</strong> Shows games in a vertical list format with customizable scroll direction
+                    <br />• <strong>Grid View:</strong> Shows games in a responsive grid layout with adjustable columns
+                    <br /><br />All modes support animations, header hiding, scroll direction controls, and size customization for optimal performance and display flexibility.
                   </div>
                 </div>
 
