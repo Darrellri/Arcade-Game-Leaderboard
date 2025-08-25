@@ -843,7 +843,7 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
         </div>
       ) : (
         <div 
-          className={`space-y-4 w-full max-w-[1200px] mx-auto transition-opacity duration-1000 ${isInitialized ? 'opacity-100' : 'opacity-0'}`}
+          className={`w-full max-w-[1200px] mx-auto transition-opacity duration-1000 ${isInitialized ? 'opacity-100' : 'opacity-0'}`}
           style={{ 
             transform: `translateY(-${scrollPositionY}px)`,
             paddingTop: `300px` // Start 300 pixels higher
