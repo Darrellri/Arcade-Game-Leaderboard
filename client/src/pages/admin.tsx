@@ -1109,252 +1109,72 @@ export default function Admin() {
             </CardContent>
           </Card>
 
-          {/* Custom Background Color */}
-          <Card id="background-color-section">
+          {/* Display View Options */}
+          <Card id="display-view-section">
             <CardHeader>
-              <CardTitle className="flex items-center gap-4">
-                {venueSettings?.logoUrl && (
-                  <img 
-                    src={venueSettings.logoUrl} 
-                    alt="Venue Logo"
-                    className="w-[150px] h-auto object-contain"
-                  />
-                )}
-                <div className="flex items-center gap-2">
-                  <div className="p-1.5 rounded-lg bg-secondary/50">
-                    <Palette className="h-4 w-4" />
-                  </div>
-                  Custom Background Color
-                </div>
-              </CardTitle>
-              <CardDescription>
-                Set a specific background color that overrides any theme
-              </CardDescription>
+              <CardTitle>Display View Options</CardTitle>
+              <CardDescription>Configure settings for the three display modes: Single View, Dual View, and Scroll View</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="space-y-4">
-                {/* Enable/Disable Toggle */}
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="customBackgroundEnabled"
-                    checked={localBackgroundOverride}
-                    onCheckedChange={(checked) => {
-                      setLocalBackgroundOverride(!!checked);
-                      setHasUnsavedChanges(true);
-                      
-                      if (!checked && venueSettings) {
-                        // Reset to theme default
-                        document.documentElement.style.removeProperty('background-color');
-                        document.documentElement.style.removeProperty('color');
-                        document.body.style.removeProperty('background-color');
-                        document.body.style.removeProperty('color');
-                      }
-                    }}
-                  />
-                  <Label htmlFor="customBackgroundEnabled" className="text-sm font-medium">
-                    Use custom background color
-                  </Label>
-                </div>
+              <div className="space-y-6">
 
-                {localBackgroundOverride && (
-                  <div className="space-y-4">
-                    {/* Color Input */}
+                {/* Single View Settings */}
+                <div className="border rounded-lg p-4 space-y-4">
+                  <h4 className="font-medium text-base">Single View (One large game centered)</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label className="text-sm font-medium">Background Color</Label>
-                      <div className="flex items-center gap-3">
-                        <input
-                          type="color"
-                          value={localCustomBackgroundColor}
-                          onChange={(e) => {
-                            setLocalCustomBackgroundColor(e.target.value);
-                            setHasUnsavedChanges(true);
-                            
-                            // Apply immediately as preview to both html and body
-                            document.documentElement.style.setProperty('background-color', e.target.value);
-                            document.body.style.setProperty('background-color', e.target.value);
-                            
-                            const rgb = hexToRgb(e.target.value);
-                            if (rgb) {
-                              const { r, g, b } = rgb;
-                              const hsl = rgbToHsl(r, g, b);
-                              const lightness = hsl.l;
-                              
-                              // Set foreground color based on lightness
-                              const textColor = lightness > 0.5 ? '#000000' : '#ffffff';
-                              document.documentElement.style.setProperty('color', textColor);
-                              document.body.style.setProperty('color', textColor);
-                            }
-                          }}
-                          className="w-12 h-12 rounded border cursor-pointer"
+                      <Label className="text-sm font-medium">Transition Speed</Label>
+                      <select 
+                        value={displayViewSettings.singleViewSpeed}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, singleViewSpeed: Number(e.target.value) }))}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value={4}>Fast (4 seconds)</option>
+                        <option value={6}>Medium (6 seconds)</option>
+                        <option value={10}>Slow (10 seconds)</option>
+                        <option value={15}>Very Slow (15 seconds)</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        <input 
+                          type="checkbox" 
+                          checked={displayViewSettings.singleViewAnimations}
+                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, singleViewAnimations: e.target.checked }))}
+                          className="rounded" 
                         />
-                        <div className="flex-1">
-                          <input
-                            type="text"
-                            value={localCustomBackgroundColor}
-                            onChange={(e) => {
-                              setLocalCustomBackgroundColor(e.target.value);
-                              setHasUnsavedChanges(true);
-                              
-                              // Apply immediately as preview if valid hex
-                              if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
-                                document.documentElement.style.setProperty('background-color', e.target.value);
-                                document.body.style.setProperty('background-color', e.target.value);
-                                
-                                const rgb = hexToRgb(e.target.value);
-                                if (rgb) {
-                                  const { r, g, b } = rgb;
-                                  const hsl = rgbToHsl(r, g, b);
-                                  const lightness = hsl.l;
-                                  
-                                  const textColor = lightness > 0.5 ? '#000000' : '#ffffff';
-                                  document.documentElement.style.setProperty('color', textColor);
-                                  document.body.style.setProperty('color', textColor);
-                                }
-                              }
-                            }}
-                            placeholder="#000000"
-                            className="w-full px-3 py-2 border border-input rounded-md text-sm"
-                          />
-                        </div>
-                      </div>
+                        Enable Animations
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Random animation effects when games change</p>
                     </div>
 
-                    {/* Preview */}
-                    <div className="p-4 border rounded-lg" style={{ backgroundColor: localCustomBackgroundColor }}>
-                      <div className="text-center">
-                        <div className="text-sm font-medium mb-1">Preview</div>
-                        <div className="text-xs opacity-70">This is how your background will look</div>
-                      </div>
-                    </div>
-
-                    {/* Common Color Presets */}
                     <div className="space-y-2">
-                      <Label className="text-sm font-medium">Quick Colors</Label>
-                      <div className="flex gap-2 flex-wrap">
-                        {[
-                          { name: 'Black', color: '#000000' },
-                          { name: 'Very Dark Gray', color: '#1C1C1C' },
-                          { name: 'Dark Gray', color: '#383838' },
-                          { name: 'Medium Dark', color: '#555555' },
-                          { name: 'Medium', color: '#717171' },
-                          { name: 'Medium Light', color: '#8D8D8D' },
-                          { name: 'Light Gray', color: '#AAAAAA' },
-                          { name: 'Very Light', color: '#C6C6C6' },
-                          { name: 'Almost White', color: '#E2E2E2' },
-                          { name: 'White', color: '#FFFFFF' },
-                        ].map((preset) => (
-                          <button
-                            key={preset.name}
-                            onClick={() => {
-                              setLocalCustomBackgroundColor(preset.color);
-                              setHasUnsavedChanges(true);
-                              
-                              // Apply immediately as preview to both html and body
-                              document.documentElement.style.setProperty('background-color', preset.color);
-                              document.body.style.setProperty('background-color', preset.color);
-                              
-                              const rgb = hexToRgb(preset.color);
-                              if (rgb) {
-                                const { r, g, b } = rgb;
-                                const hsl = rgbToHsl(r, g, b);
-                                const lightness = hsl.l;
-                                
-                                const textColor = lightness > 0.5 ? '#000000' : '#ffffff';
-                                document.documentElement.style.setProperty('color', textColor);
-                                document.body.style.setProperty('color', textColor);
-                              }
-                            }}
-                            className="w-8 h-8 rounded border-2 border-muted hover:border-primary transition-colors"
-                            style={{ backgroundColor: preset.color }}
-                            title={preset.name}
-                          />
-                        ))}
-                      </div>
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        <input 
+                          type="checkbox" 
+                          checked={displayViewSettings.singleViewHideHeader}
+                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, singleViewHideHeader: e.target.checked }))}
+                          className="rounded" 
+                        />
+                        Hide Header/Navigation
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Hide leaderboard name and controls</p>
                     </div>
-                  </div>
-                )}
 
-                {/* Current Status */}
-                <div className="p-3 bg-muted/30 rounded-lg">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium">Current Background:</span>
-                    <div className="flex items-center gap-2">
-                      {!localBackgroundOverride ? (
-                        <span className="text-sm">Using theme default</span>
-                      ) : (
-                        <>
-                          <div 
-                            className="w-4 h-4 rounded border"
-                            style={{ backgroundColor: localCustomBackgroundColor }}
-                          />
-                          <span className="text-sm font-mono">{localCustomBackgroundColor}</span>
-                        </>
-                      )}
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Display Size</Label>
+                      <select 
+                        value={displayViewSettings.singleViewSize}
+                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, singleViewSize: e.target.value }))}
+                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
+                      >
+                        <option value="normal">Regular Size</option>
+                        <option value="large">Large (1.3x)</option>
+                        <option value="extra-large">Extra Large (1.5x) - Default</option>
+                      </select>
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              {hasUnsavedChanges && (
-                <div className="flex items-center justify-between p-3 bg-amber-50 border border-amber-200 rounded-lg">
-                  <div className="flex items-center gap-2 text-sm text-amber-800">
-                    <AlertCircle className="w-4 h-4" />
-                    Custom background color changes need to be saved
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        if (venueSettings) {
-                          setLocalBackgroundOverride(venueSettings.backgroundOverride || false);
-                          setLocalCustomBackgroundColor(venueSettings.customBackgroundColor || '#000000');
-                          setHasUnsavedChanges(false);
-                          // Reset preview
-                          document.documentElement.style.removeProperty('background-color');
-                          document.documentElement.style.removeProperty('color');
-                          document.body.style.removeProperty('background-color');
-                          document.body.style.removeProperty('color');
-                        }
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      size="sm"
-                      onClick={() => {
-                        if (venueSettings) {
-                          updateSettings.mutate({
-                            ...venueSettings,
-                            backgroundOverride: localBackgroundOverride,
-                            customBackgroundColor: localCustomBackgroundColor,
-                          });
-                          setHasUnsavedChanges(false);
-                        }
-                      }}
-                      disabled={updateSettings.isPending}
-                    >
-                      {updateSettings.isPending ? "Saving..." : "Save Changes"}
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {/* Display View Options */}
-              <div id="display-view-section" className="space-y-6">
-                <div className="flex items-center gap-4">
-                  {venueSettings?.logoUrl && (
-                    <img 
-                      src={venueSettings.logoUrl} 
-                      alt="Venue Logo"
-                      className="w-[150px] h-auto object-contain"
-                    />
-                  )}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Display View Options</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Configure settings for the three display modes: Dual View, Single View, and Scroll View
-                    </p>
                   </div>
                 </div>
 
@@ -1408,79 +1228,6 @@ export default function Admin() {
                       <select 
                         value={displayViewSettings.dualViewSize}
                         onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, dualViewSize: e.target.value }))}
-                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
-                      >
-                        <option value="normal">Regular Size</option>
-                        <option value="large">Large (1.3x)</option>
-                        <option value="extra-large">Extra Large (1.5x) - Default</option>
-                      </select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium">Display Size</Label>
-                      <select 
-                        value={displayViewSettings.dualViewSize}
-                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, dualViewSize: e.target.value }))}
-                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
-                      >
-                        <option value="normal">Regular Size</option>
-                        <option value="large">Large (1.3x)</option>
-                        <option value="extra-large">Extra Large (1.5x) - Default</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Single View Settings */}
-                <div className="border rounded-lg p-4 space-y-4">
-                  <h4 className="font-medium text-base">Single View (One large game centered)</h4>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium">Transition Speed</Label>
-                      <select 
-                        value={displayViewSettings.singleViewSpeed}
-                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, singleViewSpeed: Number(e.target.value) }))}
-                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
-                      >
-                        <option value={4}>Fast (4 seconds)</option>
-                        <option value={6}>Medium (6 seconds)</option>
-                        <option value={10}>Slow (10 seconds)</option>
-                        <option value={15}>Very Slow (15 seconds)</option>
-                      </select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium flex items-center gap-2">
-                        <input 
-                          type="checkbox" 
-                          checked={displayViewSettings.singleViewAnimations}
-                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, singleViewAnimations: e.target.checked }))}
-                          className="rounded" 
-                        />
-                        Enable Animations
-                      </Label>
-                      <p className="text-xs text-muted-foreground">Random animation effects when games change</p>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium flex items-center gap-2">
-                        <input 
-                          type="checkbox" 
-                          checked={displayViewSettings.singleViewHideHeader}
-                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, singleViewHideHeader: e.target.checked }))}
-                          className="rounded" 
-                        />
-                        Hide Header/Navigation
-                      </Label>
-                      <p className="text-xs text-muted-foreground">Hide leaderboard name and controls</p>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium">Display Size</Label>
-                      <select 
-                        value={displayViewSettings.singleViewSize}
-                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, singleViewSize: e.target.value }))}
                         className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
                       >
                         <option value="normal">Regular Size</option>
@@ -1690,6 +1437,8 @@ export default function Admin() {
               </div>
             </CardContent>
           </Card>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="venue" className="space-y-6">
@@ -1827,70 +1576,7 @@ export default function Admin() {
                       )}
                     />
 
-                    {/* Weekly Hours Section */}
-                    <div className="space-y-4 pt-4 border-t">
-                      <h4 className="font-medium">Operating Hours</h4>
-                      <div className="grid gap-4">
-                        {[
-                          { key: 'monday', label: 'Monday' },
-                          { key: 'tuesday', label: 'Tuesday' },
-                          { key: 'wednesday', label: 'Wednesday' },
-                          { key: 'thursday', label: 'Thursday' },
-                          { key: 'friday', label: 'Friday' },
-                          { key: 'saturday', label: 'Saturday' },
-                          { key: 'sunday', label: 'Sunday' }
-                        ].map(({ key, label }) => (
-                          <div key={key} className="flex items-center gap-4">
-                            <div className="w-20 text-sm font-medium">{label}</div>
-                            <div className="flex items-center gap-2">
-                              <Input
-                                placeholder="9:00 AM"
-                                className="w-24"
-                                value={form.watch(`weeklyHours.${key}.open`) || ''}
-                                onChange={(e) => {
-                                  const currentHours = form.getValues('weeklyHours') || {};
-                                  const dayHours = currentHours[key] || {};
-                                  form.setValue(`weeklyHours.${key}`, {
-                                    ...dayHours,
-                                    open: e.target.value
-                                  });
-                                }}
-                              />
-                              <span className="text-sm text-muted-foreground">to</span>
-                              <Input
-                                placeholder="5:00 PM"
-                                className="w-24"
-                                value={form.watch(`weeklyHours.${key}.close`) || ''}
-                                onChange={(e) => {
-                                  const currentHours = form.getValues('weeklyHours') || {};
-                                  const dayHours = currentHours[key] || {};
-                                  form.setValue(`weeklyHours.${key}`, {
-                                    ...dayHours,
-                                    close: e.target.value
-                                  });
-                                }}
-                              />
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => {
-                                  form.setValue(`weeklyHours.${key}`, {
-                                    open: 'Closed',
-                                    close: ''
-                                  });
-                                }}
-                              >
-                                Closed
-                              </Button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        Set operating hours for each day of the week. Leave blank for days when closed, or click "Closed" for closed days.
-                      </p>
-                    </div>
+                    {/* TODO: Weekly Hours Section - will be implemented separately */}
 
                     {/* Logo Background Options - moved inside form */}
                     {(logoPreview || animatedLogoPreview) && (
