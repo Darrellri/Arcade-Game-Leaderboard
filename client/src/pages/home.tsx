@@ -238,16 +238,13 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
         </div>
       )}
       
-      {/* Horizontal Score Overlay - Random animation with darker transparency */}
-      {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
-        <div className={`absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm border-t border-primary/20 px-6 py-4 ${getRandomScoreAnimation()}`} 
+      {/* Horizontal Score Overlay - Always visible when score data exists */}
+      {((game.currentHighScore && game.currentHighScore > 0) || (game.topScorerName && game.topScorerName !== 'No scores yet')) && (
+        <div className="absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm border-t border-primary/20 px-6 py-4" 
              style={{ 
                zIndex: 100, 
                borderBottomLeftRadius: '15px', 
-               borderBottomRightRadius: '15px', 
-               animationDelay: '0.5s', 
-               animationFillMode: 'both',
-               animationDuration: '0.8s'
+               borderBottomRightRadius: '15px'
              }}>
           <div className="flex items-center justify-between w-full">
             {/* Left side - Champion info */}
