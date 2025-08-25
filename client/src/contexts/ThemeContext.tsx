@@ -91,7 +91,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
     // Calculate background colors based on theme
     const backgroundLight = newTheme.appearance === 'light' 
-      ? `${hue} ${Math.max(10, saturation * 0.25)}% 96%` // 10% tint: low saturation, very high lightness
+      ? `${hue} ${Math.max(10, saturation * 0.25)}% 77%` // 20% darker: low saturation, reduced lightness (96% - 19% = 77%)
       : '0 0% 100%'; // fallback white
     
     const backgroundDark = newTheme.appearance === 'dark' 
@@ -110,20 +110,20 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         --card: ${newTheme.appearance === 'dark' ? backgroundDark : backgroundLight};
         --card-foreground: ${newTheme.appearance === 'dark' ? '0 0% 98%' : '240 10% 3.9%'};
         
-        --secondary: ${newTheme.appearance === 'dark' ? '240 3.7% 15.9%' : '240 4.8% 95.9%'};
+        --secondary: ${newTheme.appearance === 'dark' ? '240 3.7% 15.9%' : '240 4.8% 76%'};
         --secondary-foreground: ${newTheme.appearance === 'dark' ? '0 0% 98%' : '240 5.9% 10%'};
         
-        --muted: ${newTheme.appearance === 'dark' ? '240 3.7% 15.9%' : '240 4.8% 95.9%'};
+        --muted: ${newTheme.appearance === 'dark' ? '240 3.7% 15.9%' : '240 4.8% 76%'};
         --muted-foreground: ${newTheme.appearance === 'dark' ? '240 5% 64.9%' : '240 3.8% 46.1%'};
         
-        --accent: ${newTheme.appearance === 'dark' ? '240 3.7% 15.9%' : '240 4.8% 95.9%'};
+        --accent: ${newTheme.appearance === 'dark' ? '240 3.7% 15.9%' : '240 4.8% 76%'};
         --accent-foreground: ${newTheme.appearance === 'dark' ? '0 0% 98%' : '240 5.9% 10%'};
         
         --destructive: ${newTheme.appearance === 'dark' ? '0 62.8% 30.6%' : '0 84.2% 60.2%'};
         --destructive-foreground: ${newTheme.appearance === 'dark' ? '0 0% 98%' : '0 0% 98%'};
         
-        --border: ${newTheme.appearance === 'dark' ? '240 3.7% 15.9%' : '240 5.9% 90%'};
-        --input: ${newTheme.appearance === 'dark' ? '240 3.7% 15.9%' : '240 5.9% 90%'};
+        --border: ${newTheme.appearance === 'dark' ? '240 3.7% 15.9%' : '240 5.9% 72%'};
+        --input: ${newTheme.appearance === 'dark' ? '240 3.7% 15.9%' : '240 5.9% 72%'};
         --ring: ${hue} ${saturation}% ${lightness}%;
         
         --radius: ${newTheme.radius}rem;

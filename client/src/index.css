@@ -205,6 +205,12 @@
     to { transform: translateY(0); opacity: 1; }
   }
 
+  /* High score overlay styling */
+  .high-score-overlay {
+    border-radius: 15px;
+    border: 0.5px solid hsl(var(--primary));
+  }
+
   @keyframes slideInDown {
     from { transform: translateY(-100%); opacity: 0; }
     to { transform: translateY(0); opacity: 1; }
