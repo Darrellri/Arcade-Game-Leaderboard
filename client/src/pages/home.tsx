@@ -1170,7 +1170,7 @@ export default function Home() {
           {/* Navigation Elements with Timed Fade */}
           <div 
             className={`flex flex-col gap-2 transition-opacity duration-1000 group ${
-              showLogoOverlay ? 'opacity-20 hover:opacity-100' : 'opacity-100'
+              showLogoOverlay ? 'opacity-5 hover:opacity-100' : 'opacity-100'
             }`}
           >
             {/* View Mode Buttons Row */}
@@ -1261,7 +1261,7 @@ export default function Home() {
           {/* Centered Arcade Leaderboard Logo Overlay */}
           <div 
             className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-1000 ${
-              showLogoOverlay ? 'opacity-50' : 'opacity-0'
+              showLogoOverlay ? 'opacity-100' : 'opacity-0'
             }`}
           >
             <img 
