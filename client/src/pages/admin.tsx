@@ -1778,12 +1778,119 @@ export default function Admin() {
                         <FormItem>
                           <FormLabel>Address</FormLabel>
                           <FormControl>
-                            <Input {...field} placeholder="123 Main Street, City, State" />
+                            <Input {...field} placeholder="123 Main Street" />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
+
+                    <FormField
+                      control={form.control}
+                      name="cityState"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>City/State</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="City, State ZIP" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="phone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Venue Phone Number</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="(555) 123-4567" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="webAddress"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Web Address</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="https://www.yourwebsite.com" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    {/* Weekly Hours Section */}
+                    <div className="space-y-4 pt-4 border-t">
+                      <h4 className="font-medium">Operating Hours</h4>
+                      <div className="grid gap-4">
+                        {[
+                          { key: 'monday', label: 'Monday' },
+                          { key: 'tuesday', label: 'Tuesday' },
+                          { key: 'wednesday', label: 'Wednesday' },
+                          { key: 'thursday', label: 'Thursday' },
+                          { key: 'friday', label: 'Friday' },
+                          { key: 'saturday', label: 'Saturday' },
+                          { key: 'sunday', label: 'Sunday' }
+                        ].map(({ key, label }) => (
+                          <div key={key} className="flex items-center gap-4">
+                            <div className="w-20 text-sm font-medium">{label}</div>
+                            <div className="flex items-center gap-2">
+                              <Input
+                                placeholder="9:00 AM"
+                                className="w-24"
+                                value={form.watch(`weeklyHours.${key}.open`) || ''}
+                                onChange={(e) => {
+                                  const currentHours = form.getValues('weeklyHours') || {};
+                                  const dayHours = currentHours[key] || {};
+                                  form.setValue(`weeklyHours.${key}`, {
+                                    ...dayHours,
+                                    open: e.target.value
+                                  });
+                                }}
+                              />
+                              <span className="text-sm text-muted-foreground">to</span>
+                              <Input
+                                placeholder="5:00 PM"
+                                className="w-24"
+                                value={form.watch(`weeklyHours.${key}.close`) || ''}
+                                onChange={(e) => {
+                                  const currentHours = form.getValues('weeklyHours') || {};
+                                  const dayHours = currentHours[key] || {};
+                                  form.setValue(`weeklyHours.${key}`, {
+                                    ...dayHours,
+                                    close: e.target.value
+                                  });
+                                }}
+                              />
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  form.setValue(`weeklyHours.${key}`, {
+                                    open: 'Closed',
+                                    close: ''
+                                  });
+                                }}
+                              >
+                                Closed
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Set operating hours for each day of the week. Leave blank for days when closed, or click "Closed" for closed days.
+                      </p>
+                    </div>
 
                     {/* Logo Background Options - moved inside form */}
                     {(logoPreview || animatedLogoPreview) && (
@@ -1823,6 +1930,30 @@ export default function Admin() {
                               <p className="text-xs text-muted-foreground">
                                 Background color for the logo area (works with both images and videos)
                               </p>
+                            </FormItem>
+                          )}
+                        />
+
+                        {/* Hide Logobox Border Checkbox */}
+                        <FormField
+                          control={form.control}
+                          name="hideLogoBorderShadow"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value === "true"}
+                                  onCheckedChange={(checked) =>
+                                    field.onChange(checked ? "true" : "false")
+                                  }
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Hide logobox border</FormLabel>
+                                <p className="text-xs text-muted-foreground">
+                                  Remove the border around the logo display area
+                                </p>
+                              </div>
                             </FormItem>
                           )}
                         />
