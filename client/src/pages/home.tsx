@@ -960,7 +960,7 @@ export default function Home() {
   const [viewMode, setViewMode] = useState<ViewMode>("single");
   const [animationsEnabled, setAnimationsEnabled] = useState(true);
   const [hideHeader, setHideHeader] = useState(false);
-  const [showLogoOverlay, setShowLogoOverlay] = useState(false);
+  const [showLogoOverlay, setShowLogoOverlay] = useState(true);
   const [localGames, setLocalGames] = useState<Game[]>([]);
 
   const { data: games, isLoading: gamesLoading } = useQuery<Game[]>({
@@ -979,14 +979,8 @@ export default function Home() {
     }
   }, [games]);
 
-  // Timed UI transition - fade out nav elements and fade in logo after 10 seconds
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowLogoOverlay(true);
-    }, 10000); // 10 seconds
-
-    return () => clearTimeout(timer);
-  }, []);
+  // Logo overlay is always shown immediately
+  // No timer needed as per user request
 
   // Drag and drop sensors
   const sensors = useSensors(
@@ -1170,7 +1164,7 @@ export default function Home() {
           {/* Navigation Elements with Timed Fade */}
           <div 
             className={`flex flex-col gap-2 transition-opacity duration-1000 group ${
-              showLogoOverlay ? 'opacity-5 hover:opacity-100' : 'opacity-100'
+              showLogoOverlay ? 'opacity-0 hover:opacity-100' : 'opacity-100'
             }`}
           >
             {/* View Mode Buttons Row */}
@@ -1267,7 +1261,7 @@ export default function Home() {
             <img 
               src="/arcade-leaderboard-logo.png" 
               alt="Arcade Leaderboard" 
-              className="w-40 h-40 sm:w-48 sm:h-48 object-contain" 
+              className="w-48 h-48 sm:w-58 sm:h-58 object-contain" 
             />
           </div>
         </div>
