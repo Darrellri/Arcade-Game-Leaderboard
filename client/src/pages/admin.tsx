@@ -301,6 +301,7 @@ export default function Admin() {
     dualViewSpeed: 8,
     dualViewAnimations: true,
     dualViewHideHeader: false,
+    dualViewSize: "extra-large",
     
     // Single View Settings
     singleViewSpeed: 6,
@@ -314,6 +315,7 @@ export default function Admin() {
     scrollViewAnimations: true,
     scrollViewStickyHeader: true,
     scrollViewLazyLoad: false,
+    scrollViewSize: "extra-large",
   });
 
   // Fetch venue settings
@@ -1323,19 +1325,6 @@ export default function Admin() {
                         <option value="extra-large">Extra Large (1.5x) - Default</option>
                       </select>
                     </div>
-
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium">Display Size</Label>
-                      <select 
-                        value={displayViewSettings.scrollViewSize}
-                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, scrollViewSize: e.target.value }))}
-                        className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
-                      >
-                        <option value="normal">Regular Size</option>
-                        <option value="large">Large (1.3x)</option>
-                        <option value="extra-large">Extra Large (1.5x) - Default</option>
-                      </select>
-                    </div>
                   </div>
                 </div>
 
@@ -1435,8 +1424,6 @@ export default function Admin() {
                   </Button>
                 </div>
               </div>
-            </CardContent>
-          </Card>
             </CardContent>
           </Card>
         </TabsContent>
