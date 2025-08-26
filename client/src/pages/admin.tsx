@@ -82,7 +82,9 @@ import {
   Palette,
   Sun,
   Moon,
-  AlertCircle
+  AlertCircle,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 import { 
   Dialog,
@@ -298,6 +300,24 @@ export default function Admin() {
   // Countdown timer for settings confirmation
   const [showCountdown, setShowCountdown] = useState(false);
   const [countdown, setCountdown] = useState(5);
+
+  // Collapsible sections state
+  const [collapsedSections, setCollapsedSections] = useState({
+    colorSchemes: false,
+    displayViewOptions: false,
+    singleView: false,
+    dualView: false,
+    scrollView: false,
+    animationSystem: false,
+    notes: false,
+  });
+
+  const toggleSection = (section: keyof typeof collapsedSections) => {
+    setCollapsedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
 
   // Display View Options state
   const [displayViewSettings, setDisplayViewSettings] = useState({
@@ -1009,30 +1029,45 @@ export default function Admin() {
           {/* Color Schemes Section */}
           <Card id="color-schemes-section" className="overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-muted/50 to-background border-b">
-              <CardTitle className="flex items-center gap-4">
-                {venueSettings?.logoUrl && (
-                  <img 
-                    src={venueSettings.logoUrl} 
-                    alt="Venue Logo"
-                    className="w-[150px] h-auto object-contain"
-                  />
-                )}
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-primary/10">
-                    <Palette className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <div className="text-lg font-bold">Color Schemes</div>
-                    <div className="text-sm text-muted-foreground font-normal">
-                      Transform your arcade's visual identity
+              <CardTitle className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  {venueSettings?.logoUrl && (
+                    <img 
+                      src={venueSettings.logoUrl} 
+                      alt="Venue Logo"
+                      className="w-[150px] h-auto object-contain"
+                    />
+                  )}
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-primary/10">
+                      <Palette className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <div className="text-lg font-bold">Color Schemes</div>
+                      <div className="text-sm text-muted-foreground font-normal">
+                        Transform your arcade's visual identity
+                      </div>
                     </div>
                   </div>
                 </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => toggleSection('colorSchemes')}
+                  className="h-8 w-8 p-0"
+                >
+                  {collapsedSections.colorSchemes ? (
+                    <ChevronDown className="h-6 w-6" />
+                  ) : (
+                    <ChevronUp className="h-6 w-6" />
+                  )}
+                </Button>
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-6">
-              {/* Category Filters */}
-              <div className="mb-6 flex flex-wrap gap-2">
+            {!collapsedSections.colorSchemes && (
+              <CardContent className="p-6">
+                {/* Category Filters */}
+                <div className="mb-6 flex flex-wrap gap-2">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <span className="font-medium">Categories:</span>
                 </div>
@@ -1188,23 +1223,56 @@ export default function Admin() {
                   </Badge>
                 </div>
               </div>
-            </CardContent>
+              </CardContent>
+            )}
           </Card>
 
           {/* Display View Options */}
           <Card id="display-view-section">
             <CardHeader>
-              <CardTitle>Display View Options</CardTitle>
-              <CardDescription>Configure settings for the three display modes: Single View, Dual View, and Scroll View</CardDescription>
+              <CardTitle className="flex items-center justify-between">
+                <div>
+                  <div>Display View Options</div>
+                  <CardDescription className="mt-1">Configure settings for the three display modes: Single View, Dual View, and Scroll View</CardDescription>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => toggleSection('displayViewOptions')}
+                  className="h-8 w-8 p-0"
+                >
+                  {collapsedSections.displayViewOptions ? (
+                    <ChevronDown className="h-6 w-6" />
+                  ) : (
+                    <ChevronUp className="h-6 w-6" />
+                  )}
+                </Button>
+              </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-6">
+            {!collapsedSections.displayViewOptions && (
+              <CardContent className="space-y-6">
+                <div className="space-y-6">
 
-                {/* Single View Settings */}
-                <div className="border rounded-lg p-4 space-y-4">
-                  <h4 className="font-medium text-base">Single View (One large game centered)</h4>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Single View Settings */}
+                  <div className="border rounded-lg p-4 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-medium text-base">Single View (One large game centered)</h4>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => toggleSection('singleView')}
+                        className="h-6 w-6 p-0"
+                      >
+                        {collapsedSections.singleView ? (
+                          <ChevronDown className="h-4 w-4" />
+                        ) : (
+                          <ChevronUp className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                    
+                    {!collapsedSections.singleView && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Transition Speed</Label>
                       <select 
@@ -1256,15 +1324,31 @@ export default function Admin() {
                         <option value="large">Large (1.3x)</option>
                         <option value="extra-large">Extra Large (1.5x) - Default</option>
                       </select>
-                    </div>
+                      </div>
+                      </div>
+                    )}
                   </div>
-                </div>
 
-                {/* Dual View Settings */}
-                <div className="border rounded-lg p-4 space-y-4">
-                  <h4 className="font-medium text-base">Dual View (Two games side by side)</h4>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Dual View Settings */}
+                  <div className="border rounded-lg p-4 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-medium text-base">Dual View (Two games side by side)</h4>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => toggleSection('dualView')}
+                        className="h-6 w-6 p-0"
+                      >
+                        {collapsedSections.dualView ? (
+                          <ChevronDown className="h-4 w-4" />
+                        ) : (
+                          <ChevronUp className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                    
+                    {!collapsedSections.dualView && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Transition Speed</Label>
                       <select 
@@ -1316,15 +1400,31 @@ export default function Admin() {
                         <option value="large">Large (1.3x)</option>
                         <option value="extra-large">Extra Large (1.5x) - Default</option>
                       </select>
-                    </div>
+                      </div>
+                      </div>
+                    )}
                   </div>
-                </div>
 
-                {/* Scroll View Settings */}
-                <div className="border rounded-lg p-4 space-y-4">
-                  <h4 className="font-medium text-base">Scroll View (Infinite vertical scroll)</h4>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Scroll View Settings */}
+                  <div className="border rounded-lg p-4 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-medium text-base">Scroll View (Infinite vertical scroll)</h4>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => toggleSection('scrollView')}
+                        className="h-6 w-6 p-0"
+                      >
+                        {collapsedSections.scrollView ? (
+                          <ChevronDown className="h-4 w-4" />
+                        ) : (
+                          <ChevronUp className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+                    
+                    {!collapsedSections.scrollView && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Scroll Speed</Label>
                       <select 
@@ -1404,11 +1504,12 @@ export default function Admin() {
                         <option value="large">Large (1.3x)</option>
                         <option value="extra-large">Extra Large (1.5x) - Default</option>
                       </select>
-                    </div>
+                      </div>
+                      </div>
+                    )}
                   </div>
-                </div>
 
-                {/* List View Settings */}
+                  {/* List View Settings */}
                 <div className="border rounded-lg p-4 space-y-4">
                   <h4 className="font-medium text-base">List View (Vertical list layout)</h4>
                   
