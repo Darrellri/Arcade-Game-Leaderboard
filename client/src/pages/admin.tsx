@@ -836,14 +836,6 @@ export default function Admin() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => document.getElementById('background-color-section')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="h-7 px-3 text-xs"
-                >
-                  Custom Background Color
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
                   onClick={() => document.getElementById('display-view-section')?.scrollIntoView({ behavior: 'smooth' })}
                   className="h-7 px-3 text-xs"
                 >
