@@ -877,7 +877,7 @@ export default function Admin() {
           <TabsTrigger value="notes">Notes</TabsTrigger>
         </TabsList>
 
-        {/* Admin Dashboard Content */}
+        {/* Admin Dashboard Content */
         <>
         <TabsContent key="games" value="games" className="space-y-6">
           <Card>
