@@ -249,11 +249,13 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
       
       {/* Horizontal Score Overlay - Always visible when score data exists */}
       {((game.currentHighScore && game.currentHighScore > 0) || (game.topScorerName && game.topScorerName !== 'No scores yet')) && (
-        <div className="absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm border-t border-primary/20 px-6 py-4" 
+        <div className="absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm border-t border-primary/20 px-6" 
              style={{ 
                zIndex: 100, 
                borderBottomLeftRadius: '15px', 
-               borderBottomRightRadius: '15px'
+               borderBottomRightRadius: '15px',
+               paddingTop: '30px',
+               paddingBottom: '30px'
              }}>
           <div className="flex items-center justify-between w-full">
             {/* Left side - Champion info */}
@@ -411,13 +413,15 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
           
           {/* Horizontal Score Overlay - Random animation with darker transparency */}
           {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
-            <div className={`absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm border-t border-primary/20 px-6 py-4 ${scoreOverlayVisible && !isExiting ? `${scoreAnimationClass} opacity-100` : 'opacity-0'}`} 
+            <div className={`absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm border-t border-primary/20 px-6 ${scoreOverlayVisible && !isExiting ? `${scoreAnimationClass} opacity-100` : 'opacity-0'}`}
                  style={{ 
                    zIndex: 100, 
                    borderBottomLeftRadius: '15px', 
                    borderBottomRightRadius: '15px',
                    animationDuration: '0.8s',
-                   animationFillMode: 'both'
+                   animationFillMode: 'both',
+                   paddingTop: '30px',
+                   paddingBottom: '30px'
                  }}>
               <div className="flex items-center justify-between w-full">
                 {/* Left side - Champion info */}
