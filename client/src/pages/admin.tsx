@@ -2138,7 +2138,7 @@ export default function Admin() {
                         <li className="text-foreground"><strong className="text-primary">Purpose:</strong> Additional branding or promotional overlays</li>
                         <li className="text-foreground"><strong className="text-primary">Layering:</strong> Displays over marquee image with transparency support</li>
                         <li className="text-foreground"><strong className="text-primary">Recommended Size:</strong> Same as marquee (792x214px)</li>
-                        <li className="text-foreground"><strong className="text-primary">Transparency:</strong> PNG format recommended for alpha channels</li>
+                        <li className="text-foreground"><strong className="text-primary">Transparency:</strong> WEBP or PNG format needed for alpha channels</li>
                         <li className="text-foreground"><strong className="text-primary">Use Cases:</strong> "Coming Soon" badges, special event promotions</li>
                       </ul>
                     </div>
