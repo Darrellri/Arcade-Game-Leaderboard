@@ -295,6 +295,10 @@ export default function Admin() {
   const [localCustomBackgroundColor, setLocalCustomBackgroundColor] = useState('#000000');
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
+  // Countdown timer for settings confirmation
+  const [showCountdown, setShowCountdown] = useState(false);
+  const [countdown, setCountdown] = useState(5);
+
   // Display View Options state
   const [displayViewSettings, setDisplayViewSettings] = useState({
     // Dual View Settings
@@ -705,6 +709,23 @@ export default function Admin() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/settings"] });
+      
+      // Start countdown overlay
+      setShowCountdown(true);
+      setCountdown(5);
+      
+      // Countdown timer
+      let timeLeft = 5;
+      const countdownInterval = setInterval(() => {
+        timeLeft--;
+        setCountdown(timeLeft);
+        
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          setShowCountdown(false);
+        }
+      }, 1000);
+      
       toast({
         title: "Settings Updated",
         description: "Your venue settings have been saved successfully.",
@@ -731,6 +752,23 @@ export default function Admin() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/settings"] });
+      
+      // Start countdown overlay
+      setShowCountdown(true);
+      setCountdown(5);
+      
+      // Countdown timer
+      let timeLeft = 5;
+      const countdownInterval = setInterval(() => {
+        timeLeft--;
+        setCountdown(timeLeft);
+        
+        if (timeLeft <= 0) {
+          clearInterval(countdownInterval);
+          setShowCountdown(false);
+        }
+      }, 1000);
+      
       toast({
         title: "Display Settings Saved",
         description: "All display view settings have been saved successfully.",
@@ -759,7 +797,25 @@ export default function Admin() {
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl space-y-6">
+    <div className="container mx-auto p-6 max-w-7xl space-y-6 relative">
+      {/* Countdown Overlay */}
+      {showCountdown && (
+        <div className="fixed inset-0 z-50 pointer-events-none">
+          <div className="absolute right-8 top-1/2 transform -translate-y-1/2">
+            <div 
+              className="text-9xl font-bold text-primary/20 select-none transition-all duration-1000 ease-in-out"
+              style={{
+                textShadow: '0 0 20px rgba(0,0,0,0.3)',
+                transform: `scale(${1 + (5 - countdown) * 0.1})`,
+                opacity: 0.15 + (5 - countdown) * 0.05
+              }}
+            >
+              {countdown}
+            </div>
+          </div>
+        </div>
+      )}
+      
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <img 
