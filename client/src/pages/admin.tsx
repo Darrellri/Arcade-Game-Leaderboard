@@ -2124,7 +2124,7 @@ export default function Admin() {
                     <div>
                       <h4 className="text-lg font-semibold mb-3 text-foreground">Marquee Image Specifications</h4>
                       <ul className="space-y-2 text-base">
-                        <li className="text-foreground"><strong className="text-primary">Recommended Size:</strong> 400x600px (2:3 aspect ratio)</li>
+                        <li className="text-foreground"><strong className="text-primary">Recommended Size:</strong> 792x214px</li>
                         <li className="text-foreground"><strong className="text-primary">Maximum File Size:</strong> 2MB per image</li>
                         <li className="text-foreground"><strong className="text-primary">Supported Formats:</strong> JPG, PNG, WebP</li>
                         <li className="text-foreground"><strong className="text-primary">Display Context:</strong> Grid view cards, list view thumbnails</li>
