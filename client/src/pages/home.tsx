@@ -131,6 +131,8 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
   const imageUrl = game.imageUrl;
   const [topOverlayVisible, setTopOverlayVisible] = useState(false);
   const [fadeOpacity, setFadeOpacity] = useState(0);
+  const [animationCount, setAnimationCount] = useState(0);
+  const [wasInCenter, setWasInCenter] = useState(false);
 
   // Calculate if this marquee is centered on screen for layer animation trigger
   useEffect(() => {
@@ -172,16 +174,22 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
       const centerThreshold = 50; // Pixels from center to trigger animation
       const isNearCenter = Math.abs(gameCenterPosition - screenCenter) < centerThreshold;
       
-      // Only show overlay when near center and has overlay image
-      if (isNearCenter && game.overlayImageUrl && !topOverlayVisible) {
+      // Trigger animation only once per pass through center
+      if (isNearCenter && game.overlayImageUrl && !wasInCenter && !topOverlayVisible) {
+        setWasInCenter(true);
         setTopOverlayVisible(true);
+        setAnimationCount(prev => prev + 1);
+        
         // Hide overlay after animation duration
         setTimeout(() => {
           setTopOverlayVisible(false);
         }, 1500);
+      } else if (!isNearCenter && wasInCenter) {
+        // Reset when game moves away from center, allowing it to trigger again next time
+        setWasInCenter(false);
       }
     }
-  }, [scrollPosition, gameIndex, gameSpacing, gameHeight, game.overlayImageUrl, topOverlayVisible]);
+  }, [scrollPosition, gameIndex, gameSpacing, gameHeight, game.overlayImageUrl, topOverlayVisible, wasInCenter]);
 
   return (
     <div className={`w-full max-w-[1188px] aspect-[1188/321] relative overflow-hidden transition-opacity duration-500 ${className}`} 
@@ -223,7 +231,8 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
                zIndex: 110, 
                borderRadius: '15px',
                animationDelay: `${getOverlayDelay(game.id)}ms`,
-               animationFillMode: 'both'
+               animationFillMode: 'both',
+               transform: `scale(${1 + (animationCount * 0.05)})` // Grow by 5% each time
              }}>
           <img 
             src={game.overlayImageUrl} 
