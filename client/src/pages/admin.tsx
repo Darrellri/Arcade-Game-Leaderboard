@@ -877,7 +877,9 @@ export default function Admin() {
           <TabsTrigger value="notes">Notes</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="games" className="space-y-6">
+        {/* Admin Dashboard Content */}
+        <>
+        <TabsContent key="games" value="games" className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-4">
@@ -1801,7 +1803,7 @@ export default function Admin() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="venue" className="space-y-6">
+        <TabsContent key="venue" value="venue" className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -2109,7 +2111,7 @@ export default function Admin() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="notes" className="space-y-6">
+        <TabsContent key="notes" value="notes" className="space-y-6">
           <Card className="overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-primary/5 via-secondary/10 to-primary/5 border-b">
               <CardTitle className="flex items-center gap-4">
@@ -2361,6 +2363,7 @@ export default function Admin() {
             </CardContent>
           </Card>
         </TabsContent>
+        </>
       </Tabs>
     </div>
   );

@@ -88,6 +88,21 @@ export const venueSettings = pgTable("venue_settings", {
   scrollViewLazyLoad: boolean("scroll_view_lazy_load").default(false),
   scrollViewSize: text("scroll_view_size").default("extra-large"),
   
+  listViewScrollDirection: text("list_view_scroll_direction").default("up"),
+  listViewSpeed: integer("list_view_speed").default(50),
+  listViewSpacing: integer("list_view_spacing").default(20),
+  listViewAnimations: boolean("list_view_animations").default(true),
+  listViewHideHeader: boolean("list_view_hide_header").default(false),
+  listViewSize: text("list_view_size").default("large"),
+  
+  gridViewScrollDirection: text("grid_view_scroll_direction").default("up"),
+  gridViewSpeed: integer("grid_view_speed").default(75),
+  gridViewColumns: integer("grid_view_columns").default(3),
+  gridViewSpacing: integer("grid_view_spacing").default(25),
+  gridViewAnimations: boolean("grid_view_animations").default(true),
+  gridViewHideHeader: boolean("grid_view_hide_header").default(false),
+  gridViewSize: text("grid_view_size").default("normal"),
+  
   // Animation System Settings
   animationCategories: json("animation_categories"),
   animationTiming: text("animation_timing").default("0.8"),
@@ -159,6 +174,21 @@ export const venueSettingsSchema = z.object({
   scrollViewStickyHeader: z.boolean().optional(),
   scrollViewLazyLoad: z.boolean().optional(),
   scrollViewSize: z.string().optional(),
+  
+  listViewScrollDirection: z.string().optional(),
+  listViewSpeed: z.number().optional(),
+  listViewSpacing: z.number().optional(),
+  listViewAnimations: z.boolean().optional(),
+  listViewHideHeader: z.boolean().optional(),
+  listViewSize: z.string().optional(),
+  
+  gridViewScrollDirection: z.string().optional(),
+  gridViewSpeed: z.number().optional(),
+  gridViewColumns: z.number().optional(),
+  gridViewSpacing: z.number().optional(),
+  gridViewAnimations: z.boolean().optional(),
+  gridViewHideHeader: z.boolean().optional(),
+  gridViewSize: z.string().optional(),
   
   // Animation System Settings
   animationCategories: z.object({
