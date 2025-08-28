@@ -1181,11 +1181,11 @@ export default function Home() {
             </div>
           )}
           <div className="flex-1 min-w-0">
-            <h1 className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-foreground uppercase text-outline leading-tight lg:px-5" style={{ letterSpacing: '1px' }}>
+            <h1 className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-foreground uppercase text-outline leading-tight lg:px-5 text-center" style={{ letterSpacing: '1px' }}>
               {venueSettings?.leaderboardName || "THE LEADERBOARD"}
             </h1>
             <h2 
-              className={`text-sm sm:text-lg md:text-2xl lg:text-[2.625rem] tracking-tight leading-tight lg:px-5 ${
+              className={`text-sm sm:text-lg md:text-2xl lg:text-[2.625rem] tracking-tight leading-tight lg:px-5 text-center ${
                 venueSettings?.subtitleBold === "true" ? "font-bold" : "font-normal"
               } ${
                 venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
