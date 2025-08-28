@@ -94,6 +94,7 @@ export const venueSettings = pgTable("venue_settings", {
   listViewAnimations: boolean("list_view_animations").default(true),
   listViewHideHeader: boolean("list_view_hide_header").default(false),
   listViewStickyHeader: boolean("list_view_sticky_header").default(true),
+  listViewScrolling: boolean("list_view_scrolling").default(false),
   listViewSize: text("list_view_size").default("large"),
   
   gridViewScrollDirection: text("grid_view_scroll_direction").default("up"),
@@ -103,6 +104,7 @@ export const venueSettings = pgTable("venue_settings", {
   gridViewAnimations: boolean("grid_view_animations").default(true),
   gridViewHideHeader: boolean("grid_view_hide_header").default(false),
   gridViewStickyHeader: boolean("grid_view_sticky_header").default(true),
+  gridViewScrolling: boolean("grid_view_scrolling").default(false),
   gridViewSize: text("grid_view_size").default("normal"),
   
   // Animation System Settings
@@ -183,6 +185,7 @@ export const venueSettingsSchema = z.object({
   listViewAnimations: z.boolean().optional(),
   listViewHideHeader: z.boolean().optional(),
   listViewStickyHeader: z.boolean().optional(),
+  listViewScrolling: z.boolean().optional(),
   listViewSize: z.string().optional(),
   
   gridViewScrollDirection: z.string().optional(),
@@ -192,6 +195,7 @@ export const venueSettingsSchema = z.object({
   gridViewAnimations: z.boolean().optional(),
   gridViewHideHeader: z.boolean().optional(),
   gridViewStickyHeader: z.boolean().optional(),
+  gridViewScrolling: z.boolean().optional(),
   gridViewSize: z.string().optional(),
   
   // Animation System Settings

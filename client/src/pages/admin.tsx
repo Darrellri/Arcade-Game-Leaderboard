@@ -348,6 +348,7 @@ export default function Admin() {
     listViewAnimations: true,
     listViewHideHeader: false,
     listViewStickyHeader: true,
+    listViewScrolling: false,
     listViewSize: "large",
     
     // Grid View Settings
@@ -358,6 +359,7 @@ export default function Admin() {
     gridViewAnimations: true,
     gridViewHideHeader: false,
     gridViewStickyHeader: true,
+    gridViewScrolling: false,
     gridViewSize: "normal",
   });
 
@@ -406,6 +408,7 @@ export default function Admin() {
         listViewAnimations: venueSettings.listViewAnimations !== false,
         listViewHideHeader: venueSettings.listViewHideHeader || false,
         listViewStickyHeader: venueSettings.listViewStickyHeader !== false,
+        listViewScrolling: venueSettings.listViewScrolling || false,
         listViewSize: venueSettings.listViewSize || "large",
         
         gridViewScrollDirection: venueSettings.gridViewScrollDirection || "up",
@@ -415,6 +418,7 @@ export default function Admin() {
         gridViewAnimations: venueSettings.gridViewAnimations !== false,
         gridViewHideHeader: venueSettings.gridViewHideHeader || false,
         gridViewStickyHeader: venueSettings.gridViewStickyHeader !== false,
+        gridViewScrolling: venueSettings.gridViewScrolling || false,
         gridViewSize: venueSettings.gridViewSize || "normal",
       });
       
@@ -1552,6 +1556,19 @@ export default function Admin() {
                     </div>
 
                     <div className="space-y-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        <input 
+                          type="checkbox" 
+                          checked={displayViewSettings.listViewScrolling === true}
+                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, listViewScrolling: e.target.checked }))}
+                          className="rounded" 
+                        />
+                        Enable Scrolling
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Allow automatic scrolling of list items</p>
+                    </div>
+
+                    <div className="space-y-2">
                       <Label className="text-sm font-medium">Display Size</Label>
                       <select 
                         value={displayViewSettings.listViewSize || 'large'}
@@ -1651,6 +1668,19 @@ export default function Admin() {
                         Sticky Header
                       </Label>
                       <p className="text-xs text-muted-foreground">Keep leaderboard header visible while scrolling</p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        <input 
+                          type="checkbox" 
+                          checked={displayViewSettings.gridViewScrolling === true}
+                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, gridViewScrolling: e.target.checked }))}
+                          className="rounded" 
+                        />
+                        Enable Scrolling
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Allow automatic scrolling of grid items</p>
                     </div>
 
                     <div className="space-y-2">
