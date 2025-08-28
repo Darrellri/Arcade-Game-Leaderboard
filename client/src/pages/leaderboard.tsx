@@ -360,12 +360,19 @@ export default function Leaderboard() {
         </Card>
       )}
 
-      {/* Thin Footer Bar */}
-      <div className="mt-12 py-6 border-t border-border/20 bg-card/30">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <p className="text-sm text-muted-foreground">
-            {venueSettings?.name || "Winona Axe and Arcade"} • High Score Tracking
-          </p>
+      {/* Footer Bar */}
+      <div className="mt-12 h-[100px] border-t border-border/20 bg-card/30">
+        <div className="max-w-4xl mx-auto px-4 h-full flex items-center justify-center">
+          <div className="flex items-center justify-center gap-[30px]">
+            <img 
+              src="/arcade-leaderboard-logo.png" 
+              alt="Arcade Leaderboard" 
+              className="h-12 w-auto"
+            />
+            <p className="text-sm text-primary">
+              {venueSettings?.name || "Winona Axe and Arcade"} • High Score Tracking
+            </p>
+          </div>
         </div>
       </div>
     </div>

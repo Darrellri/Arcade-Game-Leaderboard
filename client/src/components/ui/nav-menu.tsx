@@ -12,7 +12,7 @@ export default function NavMenu() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-background border-t border-border md:hidden">
-      <div className="flex justify-around items-center h-16">
+      <div className="flex justify-around items-center h-[100px]">
         {navItems.map((item) => (
           <Link
             key={item.href}
