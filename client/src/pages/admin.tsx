@@ -347,6 +347,7 @@ export default function Admin() {
     listViewSpacing: 20,
     listViewAnimations: true,
     listViewHideHeader: false,
+    listViewStickyHeader: true,
     listViewSize: "large",
     
     // Grid View Settings
@@ -356,6 +357,7 @@ export default function Admin() {
     gridViewSpacing: 25,
     gridViewAnimations: true,
     gridViewHideHeader: false,
+    gridViewStickyHeader: true,
     gridViewSize: "normal",
   });
 
@@ -403,6 +405,7 @@ export default function Admin() {
         listViewSpacing: venueSettings.listViewSpacing || 20,
         listViewAnimations: venueSettings.listViewAnimations !== false,
         listViewHideHeader: venueSettings.listViewHideHeader || false,
+        listViewStickyHeader: venueSettings.listViewStickyHeader !== false,
         listViewSize: venueSettings.listViewSize || "large",
         
         gridViewScrollDirection: venueSettings.gridViewScrollDirection || "up",
@@ -411,6 +414,7 @@ export default function Admin() {
         gridViewSpacing: venueSettings.gridViewSpacing || 25,
         gridViewAnimations: venueSettings.gridViewAnimations !== false,
         gridViewHideHeader: venueSettings.gridViewHideHeader || false,
+        gridViewStickyHeader: venueSettings.gridViewStickyHeader !== false,
         gridViewSize: venueSettings.gridViewSize || "normal",
       });
       
@@ -1547,6 +1551,18 @@ export default function Admin() {
                       <p className="text-xs text-muted-foreground">Fade-in effects as items scroll into view</p>
                     </div>
 
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        <input 
+                          type="checkbox" 
+                          checked={displayViewSettings.listViewStickyHeader !== false}
+                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, listViewStickyHeader: e.target.checked }))}
+                          className="rounded" 
+                        />
+                        Sticky Header
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Keep leaderboard header visible while scrolling</p>
+                    </div>
 
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Display Size</Label>
@@ -1637,6 +1653,18 @@ export default function Admin() {
                       <p className="text-xs text-muted-foreground">Hover and scroll animation effects</p>
                     </div>
 
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        <input 
+                          type="checkbox" 
+                          checked={displayViewSettings.gridViewStickyHeader !== false}
+                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, gridViewStickyHeader: e.target.checked }))}
+                          className="rounded" 
+                        />
+                        Sticky Header
+                      </Label>
+                      <p className="text-xs text-muted-foreground">Keep leaderboard header visible while scrolling</p>
+                    </div>
 
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Display Size</Label>

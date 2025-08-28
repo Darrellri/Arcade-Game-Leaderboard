@@ -426,6 +426,7 @@ function GridView({ games, animationsEnabled, hideHeader }: {
   const scrollSpeed = venueSettings?.gridViewSpeed || 75;
   const gridColumns = venueSettings?.gridViewColumns || 3;
   const cardSpacing = venueSettings?.gridViewSpacing || 25;
+  const stickyHeader = venueSettings?.gridViewStickyHeader !== false;
   
   const cardHeight = 350; // Approximate height of each card
   
@@ -481,11 +482,22 @@ function GridView({ games, animationsEnabled, hideHeader }: {
   
   return (
     <div className="relative overflow-hidden h-screen px-4 bg-background">
+      {/* Sticky Header */}
+      {stickyHeader && !hideHeader && (
+        <div className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-sm border-b border-border/50 px-4 py-3">
+          <div className="container mx-auto">
+            <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center">
+              {venueSettings?.leaderboardName || 'Leaderboard'}
+            </h2>
+          </div>
+        </div>
+      )}
+      
       <div 
         className={`container mx-auto transition-opacity duration-1000 ${isInitialized ? 'opacity-100' : 'opacity-0'}`}
         style={{ 
           transform: `translateY(-${scrollPositionY}px)`,
-          paddingTop: '100px'
+          paddingTop: stickyHeader && !hideHeader ? '120px' : '100px'
         }}
       >
         <div 
@@ -518,6 +530,7 @@ function ListView({ games, animationsEnabled, hideHeader }: {
   const scrollDirection = venueSettings?.listViewScrollDirection || 'up';
   const scrollSpeed = venueSettings?.listViewSpeed || 50;
   const itemSpacing = venueSettings?.listViewSpacing || 20;
+  const stickyHeader = venueSettings?.listViewStickyHeader !== false;
   
   const itemHeight = 120; // Approximate height of each list item
   
@@ -563,11 +576,22 @@ function ListView({ games, animationsEnabled, hideHeader }: {
   
   return (
     <div className="relative overflow-hidden h-screen px-4 bg-background">
+      {/* Sticky Header */}
+      {stickyHeader && !hideHeader && (
+        <div className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-sm border-b border-border/50 px-4 py-3">
+          <div className="container mx-auto">
+            <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center">
+              {venueSettings?.leaderboardName || 'Leaderboard'}
+            </h2>
+          </div>
+        </div>
+      )}
+      
       <div 
         className={`container mx-auto transition-opacity duration-1000 ${isInitialized ? 'opacity-100' : 'opacity-0'}`}
         style={{ 
           transform: `translateY(-${scrollPositionY}px)`,
-          paddingTop: '100px'
+          paddingTop: stickyHeader && !hideHeader ? '120px' : '100px'
         }}
       >
         <div className="space-y-4" style={{ gap: `${itemSpacing}px` }}>
@@ -1124,7 +1148,7 @@ export default function Home() {
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
           {(venueSettings?.animatedLogoUrl || venueSettings?.logoUrl) && (
             <div 
-              className={`logo-container flex-shrink-0 overflow-hidden cursor-pointer hover:opacity-80 transition-opacity w-24 h-12 sm:w-48 sm:h-24 ${
+              className={`logo-container flex-shrink-0 overflow-hidden cursor-pointer hover:opacity-80 transition-opacity w-24 h-12 sm:w-48 sm:h-24 md:w-72 md:h-36 ${
                 venueSettings.hideLogoBorderShadow === 'true' 
                   ? '' 
                   : 'rounded-md shadow-md border border-primary/20'
@@ -1157,7 +1181,7 @@ export default function Home() {
             </div>
           )}
           <div className="flex-1 min-w-0">
-            <h1 className="text-lg sm:text-3xl font-black tracking-tight text-foreground uppercase text-outline leading-tight lg:px-5" style={{ letterSpacing: '1px' }}>
+            <h1 className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-foreground uppercase text-outline leading-tight lg:px-5" style={{ letterSpacing: '1px' }}>
               {venueSettings?.leaderboardName || "THE LEADERBOARD"}
             </h1>
             <h2 
