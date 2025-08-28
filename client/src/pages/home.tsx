@@ -1144,7 +1144,7 @@ export default function Home() {
       } as React.CSSProperties}
     >
       {/* Header with venue name and view mode controls */}
-      <div className="themed-header px-5 py-4 sm:px-[370px] flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-lg mb-2 w-full">
+      <div className="themed-header px-5 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between rounded-lg mb-2 w-full">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
           {(venueSettings?.animatedLogoUrl || venueSettings?.logoUrl) && (
             <div 
