@@ -1192,6 +1192,7 @@ export default function Home() {
               }`}
               style={{ 
                 letterSpacing: '2px',
+                lineHeight: 'calc(1.25em + 5px)',
                 color: venueSettings?.subtitleWhite === "true" 
                   ? "white" 
                   : (() => {
