@@ -22,27 +22,12 @@ export default function Leaderboard() {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [, setLocation] = useLocation();
   
-  // Animation state for marquee overlay
-  const [overlayAnimation, setOverlayAnimation] = useState<string>("");
-  const [animationKey, setAnimationKey] = useState(0);
-  const [marqueeBlurred, setMarqueeBlurred] = useState(false);
   
   // Handle marquee image click - navigate back to home
   const handleMarqueeClick = () => {
     setLocation("/");
   };
 
-  // Array of faster animations with reduced travel distance (50% faster than before)
-  const animations = [
-    "animate-[overlayGrowShrink_0.36s_ease-in-out]",
-    "animate-[overlayJello_0.33s_ease-in-out]",
-    "animate-[overlaySkewWobble_0.4s_ease-in-out]",
-    "animate-[overlayPulseScale_0.28s_ease-in-out]",
-    "animate-[overlayElastic_0.46s_ease-out]",
-    "animate-[overlayBreath_0.55s_ease-in-out]",
-    "animate-[overlaySquish_0.36s_ease-in-out]",
-    "animate-[overlayGlow_0.46s_ease-in-out]"
-  ];
 
   const { data: game, isLoading: gameLoading } = useQuery<Game>({
     queryKey: [`/api/games/${id}`],
@@ -52,39 +37,6 @@ export default function Leaderboard() {
     queryKey: [`/api/games/${id}/scores`],
   });
 
-  // Set up random animation timer for overlay
-  useEffect(() => {
-    if (!game?.overlayImageUrl) return;
-
-    const triggerRandomAnimation = () => {
-      const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
-      setOverlayAnimation(randomAnimation);
-      setAnimationKey(prev => prev + 1);
-      
-      // Blur marquee image when overlay animation starts
-      setMarqueeBlurred(true);
-      
-      // Clear animation and remove blur after it completes
-      setTimeout(() => {
-        setOverlayAnimation("");
-        setMarqueeBlurred(false);
-      }, 1250);
-    };
-
-    // Trigger first animation after a random delay (8-15 seconds)
-    const initialDelay = Math.random() * 7000 + 8000;
-    const initialTimer = setTimeout(triggerRandomAnimation, initialDelay);
-
-    // Set up recurring animations every 20-30 seconds
-    const recurringTimer = setInterval(() => {
-      triggerRandomAnimation();
-    }, Math.random() * 10000 + 20000);
-
-    return () => {
-      clearTimeout(initialTimer);
-      clearInterval(recurringTimer);
-    };
-  }, [game?.overlayImageUrl]);
 
   if (gameLoading) {
     return (
@@ -128,32 +80,7 @@ export default function Leaderboard() {
                 src={game.imageUrl || ''} 
                 alt={game.name} 
                 className="w-full h-full object-cover rounded-[10px] brightness-125"
-                style={{
-                  filter: marqueeBlurred ? 'blur(2px)' : 'blur(0px)',
-                  transition: 'filter 0.3s ease-in-out'
-                }}
               />
-              
-              {/* Overlay Image with Random Animations and Floating Effect */}
-              {game.overlayImageUrl && (
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <img
-                    key={animationKey}
-                    src={game.overlayImageUrl}
-                    alt={`${game.name} overlay`}
-                    className={cn(
-                      "w-full h-full object-cover",
-                      overlayAnimation,
-                      // Add continuous floating when no animation is active
-                      !overlayAnimation && "animate-[overlayFloat_4s_ease-in-out_infinite]"
-                    )}
-                    style={{ 
-                      filter: "drop-shadow(2px 2px 4px rgba(0,0,0,0.5))",
-                      zIndex: 10
-                    }}
-                  />
-                </div>
-              )}
               {/* Lighter overlay for better brightness */}
               <div className="absolute inset-0 bg-black/30 rounded-[10px]" style={{ zIndex: 20 }}></div>
               

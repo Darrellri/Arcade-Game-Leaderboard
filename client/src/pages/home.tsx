@@ -33,56 +33,12 @@ import { useTheme } from "@/contexts/ThemeContext";
 import GameMarquee from "@/components/game-marquee";
 import { TrophyIcon } from "@/components/trophy-icon";
 
-// Animation classes for dynamic effects
-const animationClasses = [
-  // Fade animations
-  'animate-fade-in-up', 'animate-fade-in-down', 'animate-fade-in-left', 'animate-fade-in-right',
-  // Slide animations
-  'animate-slide-in-up', 'animate-slide-in-down', 'animate-slide-in-left', 'animate-slide-in-right',
-  // Zoom animations
-  'animate-zoom-in', 'animate-zoom-out', 'animate-zoom-in-up', 'animate-zoom-out-down',
-  // Bounce animations
-  'animate-bounce-in', 'animate-bounce-in-up', 'animate-bounce-in-down', 'animate-bounce-in-left', 'animate-bounce-in-right',
-  // Rotation animations
-  'animate-rotate-in', 'animate-rotate-in-up-left', 'animate-rotate-in-up-right', 'animate-rotate-in-down-left', 'animate-rotate-in-down-right',
-  // Elastic animations
-  'animate-elastic-in', 'animate-elastic-in-up', 'animate-elastic-in-down', 'animate-elastic-in-left', 'animate-elastic-in-right',
-  // Fun animations
-  'animate-jello', 'animate-wobble', 'animate-swing', 'animate-rubberBand', 'animate-tada',
-  // Dramatic animations
-  'animate-flip-in-x', 'animate-flip-in-y', 'animate-light-speed-in', 'animate-roll-in', 'animate-hinge'
-];
 
-// Dynamic overlay animation functions based on game ID for consistency
-function getOverlayAnimation(gameId: number): string {
-  // Layer animations that grow 20% then bounce back
-  const overlayAnimations = [
-    'animate-pulse-grow', 'animate-bounce-grow', 'animate-elastic-grow', 'animate-zoom-grow'
-  ];
-  return overlayAnimations[gameId % overlayAnimations.length];
-}
 
-function getOverlaySpeed(gameId: number): string {
-  const speeds = ['300', '500', '700', '1000', '1200'];
-  return speeds[gameId % speeds.length];
-}
-
-function getOverlayDelay(gameId: number): number {
-  const delays = [0, 100, 200, 300, 500];
-  return delays[gameId % delays.length];
-}
-
-// Score overlay animation functions - random selection each time
-function getRandomScoreAnimation(): string {
-  const scoreAnimations = [
-    'animate-slide-in-up', 'animate-slide-in-left', 'animate-slide-in-right', 'animate-flip-in-up'
-  ];
-  return scoreAnimations[Math.floor(Math.random() * scoreAnimations.length)];
-}
 
 // Get random animation class
 function getRandomAnimation() {
-  return animationClasses[Math.floor(Math.random() * animationClasses.length)];
+  return ''; // No animations
 }
 
 // Get exit animation for a given entrance animation
@@ -224,28 +180,6 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
         </div>
       )}
       
-      {/* Top Overlay for Scroll View - Uses layer image with dynamic animation effects */}
-      {topOverlayVisible && game.overlayImageUrl && (
-        <div className={`absolute inset-0 ${getOverlayAnimation(game.id)} transition-all duration-${getOverlaySpeed(game.id)}`}
-             style={{ 
-               zIndex: 110, 
-               borderRadius: '15px',
-               animationDelay: `${getOverlayDelay(game.id)}ms`,
-               animationFillMode: 'both',
-               transform: `scale(${1 + (animationCount * 0.05)})` // Grow by 5% each time
-             }}>
-          <img 
-            src={game.overlayImageUrl} 
-            alt={`${game.name} overlay`}
-            className="w-full h-full object-contain"
-            style={{
-              borderRadius: '15px',
-              maxWidth: '100%',
-              height: 'auto'
-            }}
-          />
-        </div>
-      )}
       
       {/* Horizontal Score Overlay - Always visible when score data exists */}
       {((game.currentHighScore && game.currentHighScore > 0) || (game.topScorerName && game.topScorerName !== 'No scores yet')) && (
@@ -322,11 +256,10 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
   // Set random animations when component mounts or animationKey changes
   useEffect(() => {
     const entranceAnim = getRandomAnimation();
-    const randomScoreAnim = getRandomScoreAnimation();
-    setCurrentAnimation(entranceAnim);
-    setExitAnimation(getExitAnimation(entranceAnim));
-    setScoreAnimation(randomScoreAnim);
-    setScoreAnimationClass(randomScoreAnim);
+    setCurrentAnimation('');
+    setExitAnimation('');
+    setScoreAnimation('');
+    setScoreAnimationClass('');
     setImageLoaded(false);
     setIsVisible(false);
     setScoreOverlayVisible(false);
@@ -389,27 +322,6 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
             onLoad={handleImageLoad}
           />
           
-          {/* Top Overlay - Appears after marquee animation stops using layer image with dynamic effects */}
-          {topOverlayVisible && game.overlayImageUrl && (
-            <div className={`absolute inset-0 ${getOverlayAnimation(game.id)} transition-all duration-${getOverlaySpeed(game.id)}`}
-                 style={{ 
-                   zIndex: 110, 
-                   borderRadius: '15px',
-                   animationDelay: `${getOverlayDelay(game.id)}ms`,
-                   animationFillMode: 'both'
-                 }}>
-              <img 
-                src={game.overlayImageUrl} 
-                alt={`${game.name} overlay`}
-                className="w-full h-full object-contain"
-                style={{
-                  borderRadius: '15px',
-                  maxWidth: '100%',
-                  height: 'auto'
-                }}
-              />
-            </div>
-          )}
           
           {/* Horizontal Score Overlay - Random animation with darker transparency */}
           {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
@@ -530,74 +442,6 @@ function ListView({ games, animationsEnabled, hideHeader }: {
   );
 }
 
-// Marquee Animation Effects Library - No vertical rotations, horizontal movements and creative effects
-const animationEffects = [
-  // Basic slide effects
-  'slideInLeft', 'slideInRight', 'slideInUp', 'slideInDown',
-  // Fade effects
-  'fadeIn', 'fadeInLeft', 'fadeInRight', 'fadeInUp', 'fadeInDown',
-  // Zoom effects (horizontal preferred)
-  'zoomIn', 'zoomInLeft', 'zoomInRight', 'zoomInUp', 'zoomInDown',
-  // Bounce effects
-  'bounceIn', 'bounceInUp', 'bounceInDown', 'bounceInLeft', 'bounceInRight',
-  // Back effects
-  'backInUp', 'backInDown', 'backInLeft', 'backInRight',
-  // Light speed effects (horizontal only)
-  'lightSpeedInLeft', 'lightSpeedInRight',
-  // Wobble and shake effects (no rotation)
-  'wobble', 'shake', 'swing', 'jello', 'pulse',
-  // Attention effects
-  'heartBeat', 'flash', 'rubberBand', 'tada', 'jackInTheBox',
-  // Roll effects (horizontal only)
-  'rollIn',
-  
-  // NEW: 5 Clever Animation Effects
-  'slideInBounce',    // Slides in with a bounce at the end
-  'zoomInPulse',      // Zooms in with a pulsing effect
-  'swipeInLeft',      // Fast swipe from left with ease-out
-  'popInScale',       // Pops in with scaling effect
-  'glideInSmooth',    // Smooth gliding entrance
-  
-  // Dramatic off-screen flying entries (horizontal only)
-  'flyInFromLeft', 'flyInFromRight',
-  
-  // Swooping dramatic entries (horizontal only)
-  'swoopInLeft', 'swoopInRight',
-  
-  // Fun and playful effects
-  'pulse', 'shake', 'swing', 'wobble', 'jello',
-  
-  // Attention-grabbing effects
-  'heartBeat', 'flash', 'rubberBand', 'tada', 'jackInTheBox',
-  
-  // Rolling and speed effects
-  'rollIn', 'rollOut', 'lightSpeedInLeft', 'lightSpeedInRight', 'hinge',
-  
-  // Additional directional effects
-  'slideOutLeft', 'slideOutRight', 'slideOutUp', 'slideOutDown', 'rotateOut',
-  'flipOutX', 'flipOutY', 'bounceOut', 'zoomInLeft', 'zoomInRight',
-  'zoomInUp', 'zoomInDown', 'zoomOutLeft', 'zoomOutRight', 'zoomOutUp',
-  'zoomOutDown', 'fadeInLeft', 'fadeInRight', 'fadeInUp', 'fadeInDown',
-  'fadeOutLeft', 'fadeOutRight', 'fadeOutUp', 'fadeOutDown'
-];
-
-// Pairs of complementary animations for dual view staggered timing (no vertical rotations)
-const dualViewAnimationPairs = [
-  ['flyInFromLeft', 'flyInFromRight'],
-  ['swoopInLeft', 'swoopInRight'],
-  ['slideInLeft', 'slideInRight'],
-  ['bounceInLeft', 'bounceInRight'],
-  ['backInLeft', 'backInRight'],
-  ['lightSpeedInLeft', 'lightSpeedInRight'],
-  ['slideInUp', 'slideInDown'],
-  ['bounceInUp', 'bounceInDown'],
-  ['backInUp', 'backInDown'],
-  ['fadeInLeft', 'fadeInRight'],
-  ['zoomInLeft', 'zoomInRight'],
-  ['slideInBounce', 'popInScale'],
-  ['swipeInLeft', 'glideInSmooth'],
-  ['zoomInPulse', 'slideInBounce']
-];
 
 // Dual View Component - Shows 2 games side by side with staggered dramatic animations
 function DualView({ games, animationsEnabled, hideHeader }: { 
