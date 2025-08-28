@@ -1185,7 +1185,7 @@ export default function Home() {
               {venueSettings?.leaderboardName || "THE LEADERBOARD"}
             </h1>
             <h2 
-              className={`text-sm sm:text-lg md:text-2xl tracking-tight leading-tight lg:px-5 ${
+              className={`text-sm sm:text-lg md:text-2xl lg:text-[2.625rem] tracking-tight leading-tight lg:px-5 ${
                 venueSettings?.subtitleBold === "true" ? "font-bold" : "font-normal"
               } ${
                 venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
