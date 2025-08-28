@@ -408,35 +408,173 @@ const scoreOverlayAnimations = [
 
 type ViewMode = "dual" | "single" | "scroll" | "grid" | "list";
 
-// Grid View Component - Traditional grid layout
+// Grid View Component - Scrollable grid layout
 function GridView({ games, animationsEnabled, hideHeader }: { 
   games: Game[]; 
   animationsEnabled: boolean; 
   hideHeader: boolean;
 }) {
+  const [scrollPositionY, setScrollPositionY] = useState(0);
+  const [visibleGames, setVisibleGames] = useState<Game[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
+  
+  const { data: venueSettings } = useQuery<VenueSettings>({
+    queryKey: ["/api/admin/settings"],
+  });
+  
+  const scrollDirection = venueSettings?.gridViewScrollDirection || 'up';
+  const scrollSpeed = venueSettings?.gridViewSpeed || 75;
+  const gridColumns = venueSettings?.gridViewColumns || 3;
+  const cardSpacing = venueSettings?.gridViewSpacing || 25;
+  
+  const cardHeight = 350; // Approximate height of each card
+  
+  // Create extended games array for infinite scroll
+  useEffect(() => {
+    if (games.length > 0) {
+      const extendedGames = [...games, ...games, ...games]; // Triple for seamless loop
+      setVisibleGames(extendedGames);
+      
+      // Initialize at center position
+      const screenHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
+      const centerPosition = (screenHeight / 2) - (cardHeight / 2);
+      setScrollPositionY(-centerPosition);
+      
+      setTimeout(() => {
+        setIsInitialized(true);
+      }, 100);
+    }
+  }, [games, cardHeight, cardSpacing, gridColumns]);
+  
+  // Auto-scroll effect
+  useEffect(() => {
+    if (!isInitialized) return;
+    
+    const scrollTimer = setInterval(() => {
+      setScrollPositionY(prev => {
+        const baseSpeed = scrollSpeed / 1000; // Convert ms to pixels per frame
+        const direction = scrollDirection === 'up' ? 1 : scrollDirection === 'down' ? -1 : Math.sin(Date.now() / 5000) > 0 ? 1 : -1;
+        const newPosition = prev + (baseSpeed * direction);
+        
+        const resetPoint = games.length * (cardHeight + cardSpacing) / gridColumns;
+        
+        if (direction > 0) {
+          return newPosition >= resetPoint ? 0 : newPosition;
+        } else {
+          return newPosition <= -resetPoint ? 0 : newPosition;
+        }
+      });
+    }, 16); // ~60fps
+    
+    return () => clearInterval(scrollTimer);
+  }, [games.length, cardHeight, cardSpacing, scrollDirection, scrollSpeed, isInitialized, gridColumns]);
+  
+  const getGridColumns = () => {
+    switch (gridColumns) {
+      case 2: return 'grid-cols-2';
+      case 3: return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+      case 4: return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
+      case 5: return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5';
+      default: return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+    }
+  };
+  
   return (
-    <div className="container mx-auto px-4 space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {games.map((game) => (
-          <GameCard key={game.id} game={game} />
-        ))}
+    <div className="relative overflow-hidden h-screen px-4 bg-background">
+      <div 
+        className={`container mx-auto transition-opacity duration-1000 ${isInitialized ? 'opacity-100' : 'opacity-0'}`}
+        style={{ 
+          transform: `translateY(-${scrollPositionY}px)`,
+          paddingTop: '100px'
+        }}
+      >
+        <div 
+          className={`grid ${getGridColumns()} gap-6`}
+          style={{ gap: `${cardSpacing}px` }}
+        >
+          {visibleGames.map((game, index) => (
+            <GameCard key={`${game.id}-${index}`} game={game} />
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
-// List View Component - Traditional vertical list with drag and drop
+// List View Component - Scrollable vertical list
 function ListView({ games, animationsEnabled, hideHeader }: { 
   games: Game[]; 
   animationsEnabled: boolean; 
   hideHeader: boolean;
 }) {
+  const [scrollPositionY, setScrollPositionY] = useState(0);
+  const [visibleGames, setVisibleGames] = useState<Game[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
+  
+  const { data: venueSettings } = useQuery<VenueSettings>({
+    queryKey: ["/api/admin/settings"],
+  });
+  
+  const scrollDirection = venueSettings?.listViewScrollDirection || 'up';
+  const scrollSpeed = venueSettings?.listViewSpeed || 50;
+  const itemSpacing = venueSettings?.listViewSpacing || 20;
+  
+  const itemHeight = 120; // Approximate height of each list item
+  
+  // Create extended games array for infinite scroll
+  useEffect(() => {
+    if (games.length > 0) {
+      const extendedGames = [...games, ...games, ...games]; // Triple for seamless loop
+      setVisibleGames(extendedGames);
+      
+      // Initialize at center position  
+      const screenHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
+      const centerPosition = (screenHeight / 2) - (itemHeight / 2);
+      setScrollPositionY(-centerPosition);
+      
+      setTimeout(() => {
+        setIsInitialized(true);
+      }, 100);
+    }
+  }, [games, itemHeight, itemSpacing]);
+  
+  // Auto-scroll effect
+  useEffect(() => {
+    if (!isInitialized) return;
+    
+    const scrollTimer = setInterval(() => {
+      setScrollPositionY(prev => {
+        const baseSpeed = scrollSpeed / 1000; // Convert ms to pixels per frame
+        const direction = scrollDirection === 'up' ? 1 : scrollDirection === 'down' ? -1 : Math.sin(Date.now() / 5000) > 0 ? 1 : -1;
+        const newPosition = prev + (baseSpeed * direction);
+        
+        const resetPoint = games.length * (itemHeight + itemSpacing);
+        
+        if (direction > 0) {
+          return newPosition >= resetPoint ? 0 : newPosition;
+        } else {
+          return newPosition <= -resetPoint ? 0 : newPosition;
+        }
+      });
+    }, 16); // ~60fps
+    
+    return () => clearInterval(scrollTimer);
+  }, [games.length, itemHeight, itemSpacing, scrollDirection, scrollSpeed, isInitialized]);
+  
   return (
-    <div className="container mx-auto px-4 space-y-4">
-      <div className="space-y-3">
-        {games.map((game) => (
-          <SortableGameListItem key={game.id} game={game} />
-        ))}
+    <div className="relative overflow-hidden h-screen px-4 bg-background">
+      <div 
+        className={`container mx-auto transition-opacity duration-1000 ${isInitialized ? 'opacity-100' : 'opacity-0'}`}
+        style={{ 
+          transform: `translateY(-${scrollPositionY}px)`,
+          paddingTop: '100px'
+        }}
+      >
+        <div className="space-y-4" style={{ gap: `${itemSpacing}px` }}>
+          {visibleGames.map((game, index) => (
+            <SortableGameListItem key={`${game.id}-${index}`} game={game} />
+          ))}
+        </div>
       </div>
     </div>
   );

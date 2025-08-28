@@ -1302,18 +1302,6 @@ export default function Admin() {
                       <p className="text-xs text-muted-foreground">Random animation effects when games change</p>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium flex items-center gap-2">
-                        <input 
-                          type="checkbox" 
-                          checked={displayViewSettings.singleViewHideHeader}
-                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, singleViewHideHeader: e.target.checked }))}
-                          className="rounded" 
-                        />
-                        Hide Header/Navigation
-                      </Label>
-                      <p className="text-xs text-muted-foreground">Hide leaderboard name and controls</p>
-                    </div>
 
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Display Size</Label>
@@ -1378,18 +1366,6 @@ export default function Admin() {
                       <p className="text-xs text-muted-foreground">Random animation effects when games change</p>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium flex items-center gap-2">
-                        <input 
-                          type="checkbox" 
-                          checked={displayViewSettings.dualViewHideHeader}
-                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, dualViewHideHeader: e.target.checked }))}
-                          className="rounded" 
-                        />
-                        Hide Header/Navigation
-                      </Label>
-                      <p className="text-xs text-muted-foreground">Hide leaderboard name and controls</p>
-                    </div>
 
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Display Size</Label>
@@ -1571,18 +1547,6 @@ export default function Admin() {
                       <p className="text-xs text-muted-foreground">Fade-in effects as items scroll into view</p>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium flex items-center gap-2">
-                        <input 
-                          type="checkbox" 
-                          checked={displayViewSettings.listViewHideHeader || false}
-                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, listViewHideHeader: e.target.checked }))}
-                          className="rounded" 
-                        />
-                        Hide Header/Navigation
-                      </Label>
-                      <p className="text-xs text-muted-foreground">Hide leaderboard name and controls</p>
-                    </div>
 
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Display Size</Label>
@@ -1673,18 +1637,6 @@ export default function Admin() {
                       <p className="text-xs text-muted-foreground">Hover and scroll animation effects</p>
                     </div>
 
-                    <div className="space-y-2">
-                      <Label className="text-sm font-medium flex items-center gap-2">
-                        <input 
-                          type="checkbox" 
-                          checked={displayViewSettings.gridViewHideHeader || false}
-                          onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, gridViewHideHeader: e.target.checked }))}
-                          className="rounded" 
-                        />
-                        Hide Header/Navigation
-                      </Label>
-                      <p className="text-xs text-muted-foreground">Hide leaderboard name and controls</p>
-                    </div>
 
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">Display Size</Label>
