@@ -323,20 +323,20 @@ export default function Admin() {
   const [displayViewSettings, setDisplayViewSettings] = useState({
     // Dual View Settings
     dualViewSpeed: 8,
-    dualViewAnimations: true,
+    dualViewAnimations: false,
     dualViewHideHeader: false,
     dualViewSize: "extra-large",
     
     // Single View Settings
     singleViewSpeed: 6,
-    singleViewAnimations: true,
+    singleViewAnimations: false,
     singleViewHideHeader: false,
     singleViewSize: "large",
     
     // Scroll View Settings
     scrollViewSpeed: 50,
     scrollViewSpacing: 200,
-    scrollViewAnimations: true,
+    scrollViewAnimations: false,
     scrollViewStickyHeader: true,
     scrollViewLazyLoad: false,
     scrollViewSize: "extra-large",
@@ -345,7 +345,7 @@ export default function Admin() {
     listViewScrollDirection: "up",
     listViewSpeed: 50,
     listViewSpacing: 20,
-    listViewAnimations: true,
+    listViewAnimations: false,
     listViewHideHeader: false,
     listViewStickyHeader: true,
     listViewScrolling: false,
@@ -356,7 +356,7 @@ export default function Admin() {
     gridViewSpeed: 75,
     gridViewColumns: 3,
     gridViewSpacing: 25,
-    gridViewAnimations: true,
+    gridViewAnimations: false,
     gridViewHideHeader: false,
     gridViewStickyHeader: true,
     gridViewScrolling: false,
@@ -386,18 +386,18 @@ export default function Admin() {
       // Initialize display view settings from database
       setDisplayViewSettings({
         dualViewSpeed: venueSettings.dualViewSpeed || 8,
-        dualViewAnimations: venueSettings.dualViewAnimations !== false,
+        dualViewAnimations: venueSettings.dualViewAnimations === true,
         dualViewHideHeader: venueSettings.dualViewHideHeader || false,
         dualViewSize: venueSettings.dualViewSize || "extra-large",
         
         singleViewSpeed: venueSettings.singleViewSpeed || 6,
-        singleViewAnimations: venueSettings.singleViewAnimations !== false,
+        singleViewAnimations: venueSettings.singleViewAnimations === true,
         singleViewHideHeader: venueSettings.singleViewHideHeader || false,
         singleViewSize: venueSettings.singleViewSize || "extra-large",
         
         scrollViewSpeed: venueSettings.scrollViewSpeed || 50,
         scrollViewSpacing: venueSettings.scrollViewSpacing || 200,
-        scrollViewAnimations: venueSettings.scrollViewAnimations !== false,
+        scrollViewAnimations: venueSettings.scrollViewAnimations === true,
         scrollViewStickyHeader: venueSettings.scrollViewStickyHeader !== false,
         scrollViewLazyLoad: venueSettings.scrollViewLazyLoad || false,
         scrollViewSize: venueSettings.scrollViewSize || "extra-large",
@@ -405,7 +405,7 @@ export default function Admin() {
         listViewScrollDirection: venueSettings.listViewScrollDirection || "up",
         listViewSpeed: venueSettings.listViewSpeed || 50,
         listViewSpacing: venueSettings.listViewSpacing || 20,
-        listViewAnimations: venueSettings.listViewAnimations !== false,
+        listViewAnimations: venueSettings.listViewAnimations === true,
         listViewHideHeader: venueSettings.listViewHideHeader || false,
         listViewStickyHeader: venueSettings.listViewStickyHeader !== false,
         listViewScrolling: venueSettings.listViewScrolling || false,
@@ -415,7 +415,7 @@ export default function Admin() {
         gridViewSpeed: venueSettings.gridViewSpeed || 75,
         gridViewColumns: venueSettings.gridViewColumns || 3,
         gridViewSpacing: venueSettings.gridViewSpacing || 25,
-        gridViewAnimations: venueSettings.gridViewAnimations !== false,
+        gridViewAnimations: venueSettings.gridViewAnimations === true,
         gridViewHideHeader: venueSettings.gridViewHideHeader || false,
         gridViewStickyHeader: venueSettings.gridViewStickyHeader !== false,
         gridViewScrolling: venueSettings.gridViewScrolling || false,
@@ -1308,6 +1308,7 @@ export default function Admin() {
                         <option value="normal">Regular Size</option>
                         <option value="large">Large (1.3x)</option>
                         <option value="extra-large">Extra Large (1.5x) - Default</option>
+                        <option value="full">Full Screen (150px margins)</option>
                       </select>
                       </div>
                       </div>
@@ -1372,6 +1373,7 @@ export default function Admin() {
                         <option value="normal">Regular Size</option>
                         <option value="large">Large (1.3x)</option>
                         <option value="extra-large">Extra Large (1.5x) - Default</option>
+                        <option value="full">Full Screen (150px margins)</option>
                       </select>
                       </div>
                       </div>

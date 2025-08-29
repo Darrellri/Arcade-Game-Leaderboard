@@ -613,6 +613,9 @@ function DualView({ games, animationsEnabled, hideHeader }: {
 }) {
   const [currentPair, setCurrentPair] = useState(0);
   const [animationKey, setAnimationKey] = useState(0);
+  const { data: venueSettings } = useQuery<VenueSettings>({
+    queryKey: ["/api/admin/settings"],
+  });
 
   const gamePairs = [];
   for (let i = 0; i < games.length; i += 2) {
@@ -630,9 +633,25 @@ function DualView({ games, animationsEnabled, hideHeader }: {
 
   const currentGames = gamePairs[currentPair] || [];
 
+  // Determine size based on venue settings
+  const isFullSize = venueSettings?.dualViewSize === 'full';
+  
+  const getSizeMultiplier = () => {
+    switch (venueSettings?.dualViewSize) {
+      case 'normal': return 1;
+      case 'large': return 1.3; // 30% larger (default)
+      case 'extra-large': return 1.5; // 50% larger  
+      default: return 1.5; // Default to extra large for dual view
+    }
+  };
+  
+  const sizeMultiplier = getSizeMultiplier();
+  const baseWidth = 1200;
+  const maxWidth = isFullSize ? undefined : `${Math.round(baseWidth * sizeMultiplier)}px`;
+
   return (
     <div className="flex justify-center items-center min-h-[70vh] px-4">
-      <div className="flex flex-col items-center gap-5 w-full max-w-[1200px]"> {/* 20px gap between images */}
+      <div className={`flex flex-col items-center gap-5 w-full ${isFullSize ? 'mx-[50px] lg:mx-[150px]' : ''}`} style={!isFullSize ? { maxWidth } : undefined}> {/* 20px gap between images */}
         {currentGames.map((game, index) => (
           <div key={`${game.id}-${currentPair}-${animationKey}`} className="w-full flex justify-center">
             <FullSizeMarquee 
@@ -672,18 +691,20 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   const currentGame = games[currentGameIndex];
   
   // Determine size based on venue settings
+  const isFullSize = venueSettings?.singleViewSize === 'full';
+  
   const getSizeMultiplier = () => {
     switch (venueSettings?.singleViewSize) {
       case 'normal': return 1;
       case 'large': return 1.3; // 30% larger (default)
-      case 'xl': return 1.5; // 50% larger  
+      case 'extra-large': return 1.5; // 50% larger  
       default: return 1.3; // Default to 30% larger
     }
   };
   
   const sizeMultiplier = getSizeMultiplier();
   const baseWidth = 1200;
-  const maxWidth = `${Math.round(baseWidth * sizeMultiplier)}px`;
+  const maxWidth = isFullSize ? undefined : `${Math.round(baseWidth * sizeMultiplier)}px`;
 
   if (!currentGame) return null;
 
@@ -691,8 +712,8 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
     <div className="flex justify-center items-center min-h-[70vh] w-full px-4">
       <div 
         key={`${currentGame.id}-${currentGameIndex}-${animationKey}`} 
-        className="w-full flex justify-center"
-        style={{ maxWidth }}
+        className={`w-full flex justify-center ${isFullSize ? 'mx-[50px] lg:mx-[150px]' : ''}`}
+        style={!isFullSize ? { maxWidth } : undefined}
       >
         <FullSizeMarquee 
           game={currentGame} 
