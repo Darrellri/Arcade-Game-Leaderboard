@@ -619,6 +619,188 @@
     }
   }
 
+  /* Score Overlay Entrance Animations - Bottom-up slide/bounce effects */
+  @keyframes scoreSlideUpBounce {
+    0% { 
+      transform: translateY(100%); 
+      opacity: 0; 
+    }
+    60% { 
+      transform: translateY(-8px); 
+      opacity: 1; 
+    }
+    80% { 
+      transform: translateY(4px); 
+    }
+    100% { 
+      transform: translateY(0); 
+      opacity: 1; 
+    }
+  }
+
+  @keyframes scoreSlideUpElastic {
+    0% { 
+      transform: translateY(100%) scale(0.8); 
+      opacity: 0; 
+    }
+    40% { 
+      transform: translateY(-20px) scale(1.1); 
+      opacity: 1; 
+    }
+    70% { 
+      transform: translateY(8px) scale(0.95); 
+    }
+    85% { 
+      transform: translateY(-4px) scale(1.02); 
+    }
+    100% { 
+      transform: translateY(0) scale(1); 
+      opacity: 1; 
+    }
+  }
+
+  @keyframes scoreSlideUpSpring {
+    0% { 
+      transform: translateY(100%); 
+      opacity: 0; 
+    }
+    25% { 
+      transform: translateY(-15px); 
+      opacity: 0.8; 
+    }
+    50% { 
+      transform: translateY(5px); 
+      opacity: 1; 
+    }
+    75% { 
+      transform: translateY(-2px); 
+    }
+    100% { 
+      transform: translateY(0); 
+      opacity: 1; 
+    }
+  }
+
+  @keyframes scoreSlideUpWobble {
+    0% { 
+      transform: translateY(100%) rotateX(0deg); 
+      opacity: 0; 
+    }
+    25% { 
+      transform: translateY(20px) rotateX(-5deg); 
+      opacity: 0.7; 
+    }
+    50% { 
+      transform: translateY(-10px) rotateX(3deg); 
+      opacity: 1; 
+    }
+    75% { 
+      transform: translateY(3px) rotateX(-1deg); 
+    }
+    100% { 
+      transform: translateY(0) rotateX(0deg); 
+      opacity: 1; 
+    }
+  }
+
+  @keyframes scoreSlideUpFast {
+    0% { 
+      transform: translateY(100%); 
+      opacity: 0; 
+    }
+    100% { 
+      transform: translateY(0); 
+      opacity: 1; 
+    }
+  }
+
+  @keyframes scoreSlideUpSlow {
+    0% { 
+      transform: translateY(100%); 
+      opacity: 0; 
+    }
+    100% { 
+      transform: translateY(0); 
+      opacity: 1; 
+    }
+  }
+
+  @keyframes scoreSlideUpSmooth {
+    0% { 
+      transform: translateY(100%); 
+      opacity: 0; 
+    }
+    100% { 
+      transform: translateY(0); 
+      opacity: 1; 
+    }
+  }
+
+  /* Subtle text animations for vertical movement */
+  @keyframes textFloatUp {
+    0%, 100% { 
+      transform: translateY(0); 
+    }
+    50% { 
+      transform: translateY(-2px); 
+    }
+  }
+
+  @keyframes textGentleBob {
+    0%, 100% { 
+      transform: translateY(0); 
+    }
+    25% { 
+      transform: translateY(-1px); 
+    }
+    75% { 
+      transform: translateY(1px); 
+    }
+  }
+
+  @keyframes textPulseUp {
+    0%, 100% { 
+      transform: translateY(0) scale(1); 
+    }
+    50% { 
+      transform: translateY(-1px) scale(1.02); 
+    }
+  }
+
+  /* Score overlay animation classes */
+  .animate-score-slide-up-bounce { 
+    animation: scoreSlideUpBounce 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; 
+  }
+  .animate-score-slide-up-elastic { 
+    animation: scoreSlideUpElastic 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; 
+  }
+  .animate-score-slide-up-spring { 
+    animation: scoreSlideUpSpring 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; 
+  }
+  .animate-score-slide-up-wobble { 
+    animation: scoreSlideUpWobble 1.1s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; 
+  }
+  .animate-score-slide-up-fast { 
+    animation: scoreSlideUpFast 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; 
+  }
+  .animate-score-slide-up-slow { 
+    animation: scoreSlideUpSlow 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; 
+  }
+  .animate-score-slide-up-smooth { 
+    animation: scoreSlideUpSmooth 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; 
+  }
+
+  /* Text animation classes */
+  .animate-text-float-up { 
+    animation: textFloatUp 3s ease-in-out infinite; 
+  }
+  .animate-text-gentle-bob { 
+    animation: textGentleBob 4s ease-in-out infinite; 
+  }
+  .animate-text-pulse-up { 
+    animation: textPulseUp 2s ease-in-out infinite; 
+  }
+
   /* Transparent video support */
   .transparent-video {
     background: transparent !important;

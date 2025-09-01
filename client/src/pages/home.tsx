@@ -76,19 +76,22 @@ function getExitAnimation(entranceAnimation: string): string {
 }
 
 // Scroll-specific marquee component - no individual animations, just static display
-function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSpacing, gameHeight }: { 
+function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSpacing, gameHeight, isAutoScrolling = true }: { 
   game: Game; 
   className?: string;
   scrollPosition?: number;
   gameIndex?: number;
   gameSpacing?: number;
   gameHeight?: number;
+  isAutoScrolling?: boolean;
 }) {
   const imageUrl = game.imageUrl;
   const [topOverlayVisible, setTopOverlayVisible] = useState(false);
   const [fadeOpacity, setFadeOpacity] = useState(0);
   const [animationCount, setAnimationCount] = useState(0);
   const [wasInCenter, setWasInCenter] = useState(false);
+  const [scoreOverlayVisible, setScoreOverlayVisible] = useState(false);
+  const [scoreAnimationClass, setScoreAnimationClass] = useState('');
 
   // Calculate if this marquee is centered on screen for layer animation trigger
   useEffect(() => {
@@ -147,6 +150,24 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
     }
   }, [scrollPosition, gameIndex, gameSpacing, gameHeight, game.overlayImageUrl, topOverlayVisible, wasInCenter]);
 
+  // Trigger score overlay animation when not auto-scrolling and game is visible
+  useEffect(() => {
+    if (!isAutoScrolling && fadeOpacity > 0.8) {
+      // Random delay before showing score overlay
+      const delay = 1000 + Math.random() * 1500;
+      const timer = setTimeout(() => {
+        const randomAnimation = scoreOverlayAnimations[Math.floor(Math.random() * scoreOverlayAnimations.length)];
+        setScoreAnimationClass(randomAnimation);
+        setScoreOverlayVisible(true);
+      }, delay);
+      
+      return () => clearTimeout(timer);
+    } else {
+      // Hide score overlay when auto-scrolling or not visible
+      setScoreOverlayVisible(false);
+    }
+  }, [isAutoScrolling, fadeOpacity]);
+
   return (
     <div className={`w-full max-w-[1188px] aspect-[1188/321] relative overflow-hidden transition-opacity duration-500 ${className}`} 
          style={{ 
@@ -181,9 +202,9 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
       )}
       
       
-      {/* Horizontal Score Overlay - Always visible when score data exists */}
-      {((game.currentHighScore && game.currentHighScore > 0) || (game.topScorerName && game.topScorerName !== 'No scores yet')) && (
-        <div className="absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm border-t border-primary/20 px-6" 
+      {/* Horizontal Score Overlay - Hidden during auto-scroll, animated entrance when shown */}
+      {!isAutoScrolling && ((game.currentHighScore && game.currentHighScore > 0) || (game.topScorerName && game.topScorerName !== 'No scores yet')) && (
+        <div className={`absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm border-t border-primary/20 px-6 ${scoreOverlayVisible ? scoreAnimationClass : 'translate-y-full opacity-0'}`}
              style={{ 
                zIndex: 100, 
                borderBottomLeftRadius: '15px', 
@@ -192,36 +213,36 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
                paddingBottom: '30px'
              }}>
           <div className="flex items-center justify-between w-full">
-            {/* Left side - Champion info */}
+            {/* Left side - Champion info with text animation */}
             <div className="flex items-center gap-4">
               <TrophyIcon size={62} className="text-yellow-400 flex-shrink-0 md:block sm:hidden" />
               <TrophyIcon size={46} className="text-yellow-400 flex-shrink-0 hidden sm:block md:hidden" />
               <TrophyIcon size={31} className="text-yellow-400 flex-shrink-0 block sm:hidden" />
               <div className="text-white">
-                <div className="text-2xl md:text-xl sm:text-lg font-bold text-yellow-400">#1 CHAMPION</div>
-                <div className="text-4xl md:text-3xl sm:text-2xl font-bold">{game.topScorerName || "No Name"}</div>
+                <div className="text-2xl md:text-xl sm:text-lg font-bold text-yellow-400 animate-text-float-up">#1 CHAMPION</div>
+                <div className="text-4xl md:text-3xl sm:text-2xl font-bold animate-text-gentle-bob">{game.topScorerName || "No Name"}</div>
               </div>
             </div>
             
-            {/* Center - Game name */}
+            {/* Center - Game name with text animation */}
             <div className="text-center flex-1 px-4">
-              <div className="text-3xl md:text-2xl sm:text-xl font-bold text-primary uppercase tracking-wide">
+              <div className="text-3xl md:text-2xl sm:text-xl font-bold text-primary uppercase tracking-wide animate-text-pulse-up">
                 {game.name}
               </div>
               {game.subtitle && (
-                <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1">
+                <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1 animate-text-float-up">
                   {game.subtitle}
                 </div>
               )}
             </div>
             
-            {/* Right side - Score and date */}
+            {/* Right side - Score and date with text animation */}
             <div className="text-right">
-              <div className="text-5xl md:text-4xl sm:text-3xl font-bold text-primary">
+              <div className="text-5xl md:text-4xl sm:text-3xl font-bold text-primary animate-text-pulse-up">
                 {game.currentHighScore ? game.currentHighScore.toLocaleString() : "0"}
               </div>
               {game.topScoreDate && (
-                <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1">
+                <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1 animate-text-gentle-bob">
                   {formatDate(new Date(game.topScoreDate))}
                 </div>
               )}
@@ -323,49 +344,47 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
           />
           
           
-          {/* Horizontal Score Overlay - Random animation with darker transparency */}
+          {/* Horizontal Score Overlay - Bottom-up entrance animation */}
           {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
-            <div className={`absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm border-t border-primary/20 px-6 ${scoreOverlayVisible && !isExiting ? `${scoreAnimationClass} opacity-100` : 'opacity-0'}`}
+            <div className={`absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm border-t border-primary/20 px-6 ${scoreOverlayVisible && !isExiting ? scoreAnimationClass : 'translate-y-full opacity-0'}`}
                  style={{ 
                    zIndex: 100, 
                    borderBottomLeftRadius: '15px', 
                    borderBottomRightRadius: '15px',
-                   animationDuration: '0.8s',
-                   animationFillMode: 'both',
                    paddingTop: '30px',
                    paddingBottom: '30px'
                  }}>
               <div className="flex items-center justify-between w-full">
-                {/* Left side - Champion info */}
+                {/* Left side - Champion info with text animation */}
                 <div className="flex items-center gap-4">
                   <TrophyIcon size={62} className="text-yellow-400 flex-shrink-0 md:block sm:hidden" />
                   <TrophyIcon size={46} className="text-yellow-400 flex-shrink-0 hidden sm:block md:hidden" />
                   <TrophyIcon size={31} className="text-yellow-400 flex-shrink-0 block sm:hidden" />
                   <div className="text-white">
-                    <div className="text-2xl md:text-xl sm:text-lg font-bold text-yellow-400">#1 CHAMPION</div>
-                    <div className="text-4xl md:text-3xl sm:text-2xl font-bold">{game.topScorerName || "No Name"}</div>
+                    <div className="text-2xl md:text-xl sm:text-lg font-bold text-yellow-400 animate-text-float-up">#1 CHAMPION</div>
+                    <div className="text-4xl md:text-3xl sm:text-2xl font-bold animate-text-gentle-bob">{game.topScorerName || "No Name"}</div>
                   </div>
                 </div>
                 
-                {/* Center - Game name */}
+                {/* Center - Game name with text animation */}
                 <div className="text-center flex-1 px-4">
-                  <div className="text-3xl md:text-2xl sm:text-xl font-bold text-primary uppercase tracking-wide">
+                  <div className="text-3xl md:text-2xl sm:text-xl font-bold text-primary uppercase tracking-wide animate-text-pulse-up">
                     {game.name}
                   </div>
                   {game.subtitle && (
-                    <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1">
+                    <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1 animate-text-float-up">
                       {game.subtitle}
                     </div>
                   )}
                 </div>
                 
-                {/* Right side - Score and date */}
+                {/* Right side - Score and date with text animation */}
                 <div className="text-right">
-                  <div className="text-5xl md:text-4xl sm:text-3xl font-bold text-primary">
+                  <div className="text-5xl md:text-4xl sm:text-3xl font-bold text-primary animate-text-pulse-up">
                     {game.currentHighScore ? game.currentHighScore.toLocaleString() : "0"}
                   </div>
                   {game.topScoreDate && (
-                    <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1">
+                    <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1 animate-text-gentle-bob">
                       {formatDate(new Date(game.topScoreDate))}
                     </div>
                   )}
@@ -395,15 +414,22 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
   );
 }
 
-// Score overlay slide-up animations with random variations
+// Score overlay entrance animations - Bottom-up slide/bounce effects
 const scoreOverlayAnimations = [
-  'slideUpBounce',      // Slides up with bounce
-  'slideUpWobble',      // Slides up with wobble
-  'slideUpFast',        // Fast slide up
-  'slideUpSlow',        // Slow slide up
-  'slideUpSpring',      // Spring-like slide up
-  'slideUpElastic',     // Elastic slide up
-  'slideUpSmooth'       // Smooth slide up
+  'animate-score-slide-up-bounce',   // Slides up with bounce
+  'animate-score-slide-up-wobble',   // Slides up with wobble  
+  'animate-score-slide-up-fast',     // Fast slide up
+  'animate-score-slide-up-slow',     // Slow slide up
+  'animate-score-slide-up-spring',   // Spring-like slide up
+  'animate-score-slide-up-elastic',  // Elastic slide up
+  'animate-score-slide-up-smooth'    // Smooth slide up
+];
+
+// Text animation classes for subtle vertical movement
+const textAnimations = [
+  'animate-text-float-up',
+  'animate-text-gentle-bob', 
+  'animate-text-pulse-up'
 ];
 
 type ViewMode = "dual" | "single" | "scroll" | "grid" | "list";
@@ -904,6 +930,7 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
                 gameIndex={index}
                 gameSpacing={gameSpacing}
                 gameHeight={gameHeight}
+                isAutoScrolling={isInitialized}
               />
             </div>
           ))}
