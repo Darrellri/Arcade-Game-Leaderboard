@@ -1169,7 +1169,7 @@ export default function Home() {
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
           {(venueSettings?.animatedLogoUrl || venueSettings?.logoUrl) && (
             <div 
-              className={`logo-container flex-shrink-0 overflow-hidden cursor-pointer hover:opacity-80 transition-opacity w-24 h-12 sm:w-48 sm:h-24 md:w-72 md:h-36 ${
+              className={`logo-container flex-shrink-0 overflow-hidden cursor-pointer hover:opacity-80 transition-opacity w-24 h-12 sm:w-48 sm:h-24 md:w-[300px] md:h-36 flex items-center justify-center ${
                 venueSettings.hideLogoBorderShadow === 'true' 
                   ? '' 
                   : 'rounded-md shadow-md border border-primary/20'
@@ -1336,11 +1336,13 @@ export default function Home() {
               showLogoOverlay ? 'opacity-100' : 'opacity-0'
             }`}
           >
-            <img 
-              src="/arcade-leaderboard-logo.png" 
-              alt="Arcade Leaderboard" 
-              className="w-48 h-48 sm:w-58 sm:h-58 md:w-72 md:h-72 object-contain" 
-            />
+            <div className="w-48 h-48 sm:w-58 sm:h-58 md:w-[300px] md:h-72 flex items-center justify-center">
+              <img 
+                src="/arcade-leaderboard-logo.png" 
+                alt="Arcade Leaderboard" 
+                className="max-w-full max-h-full object-contain" 
+              />
+            </div>
           </div>
         </div>
       </div>
