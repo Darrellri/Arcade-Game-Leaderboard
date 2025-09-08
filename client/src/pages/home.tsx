@@ -821,8 +821,31 @@ function SortableGameListItem({ game }: { game: Game }) {
             <GripVertical className="h-4 w-4 text-muted-foreground" />
           </div>
 
-          {/* Left side - Game marquee image with overlay support */}
-          <ListMarquee game={game} />
+          {/* Left side - Game image or icon */}
+          <div className="flex-shrink-0 mr-2 md:mr-4 w-20 xs:w-24 sm:w-32 md:w-80 relative">
+            {game.imageUrl ? (
+              <div className="relative w-full rounded-lg overflow-hidden shadow-md bg-black aspect-[792/214]">
+                <img 
+                  src={game.imageUrl} 
+                  alt={game.name} 
+                  className="w-full h-full object-contain"
+                  style={{
+                    aspectRatio: '792/214',
+                    maxWidth: '100%',
+                    height: 'auto'
+                  }}
+                />
+              </div>
+            ) : (
+              <div className="w-full h-12 sm:h-14 md:h-16 bg-muted rounded-lg flex items-center justify-center">
+                {game.type === 'pinball' ? (
+                  <CircleDot className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
+                ) : (
+                  <Gamepad2 className="h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Game info - Hidden on mobile, shown on larger screens */}
           <div className="hidden sm:flex flex-col min-w-0 flex-1">

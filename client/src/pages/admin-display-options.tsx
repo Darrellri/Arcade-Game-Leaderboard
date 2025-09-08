@@ -31,9 +31,7 @@ export default function AdminDisplayOptions() {
   // Collapsible sections state
   const [collapsedSections, setCollapsedSections] = useState({
     singleView: false,
-    dualView: false,
     scrollView: false,
-    listView: false,
     gridView: false,
   });
 
@@ -46,12 +44,6 @@ export default function AdminDisplayOptions() {
 
   // Display View Options state
   const [displayViewSettings, setDisplayViewSettings] = useState({
-    // Dual View Settings
-    dualViewSpeed: 8,
-    dualViewAnimations: false,
-    dualViewHideHeader: false,
-    dualViewSize: "extra-large",
-    
     // Single View Settings
     singleViewSpeed: 6,
     singleViewAnimations: false,
@@ -65,16 +57,6 @@ export default function AdminDisplayOptions() {
     scrollViewStickyHeader: true,
     scrollViewLazyLoad: false,
     scrollViewSize: "extra-large",
-    
-    // List View Settings
-    listViewScrollDirection: "up",
-    listViewSpeed: 50,
-    listViewSpacing: 20,
-    listViewAnimations: false,
-    listViewHideHeader: false,
-    listViewStickyHeader: true,
-    listViewScrolling: false,
-    listViewSize: "large",
     
     // Grid View Settings
     gridViewScrollDirection: "up",
@@ -92,11 +74,6 @@ export default function AdminDisplayOptions() {
   useEffect(() => {
     if (venueSettings) {
       setDisplayViewSettings({
-        dualViewSpeed: venueSettings.dualViewSpeed || 8,
-        dualViewAnimations: venueSettings.dualViewAnimations === true,
-        dualViewHideHeader: venueSettings.dualViewHideHeader || false,
-        dualViewSize: venueSettings.dualViewSize || "extra-large",
-        
         singleViewSpeed: venueSettings.singleViewSpeed || 6,
         singleViewAnimations: venueSettings.singleViewAnimations === true,
         singleViewHideHeader: venueSettings.singleViewHideHeader || false,
@@ -108,15 +85,6 @@ export default function AdminDisplayOptions() {
         scrollViewStickyHeader: venueSettings.scrollViewStickyHeader !== false,
         scrollViewLazyLoad: venueSettings.scrollViewLazyLoad || false,
         scrollViewSize: venueSettings.scrollViewSize || "extra-large",
-        
-        listViewScrollDirection: venueSettings.listViewScrollDirection || "up",
-        listViewSpeed: venueSettings.listViewSpeed || 50,
-        listViewSpacing: venueSettings.listViewSpacing || 20,
-        listViewAnimations: venueSettings.listViewAnimations === true,
-        listViewHideHeader: venueSettings.listViewHideHeader || false,
-        listViewStickyHeader: venueSettings.listViewStickyHeader !== false,
-        listViewScrolling: venueSettings.listViewScrolling || false,
-        listViewSize: venueSettings.listViewSize || "large",
         
         gridViewScrollDirection: venueSettings.gridViewScrollDirection || "up",
         gridViewSpeed: venueSettings.gridViewSpeed || 75,
@@ -267,69 +235,6 @@ export default function AdminDisplayOptions() {
               )}
             </div>
 
-            {/* Dual View Settings */}
-            <div className="border rounded-lg p-4 space-y-4">
-              <div className="flex items-center justify-between">
-                <h4 className="font-medium text-base">Dual View (Two games side by side)</h4>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => toggleSection('dualView')}
-                  className="h-6 w-6 p-0"
-                >
-                  {collapsedSections.dualView ? (
-                    <ChevronDown className="h-4 w-4" />
-                  ) : (
-                    <ChevronUp className="h-4 w-4" />
-                  )}
-                </Button>
-              </div>
-              
-              {!collapsedSections.dualView && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">Transition Speed</Label>
-                    <select 
-                      value={displayViewSettings.dualViewSpeed}
-                      onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, dualViewSpeed: Number(e.target.value) }))}
-                      className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
-                    >
-                      <option value={5}>Fast (5 seconds)</option>
-                      <option value={8}>Medium (8 seconds)</option>
-                      <option value={12}>Slow (12 seconds)</option>
-                      <option value={15}>Very Slow (15 seconds)</option>
-                    </select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium flex items-center gap-2">
-                      <input 
-                        type="checkbox" 
-                        checked={displayViewSettings.dualViewAnimations}
-                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, dualViewAnimations: e.target.checked }))}
-                        className="rounded" 
-                      />
-                      Enable Animations
-                    </Label>
-                    <p className="text-xs text-muted-foreground">Random animation effects when games change</p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">Display Size</Label>
-                    <select 
-                      value={displayViewSettings.dualViewSize}
-                      onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, dualViewSize: e.target.value }))}
-                      className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
-                    >
-                      <option value="normal">Regular Size</option>
-                      <option value="large">Large (1.3x)</option>
-                      <option value="extra-large">Extra Large (1.5x) - Default</option>
-                      <option value="full">Full Screen (150px margins)</option>
-                    </select>
-                  </div>
-                </div>
-              )}
-            </div>
 
             {/* Scroll View Settings */}
             <div className="border rounded-lg p-4 space-y-4">
@@ -435,67 +340,6 @@ export default function AdminDisplayOptions() {
               )}
             </div>
 
-            {/* List View Settings */}
-            <div className="border rounded-lg p-4 space-y-4">
-              <div className="flex items-center justify-between">
-                <h4 className="font-medium text-base">List View (Vertical list layout)</h4>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => toggleSection('listView')}
-                  className="h-6 w-6 p-0"
-                >
-                  {collapsedSections.listView ? (
-                    <ChevronDown className="h-4 w-4" />
-                  ) : (
-                    <ChevronUp className="h-4 w-4" />
-                  )}
-                </Button>
-              </div>
-              
-              {!collapsedSections.listView && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium flex items-center gap-2">
-                      <input 
-                        type="checkbox" 
-                        checked={displayViewSettings.listViewScrolling}
-                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, listViewScrolling: e.target.checked }))}
-                        className="rounded" 
-                      />
-                      Enable Scrolling
-                    </Label>
-                    <p className="text-xs text-muted-foreground">Automatically scroll through the list</p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium flex items-center gap-2">
-                      <input 
-                        type="checkbox" 
-                        checked={displayViewSettings.listViewAnimations}
-                        onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, listViewAnimations: e.target.checked }))}
-                        className="rounded" 
-                      />
-                      Enable Animations
-                    </Label>
-                    <p className="text-xs text-muted-foreground">Smooth transition effects</p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">Display Size</Label>
-                    <select 
-                      value={displayViewSettings.listViewSize}
-                      onChange={(e) => setDisplayViewSettings(prev => ({ ...prev, listViewSize: e.target.value }))}
-                      className="w-full px-3 py-2 border border-input rounded-md text-sm bg-background"
-                    >
-                      <option value="normal">Regular Size</option>
-                      <option value="large">Large (1.3x) - Default</option>
-                      <option value="extra-large">Extra Large (1.5x)</option>
-                    </select>
-                  </div>
-                </div>
-              )}
-            </div>
 
             {/* Grid View Settings */}
             <div className="border rounded-lg p-4 space-y-4">
