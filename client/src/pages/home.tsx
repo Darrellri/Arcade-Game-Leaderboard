@@ -7,7 +7,6 @@ import GameCard from "@/components/game-card";
 import ShareScore from "@/components/share-score";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Gamepad2, Grid2X2, List, CircleDot, Trophy, GripVertical, MonitorSpeaker, Play, Square } from "lucide-react";
-import ListMarquee from "@/components/list-marquee";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import {
   DndContext,
@@ -432,7 +431,7 @@ const textAnimations = [
   'animate-text-pulse-up'
 ];
 
-type ViewMode = "dual" | "single" | "scroll" | "grid" | "list";
+type ViewMode = "single" | "scroll" | "grid";
 
 // Grid View Component - Scrollable grid layout
 function GridView({ games, animationsEnabled, hideHeader }: { 
@@ -539,159 +538,8 @@ function GridView({ games, animationsEnabled, hideHeader }: {
   );
 }
 
-// List View Component - Scrollable vertical list
-function ListView({ games, animationsEnabled, hideHeader }: { 
-  games: Game[]; 
-  animationsEnabled: boolean; 
-  hideHeader: boolean;
-}) {
-  const [scrollPositionY, setScrollPositionY] = useState(0);
-  const [visibleGames, setVisibleGames] = useState<Game[]>([]);
-  const [isInitialized, setIsInitialized] = useState(false);
-  
-  const { data: venueSettings } = useQuery<VenueSettings>({
-    queryKey: ["/api/admin/settings"],
-  });
-  
-  const scrollDirection = venueSettings?.listViewScrollDirection || 'up';
-  const scrollSpeed = venueSettings?.listViewSpeed || 50;
-  const itemSpacing = venueSettings?.listViewSpacing || 20;
-  const stickyHeader = venueSettings?.listViewStickyHeader !== false;
-  
-  const itemHeight = 120; // Approximate height of each list item
-  
-  // Create extended games array for infinite scroll
-  useEffect(() => {
-    if (games.length > 0) {
-      const extendedGames = [...games, ...games, ...games]; // Triple for seamless loop
-      setVisibleGames(extendedGames);
-      
-      // Initialize at center position  
-      const screenHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
-      const centerPosition = (screenHeight / 2) - (itemHeight / 2);
-      setScrollPositionY(-centerPosition);
-      
-      setTimeout(() => {
-        setIsInitialized(true);
-      }, 100);
-    }
-  }, [games, itemHeight, itemSpacing]);
-  
-  // Auto-scroll effect
-  useEffect(() => {
-    if (!isInitialized) return;
-    
-    const scrollTimer = setInterval(() => {
-      setScrollPositionY(prev => {
-        const baseSpeed = scrollSpeed / 1000; // Convert ms to pixels per frame
-        const direction = scrollDirection === 'up' ? 1 : scrollDirection === 'down' ? -1 : Math.sin(Date.now() / 5000) > 0 ? 1 : -1;
-        const newPosition = prev + (baseSpeed * direction);
-        
-        const resetPoint = games.length * (itemHeight + itemSpacing);
-        
-        if (direction > 0) {
-          return newPosition >= resetPoint ? 0 : newPosition;
-        } else {
-          return newPosition <= -resetPoint ? 0 : newPosition;
-        }
-      });
-    }, 16); // ~60fps
-    
-    return () => clearInterval(scrollTimer);
-  }, [games.length, itemHeight, itemSpacing, scrollDirection, scrollSpeed, isInitialized]);
-  
-  return (
-    <div className="relative overflow-hidden h-screen px-4 bg-background">
-      {/* Sticky Header */}
-      {stickyHeader && !hideHeader && (
-        <div className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-sm border-b border-border/50 px-4 py-3">
-          <div className="container mx-auto">
-            <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center">
-              {venueSettings?.leaderboardName || 'Leaderboard'}
-            </h2>
-          </div>
-        </div>
-      )}
-      
-      <div 
-        className={`container mx-auto transition-opacity duration-1000 ${isInitialized ? 'opacity-100' : 'opacity-0'}`}
-        style={{ 
-          transform: `translateY(-${scrollPositionY}px)`,
-          paddingTop: stickyHeader && !hideHeader ? '120px' : '100px'
-        }}
-      >
-        <div className="space-y-4" style={{ gap: `${itemSpacing}px` }}>
-          {visibleGames.map((game, index) => (
-            <SortableGameListItem key={`${game.id}-${index}`} game={game} />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
 
 
-// Dual View Component - Shows 2 games side by side with staggered dramatic animations
-function DualView({ games, animationsEnabled, hideHeader }: { 
-  games: Game[]; 
-  animationsEnabled: boolean; 
-  hideHeader: boolean; 
-}) {
-  const [currentPair, setCurrentPair] = useState(0);
-  const [animationKey, setAnimationKey] = useState(0);
-  const { data: venueSettings } = useQuery<VenueSettings>({
-    queryKey: ["/api/admin/settings"],
-  });
-
-  const gamePairs = [];
-  for (let i = 0; i < games.length; i += 2) {
-    gamePairs.push(games.slice(i, i + 2));
-  }
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentPair((prev) => (prev + 1) % gamePairs.length);
-      setAnimationKey(prev => prev + 1); // Trigger new random animations
-    }, 8000);
-
-    return () => clearInterval(timer);
-  }, [gamePairs.length]);
-
-  const currentGames = gamePairs[currentPair] || [];
-
-  // Determine size based on venue settings
-  const isFullSize = venueSettings?.dualViewSize === 'full';
-  
-  const getSizeMultiplier = () => {
-    switch (venueSettings?.dualViewSize) {
-      case 'normal': return 1;
-      case 'large': return 1.3; // 30% larger (default)
-      case 'extra-large': return 1.5; // 50% larger  
-      default: return 1.5; // Default to extra large for dual view
-    }
-  };
-  
-  const sizeMultiplier = getSizeMultiplier();
-  const baseWidth = 1200;
-  const maxWidth = isFullSize ? undefined : `${Math.round(baseWidth * sizeMultiplier)}px`;
-
-  return (
-    <div className="flex justify-center items-center min-h-[70vh] px-4">
-      <div className={`flex flex-col items-center gap-5 w-full ${isFullSize ? 'mx-[50px] lg:mx-[150px]' : ''}`} style={!isFullSize ? { maxWidth } : undefined}> {/* 20px gap between images */}
-        {currentGames.map((game, index) => (
-          <div key={`${game.id}-${currentPair}-${animationKey}`} className="w-full flex justify-center">
-            <FullSizeMarquee 
-              game={game} 
-              animationKey={animationKey + index}
-              delay={index === 0 ? 1000 : 2500} // First game after 1s, second after 2.5s (1.5s gap)
-              className={`w-full ${animationsEnabled ? '' : 'animation-none'}`}
-            />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 // Single View Component - Shows 1 large game centered with dramatic animations
 function SingleView({ games, animationsEnabled, hideHeader }: { 
@@ -1294,17 +1142,6 @@ export default function Home() {
                     <Square className="h-3 w-3 sm:h-4 sm:w-4" />
                   </Button>
                   <Button
-                    variant={viewMode === "dual" ? "default" : "outline"}
-                    size="icon"
-                    onClick={() => setViewMode("dual")}
-                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10 ${
-                      showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
-                    }`}
-                    title="Dual View - Two games side by side"
-                  >
-                    <MonitorSpeaker className="h-3 w-3 sm:h-4 sm:w-4" />
-                  </Button>
-                  <Button
                     variant={viewMode === "scroll" ? "default" : "outline"}
                     size="icon"
                     onClick={() => setViewMode("scroll")}
@@ -1314,17 +1151,6 @@ export default function Home() {
                     title="Scroll View - Infinite vertical scroll"
                   >
                     <List className="h-3 w-3 sm:h-4 sm:w-4" />
-                  </Button>
-                  <Button
-                    variant={viewMode === "list" ? "default" : "outline"}
-                    size="icon"
-                    onClick={() => setViewMode("list")}
-                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10 ${
-                      showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
-                    }`}
-                    title="List View - Games in a vertical list"
-                  >
-                    <CircleDot className="h-3 w-3 sm:h-4 sm:w-4" />
                   </Button>
                   <Button
                     variant={viewMode === "grid" ? "default" : "outline"}
@@ -1390,13 +1216,7 @@ export default function Home() {
         </div>
       )}
 
-      {viewMode === "dual" ? (
-        <DualView 
-          games={processedGames || []} 
-          animationsEnabled={animationsEnabled} 
-          hideHeader={hideHeader}
-        />
-      ) : viewMode === "single" ? (
+      {viewMode === "single" ? (
         <SingleView 
           games={processedGames || []} 
           animationsEnabled={animationsEnabled} 
@@ -1408,14 +1228,8 @@ export default function Home() {
           animationsEnabled={animationsEnabled} 
           hideHeader={hideHeader}
         />
-      ) : viewMode === "grid" ? (
-        <GridView 
-          games={processedGames || []} 
-          animationsEnabled={animationsEnabled} 
-          hideHeader={hideHeader}
-        />
       ) : (
-        <ListView 
+        <GridView 
           games={processedGames || []} 
           animationsEnabled={animationsEnabled} 
           hideHeader={hideHeader}
