@@ -1694,7 +1694,7 @@ export default function Admin() {
                       <li>• Responsive layout for all devices</li>
                       <li>• Touch-friendly interface</li>
                       <li>• QR code scanner integration</li>
-                      <li>• Grid and list view modes</li>
+                      <li>• Multiple view modes (Single, Scroll, Grid)</li>
                       <li>• Optimized for arcade environment</li>
                     </ul>
                   </div>

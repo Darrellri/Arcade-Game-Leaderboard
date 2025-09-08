@@ -122,7 +122,7 @@ export default function AdminNotes() {
                     <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0"></div>
                     <div>
                       <h4 className="font-semibold text-foreground">Advanced Display Modes</h4>
-                      <p className="text-sm text-muted-foreground">Single, Dual, and Scroll view options with customizable animations and sizing</p>
+                      <p className="text-sm text-muted-foreground">Single, Scroll, and Grid view options with customizable animations and sizing</p>
                     </div>
                   </div>
                 </div>
@@ -225,7 +225,7 @@ export default function AdminNotes() {
                     <li className="text-foreground"><strong className="text-primary">Recommended Size:</strong> 792x214px</li>
                     <li className="text-foreground"><strong className="text-primary">Maximum File Size:</strong> 2MB per image</li>
                     <li className="text-foreground"><strong className="text-primary">Supported Formats:</strong> JPG, PNG, WebP</li>
-                    <li className="text-foreground"><strong className="text-primary">Display Context:</strong> Grid view cards, list view thumbnails</li>
+                    <li className="text-foreground"><strong className="text-primary">Display Context:</strong> Grid view cards and game displays</li>
                     <li className="text-foreground"><strong className="text-primary">Responsive Behavior:</strong> Auto-scales for mobile devices</li>
                   </ul>
                 </div>
@@ -267,9 +267,7 @@ export default function AdminNotes() {
                   <h4 className="text-lg font-semibold mb-3 text-foreground">Display View Modes</h4>
                   <ul className="space-y-2 text-base">
                     <li className="text-foreground"><strong className="text-primary">Single View:</strong> One large game displayed with automatic rotation</li>
-                    <li className="text-foreground"><strong className="text-primary">Dual View:</strong> Two games side-by-side with staggered timing</li>
                     <li className="text-foreground"><strong className="text-primary">Scroll View:</strong> Infinite vertical scroll with customizable spacing</li>
-                    <li className="text-foreground"><strong className="text-primary">List View:</strong> Compact vertical list with optional auto-scroll</li>
                     <li className="text-foreground"><strong className="text-primary">Grid View:</strong> Card-based grid layout with configurable columns</li>
                   </ul>
                 </div>
