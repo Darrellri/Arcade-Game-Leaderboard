@@ -71,11 +71,6 @@ export const venueSettings = pgTable("venue_settings", {
   customBackgroundColor: text("custom_background_color").default("#000000"),
   
   // Display View Settings
-  dualViewSpeed: integer("dual_view_speed").default(8),
-  dualViewAnimations: boolean("dual_view_animations").default(false),
-  dualViewHideHeader: boolean("dual_view_hide_header").default(false),
-  dualViewSize: text("dual_view_size").default("extra-large"),
-  
   singleViewSpeed: integer("single_view_speed").default(6),
   singleViewAnimations: boolean("single_view_animations").default(false),
   singleViewHideHeader: boolean("single_view_hide_header").default(false),
@@ -87,15 +82,6 @@ export const venueSettings = pgTable("venue_settings", {
   scrollViewStickyHeader: boolean("scroll_view_sticky_header").default(true),
   scrollViewLazyLoad: boolean("scroll_view_lazy_load").default(false),
   scrollViewSize: text("scroll_view_size").default("extra-large"),
-  
-  listViewScrollDirection: text("list_view_scroll_direction").default("up"),
-  listViewSpeed: integer("list_view_speed").default(50),
-  listViewSpacing: integer("list_view_spacing").default(20),
-  listViewAnimations: boolean("list_view_animations").default(false),
-  listViewHideHeader: boolean("list_view_hide_header").default(false),
-  listViewStickyHeader: boolean("list_view_sticky_header").default(true),
-  listViewScrolling: boolean("list_view_scrolling").default(false),
-  listViewSize: text("list_view_size").default("large"),
   
   gridViewScrollDirection: text("grid_view_scroll_direction").default("up"),
   gridViewSpeed: integer("grid_view_speed").default(75),
@@ -162,11 +148,6 @@ export const venueSettingsSchema = z.object({
   customBackgroundColor: z.string().optional(),
   
   // Display View Settings
-  dualViewSpeed: z.number().optional(),
-  dualViewAnimations: z.boolean().optional(),
-  dualViewHideHeader: z.boolean().optional(),
-  dualViewSize: z.string().optional(),
-  
   singleViewSpeed: z.number().optional(),
   singleViewAnimations: z.boolean().optional(),
   singleViewHideHeader: z.boolean().optional(),
@@ -178,15 +159,6 @@ export const venueSettingsSchema = z.object({
   scrollViewStickyHeader: z.boolean().optional(),
   scrollViewLazyLoad: z.boolean().optional(),
   scrollViewSize: z.string().optional(),
-  
-  listViewScrollDirection: z.string().optional(),
-  listViewSpeed: z.number().optional(),
-  listViewSpacing: z.number().optional(),
-  listViewAnimations: z.boolean().optional(),
-  listViewHideHeader: z.boolean().optional(),
-  listViewStickyHeader: z.boolean().optional(),
-  listViewScrolling: z.boolean().optional(),
-  listViewSize: z.string().optional(),
   
   gridViewScrollDirection: z.string().optional(),
   gridViewSpeed: z.number().optional(),
