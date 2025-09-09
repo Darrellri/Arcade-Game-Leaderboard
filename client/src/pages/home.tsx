@@ -583,7 +583,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   if (!currentGame) return null;
 
   return (
-    <div className="flex justify-center items-center min-h-[70vh] w-full px-4">
+    <div className="flex flex-col justify-center items-center min-h-[70vh] w-full px-4">
       <div 
         key={`${currentGame.id}-${currentGameIndex}-${animationKey}`} 
         className={`w-full flex justify-center ${isFullSize ? 'mx-[50px] lg:mx-[150px]' : ''}`}
@@ -596,6 +596,53 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
           className={`w-full ${animationsEnabled ? '' : 'animation-none'}`}
         />
       </div>
+      
+      {/* Champion Information Window - Below marquee with 20px padding */}
+      {((currentGame.currentHighScore && currentGame.currentHighScore > 0) || (currentGame.topScorerName && currentGame.topScorerName !== 'No scores yet')) && (
+        <div 
+          className={`w-full flex justify-center mt-5 ${isFullSize ? 'mx-[50px] lg:mx-[150px]' : ''}`}
+          style={!isFullSize ? { maxWidth } : undefined}
+        >
+          <div className="w-full max-w-[1188px] bg-black/75 backdrop-blur-sm border border-primary/20 rounded-[15px] px-6 py-6">
+            <div className="flex items-center justify-between w-full">
+              {/* Left side - Champion info with trophy icon */}
+              <div className="flex items-center gap-4">
+                <TrophyIcon size={62} className="text-yellow-400 flex-shrink-0 md:block sm:hidden" />
+                <TrophyIcon size={46} className="text-yellow-400 flex-shrink-0 hidden sm:block md:hidden" />
+                <TrophyIcon size={31} className="text-yellow-400 flex-shrink-0 block sm:hidden" />
+                <div className="text-white">
+                  <div className="text-2xl md:text-xl sm:text-lg font-bold text-yellow-400">#1 CHAMPION</div>
+                  <div className="text-4xl md:text-3xl sm:text-2xl font-bold">{currentGame.topScorerName || "No Name"}</div>
+                </div>
+              </div>
+              
+              {/* Center - Game name */}
+              <div className="text-center flex-1 px-4">
+                <div className="text-3xl md:text-2xl sm:text-xl font-bold text-primary uppercase tracking-wide">
+                  {currentGame.name}
+                </div>
+                {currentGame.subtitle && (
+                  <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1">
+                    {currentGame.subtitle}
+                  </div>
+                )}
+              </div>
+              
+              {/* Right side - Score and date */}
+              <div className="text-right">
+                <div className="text-5xl md:text-4xl sm:text-3xl font-bold text-primary">
+                  {currentGame.currentHighScore ? currentGame.currentHighScore.toLocaleString() : "0"}
+                </div>
+                {currentGame.topScoreDate && (
+                  <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1">
+                    {formatDate(new Date(currentGame.topScoreDate))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
