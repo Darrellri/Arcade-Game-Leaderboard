@@ -166,7 +166,16 @@ export default function Admin() {
                   </div>
                   <ChevronRight className={`h-5 w-5 ${section.iconColor}`} />
                 </div>
-                <CardTitle className="text-lg">{section.title}</CardTitle>
+                <CardTitle 
+                  className="text-lg font-bold"
+                  style={{ 
+                    color: venueSettings?.theme?.appearance === 'light' 
+                      ? '#1f2937' // Dark gray for light themes
+                      : '#f9fafb'  // Light gray for dark themes
+                  }}
+                >
+                  {section.title}
+                </CardTitle>
                 <CardDescription className="text-sm">
                   {section.description}
                 </CardDescription>
