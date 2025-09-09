@@ -1242,13 +1242,145 @@ export default function Home() {
     >
       {/* Header with venue name and view mode controls */}
       <div className="themed-header px-5 py-4 rounded-lg mb-2 w-full">
-        {/* Three Column Layout: Logo | Centered Titles | Controls */}
-        <div className="flex items-center w-full">
+        
+        {/* Mobile Layout: 3 Rows (visible on small screens only) */}
+        <div className="block md:hidden">
+          {/* Row 1: Logos evenly spaced */}
+          <div className="flex items-center justify-between mb-3">
+            {/* Left: Venue Logo */}
+            <div className="flex-1 flex justify-start">
+              {(venueSettings?.animatedLogoUrl || venueSettings?.logoUrl) && (
+                <div 
+                  className={`logo-container overflow-hidden cursor-pointer hover:opacity-80 transition-opacity w-20 h-10 flex items-center justify-center ${
+                    venueSettings.hideLogoBorderShadow === 'true' 
+                      ? '' 
+                      : 'rounded-md shadow-md border border-primary/20'
+                  }`}
+                  style={{ 
+                    backgroundColor: 
+                      venueSettings.logoBackgroundColor === 'white' ? '#ffffff' :
+                      venueSettings.logoBackgroundColor === 'black' ? '#000000' :
+                      venueSettings.logoBackgroundColor === 'theme' ? 'hsl(var(--primary))' :
+                      'transparent'
+                  }}
+                  onClick={cycleColorScheme}
+                  title="Click to cycle through color schemes"
+                >
+                  {venueSettings.animatedLogoUrl ? (
+                    <video 
+                      src={venueSettings.animatedLogoUrl} 
+                      autoPlay 
+                      loop 
+                      muted
+                      className="w-full h-full object-contain transparent-video" 
+                    />
+                  ) : (
+                    <img 
+                      src={venueSettings.logoUrl} 
+                      alt={venueSettings.name} 
+                      className="w-full h-full object-contain p-1" 
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+            
+            {/* Right: Arcade Leaderboard Logo */}
+            <div className="flex-1 flex justify-end">
+              <div className="w-20 h-10 flex items-center justify-center">
+                <img 
+                  src="/arcade-leaderboard-logo.png" 
+                  alt="Arcade Leaderboard" 
+                  className="max-w-full max-h-full object-contain" 
+                />
+              </div>
+            </div>
+          </div>
+          
+          {/* Row 2: Leaderboard Name */}
+          <div className="mb-2">
+            <h1 className="font-black tracking-tight text-foreground uppercase text-outline leading-tight text-center" 
+                style={{...getLeaderboardTitleStyle(), fontSize: '16px'}}>
+              {venueSettings?.leaderboardName || "THE LEADERBOARD"}
+            </h1>
+          </div>
+          
+          {/* Row 3: Venue Name */}
+          <div className="mb-3">
+            <h2 
+              className={`tracking-tight leading-tight text-center ${
+                venueSettings?.subtitleBold === "true" ? "font-bold" : "font-normal"
+              } ${
+                venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
+              }`}
+              style={{...getVenueNameStyle(), fontSize: '14px'}}
+            >
+              {venueSettings?.name || "Arcade"}
+            </h2>
+          </div>
+          
+          {/* Controls Row for Mobile */}
+          <div className="flex items-center justify-center gap-2">
+            {/* View Mode Buttons */}
+            <div className="flex items-center gap-1">
+              <Button
+                variant={viewMode === "single" ? "default" : "outline"}
+                size="icon"
+                onClick={() => setViewMode("single")}
+                className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8"
+                title="Single View"
+              >
+                <Square className="h-3 w-3" />
+              </Button>
+              <Button
+                variant={viewMode === "scroll" ? "default" : "outline"}
+                size="icon"
+                onClick={() => setViewMode("scroll")}
+                className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8"
+                title="Scroll View"
+              >
+                <List className="h-3 w-3" />
+              </Button>
+              <Button
+                variant={viewMode === "grid" ? "default" : "outline"}
+                size="icon"
+                onClick={() => setViewMode("grid")}
+                className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8"
+                title="Grid View"
+              >
+                <Grid2X2 className="h-3 w-3" />
+              </Button>
+            </div>
+            
+            {/* Navigation Buttons */}
+            <div className="flex gap-1">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                asChild 
+                className="h-7 px-2 text-xs"
+              >
+                <Link href="/">Home</Link>
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                asChild 
+                className="h-7 px-2 text-xs"
+              >
+                <Link href="/admin">Admin</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop Layout: Three Column Layout (visible on medium screens and up) */}
+        <div className="hidden md:flex items-center w-full">
           {/* Left Venue Logo - Fixed 300px on desktop */}
-          <div className="flex-shrink-0 w-32 sm:w-48 md:w-[300px] flex justify-center">
+          <div className="flex-shrink-0 w-[300px] flex justify-center">
             {(venueSettings?.animatedLogoUrl || venueSettings?.logoUrl) && (
               <div 
-                className={`logo-container overflow-hidden cursor-pointer hover:opacity-80 transition-opacity w-32 h-16 sm:w-48 sm:h-24 md:w-[280px] md:h-36 flex items-center justify-center ${
+                className={`logo-container overflow-hidden cursor-pointer hover:opacity-80 transition-opacity w-[280px] h-36 flex items-center justify-center ${
                   venueSettings.hideLogoBorderShadow === 'true' 
                     ? '' 
                     : 'rounded-md shadow-md border border-primary/20'
@@ -1284,11 +1416,11 @@ export default function Home() {
           
           {/* Center Content Area - Titles centered from marquee position */}
           <div className="flex-1 min-w-0 flex flex-col justify-center px-4">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-foreground uppercase text-outline leading-tight text-center" style={getLeaderboardTitleStyle()}>
+            <h1 className="text-4xl lg:text-5xl font-black tracking-tight text-foreground uppercase text-outline leading-tight text-center" style={getLeaderboardTitleStyle()}>
               {venueSettings?.leaderboardName || "THE LEADERBOARD"}
             </h1>
             <h2 
-              className={`text-base sm:text-lg md:text-2xl lg:text-[2.625rem] tracking-tight leading-tight text-center ${
+              className={`text-2xl lg:text-[2.625rem] tracking-tight leading-tight text-center ${
                 venueSettings?.subtitleBold === "true" ? "font-bold" : "font-normal"
               } ${
                 venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
@@ -1300,8 +1432,8 @@ export default function Home() {
           </div>
           
           {/* Right Controls and Leaderboard Logo - Fixed 300px on desktop */}
-          <div className="flex-shrink-0 w-32 sm:w-48 md:w-[300px] flex justify-center">
-            <div className="flex flex-col gap-2 self-start sm:self-center mt-2 sm:mt-0 relative">
+          <div className="flex-shrink-0 w-[300px] flex justify-center">
+            <div className="flex flex-col gap-2 self-center relative">
               {/* Navigation Elements with Timed Fade */}
               <div 
                 className={`flex flex-col gap-2 transition-opacity duration-1000 group ${
@@ -1309,49 +1441,49 @@ export default function Home() {
                 }`}
               >
                 {/* View Mode Buttons Row */}
-                <div className="flex items-center gap-1 sm:gap-2">
+                <div className="flex items-center gap-2">
                   <Button
                     variant={viewMode === "single" ? (showLogoOverlay ? "outline" : "default") : "outline"}
                     size="icon"
                     onClick={() => setViewMode("single")}
-                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-10 w-10 sm:h-10 sm:w-10 ${
+                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-10 w-10 ${
                       showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
                     }`}
                     title="Single View - One large game centered"
                   >
-                    <Square className="h-4 w-4 sm:h-4 sm:w-4" />
+                    <Square className="h-4 w-4" />
                   </Button>
                   <Button
                     variant={viewMode === "scroll" ? "default" : "outline"}
                     size="icon"
                     onClick={() => setViewMode("scroll")}
-                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-10 w-10 sm:h-10 sm:w-10 ${
+                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-10 w-10 ${
                       showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
                     }`}
                     title="Scroll View - Infinite vertical scroll"
                   >
-                    <List className="h-4 w-4 sm:h-4 sm:w-4" />
+                    <List className="h-4 w-4" />
                   </Button>
                   <Button
                     variant={viewMode === "grid" ? "default" : "outline"}
                     size="icon"
                     onClick={() => setViewMode("grid")}
-                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-10 w-10 sm:h-10 sm:w-10 ${
+                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-10 w-10 ${
                       showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
                     }`}
                     title="Grid View - Games in a grid layout"
                   >
-                    <Grid2X2 className="h-4 w-4 sm:h-4 sm:w-4" />
+                    <Grid2X2 className="h-4 w-4" />
                   </Button>
                 </div>
                 
                 {/* Navigation Buttons Row */}
-                <div className="flex gap-1 sm:gap-2">
+                <div className="flex gap-2">
                   <Button 
                     variant="outline" 
                     size="sm" 
                     asChild 
-                    className={`h-8 px-3 text-sm sm:h-8 sm:px-3 sm:text-sm ${
+                    className={`h-8 px-3 text-sm ${
                       showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
                     }`}
                   >
@@ -1362,7 +1494,7 @@ export default function Home() {
                     variant="outline" 
                     size="sm" 
                     asChild 
-                    className={`h-8 px-3 text-sm sm:h-8 sm:px-3 sm:text-sm ${
+                    className={`h-8 px-3 text-sm ${
                       showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
                     }`}
                   >
@@ -1377,7 +1509,7 @@ export default function Home() {
                   showLogoOverlay ? 'opacity-100' : 'opacity-0'
                 }`}
               >
-                <div className="w-48 h-48 sm:w-58 sm:h-58 md:w-[280px] md:h-72 flex items-center justify-center">
+                <div className="w-[280px] h-72 flex items-center justify-center">
                   <img 
                     src="/arcade-leaderboard-logo.png" 
                     alt="Arcade Leaderboard" 
