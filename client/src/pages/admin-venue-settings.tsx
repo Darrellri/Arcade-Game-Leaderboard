@@ -377,7 +377,7 @@ export default function AdminVenueSettings() {
                           min={16}
                           max={40}
                           {...field}
-                          value={field.value || 30}
+                          value={field.value ?? 30}
                           onChange={(e) => field.onChange(parseInt(e.target.value) || 30)}
                           placeholder="30"
                         />
@@ -465,7 +465,7 @@ export default function AdminVenueSettings() {
                           min={16}
                           max={40}
                           {...field}
-                          value={field.value || 30}
+                          value={field.value ?? 30}
                           onChange={(e) => field.onChange(parseInt(e.target.value) || 30)}
                           placeholder="30"
                         />
