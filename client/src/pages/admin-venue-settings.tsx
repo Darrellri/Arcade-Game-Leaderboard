@@ -126,7 +126,7 @@ export default function AdminVenueSettings() {
   // Update settings mutation
   const updateSettings = useMutation({
     mutationFn: async (data: Partial<VenueSettings>) => {
-      const response = await apiRequest("POST", "/api/admin/settings", data);
+      const response = await apiRequest("PATCH", "/api/admin/settings", data);
       return response.json();
     },
     onSuccess: () => {
