@@ -480,31 +480,47 @@ function GridView({ games, animationsEnabled, hideHeader }: {
 
 
 
-// Text animation sets that rotate each time for champion window
+// Text animation sets that rotate each time for champion window - visually interesting entrance animations
 const textAnimationSets = [
   {
-    champion: 'animate-text-float-up',
-    name: 'animate-text-gentle-bob',
-    game: 'animate-text-pulse-up',
-    score: 'animate-text-float-up',
-    subtitle: 'animate-text-gentle-bob',
-    date: 'animate-text-pulse-up'
+    champion: 'animate-text-typewriter',
+    name: 'animate-text-bounce-in',
+    game: 'animate-text-slide-in-up',
+    score: 'animate-text-zoom-in',
+    subtitle: 'animate-text-fade-in-scale',
+    date: 'animate-text-slide-in-right'
   },
   {
-    champion: 'animate-text-gentle-bob',
-    name: 'animate-text-pulse-up',
-    game: 'animate-text-float-up',
-    score: 'animate-text-gentle-bob',
-    subtitle: 'animate-text-pulse-up',
-    date: 'animate-text-float-up'
+    champion: 'animate-text-glow-in',
+    name: 'animate-text-slide-in-left',
+    game: 'animate-text-flip-in',
+    score: 'animate-text-bounce-in',
+    subtitle: 'animate-text-slide-in-down',
+    date: 'animate-text-zoom-in'
   },
   {
-    champion: 'animate-text-pulse-up',
-    name: 'animate-text-float-up',
-    game: 'animate-text-gentle-bob',
-    score: 'animate-text-pulse-up',
-    subtitle: 'animate-text-float-up',
-    date: 'animate-text-gentle-bob'
+    champion: 'animate-text-slide-in-up',
+    name: 'animate-text-fade-in-scale',
+    game: 'animate-text-glow-in',
+    score: 'animate-text-slide-in-left',
+    subtitle: 'animate-text-flip-in',
+    date: 'animate-text-bounce-in'
+  },
+  {
+    champion: 'animate-text-bounce-in',
+    name: 'animate-text-zoom-in',
+    game: 'animate-text-typewriter',
+    score: 'animate-text-slide-in-down',
+    subtitle: 'animate-text-glow-in',
+    date: 'animate-text-fade-in-scale'
+  },
+  {
+    champion: 'animate-text-flip-in',
+    name: 'animate-text-slide-in-right',
+    game: 'animate-text-zoom-in',
+    score: 'animate-text-glow-in',
+    subtitle: 'animate-text-bounce-in',
+    date: 'animate-text-slide-in-up'
   }
 ];
 
@@ -607,10 +623,16 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
                 <TrophyIcon size={46} className="text-yellow-400 flex-shrink-0 hidden sm:block md:hidden" />
                 <TrophyIcon size={31} className="text-yellow-400 flex-shrink-0 block sm:hidden" />
                 <div className="text-white">
-                  <div className={`text-2xl md:text-xl sm:text-lg font-bold text-yellow-400 ${textAnimationSets[textAnimationVariant]?.champion}`}>
+                  <div 
+                    className={`text-2xl md:text-xl sm:text-lg font-bold text-yellow-400 ${textAnimationSets[textAnimationVariant]?.champion}`}
+                    style={{ animationDelay: '0.1s', opacity: 0, animationFillMode: 'both' }}
+                  >
                     #1 CHAMPION
                   </div>
-                  <div className={`text-4xl md:text-3xl sm:text-2xl font-bold ${textAnimationSets[textAnimationVariant]?.name}`}>
+                  <div 
+                    className={`text-4xl md:text-3xl sm:text-2xl font-bold ${textAnimationSets[textAnimationVariant]?.name}`}
+                    style={{ animationDelay: '0.3s', opacity: 0, animationFillMode: 'both' }}
+                  >
                     {championGame.topScorerName || "No Name"}
                   </div>
                 </div>
@@ -618,11 +640,17 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
               
               {/* Center - Game name with animated text */}
               <div className="text-center flex-1 px-4">
-                <div className={`text-3xl md:text-2xl sm:text-xl font-bold text-primary uppercase tracking-wide ${textAnimationSets[textAnimationVariant]?.game}`}>
+                <div 
+                  className={`text-3xl md:text-2xl sm:text-xl font-bold text-primary uppercase tracking-wide ${textAnimationSets[textAnimationVariant]?.game}`}
+                  style={{ animationDelay: '0.5s', opacity: 0, animationFillMode: 'both' }}
+                >
                   {championGame.name}
                 </div>
                 {championGame.subtitle && (
-                  <div className={`text-lg md:text-base sm:text-sm text-gray-300 mt-1 ${textAnimationSets[textAnimationVariant]?.subtitle}`}>
+                  <div 
+                    className={`text-lg md:text-base sm:text-sm text-gray-300 mt-1 ${textAnimationSets[textAnimationVariant]?.subtitle}`}
+                    style={{ animationDelay: '0.7s', opacity: 0, animationFillMode: 'both' }}
+                  >
                     {championGame.subtitle}
                   </div>
                 )}
@@ -630,11 +658,17 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
               
               {/* Right side - Score and date with animated text */}
               <div className="text-right">
-                <div className={`text-5xl md:text-4xl sm:text-3xl font-bold text-primary ${textAnimationSets[textAnimationVariant]?.score}`}>
+                <div 
+                  className={`text-5xl md:text-4xl sm:text-3xl font-bold text-primary ${textAnimationSets[textAnimationVariant]?.score}`}
+                  style={{ animationDelay: '0.9s', opacity: 0, animationFillMode: 'both' }}
+                >
                   {championGame.currentHighScore ? championGame.currentHighScore.toLocaleString() : "0"}
                 </div>
                 {championGame.topScoreDate && (
-                  <div className={`text-lg md:text-base sm:text-sm text-gray-300 mt-1 ${textAnimationSets[textAnimationVariant]?.date}`}>
+                  <div 
+                    className={`text-lg md:text-base sm:text-sm text-gray-300 mt-1 ${textAnimationSets[textAnimationVariant]?.date}`}
+                    style={{ animationDelay: '1.1s', opacity: 0, animationFillMode: 'both' }}
+                  >
                     {formatDate(new Date(championGame.topScoreDate))}
                   </div>
                 )}
