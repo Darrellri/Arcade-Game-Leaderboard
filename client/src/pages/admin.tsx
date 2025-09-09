@@ -166,7 +166,7 @@ export default function Admin() {
                   </div>
                   <ChevronRight className={`h-5 w-5 ${section.iconColor}`} />
                 </div>
-                <CardTitle 
+                <div 
                   className="text-lg font-bold"
                   style={{ 
                     color: venueSettings?.theme?.appearance === 'light' 
@@ -175,7 +175,7 @@ export default function Admin() {
                   }}
                 >
                   {section.title}
-                </CardTitle>
+                </div>
                 <CardDescription className="text-sm">
                   {section.description}
                 </CardDescription>
