@@ -35,43 +35,31 @@ import { TrophyIcon } from "@/components/trophy-icon";
 
 
 
-// Get random animation class
+// Get random animation class - entrance animations with stop effects
 function getRandomAnimation() {
-  return ''; // No animations
+  const animations = [
+    'animate-slide-in-left-wobble',
+    'animate-slide-in-right-bounce',
+    'animate-fly-in-left-skew',
+    'animate-fly-in-right-wobble',
+    'animate-slide-in-top-bounce',
+    'animate-slide-in-bottom-skew'
+  ];
+  return animations[Math.floor(Math.random() * animations.length)];
 }
 
 // Get exit animation for a given entrance animation
 function getExitAnimation(entranceAnimation: string): string {
   const exitMap: { [key: string]: string } = {
-    'animate-slide-in-left': 'animate-slide-out-right',
-    'animate-slide-in-right': 'animate-slide-out-left',
-    'animate-slide-in-up': 'animate-slide-out-down',
-    'animate-slide-in-down': 'animate-slide-out-up',
-    'animate-bounce-in': 'animate-bounce-out',
-    'animate-zoom-in': 'animate-zoom-out',
-    'animate-fade-in': 'animate-fade-out',
-    'animate-rotate-in': 'animate-rotate-out',
-    'animate-flip-in-x': 'animate-flip-out-x',
-    'animate-flip-in-y': 'animate-flip-out-y',
-    'animate-light-speed-in': 'animate-light-speed-out',
-    'animate-roll-in': 'animate-roll-out',
-    'animate-back-in-up': 'animate-back-out-up',
-    'animate-back-in-down': 'animate-back-out-down',
-    'animate-back-in-left': 'animate-back-out-left',
-    'animate-back-in-right': 'animate-back-out-right',
-    'animate-fly-in-from-left': 'animate-fly-out-left',
-    'animate-fly-in-from-right': 'animate-fly-out-right',
-    'animate-fly-in-from-top': 'animate-fly-out-top',
-    'animate-fly-in-from-bottom': 'animate-fly-out-bottom',
-    'animate-swoop-in-left': 'animate-swoop-out-left',
-    'animate-swoop-in-right': 'animate-swoop-out-right',
-    'animate-spiral-in': 'animate-spiral-out',
-    'animate-explode-in': 'animate-explode-out',
-    'animate-rocket-in': 'animate-rocket-out',
-    'animate-meteor-in': 'animate-meteor-out'
+    'animate-slide-in-left-wobble': 'animate-slide-out-right-wobble',
+    'animate-slide-in-right-bounce': 'animate-slide-out-left-bounce',
+    'animate-fly-in-left-skew': 'animate-fly-out-right-skew',
+    'animate-fly-in-right-wobble': 'animate-fly-out-left-wobble',
+    'animate-slide-in-top-bounce': 'animate-slide-out-top-bounce',
+    'animate-slide-in-bottom-skew': 'animate-slide-out-bottom-skew'
   };
   
-  return exitMap[entranceAnimation] || 'animate-fade-out';
+  return exitMap[entranceAnimation] || 'opacity-0';
 }
 
 // Scroll-specific marquee component - no individual animations, just static display
@@ -274,8 +262,10 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
   // Set random animations when component mounts or animationKey changes
   useEffect(() => {
     const entranceAnim = getRandomAnimation();
-    setCurrentAnimation('');
-    setExitAnimation('');
+    const exitAnim = getExitAnimation(entranceAnim);
+    
+    setCurrentAnimation(entranceAnim);
+    setExitAnimation(exitAnim);
     setImageLoaded(false);
     setIsVisible(false);
     setTopOverlayVisible(false);
@@ -286,14 +276,14 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
       setIsVisible(true);
     }, delay);
 
-    // Show top overlay after marquee animation completes (0.8s animation + 0.2s buffer)
+    // Show top overlay after marquee animation completes (animation duration + buffer)
     const topOverlayTimer = setTimeout(() => {
       setTopOverlayVisible(true);
       // Hide top overlay after 1 second
       setTimeout(() => {
         setTopOverlayVisible(false);
       }, 1000);
-    }, delay + 1000);
+    }, delay + 1400); // Wait for entrance animation to complete (1.4s max)
 
     // Start exit animation before the component cycles
     const exitTimer = setTimeout(() => {

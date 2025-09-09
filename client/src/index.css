@@ -1119,6 +1119,275 @@
     animation: letterGlowIn 1.0s ease-out forwards; 
   }
 
+  /* Marquee entrance animations - slide/fly in from sides with stop animations */
+  @keyframes slideInLeftWobble {
+    0% { 
+      transform: translateX(-100vw); 
+      opacity: 1; 
+    }
+    70% { 
+      transform: translateX(0); 
+    }
+    80% { 
+      transform: translateX(-10px) rotateZ(-2deg); 
+    }
+    90% { 
+      transform: translateX(5px) rotateZ(1deg); 
+    }
+    100% { 
+      transform: translateX(0) rotateZ(0deg); 
+      opacity: 1; 
+    }
+  }
+
+  @keyframes slideInRightBounce {
+    0% { 
+      transform: translateX(100vw); 
+      opacity: 1; 
+    }
+    60% { 
+      transform: translateX(0); 
+    }
+    75% { 
+      transform: translateX(-15px); 
+    }
+    90% { 
+      transform: translateX(8px); 
+    }
+    100% { 
+      transform: translateX(0); 
+      opacity: 1; 
+    }
+  }
+
+  @keyframes flyInLeftSkew {
+    0% { 
+      transform: translateX(-120vw) translateY(-50px) skewX(-20deg) scale(0.8); 
+      opacity: 1; 
+    }
+    70% { 
+      transform: translateX(0) translateY(0) skewX(0deg) scale(1); 
+    }
+    85% { 
+      transform: skewX(3deg) scale(1.02); 
+    }
+    100% { 
+      transform: skewX(0deg) scale(1); 
+      opacity: 1; 
+    }
+  }
+
+  @keyframes flyInRightWobble {
+    0% { 
+      transform: translateX(120vw) translateY(30px) rotate(10deg) scale(0.9); 
+      opacity: 1; 
+    }
+    70% { 
+      transform: translateX(0) translateY(0) rotate(0deg) scale(1); 
+    }
+    80% { 
+      transform: rotateZ(-2deg) translateY(-3px); 
+    }
+    90% { 
+      transform: rotateZ(1deg) translateY(2px); 
+    }
+    100% { 
+      transform: rotateZ(0deg) translateY(0); 
+      opacity: 1; 
+    }
+  }
+
+  @keyframes slideInTopBounce {
+    0% { 
+      transform: translateY(-100vh); 
+      opacity: 1; 
+    }
+    60% { 
+      transform: translateY(0); 
+    }
+    75% { 
+      transform: translateY(-20px); 
+    }
+    90% { 
+      transform: translateY(10px); 
+    }
+    100% { 
+      transform: translateY(0); 
+      opacity: 1; 
+    }
+  }
+
+  @keyframes slideInBottomSkew {
+    0% { 
+      transform: translateY(100vh) skewY(-10deg); 
+      opacity: 1; 
+    }
+    70% { 
+      transform: translateY(0) skewY(0deg); 
+    }
+    85% { 
+      transform: skewY(2deg); 
+    }
+    100% { 
+      transform: skewY(0deg); 
+      opacity: 1; 
+    }
+  }
+
+  /* Marquee exit animations - reverse of entrance */
+  @keyframes slideOutRightWobble {
+    0% { 
+      transform: translateX(0) rotateZ(0deg); 
+      opacity: 1; 
+    }
+    10% { 
+      transform: translateX(-5px) rotateZ(-1deg); 
+    }
+    20% { 
+      transform: translateX(10px) rotateZ(2deg); 
+    }
+    30% { 
+      transform: translateX(0); 
+    }
+    100% { 
+      transform: translateX(100vw); 
+      opacity: 1; 
+    }
+  }
+
+  @keyframes slideOutLeftBounce {
+    0% { 
+      transform: translateX(0); 
+      opacity: 1; 
+    }
+    10% { 
+      transform: translateX(8px); 
+    }
+    25% { 
+      transform: translateX(-15px); 
+    }
+    40% { 
+      transform: translateX(0); 
+    }
+    100% { 
+      transform: translateX(-100vw); 
+      opacity: 1; 
+    }
+  }
+
+  @keyframes flyOutRightSkew {
+    0% { 
+      transform: skewX(0deg) scale(1); 
+      opacity: 1; 
+    }
+    15% { 
+      transform: skewX(-3deg) scale(1.02); 
+    }
+    30% { 
+      transform: translateX(0) translateY(0) skewX(0deg) scale(1); 
+    }
+    100% { 
+      transform: translateX(120vw) translateY(-50px) skewX(20deg) scale(0.8); 
+      opacity: 1; 
+    }
+  }
+
+  @keyframes flyOutLeftWobble {
+    0% { 
+      transform: rotateZ(0deg) translateY(0); 
+      opacity: 1; 
+    }
+    10% { 
+      transform: rotateZ(1deg) translateY(2px); 
+    }
+    20% { 
+      transform: rotateZ(-2deg) translateY(-3px); 
+    }
+    30% { 
+      transform: translateX(0) translateY(0) rotate(0deg) scale(1); 
+    }
+    100% { 
+      transform: translateX(-120vw) translateY(30px) rotate(-10deg) scale(0.9); 
+      opacity: 1; 
+    }
+  }
+
+  @keyframes slideOutTopBounce {
+    0% { 
+      transform: translateY(0); 
+      opacity: 1; 
+    }
+    10% { 
+      transform: translateY(10px); 
+    }
+    25% { 
+      transform: translateY(-20px); 
+    }
+    40% { 
+      transform: translateY(0); 
+    }
+    100% { 
+      transform: translateY(-100vh); 
+      opacity: 1; 
+    }
+  }
+
+  @keyframes slideOutBottomSkew {
+    0% { 
+      transform: skewY(0deg); 
+      opacity: 1; 
+    }
+    15% { 
+      transform: skewY(-2deg); 
+    }
+    30% { 
+      transform: translateY(0) skewY(0deg); 
+    }
+    100% { 
+      transform: translateY(100vh) skewY(10deg); 
+      opacity: 1; 
+    }
+  }
+
+  /* Marquee animation classes */
+  .animate-slide-in-left-wobble { 
+    animation: slideInLeftWobble 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; 
+  }
+  .animate-slide-in-right-bounce { 
+    animation: slideInRightBounce 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; 
+  }
+  .animate-fly-in-left-skew { 
+    animation: flyInLeftSkew 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; 
+  }
+  .animate-fly-in-right-wobble { 
+    animation: flyInRightWobble 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; 
+  }
+  .animate-slide-in-top-bounce { 
+    animation: slideInTopBounce 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards; 
+  }
+  .animate-slide-in-bottom-skew { 
+    animation: slideInBottomSkew 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; 
+  }
+  
+  .animate-slide-out-right-wobble { 
+    animation: slideOutRightWobble 1.2s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; 
+  }
+  .animate-slide-out-left-bounce { 
+    animation: slideOutLeftBounce 1.2s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; 
+  }
+  .animate-fly-out-right-skew { 
+    animation: flyOutRightSkew 1.4s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; 
+  }
+  .animate-fly-out-left-wobble { 
+    animation: flyOutLeftWobble 1.4s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; 
+  }
+  .animate-slide-out-top-bounce { 
+    animation: slideOutTopBounce 1.2s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; 
+  }
+  .animate-slide-out-bottom-skew { 
+    animation: slideOutBottomSkew 1.2s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards; 
+  }
+
   /* Transparent video support */
   .transparent-video {
     background: transparent !important;
