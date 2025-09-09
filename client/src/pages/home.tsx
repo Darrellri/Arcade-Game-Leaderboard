@@ -518,6 +518,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   const [animationKey, setAnimationKey] = useState(0);
   const [showChampionWindow, setShowChampionWindow] = useState(false);
   const [textAnimationVariant, setTextAnimationVariant] = useState(0);
+  const [championGame, setChampionGame] = useState<Game | null>(null);
   const { data: venueSettings } = useQuery<VenueSettings>({
     queryKey: ["/api/admin/settings"],
   });
@@ -533,15 +534,27 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
     return () => clearInterval(timer);
   }, [games.length]);
 
-  // Show champion window 1.5 seconds after marquee appears
+  // Hide champion window before next transition and show it for current game
   useEffect(() => {
     setShowChampionWindow(false); // Reset on game change
+    
+    // Show champion window 1.5 seconds after marquee appears
     const championTimer = setTimeout(() => {
+      const currentGame = games[currentGameIndex];
+      setChampionGame(currentGame); // Store the game data for champion window
       setShowChampionWindow(true);
     }, 2500); // 1 second marquee delay + 1.5 seconds = 2.5 total
+    
+    // Hide champion window 0.5 seconds before next game transition to prevent flash
+    const hideTimer = setTimeout(() => {
+      setShowChampionWindow(false);
+    }, 5500); // Hide 0.5 seconds before 6 second cycle ends
 
-    return () => clearTimeout(championTimer);
-  }, [currentGameIndex, animationKey]);
+    return () => {
+      clearTimeout(championTimer);
+      clearTimeout(hideTimer);
+    };
+  }, [currentGameIndex, animationKey, games]);
 
   const currentGame = games[currentGameIndex];
   
@@ -579,7 +592,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
       </div>
       
       {/* Champion Information Window - Below marquee with 20px padding and delayed appearance */}
-      {((currentGame.currentHighScore && currentGame.currentHighScore > 0) || (currentGame.topScorerName && currentGame.topScorerName !== 'No scores yet')) && (
+      {championGame && ((championGame.currentHighScore && championGame.currentHighScore > 0) || (championGame.topScorerName && championGame.topScorerName !== 'No scores yet')) && (
         <div 
           className={`w-full flex justify-center mt-5 transition-opacity duration-500 ${isFullSize ? 'mx-[50px] lg:mx-[150px]' : ''} ${
             showChampionWindow ? 'opacity-100' : 'opacity-0'
@@ -598,7 +611,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
                     #1 CHAMPION
                   </div>
                   <div className={`text-4xl md:text-3xl sm:text-2xl font-bold ${textAnimationSets[textAnimationVariant]?.name}`}>
-                    {currentGame.topScorerName || "No Name"}
+                    {championGame.topScorerName || "No Name"}
                   </div>
                 </div>
               </div>
@@ -606,11 +619,11 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
               {/* Center - Game name with animated text */}
               <div className="text-center flex-1 px-4">
                 <div className={`text-3xl md:text-2xl sm:text-xl font-bold text-primary uppercase tracking-wide ${textAnimationSets[textAnimationVariant]?.game}`}>
-                  {currentGame.name}
+                  {championGame.name}
                 </div>
-                {currentGame.subtitle && (
+                {championGame.subtitle && (
                   <div className={`text-lg md:text-base sm:text-sm text-gray-300 mt-1 ${textAnimationSets[textAnimationVariant]?.subtitle}`}>
-                    {currentGame.subtitle}
+                    {championGame.subtitle}
                   </div>
                 )}
               </div>
@@ -618,11 +631,11 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
               {/* Right side - Score and date with animated text */}
               <div className="text-right">
                 <div className={`text-5xl md:text-4xl sm:text-3xl font-bold text-primary ${textAnimationSets[textAnimationVariant]?.score}`}>
-                  {currentGame.currentHighScore ? currentGame.currentHighScore.toLocaleString() : "0"}
+                  {championGame.currentHighScore ? championGame.currentHighScore.toLocaleString() : "0"}
                 </div>
-                {currentGame.topScoreDate && (
+                {championGame.topScoreDate && (
                   <div className={`text-lg md:text-base sm:text-sm text-gray-300 mt-1 ${textAnimationSets[textAnimationVariant]?.date}`}>
-                    {formatDate(new Date(currentGame.topScoreDate))}
+                    {formatDate(new Date(championGame.topScoreDate))}
                   </div>
                 )}
               </div>
