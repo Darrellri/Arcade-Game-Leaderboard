@@ -561,7 +561,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
       setAnimationKey(prev => prev + 1); // Trigger new random animations
       setShowChampionWindow(false); // Hide champion window during transition
       setTextAnimations(getRandomTextAnimations()); // Generate new random animations for each text area
-    }, 6000);
+    }, 8000);
 
     return () => clearInterval(timer);
   }, [games.length]);
@@ -574,7 +574,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
     // Hide champion window 0.5 seconds before next game transition to prevent flash
     const hideTimer = setTimeout(() => {
       setShowChampionWindow(false);
-    }, 5500); // Hide 0.5 seconds before 6 second cycle ends
+    }, 7500); // Hide 0.5 seconds before 8 second cycle ends
 
     return () => {
       clearTimeout(hideTimer);
@@ -585,12 +585,12 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   useEffect(() => {
     if (!backgroundLoaded) return;
     
-    // Show champion window 1 second after background loads
+    // Show champion window 2 seconds after background loads
     const championTimer = setTimeout(() => {
       const currentGame = games[currentGameIndex];
       setChampionGame(currentGame); // Store the game data for champion window
       setShowChampionWindow(true);
-    }, 2000); // 1 second marquee delay + 1 second = 2 total
+    }, 3000); // 1 second marquee delay + 2 seconds = 3 total
 
     return () => {
       clearTimeout(championTimer);
