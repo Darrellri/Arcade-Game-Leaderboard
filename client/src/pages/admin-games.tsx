@@ -403,12 +403,24 @@ export default function AdminGames() {
           </Button>
         </Link>
         <div className="flex items-center gap-4">
-          {venueSettings?.logoUrl && (
-            <img 
-              src={venueSettings.logoUrl} 
-              alt="Venue Logo"
-              className="w-[100px] h-auto object-contain"
-            />
+          {(venueSettings?.logoUrl || venueSettings?.animatedLogoUrl) && (
+            <div className="w-[100px] h-auto">
+              {venueSettings.animatedLogoUrl ? (
+                <video 
+                  src={venueSettings.animatedLogoUrl} 
+                  autoPlay 
+                  loop 
+                  muted
+                  className="w-full h-full object-contain" 
+                />
+              ) : (
+                <img 
+                  src={venueSettings.logoUrl} 
+                  alt="Venue Logo"
+                  className="w-full h-full object-contain"
+                />
+              )}
+            </div>
           )}
           <div>
             <h1 className="text-3xl font-bold">Games Management</h1>

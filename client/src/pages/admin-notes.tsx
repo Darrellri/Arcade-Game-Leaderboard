@@ -36,12 +36,24 @@ export default function AdminNotes() {
           </Button>
         </Link>
         <div className="flex items-center gap-4">
-          {venueSettings?.logoUrl && (
-            <img 
-              src={venueSettings.logoUrl} 
-              alt="Venue Logo"
-              className="w-[100px] h-auto object-contain"
-            />
+          {(venueSettings?.logoUrl || venueSettings?.animatedLogoUrl) && (
+            <div className="w-[100px] h-auto">
+              {venueSettings.animatedLogoUrl ? (
+                <video 
+                  src={venueSettings.animatedLogoUrl} 
+                  autoPlay 
+                  loop 
+                  muted
+                  className="w-full h-full object-contain" 
+                />
+              ) : (
+                <img 
+                  src={venueSettings.logoUrl} 
+                  alt="Venue Logo"
+                  className="w-full h-full object-contain"
+                />
+              )}
+            </div>
           )}
           <div>
             <h1 className="text-3xl font-bold">System Documentation</h1>
@@ -54,12 +66,24 @@ export default function AdminNotes() {
       <Card className="overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-primary/5 via-secondary/10 to-primary/5 border-b">
           <CardTitle className="flex items-center gap-4">
-            {venueSettings?.logoUrl && (
-              <img 
-                src={venueSettings.logoUrl} 
-                alt="Venue Logo"
-                className="w-[150px] h-auto object-contain"
-              />
+            {(venueSettings?.logoUrl || venueSettings?.animatedLogoUrl) && (
+              <div className="w-[150px] h-auto">
+                {venueSettings.animatedLogoUrl ? (
+                  <video 
+                    src={venueSettings.animatedLogoUrl} 
+                    autoPlay 
+                    loop 
+                    muted
+                    className="w-full h-full object-contain" 
+                  />
+                ) : (
+                  <img 
+                    src={venueSettings.logoUrl} 
+                    alt="Venue Logo"
+                    className="w-full h-full object-contain"
+                  />
+                )}
+              </div>
             )}
             <div>
               <h2 className="text-2xl font-bold text-primary">System Documentation</h2>
