@@ -650,7 +650,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   if (!currentGame) return null;
 
   return (
-    <div className="flex flex-col justify-center items-center h-[calc(100vh-300px)] w-full px-4">
+    <div className="flex flex-col justify-center items-center h-[calc(100vh-200px)] w-full px-4">
       <div 
         key={`${currentGame.id}-${currentGameIndex}-${animationKey}`} 
         className={`w-full flex justify-center ${isFullSize ? 'mx-[50px] lg:mx-[150px]' : ''}`}
@@ -1235,7 +1235,7 @@ export default function Home() {
 
   return (
     <div 
-      className="space-y-6"
+      className="space-y-2 min-h-screen flex flex-col"
       style={{
         '--titlebox-spacing': `${parseInt(venueSettings?.titleboxSpacing || "20")}px`
       } as React.CSSProperties}
@@ -1396,36 +1396,38 @@ export default function Home() {
         </div>
       )}
 
-      {viewMode === "single" ? (
-        <SingleView 
-          games={processedGames || []} 
-          animationsEnabled={animationsEnabled} 
-          hideHeader={hideHeader}
-        />
-      ) : viewMode === "scroll" ? (
-        <ScrollView 
-          games={processedGames || []} 
-          animationsEnabled={animationsEnabled} 
-          hideHeader={hideHeader}
-        />
-      ) : (
-        <GridView 
-          games={processedGames || []} 
-          animationsEnabled={animationsEnabled} 
-          hideHeader={hideHeader}
-        />
-      )}
+      <div className="flex-1">
+        {viewMode === "single" ? (
+          <SingleView 
+            games={processedGames || []} 
+            animationsEnabled={animationsEnabled} 
+            hideHeader={hideHeader}
+          />
+        ) : viewMode === "scroll" ? (
+          <ScrollView 
+            games={processedGames || []} 
+            animationsEnabled={animationsEnabled} 
+            hideHeader={hideHeader}
+          />
+        ) : (
+          <GridView 
+            games={processedGames || []} 
+            animationsEnabled={animationsEnabled} 
+            hideHeader={hideHeader}
+          />
+        )}
+      </div>
 
       {/* Footer Bar */}
-      <div className="mt-6 h-[80px] border-t border-border/20 bg-card/30">
+      <div className="mt-2 h-[50px] bg-card/30">
         <div className="max-w-4xl mx-auto px-4 h-full flex items-center justify-center">
           <div className="flex items-center justify-center gap-[30px]">
             <img 
               src="/arcade-leaderboard-logo.png" 
               alt="Arcade Leaderboard" 
-              className="h-12 w-auto"
+              className="h-8 w-auto"
             />
-            <p className="text-sm text-primary">
+            <p className="text-xs text-primary">
               {venueSettings?.name || "Winona Axe and Arcade"} • High Score Tracking
             </p>
           </div>
