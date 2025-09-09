@@ -1134,17 +1134,7 @@ export default function Home() {
     });
   };
 
-  const isLoading = gamesLoading || settingsLoading;
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center min-h-[70vh] w-full">
-        <div className="w-full max-w-4xl">
-          <Skeleton className="h-[400px] w-full rounded-lg" />
-        </div>
-      </div>
-    );
-  }
+  // Remove loading screen - go directly to Single View
 
   // Process games data to determine the top scores
   const processedGames = games?.map(game => {
