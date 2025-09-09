@@ -254,13 +254,14 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
 }
 
 // Full-size marquee component for new views with 15px radius - MARQUEE ONLY
-function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000, overlayDelay, exitDelay = 6000 }: { 
+function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000, overlayDelay, exitDelay = 6000, onImageLoad }: { 
   game: Game; 
   className?: string; 
   animationKey?: number;
   delay?: number;
   overlayDelay?: number;
   exitDelay?: number;
+  onImageLoad?: () => void;
 }) {
   const imageUrl = game.imageUrl;
   const [currentAnimation, setCurrentAnimation] = useState('');
@@ -309,6 +310,9 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
   // Handle image load event
   const handleImageLoad = () => {
     setImageLoaded(true);
+    if (onImageLoad) {
+      onImageLoad();
+    }
   };
 
   if (imageUrl) {
@@ -546,6 +550,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   const [showChampionWindow, setShowChampionWindow] = useState(false);
   const [textAnimations, setTextAnimations] = useState(getRandomTextAnimations());
   const [championGame, setChampionGame] = useState<Game | null>(null);
+  const [backgroundLoaded, setBackgroundLoaded] = useState(false);
   const { data: venueSettings } = useQuery<VenueSettings>({
     queryKey: ["/api/admin/settings"],
   });
@@ -561,16 +566,10 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
     return () => clearInterval(timer);
   }, [games.length]);
 
-  // Hide champion window before next transition and show it for current game
+  // Reset background loaded state when game changes
   useEffect(() => {
+    setBackgroundLoaded(false);
     setShowChampionWindow(false); // Reset on game change
-    
-    // Show champion window 1.5 seconds after marquee appears
-    const championTimer = setTimeout(() => {
-      const currentGame = games[currentGameIndex];
-      setChampionGame(currentGame); // Store the game data for champion window
-      setShowChampionWindow(true);
-    }, 2500); // 1 second marquee delay + 1.5 seconds = 2.5 total
     
     // Hide champion window 0.5 seconds before next game transition to prevent flash
     const hideTimer = setTimeout(() => {
@@ -578,10 +577,25 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
     }, 5500); // Hide 0.5 seconds before 6 second cycle ends
 
     return () => {
-      clearTimeout(championTimer);
       clearTimeout(hideTimer);
     };
   }, [currentGameIndex, animationKey, games]);
+
+  // Show champion window after background loads + 1 second delay
+  useEffect(() => {
+    if (!backgroundLoaded) return;
+    
+    // Show champion window 1 second after background loads
+    const championTimer = setTimeout(() => {
+      const currentGame = games[currentGameIndex];
+      setChampionGame(currentGame); // Store the game data for champion window
+      setShowChampionWindow(true);
+    }, 2000); // 1 second marquee delay + 1 second = 2 total
+
+    return () => {
+      clearTimeout(championTimer);
+    };
+  }, [backgroundLoaded, currentGameIndex, games]);
 
   const currentGame = games[currentGameIndex];
   
@@ -615,6 +629,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
           animationKey={animationKey}
           delay={1000} // Single view starts after 1 second
           className={`w-full ${animationsEnabled ? '' : 'animation-none'}`}
+          onImageLoad={() => setBackgroundLoaded(true)}
         />
       </div>
       
