@@ -62,30 +62,16 @@ export default function AdminColorSchemes() {
             Back to Admin
           </Button>
         </Link>
-        <div className="flex items-center gap-4">
-          {(venueSettings?.logoUrl || venueSettings?.animatedLogoUrl) && (
-            <div className="w-[100px] h-auto">
-              {venueSettings.animatedLogoUrl ? (
-                <video 
-                  src={venueSettings.animatedLogoUrl} 
-                  autoPlay 
-                  loop 
-                  muted
-                  className="w-full h-full object-contain" 
-                />
-              ) : (
-                <img 
-                  src={venueSettings.logoUrl} 
-                  alt="Venue Logo"
-                  className="w-full h-full object-contain"
-                />
-              )}
-            </div>
-          )}
+        <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">Color Schemes</h1>
             <p className="text-muted-foreground">Transform your arcade's visual identity</p>
           </div>
+          <img 
+            src="/arcade-leaderboard-logo.png" 
+            alt="Arcade Leaderboard"
+            className="w-[100px] h-auto object-contain"
+          />
         </div>
       </div>
 

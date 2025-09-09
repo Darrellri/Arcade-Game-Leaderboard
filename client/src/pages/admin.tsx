@@ -94,30 +94,16 @@ export default function Admin() {
             Back to Home
           </Button>
         </Link>
-        <div className="flex items-center gap-4">
-          {(venueSettings?.logoUrl || venueSettings?.animatedLogoUrl) && (
-            <div className="w-[100px] h-auto">
-              {venueSettings.animatedLogoUrl ? (
-                <video 
-                  src={venueSettings.animatedLogoUrl} 
-                  autoPlay 
-                  loop 
-                  muted
-                  className="w-full h-full object-contain" 
-                />
-              ) : (
-                <img 
-                  src={venueSettings.logoUrl} 
-                  alt="Venue Logo"
-                  className="w-full h-full object-contain"
-                />
-              )}
-            </div>
-          )}
+        <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">Admin Dashboard</h1>
             <p className="text-muted-foreground">Manage your arcade leaderboard system</p>
           </div>
+          <img 
+            src="/arcade-leaderboard-logo.png" 
+            alt="Arcade Leaderboard"
+            className="w-[100px] h-auto object-contain"
+          />
         </div>
       </div>
 
