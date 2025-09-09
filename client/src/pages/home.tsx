@@ -200,7 +200,7 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
               {game.name}
             </h2>
             {game.subtitle && (
-              <p className="text-xs sm:text-sm md:text-base text-muted-foreground mt-2">
+              <p className="text-sm sm:text-base md:text-lg text-muted-foreground mt-2">
                 {game.subtitle}
               </p>
             )}
@@ -222,22 +222,22 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
           <div className="flex items-center justify-between w-full">
             {/* Left side - Champion info with text animation */}
             <div className="flex items-center gap-4">
-              <TrophyIcon size={62} className="text-yellow-400 flex-shrink-0 md:block sm:hidden" />
-              <TrophyIcon size={46} className="text-yellow-400 flex-shrink-0 hidden sm:block md:hidden" />
-              <TrophyIcon size={31} className="text-yellow-400 flex-shrink-0 block sm:hidden" />
+              <TrophyIcon size={40} className="text-yellow-400 flex-shrink-0 sm:hidden" />
+              <TrophyIcon size={50} className="text-yellow-400 flex-shrink-0 hidden sm:block md:hidden" />
+              <TrophyIcon size={62} className="text-yellow-400 flex-shrink-0 hidden md:block" />
               <div className="text-white">
-                <div className="text-2xl md:text-xl sm:text-lg font-bold text-yellow-400 animate-text-float-up">#1 CHAMPION</div>
-                <div className="text-4xl md:text-3xl sm:text-2xl font-bold animate-text-gentle-bob">{game.topScorerName || "No Name"}</div>
+                <div className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-400 animate-text-float-up">#1 CHAMPION</div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-bold animate-text-gentle-bob">{game.topScorerName || "No Name"}</div>
               </div>
             </div>
             
             {/* Center - Game name with text animation */}
             <div className="text-center flex-1 px-4">
-              <div className="text-3xl md:text-2xl sm:text-xl font-bold text-primary uppercase tracking-wide animate-text-pulse-up">
+              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-primary uppercase tracking-wide animate-text-pulse-up">
                 {game.name}
               </div>
               {game.subtitle && (
-                <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1 animate-text-float-up">
+                <div className="text-sm sm:text-base md:text-lg text-gray-300 mt-1 animate-text-float-up">
                   {game.subtitle}
                 </div>
               )}
@@ -245,11 +245,11 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
             
             {/* Right side - Score and date with text animation */}
             <div className="text-right">
-              <div className="text-5xl md:text-4xl sm:text-3xl font-bold text-primary animate-text-pulse-up">
+              <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary animate-text-pulse-up">
                 {game.currentHighScore ? game.currentHighScore.toLocaleString() : "0"}
               </div>
               {game.topScoreDate && (
-                <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1 animate-text-gentle-bob">
+                <div className="text-sm sm:text-base md:text-lg text-gray-300 mt-1 animate-text-gentle-bob">
                   {formatDate(new Date(game.topScoreDate))}
                 </div>
               )}
@@ -359,7 +359,7 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
     <div className={`w-full max-w-[1188px] aspect-[1188/321] flex items-center justify-center bg-gradient-to-r from-primary/20 to-primary/40 ${className}`}
          style={{ borderRadius: '15px' }}>
       <div className="text-center px-4">
-        <h2 className="text-lg sm:text-2xl md:text-3xl font-bold tracking-wider text-center uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground drop-shadow-lg">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-wider text-center uppercase bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary-foreground drop-shadow-lg">
           {game.name}
         </h2>
         {game.subtitle && (
@@ -470,7 +470,7 @@ function GridView({ games, animationsEnabled, hideHeader }: {
       {stickyHeader && !hideHeader && (
         <div className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-sm border-b border-border/50 px-4 py-3">
           <div className="container mx-auto">
-            <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center">
               {venueSettings?.leaderboardName || 'Leaderboard'}
             </h2>
           </div>
@@ -1427,7 +1427,7 @@ export default function Home() {
               alt="Arcade Leaderboard" 
               className="h-8 w-auto"
             />
-            <p className="text-xs text-primary">
+            <p className="text-sm text-primary">
               {venueSettings?.name || "Winona Axe and Arcade"} • High Score Tracking
             </p>
           </div>
