@@ -1138,10 +1138,10 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {[...Array(6)].map((_, i) => (
-          <Skeleton key={i} className="h-[300px]" />
-        ))}
+      <div className="flex justify-center items-center min-h-[70vh] w-full">
+        <div className="w-full max-w-4xl">
+          <Skeleton className="h-[400px] w-full rounded-lg" />
+        </div>
       </div>
     );
   }
