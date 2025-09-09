@@ -688,14 +688,14 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
                 <TrophyIcon size={46} className="text-yellow-400 flex-shrink-0 hidden sm:block md:hidden" />
                 <TrophyIcon size={31} className="text-yellow-400 flex-shrink-0 block sm:hidden" />
                 <div className="text-white">
-                  <div className="text-2xl md:text-xl sm:text-lg font-bold text-yellow-400">
+                  <div className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-400">
                     <AnimatedText 
                       text="#1 CHAMPION" 
                       animationClass={textAnimations.champion} 
                       baseDelay={0.35} 
                     />
                   </div>
-                  <div className="text-4xl md:text-3xl sm:text-2xl font-bold">
+                  <div className="text-2xl sm:text-3xl md:text-4xl font-bold">
                     <AnimatedText 
                       text={championGame.topScorerName || "No Name"} 
                       animationClass={textAnimations.name} 
@@ -707,7 +707,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
               
               {/* Center - Game name with animated text */}
               <div className="text-center flex-1 px-4">
-                <div className="text-3xl md:text-2xl sm:text-xl font-bold text-primary uppercase tracking-wide">
+                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-primary uppercase tracking-wide">
                   <AnimatedText 
                     text={championGame.name} 
                     animationClass={textAnimations.game} 
@@ -715,7 +715,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
                   />
                 </div>
                 {championGame.subtitle && (
-                  <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1">
+                  <div className="text-sm sm:text-base md:text-lg text-gray-300 mt-1">
                     <AnimatedText 
                       text={championGame.subtitle} 
                       animationClass={textAnimations.subtitle} 
@@ -727,7 +727,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
               
               {/* Right side - Score and date with animated text */}
               <div className="text-right">
-                <div className="text-5xl md:text-4xl sm:text-3xl font-bold text-primary">
+                <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary">
                   <AnimatedText 
                     text={championGame.currentHighScore ? championGame.currentHighScore.toLocaleString() : "0"} 
                     animationClass={textAnimations.score} 
@@ -735,7 +735,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
                   />
                 </div>
                 {championGame.topScoreDate && (
-                  <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1">
+                  <div className="text-sm sm:text-base md:text-lg text-gray-300 mt-1">
                     <AnimatedText 
                       text={formatDate(new Date(championGame.topScoreDate))} 
                       animationClass={textAnimations.date} 
@@ -1314,34 +1314,34 @@ export default function Home() {
                     variant={viewMode === "single" ? (showLogoOverlay ? "outline" : "default") : "outline"}
                     size="icon"
                     onClick={() => setViewMode("single")}
-                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10 ${
+                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-10 w-10 sm:h-10 sm:w-10 ${
                       showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
                     }`}
                     title="Single View - One large game centered"
                   >
-                    <Square className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <Square className="h-4 w-4 sm:h-4 sm:w-4" />
                   </Button>
                   <Button
                     variant={viewMode === "scroll" ? "default" : "outline"}
                     size="icon"
                     onClick={() => setViewMode("scroll")}
-                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10 ${
+                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-10 w-10 sm:h-10 sm:w-10 ${
                       showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
                     }`}
                     title="Scroll View - Infinite vertical scroll"
                   >
-                    <List className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <List className="h-4 w-4 sm:h-4 sm:w-4" />
                   </Button>
                   <Button
                     variant={viewMode === "grid" ? "default" : "outline"}
                     size="icon"
                     onClick={() => setViewMode("grid")}
-                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8 sm:h-10 sm:w-10 ${
+                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-10 w-10 sm:h-10 sm:w-10 ${
                       showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
                     }`}
                     title="Grid View - Games in a grid layout"
                   >
-                    <Grid2X2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                    <Grid2X2 className="h-4 w-4 sm:h-4 sm:w-4" />
                   </Button>
                 </div>
                 
@@ -1351,7 +1351,7 @@ export default function Home() {
                     variant="outline" 
                     size="sm" 
                     asChild 
-                    className={`h-7 px-2 text-xs sm:h-8 sm:px-3 sm:text-sm ${
+                    className={`h-8 px-3 text-sm sm:h-8 sm:px-3 sm:text-sm ${
                       showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
                     }`}
                   >
@@ -1362,7 +1362,7 @@ export default function Home() {
                     variant="outline" 
                     size="sm" 
                     asChild 
-                    className={`h-7 px-2 text-xs sm:h-8 sm:px-3 sm:text-sm ${
+                    className={`h-8 px-3 text-sm sm:h-8 sm:px-3 sm:text-sm ${
                       showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
                     }`}
                   >
