@@ -575,12 +575,12 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   useEffect(() => {
     if (!backgroundLoaded) return;
     
-    // Show champion window 2 seconds after background loads
+    // Show champion window 0.5 seconds after background loads
     const championTimer = setTimeout(() => {
       const currentGame = games[currentGameIndex];
       setChampionGame(currentGame); // Store the game data for champion window
       setShowChampionWindow(true);
-    }, 3000); // 1 second marquee delay + 2 seconds = 3 total
+    }, 500); // 0.5 seconds total
 
     return () => {
       clearTimeout(championTimer);
