@@ -56,7 +56,7 @@ export default function Admin() {
       stats: venueSettings?.themePresets ? `${venueSettings.themePresets.length} themes available` : "Loading...",
     },
     {
-      title: "Display View Options",
+      title: "Display Options",
       description: "Configure settings for all display modes",
       icon: Settings,
       href: "/admin/display-options",
