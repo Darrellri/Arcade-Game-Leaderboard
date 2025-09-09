@@ -643,14 +643,14 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
                     <AnimatedText 
                       text="#1 CHAMPION" 
                       animationClass={textAnimations.champion} 
-                      baseDelay={0.1} 
+                      baseDelay={0.35} 
                     />
                   </div>
                   <div className="text-4xl md:text-3xl sm:text-2xl font-bold">
                     <AnimatedText 
                       text={championGame.topScorerName || "No Name"} 
                       animationClass={textAnimations.name} 
-                      baseDelay={0.3} 
+                      baseDelay={0.55} 
                     />
                   </div>
                 </div>
@@ -662,7 +662,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
                   <AnimatedText 
                     text={championGame.name} 
                     animationClass={textAnimations.game} 
-                    baseDelay={0.5} 
+                    baseDelay={0.75} 
                   />
                 </div>
                 {championGame.subtitle && (
@@ -670,7 +670,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
                     <AnimatedText 
                       text={championGame.subtitle} 
                       animationClass={textAnimations.subtitle} 
-                      baseDelay={0.7} 
+                      baseDelay={0.95} 
                     />
                   </div>
                 )}
@@ -682,7 +682,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
                   <AnimatedText 
                     text={championGame.currentHighScore ? championGame.currentHighScore.toLocaleString() : "0"} 
                     animationClass={textAnimations.score} 
-                    baseDelay={0.9} 
+                    baseDelay={1.15} 
                   />
                 </div>
                 {championGame.topScoreDate && (
@@ -690,7 +690,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
                     <AnimatedText 
                       text={formatDate(new Date(championGame.topScoreDate))} 
                       animationClass={textAnimations.date} 
-                      baseDelay={1.1} 
+                      baseDelay={1.35} 
                     />
                   </div>
                 )}
