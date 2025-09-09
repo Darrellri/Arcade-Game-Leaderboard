@@ -62,6 +62,26 @@ function getExitAnimation(entranceAnimation: string): string {
   return exitMap[entranceAnimation] || 'opacity-0';
 }
 
+// Get opposite entrance animation for champion window
+function getOppositeEntranceAnimation(marqueeAnimation: string): string {
+  const oppositeMap: { [key: string]: string } = {
+    'animate-slide-in-left-wobble': 'animate-slide-in-right-wobble',
+    'animate-slide-in-right-bounce': 'animate-slide-in-left-bounce',
+    'animate-fly-in-left-skew': 'animate-fly-in-right-skew',
+    'animate-fly-in-right-wobble': 'animate-fly-in-left-wobble',
+    'animate-slide-in-top-bounce': 'animate-slide-in-bottom-bounce',
+    'animate-slide-in-bottom-skew': 'animate-slide-in-top-skew'
+  };
+  
+  return oppositeMap[marqueeAnimation] || 'animate-slide-in-bottom-bounce';
+}
+
+// Get opposite exit animation for champion window
+function getOppositeExitAnimation(marqueeAnimation: string): string {
+  const oppositeEntranceAnimation = getOppositeEntranceAnimation(marqueeAnimation);
+  return getExitAnimation(oppositeEntranceAnimation);
+}
+
 // Scroll-specific marquee component - no individual animations, just static display
 function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSpacing, gameHeight, isAutoScrolling = true }: { 
   game: Game; 
@@ -242,7 +262,7 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
 }
 
 // Full-size marquee component for new views with 15px radius - MARQUEE ONLY
-function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000, overlayDelay, exitDelay = 6000, onImageLoad }: { 
+function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000, overlayDelay, exitDelay = 6000, onImageLoad, onAnimationSet }: { 
   game: Game; 
   className?: string; 
   animationKey?: number;
@@ -250,6 +270,7 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
   overlayDelay?: number;
   exitDelay?: number;
   onImageLoad?: () => void;
+  onAnimationSet?: (animation: string) => void;
 }) {
   const imageUrl = game.imageUrl;
   const [currentAnimation, setCurrentAnimation] = useState('');
@@ -266,6 +287,11 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
     
     setCurrentAnimation(entranceAnim);
     setExitAnimation(exitAnim);
+    
+    // Notify parent component of the current animation
+    if (onAnimationSet) {
+      onAnimationSet(entranceAnim);
+    }
     setImageLoaded(false);
     setIsVisible(false);
     setTopOverlayVisible(false);
@@ -541,6 +567,9 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   const [textAnimations, setTextAnimations] = useState(getRandomTextAnimations());
   const [championGame, setChampionGame] = useState<Game | null>(null);
   const [backgroundLoaded, setBackgroundLoaded] = useState(false);
+  const [currentMarqueeAnimation, setCurrentMarqueeAnimation] = useState('');
+  const [championEntering, setChampionEntering] = useState(false);
+  const [championExiting, setChampionExiting] = useState(false);
   const { data: venueSettings } = useQuery<VenueSettings>({
     queryKey: ["/api/admin/settings"],
   });
@@ -561,12 +590,19 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
     setBackgroundLoaded(false);
     setShowChampionWindow(false); // Reset on game change
     
-    // Hide champion window 0.5 seconds before next game transition to prevent flash
+    // Start champion exit animation 0.8 seconds before next game transition
+    const exitTimer = setTimeout(() => {
+      setChampionExiting(true);
+    }, 7200); // Start exit animation 0.8 seconds before transition
+    
+    // Hide champion window after exit animation completes
     const hideTimer = setTimeout(() => {
       setShowChampionWindow(false);
+      setChampionExiting(false);
     }, 7500); // Hide 0.5 seconds before 8 second cycle ends
 
     return () => {
+      clearTimeout(exitTimer);
       clearTimeout(hideTimer);
     };
   }, [currentGameIndex, animationKey, games]);
@@ -575,11 +611,16 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   useEffect(() => {
     if (!backgroundLoaded) return;
     
-    // Show champion window 0.5 seconds after background loads
+    // Show champion window 0.5 seconds after background loads with entrance animation
     const championTimer = setTimeout(() => {
       const currentGame = games[currentGameIndex];
       setChampionGame(currentGame); // Store the game data for champion window
+      setChampionEntering(true);
       setShowChampionWindow(true);
+      // Stop entrance animation after it completes
+      setTimeout(() => {
+        setChampionEntering(false);
+      }, 800); // Animation duration
     }, 500); // 0.5 seconds total
 
     return () => {
@@ -620,16 +661,23 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
           delay={1000} // Single view starts after 1 second
           className={`w-full ${animationsEnabled ? '' : 'animation-none'}`}
           onImageLoad={() => setBackgroundLoaded(true)}
+          onAnimationSet={(animation) => setCurrentMarqueeAnimation(animation)}
         />
       </div>
       
       {/* Champion Information Window - Below marquee with 20px padding and delayed appearance */}
       {championGame && ((championGame.currentHighScore && championGame.currentHighScore > 0) || (championGame.topScorerName && championGame.topScorerName !== 'No scores yet')) && (
         <div 
-          className={`w-full flex justify-center mt-5 transition-opacity duration-500 ${isFullSize ? 'mx-[50px] lg:mx-[150px]' : ''} ${
+          className={`w-full flex justify-center mt-5 ${isFullSize ? 'mx-[50px] lg:mx-[150px]' : ''} ${
+            championEntering ? getOppositeEntranceAnimation(currentMarqueeAnimation) : 
+            championExiting ? getOppositeExitAnimation(currentMarqueeAnimation) :
             showChampionWindow ? 'opacity-100' : 'opacity-0'
           }`}
-          style={!isFullSize ? { maxWidth } : undefined}
+          style={{
+            ...((!isFullSize && { maxWidth }) || {}),
+            animationDuration: '0.8s',
+            animationFillMode: 'both'
+          }}
         >
           <div className="w-full max-w-[1188px] bg-black/75 backdrop-blur-sm border border-primary/20 rounded-[15px] px-6 py-6">
             <div className="flex items-center justify-between w-full">
