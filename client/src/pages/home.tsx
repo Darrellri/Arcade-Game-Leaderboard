@@ -650,7 +650,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   if (!currentGame) return null;
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-[70vh] w-full px-4">
+    <div className="flex flex-col justify-center items-center h-[calc(100vh-300px)] w-full px-4">
       <div 
         key={`${currentGame.id}-${currentGameIndex}-${animationKey}`} 
         className={`w-full flex justify-center ${isFullSize ? 'mx-[50px] lg:mx-[150px]' : ''}`}
@@ -1391,7 +1391,7 @@ export default function Home() {
       </div>
       
       {!hideHeader && (
-        <div className="mb-6">
+        <div className="mb-2">
           {/* Header content is rendered above */}
         </div>
       )}
@@ -1417,7 +1417,7 @@ export default function Home() {
       )}
 
       {/* Footer Bar */}
-      <div className="mt-12 h-[100px] border-t border-border/20 bg-card/30">
+      <div className="mt-6 h-[80px] border-t border-border/20 bg-card/30">
         <div className="max-w-4xl mx-auto px-4 h-full flex items-center justify-center">
           <div className="flex items-center justify-center gap-[30px]">
             <img 
