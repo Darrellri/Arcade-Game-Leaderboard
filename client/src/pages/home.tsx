@@ -1245,10 +1245,10 @@ export default function Home() {
         {/* Three Column Layout: Logo | Centered Titles | Controls */}
         <div className="flex items-center w-full">
           {/* Left Venue Logo - Fixed 300px on desktop */}
-          <div className="flex-shrink-0 w-24 sm:w-48 md:w-[300px] flex justify-center">
+          <div className="flex-shrink-0 w-32 sm:w-48 md:w-[300px] flex justify-center">
             {(venueSettings?.animatedLogoUrl || venueSettings?.logoUrl) && (
               <div 
-                className={`logo-container overflow-hidden cursor-pointer hover:opacity-80 transition-opacity w-24 h-12 sm:w-48 sm:h-24 md:w-[280px] md:h-36 flex items-center justify-center ${
+                className={`logo-container overflow-hidden cursor-pointer hover:opacity-80 transition-opacity w-32 h-16 sm:w-48 sm:h-24 md:w-[280px] md:h-36 flex items-center justify-center ${
                   venueSettings.hideLogoBorderShadow === 'true' 
                     ? '' 
                     : 'rounded-md shadow-md border border-primary/20'
@@ -1284,11 +1284,11 @@ export default function Home() {
           
           {/* Center Content Area - Titles centered from marquee position */}
           <div className="flex-1 min-w-0 flex flex-col justify-center px-4">
-            <h1 className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-foreground uppercase text-outline leading-tight text-center" style={getLeaderboardTitleStyle()}>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-foreground uppercase text-outline leading-tight text-center" style={getLeaderboardTitleStyle()}>
               {venueSettings?.leaderboardName || "THE LEADERBOARD"}
             </h1>
             <h2 
-              className={`text-sm sm:text-lg md:text-2xl lg:text-[2.625rem] tracking-tight leading-tight text-center ${
+              className={`text-base sm:text-lg md:text-2xl lg:text-[2.625rem] tracking-tight leading-tight text-center ${
                 venueSettings?.subtitleBold === "true" ? "font-bold" : "font-normal"
               } ${
                 venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
@@ -1300,7 +1300,7 @@ export default function Home() {
           </div>
           
           {/* Right Controls and Leaderboard Logo - Fixed 300px on desktop */}
-          <div className="flex-shrink-0 w-24 sm:w-48 md:w-[300px] flex justify-center">
+          <div className="flex-shrink-0 w-32 sm:w-48 md:w-[300px] flex justify-center">
             <div className="flex flex-col gap-2 self-start sm:self-center mt-2 sm:mt-0 relative">
               {/* Navigation Elements with Timed Fade */}
               <div 
