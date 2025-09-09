@@ -46,7 +46,13 @@ export const scoresRelations = relations(scores, ({ one }) => ({
 export const venueSettings = pgTable("venue_settings", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
+  nameFont: text("name_font").default("Arial"),
+  nameFontStyle: text("name_font_style").default("normal"),
+  nameFontSize: integer("name_font_size").default(30),
   leaderboardName: text("leaderboard_name").default("THE LEADERBOARD"),
+  leaderboardFont: text("leaderboard_font").default("Arial"),
+  leaderboardFontStyle: text("leaderboard_font_style").default("normal"),
+  leaderboardFontSize: integer("leaderboard_font_size").default(30),
   logoUrl: text("logo_url"),
   animatedLogoUrl: text("animated_logo_url"),
   logoBackgroundColor: text("logo_background_color").default("transparent"),
@@ -104,7 +110,13 @@ export const venueSettings = pgTable("venue_settings", {
 // Venue settings schema for admin interface
 export const venueSettingsSchema = z.object({
   name: z.string().min(1, "Venue name is required"),
+  nameFont: z.string().optional(),
+  nameFontStyle: z.string().optional(),
+  nameFontSize: z.number().min(16).max(40).optional(),
   leaderboardName: z.string().min(1, "Leaderboard name is required"),
+  leaderboardFont: z.string().optional(),
+  leaderboardFontStyle: z.string().optional(),
+  leaderboardFontSize: z.number().min(16).max(40).optional(),
   logoUrl: z.string().optional(),
   animatedLogoUrl: z.string().optional(),
   logoBackgroundColor: z.string().optional(),

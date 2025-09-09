@@ -646,6 +646,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   const baseWidth = 1200;
   const maxWidth = isFullSize ? undefined : `${Math.round(baseWidth * sizeMultiplier)}px`;
 
+
   if (!currentGame) return null;
 
   return (
@@ -1108,6 +1109,42 @@ export default function Home() {
   // Logo overlay is always shown immediately
   // No timer needed as per user request
 
+  // Font styling functions
+  const getVenueNameStyle = () => ({
+    fontFamily: venueSettings?.nameFont || "Arial",
+    fontWeight: venueSettings?.nameFontStyle === "bold" ? "bold" : "normal",
+    fontStyle: venueSettings?.nameFontStyle === "italic" ? "italic" : "normal",
+    fontSize: `${venueSettings?.nameFontSize || 30}pt`,
+    letterSpacing: '2px',
+    lineHeight: 'calc(1.25em + 2px)',
+    color: venueSettings?.subtitleWhite === "true" 
+      ? "white" 
+      : (() => {
+          // For lighter color schemes, use primary color (same as game titles)
+          const isLightScheme = venueSettings?.theme?.appearance === "light" || 
+            (venueSettings?.theme?.variant === "tint" && venueSettings?.theme?.appearance !== "dark") ||
+            (venueSettings?.theme?.primary && parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "0") > 60);
+          
+          if (isLightScheme) {
+            // Use the same color as game titles (primary color)
+            return venueSettings?.theme?.primary || "hsl(280, 100%, 50%)";
+          } else {
+            // For darker schemes, use the lighter version as before
+            return venueSettings?.theme?.primary
+              ? `hsl(${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[1] || 280}, ${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[2] || 100}%, ${Math.min(100, parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "50") + 25)}%)`
+              : "hsl(280, 100%, 75%)";
+          }
+        })()
+  });
+
+  const getLeaderboardTitleStyle = () => ({
+    fontFamily: venueSettings?.leaderboardFont || "Arial",
+    fontWeight: venueSettings?.leaderboardFontStyle === "bold" ? "bold" : "normal",
+    fontStyle: venueSettings?.leaderboardFontStyle === "italic" ? "italic" : "normal",
+    fontSize: `${venueSettings?.leaderboardFontSize || 30}pt`,
+    letterSpacing: '1px'
+  });
+
   // Drag and drop sensors
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -1247,7 +1284,7 @@ export default function Home() {
           
           {/* Center Content Area - Titles centered from marquee position */}
           <div className="flex-1 min-w-0 flex flex-col justify-center px-4">
-            <h1 className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-foreground uppercase text-outline leading-tight text-center" style={{ letterSpacing: '1px' }}>
+            <h1 className="text-lg sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-foreground uppercase text-outline leading-tight text-center" style={getLeaderboardTitleStyle()}>
               {venueSettings?.leaderboardName || "THE LEADERBOARD"}
             </h1>
             <h2 
@@ -1256,28 +1293,7 @@ export default function Home() {
               } ${
                 venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
               }`}
-              style={{ 
-                letterSpacing: '2px',
-                lineHeight: 'calc(1.25em + 2px)',
-                color: venueSettings?.subtitleWhite === "true" 
-                  ? "white" 
-                  : (() => {
-                      // For lighter color schemes, use primary color (same as game titles)
-                      const isLightScheme = venueSettings?.theme?.appearance === "light" || 
-                        (venueSettings?.theme?.variant === "tint" && venueSettings?.theme?.appearance !== "dark") ||
-                        (venueSettings?.theme?.primary && parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "0") > 60);
-                      
-                      if (isLightScheme) {
-                        // Use the same color as game titles (primary color)
-                        return venueSettings?.theme?.primary || "hsl(280, 100%, 50%)";
-                      } else {
-                        // For darker schemes, use the lighter version as before
-                        return venueSettings?.theme?.primary
-                          ? `hsl(${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[1] || 280}, ${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[2] || 100}%, ${Math.min(100, parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "50") + 25)}%)`
-                          : "hsl(280, 100%, 75%)";
-                      }
-                    })()
-              }}
+              style={getVenueNameStyle()}
             >
               {venueSettings?.name || "Arcade"}
             </h2>

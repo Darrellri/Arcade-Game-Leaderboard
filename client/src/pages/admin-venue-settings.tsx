@@ -24,6 +24,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { VenueSettings } from "@shared/schema";
 import { insertVenueSettingsSchema } from "@shared/schema";
 import { queryClient, apiRequest } from "@/lib/queryClient";
@@ -32,6 +33,28 @@ import {
   Building2,
   Upload,
 } from "lucide-react";
+
+// Font options for venue name and leaderboard title
+const fontOptions = [
+  // Common fonts
+  { value: "Arial", label: "Arial" },
+  { value: "Helvetica", label: "Helvetica" },
+  { value: "Georgia", label: "Georgia" },
+  { value: "Times New Roman", label: "Times New Roman" },
+  { value: "Verdana", label: "Verdana" },
+  // Title/display fonts
+  { value: "Impact", label: "Impact" },
+  { value: "Bebas Neue", label: "Bebas Neue" },
+  { value: "Oswald", label: "Oswald" },
+  { value: "Montserrat", label: "Montserrat" },
+  { value: "Playfair Display", label: "Playfair Display" },
+];
+
+const fontStyleOptions = [
+  { value: "normal", label: "Normal" },
+  { value: "bold", label: "Bold" },
+  { value: "italic", label: "Italic" },
+];
 
 export default function AdminVenueSettings() {
   const { toast } = useToast();
@@ -49,7 +72,13 @@ export default function AdminVenueSettings() {
     resolver: zodResolver(insertVenueSettingsSchema),
     defaultValues: {
       name: "",
+      nameFont: "Arial",
+      nameFontStyle: "normal",
+      nameFontSize: 30,
       leaderboardName: "",
+      leaderboardFont: "Arial",
+      leaderboardFontStyle: "normal",
+      leaderboardFontSize: 30,
       address: "",
       logoUrl: "",
       animatedLogoUrl: "",
@@ -286,16 +315,160 @@ export default function AdminVenueSettings() {
                 )}
               />
 
-              {/* Leaderboard Name - Full width */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Venue Name Font Settings */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-muted/50 rounded-lg">
                 <FormField
                   control={form.control}
-                  name="leaderboardName"
+                  name="nameFont"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Leaderboard Title</FormLabel>
+                      <FormLabel>Venue Name Font</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value || "Arial"}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select font" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {fontOptions.map((font) => (
+                            <SelectItem key={font.value} value={font.value}>
+                              {font.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="nameFontStyle"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Font Style</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value || "normal"}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select style" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {fontStyleOptions.map((style) => (
+                            <SelectItem key={style.value} value={style.value}>
+                              {style.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="nameFontSize"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Font Size (pt)</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="THE LEADERBOARD" />
+                        <Input
+                          type="number"
+                          min={16}
+                          max={40}
+                          {...field}
+                          value={field.value || 30}
+                          onChange={(e) => field.onChange(parseInt(e.target.value) || 30)}
+                          placeholder="30"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Leaderboard Name - Full width */}
+              <FormField
+                control={form.control}
+                name="leaderboardName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Leaderboard Title</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="THE LEADERBOARD" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Leaderboard Title Font Settings */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 bg-muted/50 rounded-lg">
+                <FormField
+                  control={form.control}
+                  name="leaderboardFont"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Leaderboard Title Font</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value || "Arial"}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select font" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {fontOptions.map((font) => (
+                            <SelectItem key={font.value} value={font.value}>
+                              {font.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="leaderboardFontStyle"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Font Style</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value || "normal"}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select style" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {fontStyleOptions.map((style) => (
+                            <SelectItem key={style.value} value={style.value}>
+                              {style.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="leaderboardFontSize"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Font Size (pt)</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          min={16}
+                          max={40}
+                          {...field}
+                          value={field.value || 30}
+                          onChange={(e) => field.onChange(parseInt(e.target.value) || 30)}
+                          placeholder="30"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
