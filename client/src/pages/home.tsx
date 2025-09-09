@@ -480,49 +480,60 @@ function GridView({ games, animationsEnabled, hideHeader }: {
 
 
 
-// Text animation sets that rotate each time for champion window - visually interesting entrance animations
-const textAnimationSets = [
-  {
-    champion: 'animate-text-typewriter',
-    name: 'animate-text-bounce-in',
-    game: 'animate-text-slide-in-up',
-    score: 'animate-text-zoom-in',
-    subtitle: 'animate-text-fade-in-scale',
-    date: 'animate-text-slide-in-right'
-  },
-  {
-    champion: 'animate-text-glow-in',
-    name: 'animate-text-slide-in-left',
-    game: 'animate-text-flip-in',
-    score: 'animate-text-bounce-in',
-    subtitle: 'animate-text-slide-in-down',
-    date: 'animate-text-zoom-in'
-  },
-  {
-    champion: 'animate-text-slide-in-up',
-    name: 'animate-text-fade-in-scale',
-    game: 'animate-text-glow-in',
-    score: 'animate-text-slide-in-left',
-    subtitle: 'animate-text-flip-in',
-    date: 'animate-text-bounce-in'
-  },
-  {
-    champion: 'animate-text-bounce-in',
-    name: 'animate-text-zoom-in',
-    game: 'animate-text-typewriter',
-    score: 'animate-text-slide-in-down',
-    subtitle: 'animate-text-glow-in',
-    date: 'animate-text-fade-in-scale'
-  },
-  {
-    champion: 'animate-text-flip-in',
-    name: 'animate-text-slide-in-right',
-    game: 'animate-text-zoom-in',
-    score: 'animate-text-glow-in',
-    subtitle: 'animate-text-bounce-in',
-    date: 'animate-text-slide-in-up'
-  }
+// Letter animation options for random selection
+const letterAnimations = [
+  'animate-letter-slide-in-left',
+  'animate-letter-slide-in-right', 
+  'animate-letter-slide-in-up',
+  'animate-letter-slide-in-down',
+  'animate-letter-bounce-in',
+  'animate-letter-zoom-in',
+  'animate-letter-rotate-in',
+  'animate-letter-flip-in',
+  'animate-letter-pop-in',
+  'animate-letter-glow-in'
 ];
+
+// Function to randomly select animations for each text section
+const getRandomTextAnimations = () => {
+  const shuffled = [...letterAnimations].sort(() => Math.random() - 0.5);
+  return {
+    champion: shuffled[0],
+    name: shuffled[1],
+    game: shuffled[2],
+    score: shuffled[3],
+    subtitle: shuffled[4],
+    date: shuffled[5]
+  };
+};
+
+// Component to render text with letter-by-letter animations
+const AnimatedText = ({ text, animationClass, baseDelay = 0 }: { 
+  text: string; 
+  animationClass: string; 
+  baseDelay?: number; 
+}) => {
+  return (
+    <>
+      {text.split('').map((char, index) => (
+        <span
+          key={index}
+          className={animationClass}
+          style={{
+            animationDelay: `${baseDelay + (index * 0.05)}s`,
+            opacity: 0,
+            animationFillMode: 'both',
+            display: 'inline-block',
+            // Preserve spaces
+            ...(char === ' ' ? { width: '0.3em' } : {})
+          }}
+        >
+          {char === ' ' ? '\u00A0' : char}
+        </span>
+      ))}
+    </>
+  );
+};
 
 // Single View Component - Shows 1 large game centered with dramatic animations
 function SingleView({ games, animationsEnabled, hideHeader }: { 
@@ -533,7 +544,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   const [currentGameIndex, setCurrentGameIndex] = useState(0);
   const [animationKey, setAnimationKey] = useState(0);
   const [showChampionWindow, setShowChampionWindow] = useState(false);
-  const [textAnimationVariant, setTextAnimationVariant] = useState(0);
+  const [textAnimations, setTextAnimations] = useState(getRandomTextAnimations());
   const [championGame, setChampionGame] = useState<Game | null>(null);
   const { data: venueSettings } = useQuery<VenueSettings>({
     queryKey: ["/api/admin/settings"],
@@ -544,7 +555,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
       setCurrentGameIndex((prev) => (prev + 1) % games.length);
       setAnimationKey(prev => prev + 1); // Trigger new random animations
       setShowChampionWindow(false); // Hide champion window during transition
-      setTextAnimationVariant(prev => (prev + 1) % textAnimationSets.length); // Cycle text animations
+      setTextAnimations(getRandomTextAnimations()); // Generate new random animations for each text area
     }, 6000);
 
     return () => clearInterval(timer);
@@ -623,53 +634,59 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
                 <TrophyIcon size={46} className="text-yellow-400 flex-shrink-0 hidden sm:block md:hidden" />
                 <TrophyIcon size={31} className="text-yellow-400 flex-shrink-0 block sm:hidden" />
                 <div className="text-white">
-                  <div 
-                    className={`text-2xl md:text-xl sm:text-lg font-bold text-yellow-400 ${textAnimationSets[textAnimationVariant]?.champion}`}
-                    style={{ animationDelay: '0.1s', opacity: 0, animationFillMode: 'both' }}
-                  >
-                    #1 CHAMPION
+                  <div className="text-2xl md:text-xl sm:text-lg font-bold text-yellow-400">
+                    <AnimatedText 
+                      text="#1 CHAMPION" 
+                      animationClass={textAnimations.champion} 
+                      baseDelay={0.1} 
+                    />
                   </div>
-                  <div 
-                    className={`text-4xl md:text-3xl sm:text-2xl font-bold ${textAnimationSets[textAnimationVariant]?.name}`}
-                    style={{ animationDelay: '0.3s', opacity: 0, animationFillMode: 'both' }}
-                  >
-                    {championGame.topScorerName || "No Name"}
+                  <div className="text-4xl md:text-3xl sm:text-2xl font-bold">
+                    <AnimatedText 
+                      text={championGame.topScorerName || "No Name"} 
+                      animationClass={textAnimations.name} 
+                      baseDelay={0.3} 
+                    />
                   </div>
                 </div>
               </div>
               
               {/* Center - Game name with animated text */}
               <div className="text-center flex-1 px-4">
-                <div 
-                  className={`text-3xl md:text-2xl sm:text-xl font-bold text-primary uppercase tracking-wide ${textAnimationSets[textAnimationVariant]?.game}`}
-                  style={{ animationDelay: '0.5s', opacity: 0, animationFillMode: 'both' }}
-                >
-                  {championGame.name}
+                <div className="text-3xl md:text-2xl sm:text-xl font-bold text-primary uppercase tracking-wide">
+                  <AnimatedText 
+                    text={championGame.name} 
+                    animationClass={textAnimations.game} 
+                    baseDelay={0.5} 
+                  />
                 </div>
                 {championGame.subtitle && (
-                  <div 
-                    className={`text-lg md:text-base sm:text-sm text-gray-300 mt-1 ${textAnimationSets[textAnimationVariant]?.subtitle}`}
-                    style={{ animationDelay: '0.7s', opacity: 0, animationFillMode: 'both' }}
-                  >
-                    {championGame.subtitle}
+                  <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1">
+                    <AnimatedText 
+                      text={championGame.subtitle} 
+                      animationClass={textAnimations.subtitle} 
+                      baseDelay={0.7} 
+                    />
                   </div>
                 )}
               </div>
               
               {/* Right side - Score and date with animated text */}
               <div className="text-right">
-                <div 
-                  className={`text-5xl md:text-4xl sm:text-3xl font-bold text-primary ${textAnimationSets[textAnimationVariant]?.score}`}
-                  style={{ animationDelay: '0.9s', opacity: 0, animationFillMode: 'both' }}
-                >
-                  {championGame.currentHighScore ? championGame.currentHighScore.toLocaleString() : "0"}
+                <div className="text-5xl md:text-4xl sm:text-3xl font-bold text-primary">
+                  <AnimatedText 
+                    text={championGame.currentHighScore ? championGame.currentHighScore.toLocaleString() : "0"} 
+                    animationClass={textAnimations.score} 
+                    baseDelay={0.9} 
+                  />
                 </div>
                 {championGame.topScoreDate && (
-                  <div 
-                    className={`text-lg md:text-base sm:text-sm text-gray-300 mt-1 ${textAnimationSets[textAnimationVariant]?.date}`}
-                    style={{ animationDelay: '1.1s', opacity: 0, animationFillMode: 'both' }}
-                  >
-                    {formatDate(new Date(championGame.topScoreDate))}
+                  <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1">
+                    <AnimatedText 
+                      text={formatDate(new Date(championGame.topScoreDate))} 
+                      animationClass={textAnimations.date} 
+                      baseDelay={1.1} 
+                    />
                   </div>
                 )}
               </div>
