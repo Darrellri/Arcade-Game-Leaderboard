@@ -264,25 +264,19 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
 }) {
   const imageUrl = game.imageUrl;
   const [currentAnimation, setCurrentAnimation] = useState('');
-  const [scoreAnimation, setScoreAnimation] = useState('');
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [scoreOverlayVisible, setScoreOverlayVisible] = useState(false);
   const [topOverlayVisible, setTopOverlayVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [exitAnimation, setExitAnimation] = useState('');
-  const [scoreAnimationClass, setScoreAnimationClass] = useState('');
 
   // Set random animations when component mounts or animationKey changes
   useEffect(() => {
     const entranceAnim = getRandomAnimation();
     setCurrentAnimation('');
     setExitAnimation('');
-    setScoreAnimation('');
-    setScoreAnimationClass('');
     setImageLoaded(false);
     setIsVisible(false);
-    setScoreOverlayVisible(false);
     setTopOverlayVisible(false);
     setIsExiting(false);
 
@@ -312,14 +306,9 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
     };
   }, [animationKey, delay, exitDelay]);
 
-  // Handle image load event to trigger score overlay
+  // Handle image load event
   const handleImageLoad = () => {
     setImageLoaded(true);
-    // Start score overlay animation after image loads with random delay
-    const scoreDelay = overlayDelay || (800 + Math.random() * 1200); // 0.8-2.0 seconds after image loads
-    setTimeout(() => {
-      setScoreOverlayVisible(true);
-    }, scoreDelay);
   };
 
   if (imageUrl) {
@@ -341,56 +330,6 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
             }}
             onLoad={handleImageLoad}
           />
-          
-          
-          {/* Horizontal Score Overlay - Bottom-up entrance animation */}
-          {((game.currentHighScore && game.currentHighScore > 0) || game.topScorerName) && (
-            <div className={`absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm border-t border-primary/20 px-6 ${scoreOverlayVisible && !isExiting ? scoreAnimationClass : 'translate-y-full opacity-0'}`}
-                 style={{ 
-                   zIndex: 100, 
-                   borderBottomLeftRadius: '15px', 
-                   borderBottomRightRadius: '15px',
-                   paddingTop: '30px',
-                   paddingBottom: '30px'
-                 }}>
-              <div className="flex items-center justify-between w-full">
-                {/* Left side - Champion info with text animation */}
-                <div className="flex items-center gap-4">
-                  <TrophyIcon size={62} className="text-yellow-400 flex-shrink-0 md:block sm:hidden" />
-                  <TrophyIcon size={46} className="text-yellow-400 flex-shrink-0 hidden sm:block md:hidden" />
-                  <TrophyIcon size={31} className="text-yellow-400 flex-shrink-0 block sm:hidden" />
-                  <div className="text-white">
-                    <div className="text-2xl md:text-xl sm:text-lg font-bold text-yellow-400 animate-text-float-up">#1 CHAMPION</div>
-                    <div className="text-4xl md:text-3xl sm:text-2xl font-bold animate-text-gentle-bob">{game.topScorerName || "No Name"}</div>
-                  </div>
-                </div>
-                
-                {/* Center - Game name with text animation */}
-                <div className="text-center flex-1 px-4">
-                  <div className="text-3xl md:text-2xl sm:text-xl font-bold text-primary uppercase tracking-wide animate-text-pulse-up">
-                    {game.name}
-                  </div>
-                  {game.subtitle && (
-                    <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1 animate-text-float-up">
-                      {game.subtitle}
-                    </div>
-                  )}
-                </div>
-                
-                {/* Right side - Score and date with text animation */}
-                <div className="text-right">
-                  <div className="text-5xl md:text-4xl sm:text-3xl font-bold text-primary animate-text-pulse-up">
-                    {game.currentHighScore ? game.currentHighScore.toLocaleString() : "0"}
-                  </div>
-                  {game.topScoreDate && (
-                    <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1 animate-text-gentle-bob">
-                      {formatDate(new Date(game.topScoreDate))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     );
@@ -541,6 +480,34 @@ function GridView({ games, animationsEnabled, hideHeader }: {
 
 
 
+// Text animation sets that rotate each time for champion window
+const textAnimationSets = [
+  {
+    champion: 'animate-text-float-up',
+    name: 'animate-text-gentle-bob',
+    game: 'animate-text-pulse-up',
+    score: 'animate-text-float-up',
+    subtitle: 'animate-text-gentle-bob',
+    date: 'animate-text-pulse-up'
+  },
+  {
+    champion: 'animate-text-gentle-bob',
+    name: 'animate-text-pulse-up',
+    game: 'animate-text-float-up',
+    score: 'animate-text-gentle-bob',
+    subtitle: 'animate-text-pulse-up',
+    date: 'animate-text-float-up'
+  },
+  {
+    champion: 'animate-text-pulse-up',
+    name: 'animate-text-float-up',
+    game: 'animate-text-gentle-bob',
+    score: 'animate-text-pulse-up',
+    subtitle: 'animate-text-float-up',
+    date: 'animate-text-gentle-bob'
+  }
+];
+
 // Single View Component - Shows 1 large game centered with dramatic animations
 function SingleView({ games, animationsEnabled, hideHeader }: { 
   games: Game[]; 
@@ -549,6 +516,8 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
 }) {
   const [currentGameIndex, setCurrentGameIndex] = useState(0);
   const [animationKey, setAnimationKey] = useState(0);
+  const [showChampionWindow, setShowChampionWindow] = useState(false);
+  const [textAnimationVariant, setTextAnimationVariant] = useState(0);
   const { data: venueSettings } = useQuery<VenueSettings>({
     queryKey: ["/api/admin/settings"],
   });
@@ -557,10 +526,22 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
     const timer = setInterval(() => {
       setCurrentGameIndex((prev) => (prev + 1) % games.length);
       setAnimationKey(prev => prev + 1); // Trigger new random animations
+      setShowChampionWindow(false); // Hide champion window during transition
+      setTextAnimationVariant(prev => (prev + 1) % textAnimationSets.length); // Cycle text animations
     }, 6000);
 
     return () => clearInterval(timer);
   }, [games.length]);
+
+  // Show champion window 1.5 seconds after marquee appears
+  useEffect(() => {
+    setShowChampionWindow(false); // Reset on game change
+    const championTimer = setTimeout(() => {
+      setShowChampionWindow(true);
+    }, 2500); // 1 second marquee delay + 1.5 seconds = 2.5 total
+
+    return () => clearTimeout(championTimer);
+  }, [currentGameIndex, animationKey]);
 
   const currentGame = games[currentGameIndex];
   
@@ -597,44 +578,50 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
         />
       </div>
       
-      {/* Champion Information Window - Below marquee with 20px padding */}
+      {/* Champion Information Window - Below marquee with 20px padding and delayed appearance */}
       {((currentGame.currentHighScore && currentGame.currentHighScore > 0) || (currentGame.topScorerName && currentGame.topScorerName !== 'No scores yet')) && (
         <div 
-          className={`w-full flex justify-center mt-5 ${isFullSize ? 'mx-[50px] lg:mx-[150px]' : ''}`}
+          className={`w-full flex justify-center mt-5 transition-opacity duration-500 ${isFullSize ? 'mx-[50px] lg:mx-[150px]' : ''} ${
+            showChampionWindow ? 'opacity-100' : 'opacity-0'
+          }`}
           style={!isFullSize ? { maxWidth } : undefined}
         >
           <div className="w-full max-w-[1188px] bg-black/75 backdrop-blur-sm border border-primary/20 rounded-[15px] px-6 py-6">
             <div className="flex items-center justify-between w-full">
-              {/* Left side - Champion info with trophy icon */}
+              {/* Left side - Champion info with trophy icon and animated text */}
               <div className="flex items-center gap-4">
                 <TrophyIcon size={62} className="text-yellow-400 flex-shrink-0 md:block sm:hidden" />
                 <TrophyIcon size={46} className="text-yellow-400 flex-shrink-0 hidden sm:block md:hidden" />
                 <TrophyIcon size={31} className="text-yellow-400 flex-shrink-0 block sm:hidden" />
                 <div className="text-white">
-                  <div className="text-2xl md:text-xl sm:text-lg font-bold text-yellow-400">#1 CHAMPION</div>
-                  <div className="text-4xl md:text-3xl sm:text-2xl font-bold">{currentGame.topScorerName || "No Name"}</div>
+                  <div className={`text-2xl md:text-xl sm:text-lg font-bold text-yellow-400 ${textAnimationSets[textAnimationVariant]?.champion}`}>
+                    #1 CHAMPION
+                  </div>
+                  <div className={`text-4xl md:text-3xl sm:text-2xl font-bold ${textAnimationSets[textAnimationVariant]?.name}`}>
+                    {currentGame.topScorerName || "No Name"}
+                  </div>
                 </div>
               </div>
               
-              {/* Center - Game name */}
+              {/* Center - Game name with animated text */}
               <div className="text-center flex-1 px-4">
-                <div className="text-3xl md:text-2xl sm:text-xl font-bold text-primary uppercase tracking-wide">
+                <div className={`text-3xl md:text-2xl sm:text-xl font-bold text-primary uppercase tracking-wide ${textAnimationSets[textAnimationVariant]?.game}`}>
                   {currentGame.name}
                 </div>
                 {currentGame.subtitle && (
-                  <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1">
+                  <div className={`text-lg md:text-base sm:text-sm text-gray-300 mt-1 ${textAnimationSets[textAnimationVariant]?.subtitle}`}>
                     {currentGame.subtitle}
                   </div>
                 )}
               </div>
               
-              {/* Right side - Score and date */}
+              {/* Right side - Score and date with animated text */}
               <div className="text-right">
-                <div className="text-5xl md:text-4xl sm:text-3xl font-bold text-primary">
+                <div className={`text-5xl md:text-4xl sm:text-3xl font-bold text-primary ${textAnimationSets[textAnimationVariant]?.score}`}>
                   {currentGame.currentHighScore ? currentGame.currentHighScore.toLocaleString() : "0"}
                 </div>
                 {currentGame.topScoreDate && (
-                  <div className="text-lg md:text-base sm:text-sm text-gray-300 mt-1">
+                  <div className={`text-lg md:text-base sm:text-sm text-gray-300 mt-1 ${textAnimationSets[textAnimationVariant]?.date}`}>
                     {formatDate(new Date(currentGame.topScoreDate))}
                   </div>
                 )}
