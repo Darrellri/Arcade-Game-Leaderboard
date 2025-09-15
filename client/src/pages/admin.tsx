@@ -1,4 +1,5 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
 import {
   Card,
@@ -28,6 +29,8 @@ import {
 } from "lucide-react";
 
 export default function Admin() {
+  const { toast } = useToast();
+
   // Fetch venue settings for header logo
   const { data: venueSettings } = useQuery<VenueSettings>({
     queryKey: ["/api/admin/settings"],
@@ -76,9 +79,20 @@ export default function Admin() {
   // Mutation for updating settings
   const updateSettingsMutation = useMutation({
     mutationFn: (data: { theme: any }) => 
-      apiRequest("PUT", "/api/admin/settings", data).then(res => res.json()),
+      apiRequest("PATCH", "/api/admin/settings", data).then(res => res.json()),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/settings"] });
+      toast({
+        title: "Theme Updated",
+        description: "Color scheme has been applied successfully.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message,
+      });
     },
   });
 
