@@ -843,61 +843,6 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
 
   return (
     <div className="relative overflow-hidden h-screen px-4 bg-background">
-      {/* Scroll Controls */}
-      <div 
-        className={`absolute top-4 right-4 z-20 flex flex-col gap-2 bg-background/90 backdrop-blur-sm border rounded-lg p-3 transition-opacity duration-1000 ${
-          showControls ? 'opacity-100' : 'opacity-5'
-        }`}
-        onMouseEnter={handleControlsMouseEnter}
-        onMouseLeave={handleControlsMouseLeave}
-      >
-        <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-          Direction:
-          <Button
-            variant={scrollDirection === 'up' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setScrollDirection('up')}
-            className="h-7 px-2"
-          >
-            ↑ Up
-          </Button>
-          <Button
-            variant={scrollDirection === 'down' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setScrollDirection('down')}
-            className="h-7 px-2"
-          >
-            ↓ Down
-          </Button>
-        </div>
-        <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-          Speed:
-          <Button
-            variant={scrollSpeed === 0.5 ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setScrollSpeed(0.5)}
-            className="h-7 px-2"
-          >
-            Slow
-          </Button>
-          <Button
-            variant={scrollSpeed === 1 ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setScrollSpeed(1)}
-            className="h-7 px-2"
-          >
-            Normal
-          </Button>
-          <Button
-            variant={scrollSpeed === 2 ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => setScrollSpeed(2)}
-            className="h-7 px-2"
-          >
-            Fast
-          </Button>
-        </div>
-      </div>
 
 
       
