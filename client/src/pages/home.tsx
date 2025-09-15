@@ -650,7 +650,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
   if (!currentGame) return null;
 
   return (
-    <div className="flex flex-col justify-center items-center h-[calc(100vh-200px)] w-full px-4">
+    <div className="flex flex-col justify-center items-center h-full w-full px-4">
       <div 
         key={`${currentGame.id}-${currentGameIndex}-${animationKey}`} 
         className={`w-full flex justify-center ${isFullSize ? 'mx-[50px] lg:mx-[150px]' : ''}`}
@@ -1528,7 +1528,7 @@ export default function Home() {
         </div>
       )}
 
-      <div className="flex-1">
+      <div className="flex-1 min-h-0">
         {viewMode === "single" ? (
           <SingleView 
             games={processedGames || []} 
