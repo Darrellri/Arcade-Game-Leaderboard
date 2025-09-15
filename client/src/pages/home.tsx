@@ -1560,7 +1560,7 @@ export default function Home() {
               className="h-8 w-auto"
             />
             <p className="text-sm text-primary">
-              {venueSettings?.name || "Winona Axe and Arcade"} • High Score Tracking
+              {venueSettings?.name || "Winona Axe and Arcade"}
             </p>
           </div>
         </div>
