@@ -70,8 +70,8 @@ import {
 import MarqueeImageUploader from "@/components/marquee-image-uploader";
 import OverlayImageUploader from "@/components/overlay-image-uploader";
 
-// Sortable table row component for admin game management
-function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onImageDelete }: { 
+// Sortable card component for admin game management - mobile-friendly
+function SortableGameCard({ game, onGameEdit, onDelete, onImageUpload, onImageDelete }: { 
   game: Game; 
   onGameEdit: (id: number, field: string, value: string | boolean) => void;
   onDelete: (id: number) => void;
@@ -94,121 +94,139 @@ function SortableGameTableRow({ game, onGameEdit, onDelete, onImageUpload, onIma
   };
 
   return (
-    <TableRow ref={setNodeRef} style={style} className={game.hidden ? "opacity-50 bg-muted/30" : ""}>
-      <TableCell className="p-2">
-        <div className="flex items-center gap-2">
+    <Card 
+      ref={setNodeRef} 
+      style={style} 
+      className={`${game.hidden ? "opacity-50 bg-muted/30" : ""} ${isDragging ? "shadow-lg z-50" : ""}`}
+    >
+      <CardContent className="p-4 space-y-4">
+        {/* Header with drag handle and game info */}
+        <div className="flex items-center gap-3">
           <div 
             {...attributes} 
             {...listeners}
-            className="cursor-grab hover:cursor-grabbing p-1 hover:bg-muted rounded"
+            className="cursor-grab hover:cursor-grabbing p-2 hover:bg-muted rounded flex-shrink-0"
           >
-            <GripVertical className="h-4 w-4 text-muted-foreground" />
+            <GripVertical className="h-5 w-5 text-muted-foreground" />
           </div>
-          <div className="flex items-center gap-2">
-            {game.type === 'pinball' ? (
-              <CircleDot className="h-4 w-4 text-primary" />
-            ) : (
-              <Gamepad2 className="h-4 w-4 text-primary" />
-            )}
-            <span className="font-medium text-sm">{game.name}</span>
-          </div>
-        </div>
-      </TableCell>
-      
-      <TableCell className="p-2">
-        <input
-          type="text"
-          value={game.subtitle || ""}
-          onChange={(e) => onGameEdit(game.id, "subtitle", e.target.value)}
-          className="w-full px-2 py-1 text-xs border rounded h-6"
-          placeholder="Subtitle (optional)"
-        />
-      </TableCell>
-      
-      <TableCell className="p-2">
-        <div className="space-y-1">
-          <div className="flex items-center space-x-2">
-            <input
-              type="radio"
-              id={`arcade-${game.id}`}
-              name={`type-${game.id}`}
-              value="arcade"
-              checked={game.type === "arcade"}
-              onChange={() => onGameEdit(game.id, "type", "arcade")}
-              className="w-3 h-3 text-primary focus:ring-primary"
-            />
-            <label htmlFor={`arcade-${game.id}`} className="flex items-center gap-1 text-xs cursor-pointer">
-              <Gamepad2 className="h-3 w-3" />
-              Arcade
-            </label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <input
-              type="radio"
-              id={`pinball-${game.id}`}
-              name={`type-${game.id}`}
-              value="pinball"
-              checked={game.type === "pinball"}
-              onChange={() => onGameEdit(game.id, "type", "pinball")}
-              className="w-3 h-3 text-primary focus:ring-primary"
-            />
-            <label htmlFor={`pinball-${game.id}`} className="flex items-center gap-1 text-xs cursor-pointer">
-              <CircleDot className="h-3 w-3" />
-              Pinball
-            </label>
-          </div>
-        </div>
-      </TableCell>
-      
-      <TableCell className="p-2">
-        <div className="space-y-1">
-          <MarqueeImageUploader 
-            gameId={game.id}
-            currentImageUrl={game.imageUrl}
-            onSuccess={() => {
-              queryClient.invalidateQueries({ queryKey: ["/api/games"] });
-            }}
-          />
-          <OverlayImageUploader 
-            gameId={game.id}
-            currentOverlayUrl={game.overlayImageUrl}
-            onSuccess={() => {
-              queryClient.invalidateQueries({ queryKey: ["/api/games"] });
-            }}
-          />
-        </div>
-      </TableCell>
-      
-      <TableCell className="p-2">
-        <div className="space-y-1">
-          {game.hidden && (
-            <div className="text-center text-xs text-muted-foreground">
-              Not Displayed
+          <div className="flex items-center gap-3 flex-1 min-w-0">
+            <div className="flex-shrink-0">
+              {game.type === 'pinball' ? (
+                <CircleDot className="h-6 w-6 text-primary" />
+              ) : (
+                <Gamepad2 className="h-6 w-6 text-primary" />
+              )}
             </div>
-          )}
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-lg truncate">{game.name}</h3>
+              {game.hidden && (
+                <p className="text-sm text-muted-foreground">Hidden from display</p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Subtitle editing */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-foreground">Subtitle</label>
+          <Input
+            type="text"
+            value={game.subtitle || ""}
+            onChange={(e) => onGameEdit(game.id, "subtitle", e.target.value)}
+            placeholder="Enter subtitle (optional)"
+            className="text-sm"
+          />
+        </div>
+
+        {/* Game type selection */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-foreground">Game Type</label>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="flex items-center space-x-2">
+              <input
+                type="radio"
+                id={`arcade-${game.id}`}
+                name={`type-${game.id}`}
+                value="arcade"
+                checked={game.type === "arcade"}
+                onChange={() => onGameEdit(game.id, "type", "arcade")}
+                className="w-4 h-4 text-primary focus:ring-primary"
+              />
+              <label htmlFor={`arcade-${game.id}`} className="flex items-center gap-2 text-sm cursor-pointer">
+                <Gamepad2 className="h-4 w-4" />
+                Arcade
+              </label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <input
+                type="radio"
+                id={`pinball-${game.id}`}
+                name={`type-${game.id}`}
+                value="pinball"
+                checked={game.type === "pinball"}
+                onChange={() => onGameEdit(game.id, "type", "pinball")}
+                className="w-4 h-4 text-primary focus:ring-primary"
+              />
+              <label htmlFor={`pinball-${game.id}`} className="flex items-center gap-2 text-sm cursor-pointer">
+                <CircleDot className="h-4 w-4" />
+                Pinball
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* Image uploads */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-foreground">Images</label>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="space-y-1">
+              <p className="text-xs text-muted-foreground">Marquee Image</p>
+              <MarqueeImageUploader 
+                gameId={game.id}
+                currentImageUrl={game.imageUrl}
+                onSuccess={() => {
+                  queryClient.invalidateQueries({ queryKey: ["/api/games"] });
+                }}
+              />
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs text-muted-foreground">Overlay Image</p>
+              <OverlayImageUploader 
+                gameId={game.id}
+                currentOverlayUrl={game.overlayImageUrl}
+                onSuccess={() => {
+                  queryClient.invalidateQueries({ queryKey: ["/api/games"] });
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Action buttons */}
+        <div className="flex flex-col sm:flex-row gap-2">
           <Button 
             variant={game.hidden ? "outline" : "secondary"} 
             size="sm"
-            className="w-full text-xs h-6"
+            className="flex-1"
             onClick={() => onGameEdit(game.id, "hidden", !game.hidden)}
           >
-            {game.hidden ? "Show" : "Hide"}
+            {game.hidden ? "Show Game" : "Hide Game"}
           </Button>
           <Button 
             variant="destructive" 
             size="sm"
-            className="w-full text-xs h-6"
+            className="flex-1"
             onClick={() => {
               if (window.confirm(`Delete ${game.name}? This will remove the game and all scores.`)) {
                 onDelete(game.id);
               }
             }}
           >
-            Delete
+            Delete Game
           </Button>
         </div>
-      </TableCell>
-    </TableRow>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -828,8 +846,8 @@ export default function AdminGames() {
             </Select>
           </div>
 
-          {/* Games Table */}
-          <div className="border rounded-lg overflow-hidden">
+          {/* Games Cards - Mobile Friendly */}
+          <div className="space-y-4">
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
@@ -839,29 +857,16 @@ export default function AdminGames() {
                 items={filteredAndSortedGames.map(g => g.id)}
                 strategy={verticalListSortingStrategy}
               >
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Game</TableHead>
-                      <TableHead className="text-center">Subtitle</TableHead>
-                      <TableHead className="text-center">Type</TableHead>
-                      <TableHead className="text-center">Marquee Images</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredAndSortedGames.map((game) => (
-                      <SortableGameTableRow
-                        key={game.id}
-                        game={game}
-                        onGameEdit={handleGameEdit}
-                        onDelete={handleGameDelete}
-                        onImageUpload={() => {}}
-                        onImageDelete={() => {}}
-                      />
-                    ))}
-                  </TableBody>
-                </Table>
+                {filteredAndSortedGames.map((game) => (
+                  <SortableGameCard
+                    key={game.id}
+                    game={game}
+                    onGameEdit={handleGameEdit}
+                    onDelete={handleGameDelete}
+                    onImageUpload={() => {}}
+                    onImageDelete={() => {}}
+                  />
+                ))}
               </SortableContext>
             </DndContext>
           </div>
