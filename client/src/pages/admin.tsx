@@ -457,9 +457,7 @@ export default function Admin() {
                 <div 
                   className="text-sm font-bold leading-tight"
                   style={{ 
-                    color: venueSettings?.theme?.appearance === 'light' 
-                      ? '#1f2937' // Dark gray for light themes
-                      : '#f9fafb'  // Light gray for dark themes
+                    color: '#1f2937' // Dark gray for all themes
                   }}
                 >
                   {section.title}
