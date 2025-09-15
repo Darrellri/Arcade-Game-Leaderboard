@@ -445,7 +445,11 @@ export default function Admin() {
         
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {adminSections.map((section) => (
-          <Link key={section.href} href={section.href}>
+          <Link 
+            key={section.href} 
+            href={section.href}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          >
             <Card className={`h-full transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer ${section.color}`}>
               <CardHeader className="pb-2 pt-3 px-3">
                 <div className="flex items-center justify-between mb-2">
@@ -520,25 +524,37 @@ export default function Admin() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <Link href="/admin/games">
+            <Link 
+              href="/admin/games"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
               <Button variant="outline" className="w-full justify-start">
                 <Gamepad2 className="h-4 w-4 mr-2" />
                 Add New Game
               </Button>
             </Link>
-            <Link href="/admin/color-schemes">
+            <Link 
+              href="/admin/color-schemes"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
               <Button variant="outline" className="w-full justify-start">
                 <Palette className="h-4 w-4 mr-2" />
                 Change Theme
               </Button>
             </Link>
-            <Link href="/admin/venue-settings">
+            <Link 
+              href="/admin/venue-settings"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
               <Button variant="outline" className="w-full justify-start">
                 <Building2 className="h-4 w-4 mr-2" />
                 Update Venue Info
               </Button>
             </Link>
-            <Link href="/admin/display-options">
+            <Link 
+              href="/admin/display-options"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
               <Button variant="outline" className="w-full justify-start">
                 <Settings className="h-4 w-4 mr-2" />
                 Configure Views
