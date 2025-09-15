@@ -89,10 +89,6 @@ export default function AdminColorSchemes() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/settings"] });
-      toast({
-        title: "Theme Updated",
-        description: "Color scheme has been applied successfully.",
-      });
     },
     onError: (error) => {
       toast({

@@ -82,10 +82,6 @@ export default function Admin() {
       apiRequest("PATCH", "/api/admin/settings", data).then(res => res.json()),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/settings"] });
-      toast({
-        title: "Theme Updated",
-        description: "Color scheme has been applied successfully.",
-      });
     },
     onError: (error) => {
       toast({
