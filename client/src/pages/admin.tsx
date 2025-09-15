@@ -73,6 +73,15 @@ export default function Admin() {
     letterSpacing: '1px'
   });
 
+  // Mutation for updating settings
+  const updateSettingsMutation = useMutation({
+    mutationFn: (data: { theme: any }) => 
+      apiRequest("PUT", "/api/admin/settings", data).then(res => res.json()),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/settings"] });
+    },
+  });
+
   // Function to cycle through color schemes
   const cycleColorScheme = () => {
     if (!venueSettings?.themePresets) return;
@@ -87,14 +96,6 @@ export default function Admin() {
     
     const nextIndex = (currentIndex + 1) % presets.length;
     const nextTheme = presets[nextIndex];
-    
-    const updateSettingsMutation = useMutation({
-      mutationFn: (data: { theme: any }) => 
-        apiRequest("PUT", "/api/admin/settings", data).then(res => res.json()),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["/api/admin/settings"] });
-      },
-    });
     
     updateSettingsMutation.mutate({ theme: nextTheme });
   };
@@ -420,53 +421,66 @@ export default function Admin() {
 
       <div className="container mx-auto px-4 py-4 space-y-8">
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                <Gamepad2 className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-              </div>
-              <div>
-                <div className="text-2xl font-bold">{games ? games.length : '—'}</div>
-                <div className="text-sm text-muted-foreground">Total Games</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      {/* Dashboard Overview Section */}
+      <div className="space-y-4">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Dashboard Overview</h2>
+          <p className="text-muted-foreground">System statistics and quick actions for your arcade leaderboard</p>
+        </div>
         
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                <Eye className="h-6 w-6 text-green-600 dark:text-green-400" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                  <Gamepad2 className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold">{games ? games.length : '—'}</div>
+                  <div className="text-sm text-muted-foreground">Total Games</div>
+                </div>
               </div>
-              <div>
-                <div className="text-2xl font-bold">{games ? games.filter(g => !g.hidden).length : '—'}</div>
-                <div className="text-sm text-muted-foreground">Visible Games</div>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                  <Eye className="h-6 w-6 text-green-600 dark:text-green-400" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold">{games ? games.filter(g => !g.hidden).length : '—'}</div>
+                  <div className="text-sm text-muted-foreground">Visible Games</div>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                <Palette className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                  <Palette className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold">{venueSettings?.themePresets?.length || '—'}</div>
+                  <div className="text-sm text-muted-foreground">Color Themes</div>
+                </div>
               </div>
-              <div>
-                <div className="text-2xl font-bold">{venueSettings?.themePresets?.length || '—'}</div>
-                <div className="text-sm text-muted-foreground">Color Themes</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
-      {/* Admin Sections */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Management Sections */}
+      <div className="space-y-4">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">Management Sections</h2>
+          <p className="text-muted-foreground">Configure and customize your arcade leaderboard system</p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {adminSections.map((section) => (
           <Link key={section.href} href={section.href}>
             <Card className={`h-full transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer ${section.color}`}>
@@ -572,7 +586,7 @@ export default function Admin() {
           </div>
         </CardContent>
       </Card>
-      
+        </div>
       </div>
     </div>
   );
