@@ -443,19 +443,19 @@ export default function Admin() {
           <p className="text-muted-foreground">Configure and customize your arcade leaderboard system</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {adminSections.map((section) => (
           <Link key={section.href} href={section.href}>
             <Card className={`h-full transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer ${section.color}`}>
-              <CardHeader className="pb-4">
-                <div className="flex items-center justify-between">
-                  <div className={`p-3 rounded-lg bg-white/50 dark:bg-black/20`}>
-                    <section.icon className={`h-6 w-6 ${section.iconColor}`} />
+              <CardHeader className="pb-2 pt-3 px-3">
+                <div className="flex items-center justify-between mb-2">
+                  <div className={`p-2 rounded-md bg-white/50 dark:bg-black/20`}>
+                    <section.icon className={`h-4 w-4 ${section.iconColor}`} />
                   </div>
-                  <ChevronRight className={`h-5 w-5 ${section.iconColor}`} />
+                  <ChevronRight className={`h-4 w-4 ${section.iconColor}`} />
                 </div>
                 <div 
-                  className="text-lg font-bold"
+                  className="text-sm font-bold leading-tight"
                   style={{ 
                     color: venueSettings?.theme?.appearance === 'light' 
                       ? '#1f2937' // Dark gray for light themes
@@ -464,11 +464,11 @@ export default function Admin() {
                 >
                   {section.title}
                 </div>
-                <CardDescription className="text-sm">
+                <CardDescription className="text-xs leading-tight">
                   {section.description}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="pt-0">
+              <CardContent className="pt-0 pb-3 px-3">
                 <Badge variant="secondary" className="text-xs">
                   {section.stats}
                 </Badge>
