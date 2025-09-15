@@ -344,12 +344,7 @@ export default function AdminNotes() {
       {/* Documentation Content */}
       <Card className="overflow-hidden">
         <CardHeader className="bg-gradient-to-r from-primary/5 via-secondary/10 to-primary/5 border-b">
-          <CardTitle className="flex items-center gap-4">
-            <img 
-              src="/arcade-leaderboard-logo.png" 
-              alt="Arcade Leaderboard"
-              className="w-[150px] h-auto object-contain"
-            />
+          <CardTitle>
             <div>
               <h2 className="text-2xl font-bold text-primary">System Documentation</h2>
               <p className="text-muted-foreground text-base mt-1">
