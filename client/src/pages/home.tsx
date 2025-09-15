@@ -1327,28 +1327,28 @@ export default function Home() {
                 variant={viewMode === "single" ? "default" : "outline"}
                 size="icon"
                 onClick={() => setViewMode("single")}
-                className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8"
+                className="shadow-sm hover:shadow-md transition-all duration-200 h-[42px] w-[42px]"
                 title="Single View"
               >
-                <Square className="h-3 w-3" />
+                <Square className="h-[16px] w-[16px]" />
               </Button>
               <Button
                 variant={viewMode === "scroll" ? "default" : "outline"}
                 size="icon"
                 onClick={() => setViewMode("scroll")}
-                className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8"
+                className="shadow-sm hover:shadow-md transition-all duration-200 h-[42px] w-[42px]"
                 title="Scroll View"
               >
-                <List className="h-3 w-3" />
+                <List className="h-[16px] w-[16px]" />
               </Button>
               <Button
                 variant={viewMode === "grid" ? "default" : "outline"}
                 size="icon"
                 onClick={() => setViewMode("grid")}
-                className="shadow-sm hover:shadow-md transition-all duration-200 h-8 w-8"
+                className="shadow-sm hover:shadow-md transition-all duration-200 h-[42px] w-[42px]"
                 title="Grid View"
               >
-                <Grid2X2 className="h-3 w-3" />
+                <Grid2X2 className="h-[16px] w-[16px]" />
               </Button>
             </div>
             
@@ -1358,15 +1358,7 @@ export default function Home() {
                 variant="outline" 
                 size="sm" 
                 asChild 
-                className="h-7 px-2 text-xs"
-              >
-                <Link href="/">Home</Link>
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                asChild 
-                className="h-7 px-2 text-xs"
+                className="h-[36px] px-4 text-base"
               >
                 <Link href="/admin">Admin</Link>
               </Button>
@@ -1446,34 +1438,34 @@ export default function Home() {
                     variant={viewMode === "single" ? (showLogoOverlay ? "outline" : "default") : "outline"}
                     size="icon"
                     onClick={() => setViewMode("single")}
-                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-10 w-10 ${
+                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-[52px] w-[52px] ${
                       showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
                     }`}
                     title="Single View - One large game centered"
                   >
-                    <Square className="h-4 w-4" />
+                    <Square className="h-[21px] w-[21px]" />
                   </Button>
                   <Button
                     variant={viewMode === "scroll" ? "default" : "outline"}
                     size="icon"
                     onClick={() => setViewMode("scroll")}
-                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-10 w-10 ${
+                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-[52px] w-[52px] ${
                       showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
                     }`}
                     title="Scroll View - Infinite vertical scroll"
                   >
-                    <List className="h-4 w-4" />
+                    <List className="h-[21px] w-[21px]" />
                   </Button>
                   <Button
                     variant={viewMode === "grid" ? "default" : "outline"}
                     size="icon"
                     onClick={() => setViewMode("grid")}
-                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-10 w-10 ${
+                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-[52px] w-[52px] ${
                       showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
                     }`}
                     title="Grid View - Games in a grid layout"
                   >
-                    <Grid2X2 className="h-4 w-4" />
+                    <Grid2X2 className="h-[21px] w-[21px]" />
                   </Button>
                 </div>
                 
@@ -1483,18 +1475,7 @@ export default function Home() {
                     variant="outline" 
                     size="sm" 
                     asChild 
-                    className={`h-8 px-3 text-sm ${
-                      showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
-                    }`}
-                  >
-                    <Link href="/">Home</Link>
-                  </Button>
-
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    asChild 
-                    className={`h-8 px-3 text-sm ${
+                    className={`h-[42px] px-5 text-lg ${
                       showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
                     }`}
                   >
