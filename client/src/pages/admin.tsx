@@ -121,15 +121,6 @@ export default function Admin() {
       stats: games ? `${games.length} total games` : "Loading...",
     },
     {
-      title: "Color Schemes",
-      description: "Transform your arcade's visual identity",
-      icon: Palette,
-      href: "/admin/color-schemes",
-      color: "bg-purple-50/30 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800",
-      iconColor: "text-purple-600 dark:text-purple-400",
-      stats: venueSettings?.themePresets ? `${venueSettings.themePresets.length} themes available` : "Loading...",
-    },
-    {
       title: "Display Options",
       description: "Configure settings for all display modes",
       icon: Settings,
@@ -530,7 +521,7 @@ export default function Admin() {
               </Button>
             </Link>
             <Link 
-              href="/admin/color-schemes"
+              href="/admin/display-options"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
               <Button variant="outline" className="w-full justify-start">
