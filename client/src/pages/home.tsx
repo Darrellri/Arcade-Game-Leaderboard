@@ -681,9 +681,9 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
           }}
         >
           <div className="w-full max-w-[1188px] bg-black/75 backdrop-blur-sm border border-primary/20 rounded-[15px] px-6 py-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-              {/* Column 1: Game Information (Left) */}
-              <div className="text-left space-y-2">
+            <div className="flex flex-col items-center justify-center text-center space-y-4">
+              {/* Game name and subtitle at top */}
+              <div className="space-y-2">
                 <div className="text-xl sm:text-2xl md:text-3xl font-bold text-primary uppercase tracking-wide">
                   <AnimatedText 
                     text={championGame.name} 
@@ -702,54 +702,48 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
                 )}
               </div>
 
-              {/* Column 2: Champion Information (Center) */}
-              <div className="text-center space-y-4">
-                {/* Trophy icon and champion label */}
-                <div className="flex flex-col items-center gap-3">
-                  <TrophyIcon size={40} className="text-yellow-400 flex-shrink-0 sm:hidden" />
-                  <TrophyIcon size={50} className="text-yellow-400 flex-shrink-0 hidden sm:block md:hidden" />
-                  <TrophyIcon size={62} className="text-yellow-400 flex-shrink-0 hidden md:block" />
-                  <div className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-400">
-                    <AnimatedText 
-                      text="#1 CHAMPION" 
-                      animationClass={textAnimations.champion} 
-                      baseDelay={0.75} 
-                    />
-                  </div>
-                </div>
-
-                {/* Champion name */}
-                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
+              {/* Trophy icon and champion label */}
+              <div className="flex items-center justify-center gap-3">
+                <TrophyIcon size={40} className="text-yellow-400 flex-shrink-0 sm:hidden" />
+                <TrophyIcon size={50} className="text-yellow-400 flex-shrink-0 hidden sm:block md:hidden" />
+                <TrophyIcon size={62} className="text-yellow-400 flex-shrink-0 hidden md:block" />
+                <div className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-400">
                   <AnimatedText 
-                    text={championGame.topScorerName || "No Name"} 
-                    animationClass={textAnimations.name} 
-                    baseDelay={0.95} 
+                    text="#1 CHAMPION" 
+                    animationClass={textAnimations.champion} 
+                    baseDelay={0.75} 
                   />
                 </div>
               </div>
 
-              {/* Column 3: Score Information (Right) */}
-              <div className="text-right space-y-2">
-                {/* Score */}
-                <div className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary">
+              {/* Champion name */}
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
+                <AnimatedText 
+                  text={championGame.topScorerName || "No Name"} 
+                  animationClass={textAnimations.name} 
+                  baseDelay={0.95} 
+                />
+              </div>
+
+              {/* Score */}
+              <div className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary">
+                <AnimatedText 
+                  text={championGame.currentHighScore ? championGame.currentHighScore.toLocaleString() : "0"} 
+                  animationClass={textAnimations.score} 
+                  baseDelay={1.15} 
+                />
+              </div>
+
+              {/* Date */}
+              {championGame.topScoreDate && (
+                <div className="text-base sm:text-lg md:text-xl text-gray-300">
                   <AnimatedText 
-                    text={championGame.currentHighScore ? championGame.currentHighScore.toLocaleString() : "0"} 
-                    animationClass={textAnimations.score} 
-                    baseDelay={1.15} 
+                    text={`Champion since ${formatDate(new Date(championGame.topScoreDate))}`} 
+                    animationClass={textAnimations.date} 
+                    baseDelay={1.35} 
                   />
                 </div>
-
-                {/* Date */}
-                {championGame.topScoreDate && (
-                  <div className="text-base sm:text-lg md:text-xl text-gray-300">
-                    <AnimatedText 
-                      text={`Champion since ${formatDate(new Date(championGame.topScoreDate))}`} 
-                      animationClass={textAnimations.date} 
-                      baseDelay={1.35} 
-                    />
-                  </div>
-                )}
-              </div>
+              )}
             </div>
           </div>
         </div>
