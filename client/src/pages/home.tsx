@@ -1470,22 +1470,6 @@ export default function Home() {
           />
         )}
       </div>
-
-      {/* Footer Bar */}
-      <div className="mt-2 h-[50px] bg-card/30">
-        <div className="max-w-4xl mx-auto px-4 h-full flex items-center justify-center">
-          <div className="flex items-center justify-center gap-[30px]">
-            <img 
-              src="/arcade-leaderboard-logo.png" 
-              alt="Arcade Leaderboard" 
-              className="h-8 w-auto"
-            />
-            <p className="text-sm text-primary">
-              {venueSettings?.name || "Winona Axe and Arcade"}
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
