@@ -680,7 +680,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
             animationFillMode: 'both'
           }}
         >
-          <div className="w-full max-w-[1188px] aspect-[1188/321] bg-black/75 backdrop-blur-sm border border-primary/20 rounded-[15px]">
+          <div className="w-full max-w-[1188px] aspect-[1188/241] bg-black/75 backdrop-blur-sm border border-primary/20 rounded-[15px]">
             <div className="w-full h-full grid grid-cols-3 gap-4 px-6 py-6">
               {/* Left Column - Champion Name */}
               <div className="flex flex-col justify-center items-start">
@@ -702,7 +702,7 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
 
               {/* Middle Column - High Score and Date */}
               <div className="flex flex-col justify-center items-center text-center">
-                <div className="text-4xl sm:text-5xl md:text-6xl font-bold text-primary mb-2">
+                <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-2">
                   <AnimatedText 
                     text={championGame.currentHighScore ? championGame.currentHighScore.toLocaleString() : "0"} 
                     animationClass={textAnimations.score} 
