@@ -175,31 +175,54 @@ function SortableGameCard({ game, onGameEdit, onDelete, onImageUpload, onImageDe
           </div>
         </div>
 
-        {/* Image uploads */}
+        {/* Marquee Image - Large Display */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground">Images</label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <div className="space-y-1">
-              <p className="text-xs text-muted-foreground">Marquee Image</p>
-              <MarqueeImageUploader 
-                gameId={game.id}
-                currentImageUrl={game.imageUrl}
-                onSuccess={() => {
-                  queryClient.invalidateQueries({ queryKey: ["/api/games"] });
-                }}
+          <label className="text-sm font-medium text-foreground uppercase tracking-wide">Marquee Image</label>
+          <div className="w-full aspect-[3/1] bg-black/20 rounded-lg overflow-hidden border border-primary/20">
+            {game.imageUrl ? (
+              <img 
+                src={game.imageUrl} 
+                alt={game.name} 
+                className="w-full h-full object-contain"
               />
-            </div>
-            <div className="space-y-1">
-              <p className="text-xs text-muted-foreground">Overlay Image</p>
-              <OverlayImageUploader 
-                gameId={game.id}
-                currentOverlayUrl={game.overlayImageUrl}
-                onSuccess={() => {
-                  queryClient.invalidateQueries({ queryKey: ["/api/games"] });
-                }}
-              />
-            </div>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
+                No image uploaded
+              </div>
+            )}
           </div>
+          <MarqueeImageUploader 
+            gameId={game.id}
+            currentImageUrl={game.imageUrl}
+            onSuccess={() => {
+              queryClient.invalidateQueries({ queryKey: ["/api/games"] });
+            }}
+          />
+        </div>
+
+        {/* Overlay Image - Large Display */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-foreground uppercase tracking-wide">Overlay Image</label>
+          <div className="w-full aspect-[3/1] bg-black/20 rounded-lg overflow-hidden border border-primary/20">
+            {game.overlayImageUrl ? (
+              <img 
+                src={game.overlayImageUrl} 
+                alt={`${game.name} overlay`} 
+                className="w-full h-full object-contain"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
+                No overlay uploaded
+              </div>
+            )}
+          </div>
+          <OverlayImageUploader 
+            gameId={game.id}
+            currentOverlayUrl={game.overlayImageUrl}
+            onSuccess={() => {
+              queryClient.invalidateQueries({ queryKey: ["/api/games"] });
+            }}
+          />
         </div>
 
         {/* Action buttons */}
@@ -243,25 +266,22 @@ export default function AdminGames() {
 
   // Font styling functions
   const getVenueNameStyle = () => ({
-    fontFamily: venueSettings?.nameFont || "Arial",
-    fontWeight: venueSettings?.nameFontStyle === "bold" ? "bold" : "normal",
+    fontFamily: venueSettings?.nameFont || "'Oswald', 'Impact', 'Arial Black', sans-serif",
+    fontWeight: venueSettings?.nameFontStyle === "bold" ? "900" : "700",
     fontStyle: venueSettings?.nameFontStyle === "italic" ? "italic" : "normal",
-    fontSize: `${venueSettings?.nameFontSize || 30}pt`,
-    letterSpacing: '2px',
-    lineHeight: 'calc(1.25em + 2px)',
+    letterSpacing: '0.08em',
+    lineHeight: '1.1',
+    whiteSpace: 'nowrap' as const,
     color: venueSettings?.subtitleWhite === "true" 
       ? "white" 
       : (() => {
-          // For lighter color schemes, use primary color (same as game titles)
           const isLightScheme = venueSettings?.theme?.appearance === "light" || 
             (venueSettings?.theme?.variant === "tint" && venueSettings?.theme?.appearance !== "dark") ||
             (venueSettings?.theme?.primary && parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "0") > 60);
           
           if (isLightScheme) {
-            // Use the same color as game titles (primary color)
             return venueSettings?.theme?.primary || "hsl(280, 100%, 50%)";
           } else {
-            // For dark schemes, use a lighter purple color
             return "hsl(280, 100%, 75%)";
           }
         })()
@@ -549,26 +569,24 @@ export default function AdminGames() {
             </div>
           </div>
           
-          {/* Row 2: Leaderboard Name */}
-          <div className="mb-2">
-            <h1 className="font-black tracking-tight text-foreground uppercase text-outline leading-tight text-center" 
-                style={{...getLeaderboardTitleStyle(), fontSize: '16px'}}>
-              {venueSettings?.leaderboardName || "THE LEADERBOARD"}
-            </h1>
-          </div>
-          
-          {/* Row 3: Venue Name */}
-          <div className="mb-3">
-            <h2 
-              className={`tracking-tight leading-tight text-center ${
-                venueSettings?.subtitleBold === "true" ? "font-bold" : "font-normal"
+          {/* Row 2: Venue Name - Centered */}
+          <div className="mb-3 w-full overflow-hidden flex items-center justify-center px-2">
+            <h1 
+              className={`leading-tight text-center truncate ${
+                venueSettings?.subtitleBold === "true" ? "font-bold" : ""
               } ${
                 venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
               }`}
-              style={{...getVenueNameStyle(), fontSize: '14px'}}
+              style={{
+                ...getVenueNameStyle(),
+                fontSize: 'clamp(1.1rem, 5vw, 1.6rem)',
+                maxWidth: '100%',
+                WebkitTextStroke: '2px black',
+                textShadow: '0 0 6px rgba(0,0,0,0.8), 0 0 6px rgba(0,0,0,0.8)'
+              }}
             >
               {venueSettings?.name || "Arcade"}
-            </h2>
+            </h1>
           </div>
           
           {/* Controls Row for Mobile */}
@@ -672,21 +690,24 @@ export default function AdminGames() {
             )}
           </div>
           
-          {/* Center Content Area - Titles centered from marquee position */}
-          <div className="flex-1 min-w-0 flex flex-col justify-center px-4">
-            <h1 className="text-4xl lg:text-5xl font-black tracking-tight text-foreground uppercase text-outline leading-tight text-center" style={getLeaderboardTitleStyle()}>
-              {venueSettings?.leaderboardName || "THE LEADERBOARD"}
-            </h1>
-            <h2 
-              className={`text-2xl lg:text-[2.625rem] tracking-tight leading-tight text-center ${
-                venueSettings?.subtitleBold === "true" ? "font-bold" : "font-normal"
+          {/* Center Content Area - Venue Name centered */}
+          <div className="flex-1 min-w-0 flex items-center justify-center px-4 overflow-hidden">
+            <h1 
+              className={`leading-tight text-center truncate ${
+                venueSettings?.subtitleBold === "true" ? "font-bold" : ""
               } ${
                 venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
               }`}
-              style={getVenueNameStyle()}
+              style={{
+                ...getVenueNameStyle(),
+                fontSize: 'clamp(1.5rem, 3.5vw, 3rem)',
+                maxWidth: '100%',
+                WebkitTextStroke: '2px black',
+                textShadow: '0 0 6px rgba(0,0,0,0.8), 0 0 6px rgba(0,0,0,0.8)'
+              }}
             >
               {venueSettings?.name || "Arcade"}
-            </h2>
+            </h1>
           </div>
           
           {/* Right Controls and Leaderboard Logo - Fixed 300px on desktop */}
@@ -758,129 +779,115 @@ export default function AdminGames() {
 
       <div className="container mx-auto px-4 py-4 space-y-8">
 
-      {/* Games Management */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <Gamepad2 className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <div className="text-lg font-bold">Game Library</div>
-              <CardDescription>
-                Manage your arcade and pinball games. Drag to reorder, edit details, and upload marquee images.
-              </CardDescription>
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Add New Game Form */}
-          <div className="border rounded-lg p-4 bg-muted/20">
-            <h3 className="font-semibold mb-4 text-primary">Add New Game</h3>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-4 items-end flex-wrap">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem className="flex-1 min-w-[200px]">
-                      <FormLabel>Game Name</FormLabel>
+      {/* Page Title */}
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-bold uppercase tracking-wide">GAME LIBRARY</h2>
+        <p className="text-muted-foreground">Add games, upload images, and drag to reorder</p>
+      </div>
+
+      {/* Add New Game - Simple & Fun */}
+      <Card className="border-2 border-dashed border-primary/40 bg-primary/5">
+        <CardContent className="p-6">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-4 items-center">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem className="flex-1 w-full sm:w-auto">
+                    <FormControl>
+                      <Input 
+                        {...field} 
+                        placeholder="Type game name here..." 
+                        className="text-lg h-14 text-center sm:text-left font-medium"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <Input {...field} placeholder="Enter game name" />
+                        <SelectTrigger className="w-[140px] h-14">
+                          <SelectValue placeholder="Type" />
+                        </SelectTrigger>
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="type"
-                  render={({ field }) => (
-                    <FormItem className="min-w-[120px]">
-                      <FormLabel>Type</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select type" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="arcade">
-                            <div className="flex items-center gap-2">
-                              <Gamepad2 className="h-4 w-4" />
-                              Arcade
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="pinball">
-                            <div className="flex items-center gap-2">
-                              <CircleDot className="h-4 w-4" />
-                              Pinball
-                            </div>
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button type="submit" disabled={addGame.isPending}>
-                  <PlusCircle className="h-4 w-4 mr-2" />
-                  Add Game
-                </Button>
-              </form>
-            </Form>
-          </div>
-
-          {/* Sort Controls */}
-          <div className="flex items-center gap-4">
-            <span className="text-sm font-medium">Sort by:</span>
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="displayOrder">Display Order</SelectItem>
-                <SelectItem value="name">Game Name</SelectItem>
-                <SelectItem value="type">Game Type</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Games Cards - Mobile Friendly */}
-          <div className="space-y-4">
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={handleDragEnd}
-            >
-              <SortableContext
-                items={filteredAndSortedGames.map(g => g.id)}
-                strategy={verticalListSortingStrategy}
-              >
-                {filteredAndSortedGames.map((game) => (
-                  <SortableGameCard
-                    key={game.id}
-                    game={game}
-                    onGameEdit={handleGameEdit}
-                    onDelete={handleGameDelete}
-                    onImageUpload={() => {}}
-                    onImageDelete={() => {}}
-                  />
-                ))}
-              </SortableContext>
-            </DndContext>
-          </div>
-
-          {/* Stats */}
-          <div className="flex items-center justify-between text-sm text-muted-foreground">
-            <span>{filteredAndSortedGames.length} total games</span>
-            <span>
-              {filteredAndSortedGames.filter(g => !g.hidden).length} visible, {' '}
-              {filteredAndSortedGames.filter(g => g.hidden).length} hidden
-            </span>
-          </div>
+                      <SelectContent>
+                        <SelectItem value="arcade">
+                          <div className="flex items-center gap-2">
+                            <Gamepad2 className="h-4 w-4" />
+                            Arcade
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="pinball">
+                          <div className="flex items-center gap-2">
+                            <CircleDot className="h-4 w-4" />
+                            Pinball
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" disabled={addGame.isPending} size="lg" className="h-14 px-8 text-lg">
+                <PlusCircle className="h-5 w-5 mr-2" />
+                ADD GAME
+              </Button>
+            </form>
+          </Form>
         </CardContent>
       </Card>
+
+      {/* Sort Controls */}
+      <div className="flex items-center justify-between">
+        <span className="text-sm text-muted-foreground">{filteredAndSortedGames.length} games</span>
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium">Sort:</span>
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="w-[150px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="displayOrder">Display Order</SelectItem>
+              <SelectItem value="name">Name</SelectItem>
+              <SelectItem value="type">Type</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {/* Games List */}
+      <div className="space-y-4">
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={filteredAndSortedGames.map(g => g.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            {filteredAndSortedGames.map((game) => (
+              <SortableGameCard
+                key={game.id}
+                game={game}
+                onGameEdit={handleGameEdit}
+                onDelete={handleGameDelete}
+                onImageUpload={() => {}}
+                onImageDelete={() => {}}
+              />
+            ))}
+          </SortableContext>
+        </DndContext>
+      </div>
+
       </div>
     </div>
   );
