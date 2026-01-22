@@ -1353,7 +1353,9 @@ export default function Home() {
               style={{
                 ...getVenueNameStyle(true),
                 fontSize: 'clamp(1.1rem, 5vw, 1.6rem)',
-                maxWidth: '100%'
+                maxWidth: '100%',
+                WebkitTextStroke: '2px black',
+                textShadow: '0 0 6px rgba(0,0,0,0.8), 0 0 6px rgba(0,0,0,0.8)'
               }}
             >
               {venueSettings?.name || "Arcade"}
@@ -1458,7 +1460,9 @@ export default function Home() {
               style={{
                 ...getVenueNameStyle(),
                 fontSize: 'clamp(1.5rem, 3.5vw, 3rem)',
-                maxWidth: '100%'
+                maxWidth: '100%',
+                WebkitTextStroke: '2px black',
+                textShadow: '0 0 6px rgba(0,0,0,0.8), 0 0 6px rgba(0,0,0,0.8)'
               }}
             >
               {venueSettings?.name || "Arcade"}
