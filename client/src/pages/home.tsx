@@ -1051,11 +1051,12 @@ export default function Home() {
 
   // Font styling functions
   const getVenueNameStyle = (isMobile = false) => ({
-    fontFamily: venueSettings?.nameFont || "'Montserrat', 'Segoe UI', sans-serif",
+    fontFamily: venueSettings?.nameFont || "'Cinzel', 'Times New Roman', serif",
     fontWeight: venueSettings?.nameFontStyle === "bold" ? "bold" : "600",
     fontStyle: venueSettings?.nameFontStyle === "italic" ? "italic" : "normal",
-    letterSpacing: '0.05em',
-    lineHeight: '1.2',
+    letterSpacing: '0.08em',
+    lineHeight: '1.1',
+    whiteSpace: 'nowrap' as const,
     color: venueSettings?.subtitleWhite === "true" 
       ? "white" 
       : (() => {
@@ -1238,7 +1239,7 @@ export default function Home() {
               className="tracking-wide text-foreground uppercase leading-tight text-center" 
               style={{
                 ...getLeaderboardTitleStyle(true),
-                fontSize: 'clamp(1.25rem, 5vw, 1.75rem)'
+                fontSize: 'clamp(1rem, 4vw, 1.4rem)'
               }}
             >
               {venueSettings?.leaderboardName || "THE LEADERBOARD"}
@@ -1246,7 +1247,7 @@ export default function Home() {
           </div>
           
           {/* Row 3: Venue Name */}
-          <div className="mb-3">
+          <div className="mb-3 w-full overflow-visible">
             <h2 
               className={`leading-tight text-center ${
                 venueSettings?.subtitleBold === "true" ? "font-bold" : ""
@@ -1255,7 +1256,7 @@ export default function Home() {
               }`}
               style={{
                 ...getVenueNameStyle(true),
-                fontSize: 'clamp(0.875rem, 4vw, 1.25rem)'
+                fontSize: 'clamp(0.75rem, 3.5vw, 1.1rem)'
               }}
             >
               {venueSettings?.name || "Arcade"}
@@ -1350,12 +1351,12 @@ export default function Home() {
           </div>
           
           {/* Center Content Area - Titles centered from marquee position */}
-          <div className="flex-1 min-w-0 flex flex-col justify-center px-4">
+          <div className="flex-1 min-w-0 flex flex-col justify-center px-2 overflow-visible">
             <h1 
               className="tracking-wide text-foreground uppercase leading-tight text-center"
               style={{
                 ...getLeaderboardTitleStyle(),
-                fontSize: 'clamp(2rem, 4vw, 3.5rem)'
+                fontSize: 'clamp(1.6rem, 3.2vw, 2.8rem)'
               }}
             >
               {venueSettings?.leaderboardName || "THE LEADERBOARD"}
@@ -1368,7 +1369,7 @@ export default function Home() {
               }`}
               style={{
                 ...getVenueNameStyle(),
-                fontSize: 'clamp(1.25rem, 3vw, 2.5rem)'
+                fontSize: 'clamp(1rem, 2.5vw, 2rem)'
               }}
             >
               {venueSettings?.name || "Arcade"}
