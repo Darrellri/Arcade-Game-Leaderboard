@@ -81,7 +81,7 @@ export default function AdminScores() {
         gameId: parseInt(data.gameId),
         playerName: data.playerName,
         score: parseInt(data.score),
-        phoneNumber: "ADMIN",
+        phoneNumber: "+10000000000",
         latitude: 0,
         longitude: 0,
       });
