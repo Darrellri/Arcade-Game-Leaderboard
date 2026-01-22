@@ -281,6 +281,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Delete a score
+  app.delete("/api/scores/:id", async (req, res) => {
+    try {
+      const scoreId = parseInt(req.params.id);
+      await storage.deleteScore(scoreId);
+      res.status(200).json({ success: true });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete score" });
+    }
+  });
+
   // Upload game marquee image (792x214 aspect ratio)
   app.post("/api/games/:id/upload-marquee", upload.single('marqueeImage'), async (req, res) => {
     try {

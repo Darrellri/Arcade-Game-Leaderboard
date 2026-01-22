@@ -14,6 +14,7 @@ export interface IStorage {
   // Score operations
   getScoresByGame(gameId: number): Promise<Score[]>;
   addScore(score: InsertScore): Promise<Score>;
+  deleteScore(id: number): Promise<void>;
 
   // Venue settings operations
   getVenueSettings(): Promise<VenueSettings>;
@@ -245,6 +246,10 @@ export class MemStorage implements IStorage {
     }
 
     return newScore;
+  }
+
+  async deleteScore(id: number): Promise<void> {
+    this.scores.delete(id);
   }
 
   async updateGame(id: number, gameUpdate: Partial<Game>): Promise<Game> {

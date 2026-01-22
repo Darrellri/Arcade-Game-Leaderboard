@@ -7,6 +7,7 @@ import SubmitScore from "@/pages/submit-score";
 import Leaderboard from "@/pages/leaderboard";
 import Admin from "@/pages/admin";
 import AdminGames from "@/pages/admin-games";
+import AdminScores from "@/pages/admin-scores";
 import AdminColorSchemes from "@/pages/admin-color-schemes";
 import AdminDisplayOptions from "@/pages/admin-display-options";
 import AdminVenueSettings from "@/pages/admin-venue-settings";
@@ -27,6 +28,7 @@ function Router() {
           <Route path="/leaderboard/:gameId" component={Leaderboard} />
           <Route path="/admin" component={Admin} />
           <Route path="/admin/games" component={AdminGames} />
+          <Route path="/admin/scores" component={AdminScores} />
           <Route path="/admin/color-schemes" component={AdminColorSchemes} />
           <Route path="/admin/display-options" component={AdminDisplayOptions} />
           <Route path="/admin/venue-settings" component={AdminVenueSettings} />

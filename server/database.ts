@@ -69,6 +69,10 @@ export class DatabaseStorage implements IStorage {
     return newScore;
   }
 
+  async deleteScore(id: number): Promise<void> {
+    await db.delete(scores).where(eq(scores.id, id));
+  }
+
   async updateGame(id: number, gameUpdate: Partial<Game>): Promise<Game> {
     const [updatedGame] = await db.update(games)
       .set(gameUpdate)

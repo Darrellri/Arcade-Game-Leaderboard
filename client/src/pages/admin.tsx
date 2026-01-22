@@ -110,6 +110,13 @@ export default function Admin() {
       stats: games ? `${games.length} total games` : "Loading...",
     },
     {
+      title: "HIGH SCORES",
+      description: "Manually enter high scores for games",
+      href: "/admin/scores",
+      color: "bg-purple-50/30 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800",
+      stats: "Add & manage scores",
+    },
+    {
       title: "DISPLAY OPTIONS",
       description: "Configure settings for all display modes",
       href: "/admin/display-options",
@@ -414,7 +421,7 @@ export default function Admin() {
 
       {/* Management Sections - Centered */}
       <div className="flex justify-center">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 max-w-5xl">
           {adminSections.map((section) => (
             <Link 
               key={section.href} 
