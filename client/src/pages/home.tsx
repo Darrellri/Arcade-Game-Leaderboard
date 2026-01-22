@@ -287,8 +287,8 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
 }
 
 // Full-size marquee component for new views with 15px radius - MARQUEE ONLY
-// Layer overlay animations - subtle shifts and bounces from center
-const layerAnimations = [
+// Layer overlay animations - pool of 20 animations for variety
+const layerAnimationsPool = [
   'animate-layer-bounce-left',
   'animate-layer-bounce-right',
   'animate-layer-grow-wobble',
@@ -296,12 +296,47 @@ const layerAnimations = [
   'animate-layer-drift-slow-left',
   'animate-layer-drift-slow-right',
   'animate-layer-elastic-settle',
-  'animate-layer-pop-shake'
+  'animate-layer-pop-shake',
+  'animate-layer-swing-left',
+  'animate-layer-swing-right',
+  'animate-layer-zoom-bounce',
+  'animate-layer-float-up',
+  'animate-layer-float-down',
+  'animate-layer-pulse-grow',
+  'animate-layer-jitter-in',
+  'animate-layer-spiral-subtle',
+  'animate-layer-snap-in',
+  'animate-layer-slide-bounce-left',
+  'animate-layer-slide-bounce-right',
+  'animate-layer-wobble-scale'
 ];
 
-// Get a random layer animation
-const getRandomLayerAnimation = () => {
-  return layerAnimations[Math.floor(Math.random() * layerAnimations.length)];
+// Shuffle array using Fisher-Yates algorithm
+const shuffleArray = <T,>(array: T[]): T[] => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
+// Animation cycle manager - shuffles animations each cycle so games get different animations
+let currentAnimationCycle: string[] = shuffleArray(layerAnimationsPool);
+let animationCycleIndex = 0;
+
+// Get next animation from shuffled pool, reshuffles when cycle completes
+const getNextLayerAnimation = () => {
+  const animation = currentAnimationCycle[animationCycleIndex % currentAnimationCycle.length];
+  animationCycleIndex++;
+  
+  // Reshuffle when we've used all animations
+  if (animationCycleIndex >= currentAnimationCycle.length) {
+    currentAnimationCycle = shuffleArray(layerAnimationsPool);
+    animationCycleIndex = 0;
+  }
+  
+  return animation;
 };
 
 function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000, overlayDelay, exitDelay = 6000, onImageLoad, onAnimationSet }: { 
@@ -337,7 +372,7 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
   useEffect(() => {
     const entranceAnim = getRandomAnimation();
     const exitAnim = getExitAnimation(entranceAnim);
-    const layerAnim = getRandomLayerAnimation();
+    const layerAnim = getNextLayerAnimation();
     const bgReactAnim = bgReactionAnimations[Math.floor(Math.random() * bgReactionAnimations.length)];
     
     setCurrentAnimation(entranceAnim);
