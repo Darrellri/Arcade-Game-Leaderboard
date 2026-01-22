@@ -1162,8 +1162,8 @@ export default function Home() {
 
   // Font styling functions
   const getVenueNameStyle = (isMobile = false) => ({
-    fontFamily: venueSettings?.nameFont || "'Cinzel', 'Times New Roman', serif",
-    fontWeight: venueSettings?.nameFontStyle === "bold" ? "bold" : "600",
+    fontFamily: venueSettings?.nameFont || "'Oswald', 'Impact', 'Arial Black', sans-serif",
+    fontWeight: venueSettings?.nameFontStyle === "bold" ? "900" : "700",
     fontStyle: venueSettings?.nameFontStyle === "italic" ? "italic" : "normal",
     letterSpacing: '0.08em',
     lineHeight: '1.1',
