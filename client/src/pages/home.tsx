@@ -1297,8 +1297,8 @@ export default function Home() {
               )}
             </div>
             
-            {/* Right: Arcade Leaderboard Logo */}
-            <div className="w-[25vw] max-w-[120px] flex justify-end">
+            {/* Right: Arcade Leaderboard Logo - 20% larger */}
+            <div className="w-[30vw] max-w-[144px] flex justify-end">
               <div className="w-full aspect-[2/1] flex items-center justify-center">
                 <img 
                   src="/arcade-leaderboard-logo.png" 
@@ -1309,17 +1309,18 @@ export default function Home() {
             </div>
           </div>
           
-          {/* Row 2: Venue Name - Centered */}
-          <div className="mb-3 w-full overflow-visible flex items-center justify-center">
+          {/* Row 2: Venue Name - Centered, constrained to not overlay sides */}
+          <div className="mb-3 w-full overflow-hidden flex items-center justify-center px-2">
             <h1 
-              className={`leading-tight text-center ${
+              className={`leading-tight text-center truncate ${
                 venueSettings?.subtitleBold === "true" ? "font-bold" : ""
               } ${
                 venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
               }`}
               style={{
                 ...getVenueNameStyle(true),
-                fontSize: 'clamp(1.1rem, 5vw, 1.6rem)'
+                fontSize: 'clamp(1.1rem, 5vw, 1.6rem)',
+                maxWidth: '100%'
               }}
             >
               {venueSettings?.name || "Arcade"}
@@ -1413,17 +1414,18 @@ export default function Home() {
             )}
           </div>
           
-          {/* Center Content Area - Venue Name centered */}
-          <div className="flex-1 min-w-0 flex items-center justify-center px-2 overflow-visible">
+          {/* Center Content Area - Venue Name centered, constrained to not overlay sides */}
+          <div className="flex-1 min-w-0 flex items-center justify-center px-4 overflow-hidden">
             <h1 
-              className={`leading-tight text-center ${
+              className={`leading-tight text-center truncate ${
                 venueSettings?.subtitleBold === "true" ? "font-bold" : ""
               } ${
                 venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
               }`}
               style={{
                 ...getVenueNameStyle(),
-                fontSize: 'clamp(1.5rem, 3.5vw, 3rem)'
+                fontSize: 'clamp(1.5rem, 3.5vw, 3rem)',
+                maxWidth: '100%'
               }}
             >
               {venueSettings?.name || "Arcade"}
