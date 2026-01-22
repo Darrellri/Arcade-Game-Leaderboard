@@ -1332,8 +1332,8 @@ export default function Home() {
               )}
             </div>
             
-            {/* Right: Arcade Leaderboard Logo - 20% larger than venue logo */}
-            <div className="w-[30vw] max-w-[144px] flex justify-end items-center">
+            {/* Right: Arcade Leaderboard Logo - 50% larger */}
+            <div className="w-[45vw] max-w-[216px] flex justify-end items-center">
               <img 
                 src="/arcade-leaderboard-logo.png" 
                 alt="Arcade Leaderboard" 
