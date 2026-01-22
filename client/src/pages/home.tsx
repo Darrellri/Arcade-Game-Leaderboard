@@ -341,12 +341,12 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
       }
     }, delay + 850); // Show layer right after main animation finishes
 
-    // Trigger background reaction 500ms before layer animation ends
+    // Trigger background reaction 200ms before layer animation ends
     const bgReactTimer = setTimeout(() => {
       if (overlayImageUrl) {
         setBgReaction(bgReactAnim);
       }
-    }, delay + 850 + 100); // Layer shows at 850ms, react 100ms in (500ms before ~600ms animation ends)
+    }, delay + 850 + 400); // Layer shows at 850ms, react 400ms in (200ms before ~600ms animation ends)
 
     // Start exit animation before the component cycles
     const exitTimer = setTimeout(() => {
