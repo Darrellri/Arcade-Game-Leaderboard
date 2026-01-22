@@ -262,6 +262,38 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
 }
 
 // Full-size marquee component for new views with 15px radius - MARQUEE ONLY
+// Overlay depth effect animations array
+const overlayDepthAnimations = [
+  'animate-overlay-depth-zoom',
+  'animate-overlay-depth-float',
+  'animate-overlay-depth-swing',
+  'animate-overlay-depth-pop',
+  'animate-overlay-depth-slide-3d',
+  'animate-overlay-depth-spiral',
+  'animate-overlay-depth-elastic',
+  'animate-overlay-depth-flip'
+];
+
+// Get a random overlay depth animation
+const getRandomOverlayAnimation = () => {
+  return overlayDepthAnimations[Math.floor(Math.random() * overlayDepthAnimations.length)];
+};
+
+// Get a complementary overlay animation based on the main entrance animation
+const getComplementaryOverlayAnimation = (entranceAnim: string): string => {
+  // Match overlay animation to complement the main animation
+  if (entranceAnim.includes('left') || entranceAnim.includes('right')) {
+    return Math.random() > 0.5 ? 'animate-overlay-depth-swing' : 'animate-overlay-depth-flip';
+  } else if (entranceAnim.includes('up') || entranceAnim.includes('down') || entranceAnim.includes('top') || entranceAnim.includes('bottom')) {
+    return Math.random() > 0.5 ? 'animate-overlay-depth-float' : 'animate-overlay-depth-slide-3d';
+  } else if (entranceAnim.includes('zoom') || entranceAnim.includes('scale')) {
+    return Math.random() > 0.5 ? 'animate-overlay-depth-zoom' : 'animate-overlay-depth-pop';
+  } else if (entranceAnim.includes('rotate') || entranceAnim.includes('spin')) {
+    return Math.random() > 0.5 ? 'animate-overlay-depth-spiral' : 'animate-overlay-depth-elastic';
+  }
+  return getRandomOverlayAnimation();
+};
+
 function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000, overlayDelay, exitDelay = 6000, onImageLoad, onAnimationSet }: { 
   game: Game; 
   className?: string; 
@@ -273,7 +305,9 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
   onAnimationSet?: (animation: string) => void;
 }) {
   const imageUrl = game.imageUrl;
+  const overlayImageUrl = game.overlayImageUrl;
   const [currentAnimation, setCurrentAnimation] = useState('');
+  const [overlayAnimation, setOverlayAnimation] = useState('');
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [topOverlayVisible, setTopOverlayVisible] = useState(false);
@@ -284,9 +318,11 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
   useEffect(() => {
     const entranceAnim = getRandomAnimation();
     const exitAnim = getExitAnimation(entranceAnim);
+    const overlayAnim = getComplementaryOverlayAnimation(entranceAnim);
     
     setCurrentAnimation(entranceAnim);
     setExitAnimation(exitAnim);
+    setOverlayAnimation(overlayAnim);
     
     // Notify parent component of the current animation
     if (onAnimationSet) {
@@ -304,16 +340,15 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
 
     // Show top overlay after marquee animation completes (animation duration + buffer)
     const topOverlayTimer = setTimeout(() => {
-      setTopOverlayVisible(true);
-      // Hide top overlay after 1 second
-      setTimeout(() => {
-        setTopOverlayVisible(false);
-      }, 1000);
-    }, delay + 1400); // Wait for entrance animation to complete (1.4s max)
+      if (overlayImageUrl) {
+        setTopOverlayVisible(true);
+      }
+    }, delay + 800); // Show overlay slightly after main animation starts
 
     // Start exit animation before the component cycles
     const exitTimer = setTimeout(() => {
       setIsExiting(true);
+      setTopOverlayVisible(false); // Hide overlay when exiting
     }, delay + exitDelay);
 
     return () => {
@@ -321,7 +356,7 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
       clearTimeout(topOverlayTimer);
       clearTimeout(exitTimer);
     };
-  }, [animationKey, delay, exitDelay]);
+  }, [animationKey, delay, exitDelay, overlayImageUrl]);
 
   // Handle image load event
   const handleImageLoad = () => {
@@ -336,7 +371,7 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
     
     return (
       <div className={`w-full max-w-[1188px] aspect-[1188/321] relative overflow-hidden ${className} ${animationClass}`} 
-           style={{ borderRadius: '15px', animationDuration: '0.8s' }}>
+           style={{ borderRadius: '15px', animationDuration: '0.8s', perspective: '1000px' }}>
         <div className="w-full h-full bg-black flex items-center justify-center" 
              style={{ borderRadius: '15px' }}>
           <img 
@@ -351,6 +386,29 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
             onLoad={handleImageLoad}
           />
         </div>
+        
+        {/* Top overlay image layer for depth effect */}
+        {overlayImageUrl && topOverlayVisible && (
+          <div 
+            className={`absolute inset-0 flex items-center justify-center pointer-events-none ${overlayAnimation}`}
+            style={{ 
+              borderRadius: '15px',
+              transformStyle: 'preserve-3d'
+            }}
+          >
+            <img 
+              src={overlayImageUrl} 
+              alt={`${game.name} overlay`}
+              className="w-full h-full object-contain"
+              style={{
+                borderRadius: '15px',
+                maxWidth: '100%',
+                height: 'auto',
+                filter: 'drop-shadow(0 4px 20px rgba(0,0,0,0.5))'
+              }}
+            />
+          </div>
+        )}
       </div>
     );
   }
