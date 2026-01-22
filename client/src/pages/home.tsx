@@ -1297,15 +1297,13 @@ export default function Home() {
               )}
             </div>
             
-            {/* Right: Arcade Leaderboard Logo - 20% larger */}
-            <div className="w-[30vw] max-w-[144px] flex justify-end">
-              <div className="w-full aspect-[2/1] flex items-center justify-center">
-                <img 
-                  src="/arcade-leaderboard-logo.png" 
-                  alt="Arcade Leaderboard" 
-                  className="w-full h-full object-contain" 
-                />
-              </div>
+            {/* Right: Arcade Leaderboard Logo - 20% larger than venue logo */}
+            <div className="w-[30vw] max-w-[144px] flex justify-end items-center">
+              <img 
+                src="/arcade-leaderboard-logo.png" 
+                alt="Arcade Leaderboard" 
+                className="w-full h-auto object-contain" 
+              />
             </div>
           </div>
           
