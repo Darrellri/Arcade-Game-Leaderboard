@@ -1184,10 +1184,10 @@ export default function Home() {
           {/* Row 1: Logos evenly spaced */}
           <div className="flex items-center justify-between mb-3">
             {/* Left: Venue Logo */}
-            <div className="flex-1 flex justify-start">
+            <div className="w-[25vw] max-w-[120px] flex justify-start">
               {(venueSettings?.animatedLogoUrl || venueSettings?.logoUrl) && (
                 <div 
-                  className={`logo-container overflow-hidden cursor-pointer hover:opacity-80 transition-opacity w-20 h-10 flex items-center justify-center ${
+                  className={`logo-container overflow-hidden cursor-pointer hover:opacity-80 transition-opacity w-full aspect-[2/1] flex items-center justify-center ${
                     venueSettings.hideLogoBorderShadow === 'true' 
                       ? '' 
                       : 'rounded-md shadow-md border border-primary/20'
@@ -1222,12 +1222,12 @@ export default function Home() {
             </div>
             
             {/* Right: Arcade Leaderboard Logo */}
-            <div className="flex-1 flex justify-end">
-              <div className="w-20 h-10 flex items-center justify-center">
+            <div className="w-[25vw] max-w-[120px] flex justify-end">
+              <div className="w-full aspect-[2/1] flex items-center justify-center">
                 <img 
                   src="/arcade-leaderboard-logo.png" 
                   alt="Arcade Leaderboard" 
-                  className="max-w-full max-h-full object-contain" 
+                  className="w-full h-full object-contain" 
                 />
               </div>
             </div>
@@ -1239,7 +1239,7 @@ export default function Home() {
               className="tracking-wide text-foreground uppercase leading-tight text-center" 
               style={{
                 ...getLeaderboardTitleStyle(true),
-                fontSize: 'clamp(1rem, 4vw, 1.4rem)'
+                fontSize: 'clamp(0.8rem, 3.2vw, 1.1rem)'
               }}
             >
               {venueSettings?.leaderboardName || "THE LEADERBOARD"}
@@ -1256,7 +1256,7 @@ export default function Home() {
               }`}
               style={{
                 ...getVenueNameStyle(true),
-                fontSize: 'clamp(0.75rem, 3.5vw, 1.1rem)'
+                fontSize: 'clamp(0.9rem, 4.2vw, 1.3rem)'
               }}
             >
               {venueSettings?.name || "Arcade"}
@@ -1356,7 +1356,7 @@ export default function Home() {
               className="tracking-wide text-foreground uppercase leading-tight text-center"
               style={{
                 ...getLeaderboardTitleStyle(),
-                fontSize: 'clamp(1.6rem, 3.2vw, 2.8rem)'
+                fontSize: 'clamp(1.3rem, 2.5vw, 2.2rem)'
               }}
             >
               {venueSettings?.leaderboardName || "THE LEADERBOARD"}
@@ -1369,7 +1369,7 @@ export default function Home() {
               }`}
               style={{
                 ...getVenueNameStyle(),
-                fontSize: 'clamp(1rem, 2.5vw, 2rem)'
+                fontSize: 'clamp(1.2rem, 3vw, 2.4rem)'
               }}
             >
               {venueSettings?.name || "Arcade"}
