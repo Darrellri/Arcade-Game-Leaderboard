@@ -262,36 +262,21 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
 }
 
 // Full-size marquee component for new views with 15px radius - MARQUEE ONLY
-// Overlay depth effect animations array
-const overlayDepthAnimations = [
-  'animate-overlay-depth-zoom',
-  'animate-overlay-depth-float',
-  'animate-overlay-depth-swing',
-  'animate-overlay-depth-pop',
-  'animate-overlay-depth-slide-3d',
-  'animate-overlay-depth-spiral',
-  'animate-overlay-depth-elastic',
-  'animate-overlay-depth-flip'
+// Layer overlay animations - subtle shifts and bounces from center
+const layerAnimations = [
+  'animate-layer-bounce-left',
+  'animate-layer-bounce-right',
+  'animate-layer-grow-wobble',
+  'animate-layer-pop-impact',
+  'animate-layer-drift-slow-left',
+  'animate-layer-drift-slow-right',
+  'animate-layer-elastic-settle',
+  'animate-layer-pop-shake'
 ];
 
-// Get a random overlay depth animation
-const getRandomOverlayAnimation = () => {
-  return overlayDepthAnimations[Math.floor(Math.random() * overlayDepthAnimations.length)];
-};
-
-// Get a complementary overlay animation based on the main entrance animation
-const getComplementaryOverlayAnimation = (entranceAnim: string): string => {
-  // Match overlay animation to complement the main animation
-  if (entranceAnim.includes('left') || entranceAnim.includes('right')) {
-    return Math.random() > 0.5 ? 'animate-overlay-depth-swing' : 'animate-overlay-depth-flip';
-  } else if (entranceAnim.includes('up') || entranceAnim.includes('down') || entranceAnim.includes('top') || entranceAnim.includes('bottom')) {
-    return Math.random() > 0.5 ? 'animate-overlay-depth-float' : 'animate-overlay-depth-slide-3d';
-  } else if (entranceAnim.includes('zoom') || entranceAnim.includes('scale')) {
-    return Math.random() > 0.5 ? 'animate-overlay-depth-zoom' : 'animate-overlay-depth-pop';
-  } else if (entranceAnim.includes('rotate') || entranceAnim.includes('spin')) {
-    return Math.random() > 0.5 ? 'animate-overlay-depth-spiral' : 'animate-overlay-depth-elastic';
-  }
-  return getRandomOverlayAnimation();
+// Get a random layer animation
+const getRandomLayerAnimation = () => {
+  return layerAnimations[Math.floor(Math.random() * layerAnimations.length)];
 };
 
 function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000, overlayDelay, exitDelay = 6000, onImageLoad, onAnimationSet }: { 
@@ -318,11 +303,11 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
   useEffect(() => {
     const entranceAnim = getRandomAnimation();
     const exitAnim = getExitAnimation(entranceAnim);
-    const overlayAnim = getComplementaryOverlayAnimation(entranceAnim);
+    const layerAnim = getRandomLayerAnimation();
     
     setCurrentAnimation(entranceAnim);
     setExitAnimation(exitAnim);
-    setOverlayAnimation(overlayAnim);
+    setOverlayAnimation(layerAnim);
     
     // Notify parent component of the current animation
     if (onAnimationSet) {
@@ -338,22 +323,22 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
       setIsVisible(true);
     }, delay);
 
-    // Show top overlay after marquee animation completes (animation duration + buffer)
-    const topOverlayTimer = setTimeout(() => {
+    // Show layer immediately after marquee animation completes (800ms animation duration)
+    const layerTimer = setTimeout(() => {
       if (overlayImageUrl) {
         setTopOverlayVisible(true);
       }
-    }, delay + 800); // Show overlay slightly after main animation starts
+    }, delay + 850); // Show layer right after main animation finishes
 
     // Start exit animation before the component cycles
     const exitTimer = setTimeout(() => {
       setIsExiting(true);
-      setTopOverlayVisible(false); // Hide overlay when exiting
+      setTopOverlayVisible(false); // Hide layer when exiting
     }, delay + exitDelay);
 
     return () => {
       clearTimeout(mainTimer);
-      clearTimeout(topOverlayTimer);
+      clearTimeout(layerTimer);
       clearTimeout(exitTimer);
     };
   }, [animationKey, delay, exitDelay, overlayImageUrl]);
