@@ -219,37 +219,62 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
                paddingTop: '30px',
                paddingBottom: '30px'
              }}>
-          <div className="flex items-center justify-between w-full">
+          <div className="flex items-center justify-between w-full gap-2">
             {/* Left side - Champion info with text animation */}
-            <div className="flex items-center gap-4">
-              <TrophyIcon size={40} className="text-yellow-400 flex-shrink-0 sm:hidden" />
-              <TrophyIcon size={50} className="text-yellow-400 flex-shrink-0 hidden sm:block md:hidden" />
-              <TrophyIcon size={62} className="text-yellow-400 flex-shrink-0 hidden md:block" />
-              <div className="text-white">
-                <div className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-400 animate-text-float-up">#1 CHAMPION</div>
-                <div className="text-2xl sm:text-3xl md:text-4xl font-bold animate-text-gentle-bob">{game.topScorerName || "No Name"}</div>
+            <div className="flex items-center gap-2 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '35%' }}>
+              <div 
+                className="flex-shrink-0 flex items-center justify-center"
+                style={{ width: 'clamp(28px, 4vw, 62px)', height: 'clamp(28px, 4vw, 62px)' }}
+              >
+                <TrophyIcon className="text-yellow-400 w-full h-full" />
+              </div>
+              <div className="text-white" style={{ whiteSpace: 'nowrap' }}>
+                <div 
+                  className="font-bold text-yellow-400 animate-text-float-up"
+                  style={{ fontSize: 'clamp(0.7rem, 1.5vw, 1.5rem)' }}
+                >
+                  #1 CHAMPION
+                </div>
+                <div 
+                  className="font-bold animate-text-gentle-bob"
+                  style={{ fontSize: 'clamp(0.9rem, 2.2vw, 2.5rem)' }}
+                >
+                  {game.topScorerName || "No Name"}
+                </div>
               </div>
             </div>
             
             {/* Center - Game name with text animation */}
-            <div className="text-center flex-1 px-4">
-              <div className="text-xl sm:text-2xl md:text-3xl font-bold text-primary uppercase tracking-wide animate-text-pulse-up">
+            <div className="text-center flex-1 px-2" style={{ whiteSpace: 'nowrap', minWidth: '30%' }}>
+              <div 
+                className="font-bold text-primary uppercase tracking-wide animate-text-pulse-up"
+                style={{ fontSize: 'clamp(0.9rem, 2vw, 2rem)' }}
+              >
                 {game.name}
               </div>
               {game.subtitle && (
-                <div className="text-sm sm:text-base md:text-lg text-gray-300 mt-1 animate-text-float-up">
+                <div 
+                  className="text-gray-300 mt-1 animate-text-float-up"
+                  style={{ fontSize: 'clamp(0.6rem, 1.2vw, 1.1rem)' }}
+                >
                   {game.subtitle}
                 </div>
               )}
             </div>
             
             {/* Right side - Score and date with text animation */}
-            <div className="text-right">
-              <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary animate-text-pulse-up">
+            <div className="text-right flex-shrink-0" style={{ whiteSpace: 'nowrap', minWidth: '25%', maxWidth: '35%' }}>
+              <div 
+                className="font-bold text-primary animate-text-pulse-up"
+                style={{ fontSize: 'clamp(1.2rem, 3vw, 3.5rem)' }}
+              >
                 {game.currentHighScore ? game.currentHighScore.toLocaleString() : "0"}
               </div>
               {game.topScoreDate && (
-                <div className="text-sm sm:text-base md:text-lg text-gray-300 mt-1 animate-text-gentle-bob">
+                <div 
+                  className="text-gray-300 mt-1 animate-text-gentle-bob"
+                  style={{ fontSize: 'clamp(0.6rem, 1.2vw, 1.1rem)' }}
+                >
                   {formatDate(new Date(game.topScoreDate))}
                 </div>
               )}
