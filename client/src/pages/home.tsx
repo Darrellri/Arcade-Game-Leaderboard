@@ -298,16 +298,27 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
   const [topOverlayVisible, setTopOverlayVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [exitAnimation, setExitAnimation] = useState('');
+  const [bgReaction, setBgReaction] = useState('');
+  
+  // Background reaction animations array
+  const bgReactionAnimations = [
+    'animate-bg-react-shake',
+    'animate-bg-react-pulse',
+    'animate-bg-react-ripple',
+    'animate-bg-react-bump'
+  ];
 
   // Set random animations when component mounts or animationKey changes
   useEffect(() => {
     const entranceAnim = getRandomAnimation();
     const exitAnim = getExitAnimation(entranceAnim);
     const layerAnim = getRandomLayerAnimation();
+    const bgReactAnim = bgReactionAnimations[Math.floor(Math.random() * bgReactionAnimations.length)];
     
     setCurrentAnimation(entranceAnim);
     setExitAnimation(exitAnim);
     setOverlayAnimation(layerAnim);
+    setBgReaction('');
     
     // Notify parent component of the current animation
     if (onAnimationSet) {
@@ -330,15 +341,24 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
       }
     }, delay + 850); // Show layer right after main animation finishes
 
+    // Trigger background reaction when layer animation ends (~600ms after layer starts)
+    const bgReactTimer = setTimeout(() => {
+      if (overlayImageUrl) {
+        setBgReaction(bgReactAnim);
+      }
+    }, delay + 850 + 600); // Layer shows at 850ms, animation is ~600ms
+
     // Start exit animation before the component cycles
     const exitTimer = setTimeout(() => {
       setIsExiting(true);
       setTopOverlayVisible(false); // Hide layer when exiting
+      setBgReaction(''); // Clear bg reaction when exiting
     }, delay + exitDelay);
 
     return () => {
       clearTimeout(mainTimer);
       clearTimeout(layerTimer);
+      clearTimeout(bgReactTimer);
       clearTimeout(exitTimer);
     };
   }, [animationKey, delay, exitDelay, overlayImageUrl]);
@@ -357,7 +377,7 @@ function FullSizeMarquee({ game, className = "", animationKey = 0, delay = 1000,
     return (
       <div className={`w-full max-w-[1188px] aspect-[1188/321] relative overflow-hidden ${className} ${animationClass}`} 
            style={{ borderRadius: '15px', animationDuration: '0.8s', perspective: '1000px' }}>
-        <div className="w-full h-full bg-black flex items-center justify-center" 
+        <div className={`w-full h-full bg-black flex items-center justify-center ${bgReaction}`}
              style={{ borderRadius: '15px' }}>
           <img 
             src={imageUrl} 
