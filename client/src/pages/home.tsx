@@ -791,8 +791,8 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
             animationFillMode: 'both'
           }}
         >
-          <div className="w-full max-w-[1188px] aspect-[1188/241] bg-black/75 backdrop-blur-sm border border-primary/20 rounded-[15px]">
-            <div className="w-full h-full grid grid-cols-3 gap-4 px-6 py-6">
+          <div className="w-full max-w-[1188px] bg-black/75 backdrop-blur-sm border border-primary/20 rounded-[15px]">
+            <div className="w-full h-full grid grid-cols-3 gap-4 px-6 py-1">
               {/* Left Column - Champion Name */}
               <div className="flex flex-col justify-center items-start">
                 <div className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-400 mb-2">
