@@ -13,10 +13,6 @@ import { Badge } from "@/components/ui/badge";
 import type { VenueSettings, Game } from "@shared/schema";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import {
-  Gamepad2,
-  Palette,
-  Settings,
-  Building2,
   ChevronRight,
   Square,
   List,
@@ -410,131 +406,50 @@ export default function Admin() {
       <div className="container mx-auto px-4 py-4 space-y-8">
 
 
-      {/* Management Sections */}
-      <div className="space-y-4">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Management Sections</h2>
-          <p className="text-muted-foreground">Configure and customize your arcade leaderboard system</p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3">
-        {adminSections.map((section) => (
-          <Link 
-            key={section.href} 
-            href={section.href}
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          >
-            <Card className={`h-full transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer ${section.color}`}>
-              <CardHeader className="pb-2 pt-3 px-3">
-                <div className="flex items-center justify-between mb-2">
-                  <div 
-                    className="text-sm font-bold leading-tight tracking-wide"
-                    style={{ 
-                      color: '#1f2937'
-                    }}
-                  >
-                    {section.title}
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-gray-500" />
-                </div>
-                <CardDescription className="text-xs leading-tight">
-                  {section.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pt-0 pb-3 px-3">
-                <Badge variant="secondary" className="text-xs">
-                  {section.stats}
-                </Badge>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
+      {/* Page Title */}
+      <div className="text-center mb-6">
+        <h2 className="text-2xl font-bold uppercase tracking-wide">ADMIN DASHBOARD</h2>
+        <p className="text-muted-foreground">Configure and customize your arcade leaderboard</p>
       </div>
 
-      {/* Current Active Theme Preview */}
-      {venueSettings?.theme && (
-        <Card className="mt-8">
-          <CardHeader>
-            <CardTitle className="text-lg">Current Theme</CardTitle>
-            <CardDescription>Currently active color scheme for your venue</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-4">
-              <div 
-                className="w-12 h-12 rounded border shadow-sm"
-                style={{ backgroundColor: venueSettings.theme.primary }}
-              />
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                <div>
-                  <span className="text-muted-foreground">Primary:</span>
-                  <div className="font-mono text-xs">{venueSettings.theme.primary}</div>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">Variant:</span>
-                  <div className="capitalize">{venueSettings.theme.variant}</div>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">Mode:</span>
-                  <div className="capitalize">{venueSettings.theme.appearance}</div>
-                </div>
-                <div>
-                  <span className="text-muted-foreground">Radius:</span>
-                  <div>{venueSettings.theme.radius}</div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Quick Actions */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Quick Actions</CardTitle>
-          <CardDescription>Common administrative tasks</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Management Sections - Centered */}
+      <div className="flex justify-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl">
+          {adminSections.map((section) => (
             <Link 
-              href="/admin/games"
+              key={section.href} 
+              href={section.href}
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
-              <Button variant="outline" className="w-full justify-start">
-                <Gamepad2 className="h-4 w-4 mr-2" />
-                Add New Game
-              </Button>
+              <Card className={`h-full transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer ${section.color}`}>
+                <CardHeader className="pb-2 pt-4 px-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <div 
+                      className="text-base font-bold leading-tight tracking-wide"
+                      style={{ 
+                        color: '#1f2937',
+                        fontSize: '1.1rem'
+                      }}
+                    >
+                      {section.title}
+                    </div>
+                    <ChevronRight className="h-5 w-5 text-gray-500" />
+                  </div>
+                  <CardDescription className="text-sm leading-tight" style={{ fontSize: '0.935rem' }}>
+                    {section.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="pt-0 pb-4 px-4">
+                  <Badge variant="secondary" className="text-sm" style={{ fontSize: '0.935rem' }}>
+                    {section.stats}
+                  </Badge>
+                </CardContent>
+              </Card>
             </Link>
-            <Link 
-              href="/admin/display-options"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            >
-              <Button variant="outline" className="w-full justify-start">
-                <Palette className="h-4 w-4 mr-2" />
-                Change Theme
-              </Button>
-            </Link>
-            <Link 
-              href="/admin/venue-settings"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            >
-              <Button variant="outline" className="w-full justify-start">
-                <Building2 className="h-4 w-4 mr-2" />
-                Update Venue Info
-              </Button>
-            </Link>
-            <Link 
-              href="/admin/display-options"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            >
-              <Button variant="outline" className="w-full justify-start">
-                <Settings className="h-4 w-4 mr-2" />
-                Configure Views
-              </Button>
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
+          ))}
         </div>
+      </div>
+
       </div>
     </div>
   );
