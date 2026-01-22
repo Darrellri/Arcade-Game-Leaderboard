@@ -184,6 +184,23 @@
     @apply bg-background text-foreground;
   }
 
+  /* Text outline/shadow styles - different for light and dark themes */
+  .text-outline {
+    text-shadow: 
+      1px 1px 2px rgba(0, 0, 0, 0.8),
+      -1px -1px 2px rgba(0, 0, 0, 0.8),
+      0 0 10px rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Light theme text outline - uses light gray shadow for better visibility */
+  :root:not(.dark) .text-outline,
+  [data-theme="light"] .text-outline {
+    text-shadow: 
+      1px 1px 2px rgba(180, 180, 180, 0.6),
+      -1px -1px 2px rgba(180, 180, 180, 0.6),
+      0 0 8px rgba(200, 200, 200, 0.4);
+  }
+
   /* Keyframe animations for game displays */
   @keyframes fadeIn {
     from { opacity: 0; }
