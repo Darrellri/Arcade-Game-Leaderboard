@@ -175,62 +175,65 @@ function SortableGameCard({ game, onGameEdit, onDelete, onImageUpload, onImageDe
           </div>
         </div>
 
-        {/* Marquee Image - Large Display */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground uppercase tracking-wide">Marquee Image</label>
-          <div className="w-full aspect-[3/1] bg-black/20 rounded-lg overflow-hidden border border-primary/20">
-            {game.imageUrl ? (
-              <img 
-                src={game.imageUrl} 
-                alt={game.name} 
-                className="w-full h-full object-contain"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
-                No image uploaded
-              </div>
-            )}
+        {/* Images Side by Side */}
+        <div className="flex flex-wrap gap-4">
+          {/* Marquee Image */}
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Marquee</label>
+            <div className="w-[300px] max-w-full aspect-[3/1] bg-black/20 rounded-lg overflow-hidden border border-primary/20">
+              {game.imageUrl ? (
+                <img 
+                  src={game.imageUrl} 
+                  alt={game.name} 
+                  className="w-full h-full object-contain"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">
+                  No image
+                </div>
+              )}
+            </div>
+            <MarqueeImageUploader 
+              gameId={game.id}
+              currentImageUrl={game.imageUrl}
+              onSuccess={() => {
+                queryClient.invalidateQueries({ queryKey: ["/api/games"] });
+              }}
+            />
           </div>
-          <MarqueeImageUploader 
-            gameId={game.id}
-            currentImageUrl={game.imageUrl}
-            onSuccess={() => {
-              queryClient.invalidateQueries({ queryKey: ["/api/games"] });
-            }}
-          />
+
+          {/* Overlay Image */}
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Overlay</label>
+            <div className="w-[300px] max-w-full aspect-[3/1] bg-black/20 rounded-lg overflow-hidden border border-primary/20">
+              {game.overlayImageUrl ? (
+                <img 
+                  src={game.overlayImageUrl} 
+                  alt={`${game.name} overlay`} 
+                  className="w-full h-full object-contain"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">
+                  No image
+                </div>
+              )}
+            </div>
+            <OverlayImageUploader 
+              gameId={game.id}
+              currentOverlayUrl={game.overlayImageUrl}
+              onSuccess={() => {
+                queryClient.invalidateQueries({ queryKey: ["/api/games"] });
+              }}
+            />
+          </div>
         </div>
 
-        {/* Overlay Image - Large Display */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground uppercase tracking-wide">Overlay Image</label>
-          <div className="w-full aspect-[3/1] bg-black/20 rounded-lg overflow-hidden border border-primary/20">
-            {game.overlayImageUrl ? (
-              <img 
-                src={game.overlayImageUrl} 
-                alt={`${game.name} overlay`} 
-                className="w-full h-full object-contain"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm">
-                No overlay uploaded
-              </div>
-            )}
-          </div>
-          <OverlayImageUploader 
-            gameId={game.id}
-            currentOverlayUrl={game.overlayImageUrl}
-            onSuccess={() => {
-              queryClient.invalidateQueries({ queryKey: ["/api/games"] });
-            }}
-          />
-        </div>
-
-        {/* Action buttons */}
-        <div className="flex flex-col sm:flex-row gap-2">
+        {/* Action buttons - fixed height, no stretch */}
+        <div className="flex flex-wrap gap-2">
           <Button 
             variant={game.hidden ? "outline" : "secondary"} 
             size="sm"
-            className="flex-1"
+            className="h-9"
             onClick={() => onGameEdit(game.id, "hidden", !game.hidden)}
           >
             {game.hidden ? "Show Game" : "Hide Game"}
@@ -238,7 +241,7 @@ function SortableGameCard({ game, onGameEdit, onDelete, onImageUpload, onImageDe
           <Button 
             variant="destructive" 
             size="sm"
-            className="flex-1"
+            className="h-9"
             onClick={() => {
               if (window.confirm(`Delete ${game.name}? This will remove the game and all scores.`)) {
                 onDelete(game.id);

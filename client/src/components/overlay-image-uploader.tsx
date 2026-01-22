@@ -112,75 +112,48 @@ export default function OverlayImageUploader({
   };
 
   return (
-    <div className="space-y-2">
+    <div className="flex gap-1">
+      <input
+        type="file"
+        ref={fileInputRef}
+        className="hidden"
+        accept="image/*"
+        onChange={handleFileChange}
+      />
       
-      {/* Image Preview Area */}
-      <div 
-        className="border rounded p-2 w-full h-16 flex items-center justify-center bg-card/50 relative"
-        style={{ 
-          backgroundImage: 'url("data:image/svg+xml,%3csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3e%3cdefs%3e%3cpattern id="a" patternUnits="userSpaceOnUse" width="20" height="20"%3e%3crect fill="%23f1f5f9" width="10" height="10"/%3e%3crect fill="%23e2e8f0" x="10" y="10" width="10" height="10"/%3e%3c/pattern%3e%3c/defs%3e%3crect width="100" height="100" fill="url(%23a)"/%3e%3c/svg%3e")'
-        }}
+      <Button 
+        variant="outline" 
+        onClick={() => fileInputRef.current?.click()}
+        type="button"
+        size="sm"
+        className="text-xs h-8"
       >
-        {previewUrl ? (
-          <div className="relative w-full h-full">
-            <img 
-              src={previewUrl} 
-              alt="Overlay Preview" 
-              className="w-full h-full object-contain"
-              onError={() => setPreviewUrl(null)}
-            />
-          </div>
-        ) : (
-          <div className="flex items-center text-muted-foreground">
-            <Layers className="h-4 w-4 opacity-50" />
-          </div>
-        )}
-      </div>
+        <Layers className="h-3 w-3 mr-1" />
+        Select
+      </Button>
       
-      {/* Upload Controls */}
-      <div className="flex gap-1">
-        <input
-          type="file"
-          ref={fileInputRef}
-          className="hidden"
-          accept="image/*"
-          onChange={handleFileChange}
-        />
-        
+      <Button 
+        onClick={handleUpload} 
+        type="button"
+        disabled={isUploading || !fileInputRef.current?.files?.[0]}
+        size="sm"
+        className="text-xs h-8"
+      >
+        <Upload className="h-3 w-3 mr-1" />
+        {isUploading ? "..." : "Upload"}
+      </Button>
+      
+      {previewUrl && previewUrl !== currentOverlayUrl && (
         <Button 
-          variant="outline" 
-          onClick={() => fileInputRef.current?.click()}
+          variant="ghost" 
+          onClick={clearSelection}
           type="button"
           size="sm"
-          className="flex-1 text-xs h-6"
+          className="h-8 w-8 p-0"
         >
-          <Layers className="h-3 w-3 mr-1" />
-          Select
+          <X className="h-3 w-3" />
         </Button>
-        
-        <Button 
-          onClick={handleUpload} 
-          type="button"
-          disabled={isUploading || !fileInputRef.current?.files?.[0]}
-          size="sm"
-          className="flex-1 text-xs h-6"
-        >
-          <Upload className="h-3 w-3 mr-1" />
-          {isUploading ? "..." : "Upload"}
-        </Button>
-        
-        {previewUrl && previewUrl !== currentOverlayUrl && (
-          <Button 
-            variant="ghost" 
-            onClick={clearSelection}
-            type="button"
-            size="sm"
-            className="h-6 w-6 p-0"
-          >
-            <X className="h-3 w-3" />
-          </Button>
-        )}
-      </div>
+      )}
     </div>
   );
 }

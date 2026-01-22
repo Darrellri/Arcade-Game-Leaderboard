@@ -112,72 +112,48 @@ export default function MarqueeImageUploader({
   };
 
   return (
-    <div className="space-y-2">
+    <div className="flex gap-1">
+      <input
+        type="file"
+        ref={fileInputRef}
+        className="hidden"
+        accept="image/*"
+        onChange={handleFileChange}
+      />
       
-      {/* Image Preview Area */}
-      <div 
-        className="border rounded p-2 w-full h-16 flex items-center justify-center bg-card/50 relative"
+      <Button 
+        variant="outline" 
+        onClick={() => fileInputRef.current?.click()}
+        type="button"
+        size="sm"
+        className="text-xs h-8"
       >
-        {previewUrl ? (
-          <div className="relative w-full h-full">
-            <img 
-              src={previewUrl} 
-              alt="Marquee Preview" 
-              className="w-full h-full object-contain"
-              onError={() => setPreviewUrl(null)}
-            />
-          </div>
-        ) : (
-          <div className="flex items-center text-muted-foreground">
-            <ImageIcon className="h-4 w-4 opacity-50" />
-          </div>
-        )}
-      </div>
+        <ImageIcon className="h-3 w-3 mr-1" />
+        Select
+      </Button>
       
-      {/* Upload Controls */}
-      <div className="flex gap-1">
-        <input
-          type="file"
-          ref={fileInputRef}
-          className="hidden"
-          accept="image/*"
-          onChange={handleFileChange}
-        />
-        
+      <Button 
+        onClick={handleUpload} 
+        type="button"
+        disabled={isUploading || !fileInputRef.current?.files?.[0]}
+        size="sm"
+        className="text-xs h-8"
+      >
+        <Upload className="h-3 w-3 mr-1" />
+        {isUploading ? "..." : "Upload"}
+      </Button>
+      
+      {previewUrl && previewUrl !== currentImageUrl && (
         <Button 
-          variant="outline" 
-          onClick={() => fileInputRef.current?.click()}
+          variant="ghost" 
+          onClick={clearSelection}
           type="button"
           size="sm"
-          className="flex-1 text-xs h-6"
+          className="h-8 w-8 p-0"
         >
-          <ImageIcon className="h-3 w-3 mr-1" />
-          Select
+          <X className="h-3 w-3" />
         </Button>
-        
-        <Button 
-          onClick={handleUpload} 
-          type="button"
-          disabled={isUploading || !fileInputRef.current?.files?.[0]}
-          size="sm"
-          className="flex-1 text-xs h-6"
-        >
-          <Upload className="h-3 w-3 mr-1" />
-          {isUploading ? "..." : "Upload"}
-        </Button>
-        
-        {previewUrl && previewUrl !== currentImageUrl && (
-          <Button 
-            variant="ghost" 
-            onClick={clearSelection}
-            type="button"
-            size="sm"
-            className="h-6 w-6 p-0"
-          >
-            <X className="h-3 w-3" />
-          </Button>
-        )}
-      </div>
+      )}
     </div>
   );
 }
