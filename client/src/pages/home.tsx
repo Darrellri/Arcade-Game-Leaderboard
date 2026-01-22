@@ -453,7 +453,6 @@ function GridView({ games, animationsEnabled, hideHeader }: {
   const scrollSpeed = venueSettings?.gridViewSpeed || 75;
   const gridColumns = venueSettings?.gridViewColumns || 3;
   const cardSpacing = venueSettings?.gridViewSpacing || 25;
-  const stickyHeader = venueSettings?.gridViewStickyHeader !== false;
   
   const cardHeight = 350; // Approximate height of each card
   
@@ -509,22 +508,11 @@ function GridView({ games, animationsEnabled, hideHeader }: {
   
   return (
     <div className="relative overflow-hidden h-screen px-4 bg-background">
-      {/* Sticky Header */}
-      {stickyHeader && !hideHeader && (
-        <div className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-sm border-b border-border/50 px-4 py-3">
-          <div className="container mx-auto">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center">
-              {venueSettings?.leaderboardName || 'Leaderboard'}
-            </h2>
-          </div>
-        </div>
-      )}
-      
       <div 
         className={`container mx-auto transition-opacity duration-1000 ${isInitialized ? 'opacity-100' : 'opacity-0'}`}
         style={{ 
           transform: `translateY(-${scrollPositionY}px)`,
-          paddingTop: stickyHeader && !hideHeader ? '120px' : '100px'
+          paddingTop: '100px'
         }}
       >
         <div 
