@@ -211,7 +211,7 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
       
       {/* Horizontal Score Overlay - Hidden during auto-scroll, animated entrance when shown */}
       {!isAutoScrolling && ((game.currentHighScore && game.currentHighScore > 0) || (game.topScorerName && game.topScorerName !== 'No scores yet')) && (
-        <div className={`absolute bottom-0 left-0 right-0 bg-black/75 backdrop-blur-sm border-t border-primary/20 px-6 ${scoreOverlayVisible ? scoreAnimationClass : 'translate-y-full opacity-0'}`}
+        <div className={`absolute bottom-0 left-0 right-0 bg-black/70 backdrop-blur-sm border-t border-primary/20 px-6 ${scoreOverlayVisible ? scoreAnimationClass : 'translate-y-full opacity-0'}`}
              style={{ 
                zIndex: 100, 
                borderBottomLeftRadius: '15px', 
