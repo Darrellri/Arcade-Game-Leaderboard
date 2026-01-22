@@ -1050,26 +1050,22 @@ export default function Home() {
   // No timer needed as per user request
 
   // Font styling functions
-  const getVenueNameStyle = () => ({
-    fontFamily: venueSettings?.nameFont || "Arial",
-    fontWeight: venueSettings?.nameFontStyle === "bold" ? "bold" : "normal",
+  const getVenueNameStyle = (isMobile = false) => ({
+    fontFamily: venueSettings?.nameFont || "'Montserrat', 'Segoe UI', sans-serif",
+    fontWeight: venueSettings?.nameFontStyle === "bold" ? "bold" : "600",
     fontStyle: venueSettings?.nameFontStyle === "italic" ? "italic" : "normal",
-    fontSize: `${venueSettings?.nameFontSize || 30}pt`,
-    letterSpacing: '2px',
-    lineHeight: 'calc(1.25em + 2px)',
+    letterSpacing: '0.05em',
+    lineHeight: '1.2',
     color: venueSettings?.subtitleWhite === "true" 
       ? "white" 
       : (() => {
-          // For lighter color schemes, use primary color (same as game titles)
           const isLightScheme = venueSettings?.theme?.appearance === "light" || 
             (venueSettings?.theme?.variant === "tint" && venueSettings?.theme?.appearance !== "dark") ||
             (venueSettings?.theme?.primary && parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "0") > 60);
           
           if (isLightScheme) {
-            // Use the same color as game titles (primary color)
             return venueSettings?.theme?.primary || "hsl(280, 100%, 50%)";
           } else {
-            // For darker schemes, use the lighter version as before
             return venueSettings?.theme?.primary
               ? `hsl(${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[1] || 280}, ${venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[2] || 100}%, ${Math.min(100, parseInt(venueSettings.theme.primary.match(/hsl\((\d+),\s*(\d+)%,\s*(\d+)%\)/)?.[3] || "50") + 25)}%)`
               : "hsl(280, 100%, 75%)";
@@ -1077,12 +1073,11 @@ export default function Home() {
         })()
   });
 
-  const getLeaderboardTitleStyle = () => ({
-    fontFamily: venueSettings?.leaderboardFont || "Arial",
-    fontWeight: venueSettings?.leaderboardFontStyle === "bold" ? "bold" : "normal",
+  const getLeaderboardTitleStyle = (isMobile = false) => ({
+    fontFamily: venueSettings?.leaderboardFont || "'Bebas Neue', 'Impact', sans-serif",
+    fontWeight: venueSettings?.leaderboardFontStyle === "bold" ? "bold" : "700",
     fontStyle: venueSettings?.leaderboardFontStyle === "italic" ? "italic" : "normal",
-    fontSize: `${venueSettings?.leaderboardFontSize || 30}pt`,
-    letterSpacing: '1px'
+    letterSpacing: '0.08em'
   });
 
   // Drag and drop sensors
@@ -1238,9 +1233,14 @@ export default function Home() {
           </div>
           
           {/* Row 2: Leaderboard Name */}
-          <div className="mb-2">
-            <h1 className="font-black tracking-tight text-foreground uppercase text-outline leading-tight text-center" 
-                style={{...getLeaderboardTitleStyle(), fontSize: '16px'}}>
+          <div className="mb-1">
+            <h1 
+              className="tracking-wide text-foreground uppercase leading-tight text-center" 
+              style={{
+                ...getLeaderboardTitleStyle(true),
+                fontSize: 'clamp(1.25rem, 5vw, 1.75rem)'
+              }}
+            >
               {venueSettings?.leaderboardName || "THE LEADERBOARD"}
             </h1>
           </div>
@@ -1248,12 +1248,15 @@ export default function Home() {
           {/* Row 3: Venue Name */}
           <div className="mb-3">
             <h2 
-              className={`tracking-tight leading-tight text-center ${
-                venueSettings?.subtitleBold === "true" ? "font-bold" : "font-normal"
+              className={`leading-tight text-center ${
+                venueSettings?.subtitleBold === "true" ? "font-bold" : ""
               } ${
                 venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
               }`}
-              style={{...getVenueNameStyle(), fontSize: '14px'}}
+              style={{
+                ...getVenueNameStyle(true),
+                fontSize: 'clamp(0.875rem, 4vw, 1.25rem)'
+              }}
             >
               {venueSettings?.name || "Arcade"}
             </h2>
@@ -1348,16 +1351,25 @@ export default function Home() {
           
           {/* Center Content Area - Titles centered from marquee position */}
           <div className="flex-1 min-w-0 flex flex-col justify-center px-4">
-            <h1 className="text-4xl lg:text-5xl font-black tracking-tight text-foreground uppercase text-outline leading-tight text-center" style={getLeaderboardTitleStyle()}>
+            <h1 
+              className="tracking-wide text-foreground uppercase leading-tight text-center"
+              style={{
+                ...getLeaderboardTitleStyle(),
+                fontSize: 'clamp(2rem, 4vw, 3.5rem)'
+              }}
+            >
               {venueSettings?.leaderboardName || "THE LEADERBOARD"}
             </h1>
             <h2 
-              className={`text-2xl lg:text-[2.625rem] tracking-tight leading-tight text-center ${
-                venueSettings?.subtitleBold === "true" ? "font-bold" : "font-normal"
+              className={`leading-tight text-center ${
+                venueSettings?.subtitleBold === "true" ? "font-bold" : ""
               } ${
                 venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
               }`}
-              style={getVenueNameStyle()}
+              style={{
+                ...getVenueNameStyle(),
+                fontSize: 'clamp(1.25rem, 3vw, 2.5rem)'
+              }}
             >
               {venueSettings?.name || "Arcade"}
             </h2>
