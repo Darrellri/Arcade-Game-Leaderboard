@@ -13,16 +13,11 @@ import { Badge } from "@/components/ui/badge";
 import type { VenueSettings, Game } from "@shared/schema";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import {
-  ArrowLeft,
   Gamepad2,
   Palette,
   Settings,
   Building2,
-  FileText,
   ChevronRight,
-  Users,
-  BarChart3,
-  Eye,
   Square,
   List,
   Grid2X2,
@@ -112,39 +107,31 @@ export default function Admin() {
 
   const adminSections = [
     {
-      title: "Games Management",
+      title: "GAMES MANAGEMENT",
       description: "Add, edit, and organize your arcade games",
-      icon: Gamepad2,
       href: "/admin/games",
       color: "bg-blue-50/30 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800",
-      iconColor: "text-blue-600 dark:text-blue-400",
       stats: games ? `${games.length} total games` : "Loading...",
     },
     {
-      title: "Display Options",
+      title: "DISPLAY OPTIONS",
       description: "Configure settings for all display modes",
-      icon: Settings,
       href: "/admin/display-options",
       color: "bg-green-50/30 dark:bg-green-900/20 border-green-200 dark:border-green-800",
-      iconColor: "text-green-600 dark:text-green-400",
       stats: "5 view modes configurable",
     },
     {
-      title: "Venue Settings",
+      title: "VENUE SETTINGS",
       description: "Configure your venue's basic information",
-      icon: Building2,
       href: "/admin/venue-settings",
       color: "bg-orange-50/30 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800",
-      iconColor: "text-orange-600 dark:text-orange-400",
       stats: venueSettings?.name ? `Set up as ${venueSettings.name}` : "Not configured",
     },
     {
-      title: "System Documentation",
+      title: "SYSTEM DOCUMENTATION",
       description: "Platform features and technical specifications",
-      icon: FileText,
       href: "/admin/notes",
       color: "bg-gray-50/30 dark:bg-gray-900/20 border-gray-200 dark:border-gray-800",
-      iconColor: "text-gray-600 dark:text-gray-400",
       stats: "Complete feature guide",
     },
   ];
@@ -440,18 +427,15 @@ export default function Admin() {
             <Card className={`h-full transition-all duration-200 hover:shadow-lg hover:scale-[1.02] cursor-pointer ${section.color}`}>
               <CardHeader className="pb-2 pt-3 px-3">
                 <div className="flex items-center justify-between mb-2">
-                  <div className={`p-2 rounded-md bg-white/50 dark:bg-black/20`}>
-                    <section.icon className={`h-4 w-4 ${section.iconColor}`} />
+                  <div 
+                    className="text-sm font-bold leading-tight tracking-wide"
+                    style={{ 
+                      color: '#1f2937'
+                    }}
+                  >
+                    {section.title}
                   </div>
-                  <ChevronRight className={`h-4 w-4 ${section.iconColor}`} />
-                </div>
-                <div 
-                  className="text-sm font-bold leading-tight"
-                  style={{ 
-                    color: '#1f2937' // Dark gray for all themes
-                  }}
-                >
-                  {section.title}
+                  <ChevronRight className="h-4 w-4 text-gray-500" />
                 </div>
                 <CardDescription className="text-xs leading-tight">
                   {section.description}
