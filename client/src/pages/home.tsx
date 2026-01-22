@@ -1309,22 +1309,9 @@ export default function Home() {
             </div>
           </div>
           
-          {/* Row 2: Leaderboard Name */}
-          <div className="mb-1">
+          {/* Row 2: Venue Name - Centered */}
+          <div className="mb-3 w-full overflow-visible flex items-center justify-center">
             <h1 
-              className="tracking-wide text-foreground uppercase leading-tight text-center" 
-              style={{
-                ...getLeaderboardTitleStyle(true),
-                fontSize: 'clamp(0.8rem, 3.2vw, 1.1rem)'
-              }}
-            >
-              {venueSettings?.leaderboardName || "THE LEADERBOARD"}
-            </h1>
-          </div>
-          
-          {/* Row 3: Venue Name */}
-          <div className="mb-3 w-full overflow-visible">
-            <h2 
               className={`leading-tight text-center ${
                 venueSettings?.subtitleBold === "true" ? "font-bold" : ""
               } ${
@@ -1332,11 +1319,11 @@ export default function Home() {
               }`}
               style={{
                 ...getVenueNameStyle(true),
-                fontSize: 'clamp(0.9rem, 4.2vw, 1.3rem)'
+                fontSize: 'clamp(1.1rem, 5vw, 1.6rem)'
               }}
             >
               {venueSettings?.name || "Arcade"}
-            </h2>
+            </h1>
           </div>
           
           {/* Controls Row for Mobile */}
@@ -1426,18 +1413,9 @@ export default function Home() {
             )}
           </div>
           
-          {/* Center Content Area - Titles centered from marquee position */}
-          <div className="flex-1 min-w-0 flex flex-col justify-center px-2 overflow-visible">
+          {/* Center Content Area - Venue Name centered */}
+          <div className="flex-1 min-w-0 flex items-center justify-center px-2 overflow-visible">
             <h1 
-              className="tracking-wide text-foreground uppercase leading-tight text-center"
-              style={{
-                ...getLeaderboardTitleStyle(),
-                fontSize: 'clamp(1.3rem, 2.5vw, 2.2rem)'
-              }}
-            >
-              {venueSettings?.leaderboardName || "THE LEADERBOARD"}
-            </h1>
-            <h2 
               className={`leading-tight text-center ${
                 venueSettings?.subtitleBold === "true" ? "font-bold" : ""
               } ${
@@ -1445,11 +1423,11 @@ export default function Home() {
               }`}
               style={{
                 ...getVenueNameStyle(),
-                fontSize: 'clamp(1.2rem, 3vw, 2.4rem)'
+                fontSize: 'clamp(1.5rem, 3.5vw, 3rem)'
               }}
             >
               {venueSettings?.name || "Arcade"}
-            </h2>
+            </h1>
           </div>
           
           {/* Right Controls and Leaderboard Logo - Fixed 300px on desktop */}
