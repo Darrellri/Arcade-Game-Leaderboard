@@ -164,31 +164,26 @@ export default function AdminScores() {
       {/* Header */}
       <div className="themed-header px-5 py-4 rounded-lg mb-2 w-full">
         <div className="block md:hidden">
-          <div className="flex flex-col items-center gap-3">
-            {/* Row 1: Logos */}
-            <div className="flex items-center justify-center gap-4 w-full">
+          <div className="flex flex-col items-center gap-2">
+            {/* Row 1: Venue Logo */}
+            {venueSettings?.logoUrl && (
+              <img 
+                src={venueSettings.logoUrl} 
+                alt={venueSettings?.name || "Venue"}
+                className="h-12 w-auto object-contain"
+              />
+            )}
+            
+            {/* Row 2: GAME MASTER Title + Arcade Logo */}
+            <div className="flex items-center justify-center gap-2">
+              <h1 className="game-master-title text-xl whitespace-nowrap">
+                GAME MASTER
+              </h1>
               <img 
                 src="/arcade-leaderboard-logo.png" 
                 alt="Arcade Leaderboard"
-                className="h-12 w-auto object-contain"
+                className="h-6 w-auto object-contain"
               />
-              {venueSettings?.logoUrl && (
-                <img 
-                  src={venueSettings.logoUrl} 
-                  alt={venueSettings?.name || "Venue"}
-                  className="h-10 w-auto object-contain"
-                />
-              )}
-            </div>
-            
-            {/* Row 2: Business name */}
-            <div className="text-center">
-              <h1 
-                className="text-2xl text-white"
-                style={getVenueNameStyle()}
-              >
-                {venueSettings?.name || "ARCADE VENUE"}
-              </h1>
             </div>
             
             {/* Row 3: Navigation */}
@@ -212,31 +207,32 @@ export default function AdminScores() {
         </div>
 
         {/* Desktop Layout */}
-        <div className="hidden md:block">
-          <div className="flex items-center justify-between gap-6">
-            <div className="flex items-center gap-4 flex-shrink-0">
+        <div className="hidden md:flex items-center w-full">
+          {/* Left Venue Logo */}
+          <div className="flex-shrink-0 w-[300px] flex justify-center">
+            {venueSettings?.logoUrl && (
               <img 
-                src="/arcade-leaderboard-logo.png" 
-                alt="Arcade Leaderboard"
-                className="h-16 w-auto object-contain"
+                src={venueSettings.logoUrl} 
+                alt={venueSettings?.name || "Venue"}
+                className="h-20 w-auto object-contain"
               />
-              {venueSettings?.logoUrl && (
-                <img 
-                  src={venueSettings.logoUrl} 
-                  alt={venueSettings?.name || "Venue"}
-                  className="h-12 w-auto object-contain"
-                />
-              )}
-            </div>
-            
-            <div className="flex-1 text-center">
-              <h1 
-                className="text-3xl text-white"
-                style={getVenueNameStyle()}
-              >
-                {venueSettings?.name || "ARCADE VENUE"}
-              </h1>
-            </div>
+            )}
+          </div>
+          
+          {/* Center Content Area - GAME MASTER Title + Arcade Logo */}
+          <div className="flex-1 min-w-0 flex items-center justify-center gap-4 px-4">
+            <h1 className="game-master-title text-4xl lg:text-5xl xl:text-6xl whitespace-nowrap">
+              GAME MASTER
+            </h1>
+            <img 
+              src="/arcade-leaderboard-logo.png" 
+              alt="Arcade Leaderboard" 
+              className="h-16 lg:h-20 xl:h-24 w-auto object-contain" 
+            />
+          </div>
+          
+          {/* Right Controls */}
+          <div className="flex-shrink-0 w-[300px] flex justify-center">
             
             <div className="flex items-center gap-3 flex-shrink-0">
               <div className="flex gap-1">

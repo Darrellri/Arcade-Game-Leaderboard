@@ -206,7 +206,7 @@
     font-family: 'Orbitron', 'Audiowide', 'Russo One', sans-serif;
     font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.1em;
     background: linear-gradient(
       180deg,
       #ffffff 0%,
@@ -225,6 +225,37 @@
     -webkit-text-stroke: 2px rgba(0, 0, 0, 0.7);
     paint-order: stroke fill;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+  }
+
+  /* No-break text styling - prevent word/number breaking, resize font instead */
+  .no-break-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+    max-width: 100%;
+  }
+
+  /* Info window text - 25% smaller with no breaking */
+  .info-text {
+    font-size: 0.75em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  /* Score display - no number breaking */
+  .score-display {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Fit text container - scales text to fit without breaking */
+  .fit-text {
+    display: inline-block;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   /* Fallback for browsers that don't support background-clip: text */

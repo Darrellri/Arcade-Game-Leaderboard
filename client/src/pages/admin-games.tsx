@@ -520,76 +520,54 @@ export default function AdminGames() {
         
         {/* Mobile Layout: 3 Rows (visible on small screens only) */}
         <div className="block md:hidden">
-          {/* Row 1: Logos evenly spaced */}
-          <div className="flex items-center justify-between mb-3">
-            {/* Left: Venue Logo */}
-            <div className="flex-1 flex justify-start">
-              {(venueSettings?.animatedLogoUrl || venueSettings?.logoUrl) && (
-                <div 
-                  className={`logo-container overflow-hidden cursor-pointer hover:opacity-80 transition-opacity w-20 h-10 flex items-center justify-center ${
-                    venueSettings.hideLogoBorderShadow === 'true' 
-                      ? '' 
-                      : 'rounded-md shadow-md border border-primary/20'
-                  }`}
-                  style={{ 
-                    backgroundColor: 
-                      venueSettings.logoBackgroundColor === 'white' ? '#ffffff' :
-                      venueSettings.logoBackgroundColor === 'black' ? '#000000' :
-                      venueSettings.logoBackgroundColor === 'theme' ? 'hsl(var(--primary))' :
-                      'transparent'
-                  }}
-                  onClick={cycleColorScheme}
-                  title="Click to cycle through color schemes"
-                >
-                  {venueSettings.animatedLogoUrl ? (
-                    <video 
-                      src={venueSettings.animatedLogoUrl} 
-                      autoPlay 
-                      loop 
-                      muted
-                      className="w-full h-full object-contain transparent-video" 
-                    />
-                  ) : (
-                    <img 
-                      src={venueSettings.logoUrl} 
-                      alt={venueSettings.name} 
-                      className="w-full h-full object-contain p-1" 
-                    />
-                  )}
-                </div>
-              )}
-            </div>
-            
-            {/* Right: Arcade Leaderboard Logo */}
-            <div className="flex-1 flex justify-end">
-              <div className="w-20 h-10 flex items-center justify-center">
-                <img 
-                  src="/arcade-leaderboard-logo.png" 
-                  alt="Arcade Leaderboard" 
-                  className="max-w-full max-h-full object-contain" 
-                />
+          {/* Row 1: Venue Logo */}
+          <div className="flex items-center justify-center mb-2">
+            {(venueSettings?.animatedLogoUrl || venueSettings?.logoUrl) && (
+              <div 
+                className={`logo-container overflow-hidden cursor-pointer hover:opacity-80 transition-opacity w-24 h-12 flex items-center justify-center ${
+                  venueSettings.hideLogoBorderShadow === 'true' 
+                    ? '' 
+                    : 'rounded-md shadow-md border border-primary/20'
+                }`}
+                style={{ 
+                  backgroundColor: 
+                    venueSettings.logoBackgroundColor === 'white' ? '#ffffff' :
+                    venueSettings.logoBackgroundColor === 'black' ? '#000000' :
+                    venueSettings.logoBackgroundColor === 'theme' ? 'hsl(var(--primary))' :
+                    'transparent'
+                }}
+                onClick={cycleColorScheme}
+                title="Click to cycle through color schemes"
+              >
+                {venueSettings.animatedLogoUrl ? (
+                  <video 
+                    src={venueSettings.animatedLogoUrl} 
+                    autoPlay 
+                    loop 
+                    muted
+                    className="w-full h-full object-contain transparent-video" 
+                  />
+                ) : (
+                  <img 
+                    src={venueSettings.logoUrl} 
+                    alt={venueSettings.name} 
+                    className="w-full h-full object-contain p-1" 
+                  />
+                )}
               </div>
-            </div>
+            )}
           </div>
           
-          {/* Row 2: Venue Name - Centered */}
-          <div className="mb-3 w-full overflow-hidden flex items-center justify-center px-2">
-            <h1 
-              className={`leading-tight text-center truncate ${
-                venueSettings?.subtitleBold === "true" ? "font-bold" : ""
-              } ${
-                venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
-              }`}
-              style={{
-                ...getVenueNameStyle(),
-                fontSize: 'clamp(1.1rem, 5vw, 1.6rem)',
-                maxWidth: '100%',
-                WebkitTextStroke: '2px black',
-                textShadow: '0 0 6px rgba(0,0,0,0.8), 0 0 6px rgba(0,0,0,0.8)'
-              }}
-            >
-              {venueSettings?.name || "Arcade"}
+          {/* Row 2: GAME MASTER Title + Arcade Leaderboard Logo */}
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <h1 className="game-master-title text-xl whitespace-nowrap">
+              GAME MASTER
             </h1>
+            <img 
+              src="/arcade-leaderboard-logo.png" 
+              alt="Arcade Leaderboard" 
+              className="h-6 w-auto object-contain" 
+            />
           </div>
           
           {/* Controls Row for Mobile */}
@@ -693,24 +671,16 @@ export default function AdminGames() {
             )}
           </div>
           
-          {/* Center Content Area - Venue Name centered */}
-          <div className="flex-1 min-w-0 flex items-center justify-center px-4 overflow-hidden">
-            <h1 
-              className={`leading-tight text-center truncate ${
-                venueSettings?.subtitleBold === "true" ? "font-bold" : ""
-              } ${
-                venueSettings?.subtitleAllCaps === "true" ? "uppercase" : ""
-              }`}
-              style={{
-                ...getVenueNameStyle(),
-                fontSize: 'clamp(1.5rem, 3.5vw, 3rem)',
-                maxWidth: '100%',
-                WebkitTextStroke: '2px black',
-                textShadow: '0 0 6px rgba(0,0,0,0.8), 0 0 6px rgba(0,0,0,0.8)'
-              }}
-            >
-              {venueSettings?.name || "Arcade"}
+          {/* Center Content Area - GAME MASTER Title + Arcade Logo */}
+          <div className="flex-1 min-w-0 flex items-center justify-center gap-4 px-4">
+            <h1 className="game-master-title text-4xl lg:text-5xl xl:text-6xl whitespace-nowrap">
+              GAME MASTER
             </h1>
+            <img 
+              src="/arcade-leaderboard-logo.png" 
+              alt="Arcade Leaderboard" 
+              className="h-16 lg:h-20 xl:h-24 w-auto object-contain" 
+            />
           </div>
           
           {/* Right Controls and Leaderboard Logo - Fixed 300px on desktop */}
