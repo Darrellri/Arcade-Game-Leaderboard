@@ -24,6 +24,8 @@ import {
   Palette,
   Moon,
   Sun,
+  Monitor,
+  Smartphone,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
@@ -461,6 +463,86 @@ export default function AdminDisplayOptions() {
       </div>
 
       <div className="container mx-auto px-4 py-4 space-y-8">
+
+      {/* Full HD Preview Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-primary/10">
+              <Monitor className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <div className="text-lg font-bold">Full HD Display Preview</div>
+              <CardDescription>See how your leaderboard looks at 1920x1080 (landscape) and 1080x1920 (portrait)</CardDescription>
+            </div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Landscape Preview (1920x1080) */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 mb-2">
+                <Monitor className="h-4 w-4 text-muted-foreground" />
+                <span className="font-medium text-sm">Landscape (1920 x 1080)</span>
+                <Badge variant="outline" className="text-xs">16:9</Badge>
+              </div>
+              <div 
+                className="relative bg-black rounded-lg overflow-hidden border-2 border-border shadow-lg"
+                style={{ 
+                  width: '100%',
+                  paddingBottom: '56.25%' /* 9/16 = 56.25% for 16:9 aspect ratio */
+                }}
+              >
+                <iframe
+                  src="/?preview=true"
+                  className="absolute inset-0 w-full h-full"
+                  style={{ 
+                    border: 'none',
+                    transformOrigin: 'top left',
+                  }}
+                  title="Landscape Preview"
+                />
+              </div>
+              <p className="text-xs text-muted-foreground text-center">
+                Scaled preview of 1920x1080 display
+              </p>
+            </div>
+
+            {/* Portrait Preview (1080x1920) */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 mb-2">
+                <Smartphone className="h-4 w-4 text-muted-foreground" />
+                <span className="font-medium text-sm">Portrait (1080 x 1920)</span>
+                <Badge variant="outline" className="text-xs">9:16</Badge>
+              </div>
+              <div 
+                className="relative bg-black rounded-lg overflow-hidden border-2 border-border shadow-lg mx-auto"
+                style={{ 
+                  width: '56.25%', /* Keep portrait narrower */
+                  paddingBottom: '100%' /* 16/9 * 0.5625 = 100% for portrait at half width */
+                }}
+              >
+                <iframe
+                  src="/?preview=true"
+                  className="absolute inset-0 w-full h-full"
+                  style={{ 
+                    border: 'none',
+                    transformOrigin: 'top left',
+                  }}
+                  title="Portrait Preview"
+                />
+              </div>
+              <p className="text-xs text-muted-foreground text-center">
+                Scaled preview of 1080x1920 display
+              </p>
+            </div>
+          </div>
+          <div className="mt-4 p-3 bg-muted/30 rounded-lg text-sm text-muted-foreground">
+            <strong>Tip:</strong> These previews show how your leaderboard will appear on full HD screens. 
+            The landscape view is ideal for wall-mounted TVs, while portrait works great for vertical kiosk displays.
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Display View Options */}
       <Card>
