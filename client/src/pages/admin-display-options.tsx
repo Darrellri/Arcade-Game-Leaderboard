@@ -20,7 +20,6 @@ import {
   ChevronUp,
   Square,
   List,
-  Grid2X2,
   Palette,
   Moon,
   Sun,
@@ -279,18 +278,7 @@ export default function AdminDisplayOptions() {
                   <List className="h-[16px] w-[16px]" />
                 </Link>
               </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                asChild
-                className="shadow-sm hover:shadow-md transition-all duration-200 h-[42px] w-[42px]"
-                title="Grid View"
-              >
-                <Link href="/">
-                  <Grid2X2 className="h-[16px] w-[16px]" />
-                </Link>
-              </Button>
-            </div>
+              </div>
             
             {/* Navigation Buttons */}
             <div className="flex gap-1">
@@ -395,18 +383,7 @@ export default function AdminDisplayOptions() {
                       <List className="h-[21px] w-[21px]" />
                     </Link>
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    asChild
-                    className="shadow-sm hover:shadow-md transition-all duration-200 h-[52px] w-[52px]"
-                    title="Grid View - Games in a grid layout"
-                  >
-                    <Link href="/">
-                      <Grid2X2 className="h-[21px] w-[21px]" />
-                    </Link>
-                  </Button>
-                </div>
+                  </div>
                 
                 {/* Navigation Buttons Row */}
                 <div className="flex gap-2">

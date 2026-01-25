@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import GameCard from "@/components/game-card";
 import ShareScore from "@/components/share-score";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Gamepad2, Grid2X2, List, CircleDot, Trophy, GripVertical, MonitorSpeaker, Play, Square } from "lucide-react";
+import { Gamepad2, List, CircleDot, Trophy, GripVertical, MonitorSpeaker, Play, Square } from "lucide-react";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import {
   DndContext,
@@ -513,7 +513,7 @@ const textAnimations = [
   'animate-text-pulse-up'
 ];
 
-type ViewMode = "single" | "scroll" | "grid";
+type ViewMode = "single" | "scroll";
 
 // Grid View Component - Scrollable grid layout
 function GridView({ games, animationsEnabled, hideHeader }: { 
@@ -1364,16 +1364,7 @@ export default function Home() {
               >
                 <List className="h-[16px] w-[16px]" />
               </Button>
-              <Button
-                variant={viewMode === "grid" ? "default" : "outline"}
-                size="icon"
-                onClick={() => setViewMode("grid")}
-                className="shadow-sm hover:shadow-md transition-all duration-200 h-[42px] w-[42px]"
-                title="Grid View"
-              >
-                <Grid2X2 className="h-[16px] w-[16px]" />
-              </Button>
-            </div>
+              </div>
             
             {/* Navigation Buttons */}
             <div className="flex gap-1">
@@ -1474,18 +1465,7 @@ export default function Home() {
                   >
                     <List className="h-[16px] w-[16px]" />
                   </Button>
-                  <Button
-                    variant={viewMode === "grid" ? "default" : "outline"}
-                    size="icon"
-                    onClick={() => setViewMode("grid")}
-                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-[42px] w-[42px] ${
-                      showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
-                    }`}
-                    title="Grid View - Games in a grid layout"
-                  >
-                    <Grid2X2 className="h-[16px] w-[16px]" />
-                  </Button>
-                </div>
+                  </div>
                 
                 {/* Navigation Buttons Row */}
                 <div className="flex gap-2">

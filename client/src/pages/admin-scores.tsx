@@ -31,7 +31,6 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import {
   Square,
   List,
-  Grid2X2,
   Trophy,
   Gamepad2,
   CircleDot,
@@ -195,10 +194,7 @@ export default function AdminScores() {
                 <Button variant="outline" size="icon" asChild className="h-[42px] w-[42px]">
                   <Link href="/"><List className="h-[16px] w-[16px]" /></Link>
                 </Button>
-                <Button variant="outline" size="icon" asChild className="h-[42px] w-[42px]">
-                  <Link href="/"><Grid2X2 className="h-[16px] w-[16px]" /></Link>
-                </Button>
-              </div>
+                </div>
               <Button variant="outline" size="sm" asChild className="h-[36px] px-4">
                 <Link href="/admin">Back</Link>
               </Button>
@@ -242,10 +238,7 @@ export default function AdminScores() {
                 <Button variant="outline" size="icon" asChild className="h-[52px] w-[52px]">
                   <Link href="/"><List className="h-[21px] w-[21px]" /></Link>
                 </Button>
-                <Button variant="outline" size="icon" asChild className="h-[52px] w-[52px]">
-                  <Link href="/"><Grid2X2 className="h-[21px] w-[21px]" /></Link>
-                </Button>
-              </div>
+                </div>
               <Button variant="outline" size="sm" asChild className="h-[42px] px-5 text-lg">
                 <Link href="/admin">Back</Link>
               </Button>

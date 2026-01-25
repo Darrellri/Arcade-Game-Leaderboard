@@ -3,7 +3,7 @@ import { useParams, Link } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
-import { Grid2X2, List } from "lucide-react";
+import { List } from "lucide-react";
 import { useState } from "react";
 import type { Game, Score } from "@shared/schema";
 import ShareScore from "@/components/share-score";
@@ -12,13 +12,13 @@ import { TrophyIcon } from "@/components/trophy-icon";
 import { formatDate, formatTime } from "@/lib/formatters";
 import { useTheme } from "@/contexts/ThemeContext";
 
-type ViewMode = "grid" | "list";
+type ViewMode = "list";
 
 export default function Leaderboard() {
   const { gameId } = useParams();
   const id = parseInt(gameId || "0");
   const { venueSettings } = useTheme();
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
   // Always sort by score in descending order for individual game pages
 
   const { data: game } = useQuery<Game>({
@@ -170,15 +170,6 @@ export default function Leaderboard() {
       {/* View Mode Toggle */}
       <div className="flex justify-center gap-2 mb-6">
         <Button
-          variant={viewMode === "grid" ? "default" : "outline"}
-          size="sm"
-          onClick={() => setViewMode("grid")}
-          className="flex items-center gap-2"
-        >
-          <Grid2X2 className="h-4 w-4" />
-          Grid
-        </Button>
-        <Button
           variant={viewMode === "list" ? "default" : "outline"}
           size="sm"
           onClick={() => setViewMode("list")}
@@ -194,39 +185,6 @@ export default function Leaderboard() {
         <div className="space-y-4">
           {[...Array(3)].map((_, i) => (
             <Skeleton key={i} className="h-24 w-full" />
-          ))}
-        </div>
-      ) : viewMode === "grid" ? (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {nonChampionScores.map((score, index) => (
-            <Card key={score.id} className="relative overflow-hidden">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground font-bold text-sm">
-                      #{index + 2}
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-lg">{score.playerName}</h3>
-                      <p className="text-xs text-muted-foreground">
-                        {formatDate(new Date(score.submittedAt))} • {formatTime(new Date(score.submittedAt))}
-                      </p>
-                    </div>
-                  </div>
-                  <ShareScore 
-                    game={game} 
-                    score={score}
-                    variant="ghost" 
-                    size="sm"
-                  />
-                </div>
-                <div className="text-right">
-                  <p className="text-2xl font-bold text-primary tabular-nums">
-                    {score.score.toLocaleString()}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
           ))}
         </div>
       ) : (
