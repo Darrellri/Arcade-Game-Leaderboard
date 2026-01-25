@@ -94,7 +94,7 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
 }) {
   const imageUrl = game.imageUrl;
   const [topOverlayVisible, setTopOverlayVisible] = useState(false);
-  const [fadeOpacity, setFadeOpacity] = useState(0);
+  const [fadeOpacity, setFadeOpacity] = useState(1);
   const [animationCount, setAnimationCount] = useState(0);
   const [wasInCenter, setWasInCenter] = useState(false);
   const [scoreOverlayVisible, setScoreOverlayVisible] = useState(false);
@@ -108,36 +108,13 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
       
       // Calculate this game's position on screen
       const gameTopPosition = (gameIndex * (gameHeight + gameSpacing)) - scrollPosition;
-      const gameBottomPosition = gameTopPosition + gameHeight;
       const gameCenterPosition = gameTopPosition + (gameHeight / 2);
       
-      // Calculate visibility and opacity for fade effect
-      const visibilityBuffer = 100; // Start fading in/out 100px before/after screen edges
-      const topEdge = -visibilityBuffer;
-      const bottomEdge = screenHeight + visibilityBuffer;
-      
-      // Fade calculation
-      let opacity = 0;
-      if (gameTopPosition > bottomEdge || gameBottomPosition < topEdge) {
-        opacity = 0; // Completely off screen
-      } else if (gameTopPosition >= topEdge && gameBottomPosition <= bottomEdge) {
-        opacity = 1; // Completely on screen
-      } else {
-        // Partially on screen - calculate fade
-        const fadeDistance = visibilityBuffer;
-        if (gameTopPosition < topEdge) {
-          // Fading in from top
-          opacity = Math.max(0, Math.min(1, (gameBottomPosition - topEdge) / fadeDistance));
-        } else if (gameBottomPosition > bottomEdge) {
-          // Fading out to bottom
-          opacity = Math.max(0, Math.min(1, (bottomEdge - gameTopPosition) / fadeDistance));
-        }
-      }
-      
-      setFadeOpacity(opacity);
+      // Always keep marquees visible - no fade effect
+      setFadeOpacity(1);
       
       // Check if game center is near screen center for layer animation
-      const centerThreshold = 50; // Pixels from center to trigger animation
+      const centerThreshold = 50;
       const isNearCenter = Math.abs(gameCenterPosition - screenCenter) < centerThreshold;
       
       // Trigger animation only once per pass through center
@@ -146,12 +123,10 @@ function ScrollMarquee({ game, className = "", scrollPosition, gameIndex, gameSp
         setTopOverlayVisible(true);
         setAnimationCount(prev => prev + 1);
         
-        // Hide overlay after animation duration
         setTimeout(() => {
           setTopOverlayVisible(false);
         }, 1500);
       } else if (!isNearCenter && wasInCenter) {
-        // Reset when game moves away from center, allowing it to trigger again next time
         setWasInCenter(false);
       }
     }
