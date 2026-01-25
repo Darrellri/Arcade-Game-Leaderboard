@@ -1138,7 +1138,7 @@ export default function Home() {
   const [viewMode, setViewMode] = useState<ViewMode>("single");
   const [animationsEnabled, setAnimationsEnabled] = useState(true);
   const [hideHeader, setHideHeader] = useState(false);
-  const [showLogoOverlay, setShowLogoOverlay] = useState(true);
+  const [buttonsVisible, setButtonsVisible] = useState(true);
   const [localGames, setLocalGames] = useState<Game[]>([]);
 
   const { data: games, isLoading: gamesLoading } = useQuery<Game[]>({
@@ -1157,8 +1157,34 @@ export default function Home() {
     }
   }, [games]);
 
-  // Logo overlay is always shown immediately
-  // No timer needed as per user request
+  // Auto-hide navigation buttons after 10 seconds of inactivity
+  useEffect(() => {
+    let inactivityTimer: NodeJS.Timeout;
+    
+    const resetTimer = () => {
+      setButtonsVisible(true);
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        setButtonsVisible(false);
+      }, 10000); // 10 seconds
+    };
+    
+    // Initial timer start
+    resetTimer();
+    
+    // Event listeners for activity detection
+    const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'];
+    events.forEach(event => {
+      window.addEventListener(event, resetTimer);
+    });
+    
+    return () => {
+      clearTimeout(inactivityTimer);
+      events.forEach(event => {
+        window.removeEventListener(event, resetTimer);
+      });
+    };
+  }, []);
 
   // Font styling functions
   const getVenueNameStyle = (isMobile = false) => ({
@@ -1343,7 +1369,9 @@ export default function Home() {
           </div>
           
           {/* Controls Row for Mobile */}
-          <div className="flex items-center justify-center gap-2">
+          <div className={`flex items-center justify-center gap-2 transition-opacity duration-1000 ${
+            buttonsVisible ? 'opacity-100' : 'opacity-0'
+          }`}>
             {/* View Mode Buttons */}
             <div className="flex items-center gap-1">
               <Button
@@ -1432,69 +1460,43 @@ export default function Home() {
             />
           </div>
           
-          {/* Right Controls and Leaderboard Logo - Fixed 300px on desktop */}
+          {/* Right Controls - Fixed 300px on desktop */}
           <div className="flex-shrink-0 w-[300px] flex justify-center">
-            <div className="flex flex-col gap-2 self-center relative">
-              {/* Navigation Elements with Timed Fade */}
-              <div 
-                className={`flex flex-col gap-2 transition-opacity duration-1000 group ${
-                  showLogoOverlay ? 'opacity-0 hover:opacity-100' : 'opacity-100'
-                }`}
-              >
-                {/* View Mode Buttons Row */}
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant={viewMode === "single" ? (showLogoOverlay ? "outline" : "default") : "outline"}
-                    size="icon"
-                    onClick={() => setViewMode("single")}
-                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-[42px] w-[42px] ${
-                      showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
-                    }`}
-                    title="Single View - One large game centered"
-                  >
-                    <Square className="h-[16px] w-[16px]" />
-                  </Button>
-                  <Button
-                    variant={viewMode === "scroll" ? "default" : "outline"}
-                    size="icon"
-                    onClick={() => setViewMode("scroll")}
-                    className={`shadow-sm hover:shadow-md transition-all duration-200 h-[42px] w-[42px] ${
-                      showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
-                    }`}
-                    title="Scroll View - Infinite vertical scroll"
-                  >
-                    <List className="h-[16px] w-[16px]" />
-                  </Button>
-                  </div>
-                
-                {/* Navigation Buttons Row */}
-                <div className="flex gap-2">
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    asChild 
-                    className={`h-[36px] px-4 text-base ${
-                      showLogoOverlay ? 'hover:opacity-100 group-hover:z-10 relative' : ''
-                    }`}
-                  >
-                    <Link href="/admin">Admin</Link>
-                  </Button>
-                </div>
+            <div className={`flex flex-col gap-2 self-center transition-opacity duration-1000 ${
+              buttonsVisible ? 'opacity-100' : 'opacity-0'
+            }`}>
+              {/* View Mode Buttons Row */}
+              <div className="flex items-center gap-2">
+                <Button
+                  variant={viewMode === "single" ? "default" : "outline"}
+                  size="icon"
+                  onClick={() => setViewMode("single")}
+                  className="shadow-sm hover:shadow-md transition-all duration-200 h-[42px] w-[42px]"
+                  title="Single View - One large game centered"
+                >
+                  <Square className="h-[16px] w-[16px]" />
+                </Button>
+                <Button
+                  variant={viewMode === "scroll" ? "default" : "outline"}
+                  size="icon"
+                  onClick={() => setViewMode("scroll")}
+                  className="shadow-sm hover:shadow-md transition-all duration-200 h-[42px] w-[42px]"
+                  title="Scroll View - Infinite vertical scroll"
+                >
+                  <List className="h-[16px] w-[16px]" />
+                </Button>
               </div>
-
-              {/* Centered Arcade Leaderboard Logo Overlay */}
-              <div 
-                className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-1000 ${
-                  showLogoOverlay ? 'opacity-100' : 'opacity-0'
-                }`}
-              >
-                <div className="w-[280px] h-72 flex items-center justify-center">
-                  <img 
-                    src="/arcade-leaderboard-logo.png" 
-                    alt="Arcade Leaderboard" 
-                    className="max-w-full max-h-full object-contain" 
-                  />
-                </div>
+              
+              {/* Navigation Buttons Row */}
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  asChild 
+                  className="h-[36px] px-4 text-base"
+                >
+                  <Link href="/admin">Admin</Link>
+                </Button>
               </div>
             </div>
           </div>
