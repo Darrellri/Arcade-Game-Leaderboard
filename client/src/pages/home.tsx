@@ -864,58 +864,64 @@ function ScrollView({ games, animationsEnabled, hideHeader }: {
   animationsEnabled: boolean; 
   hideHeader: boolean; 
 }) {
-  const [scrollPositionX, setScrollPositionX] = useState(0);
   const [scrollPositionY, setScrollPositionY] = useState(0);
   const [visibleGames, setVisibleGames] = useState<Game[]>([]);
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('up');
-  const [scrollSpeed, setScrollSpeed] = useState(1); // 1 = normal, 0.5 = slow, 2 = fast
+  const [scrollSpeed, setScrollSpeed] = useState(1);
   const [isInitialized, setIsInitialized] = useState(false);
   const [showControls, setShowControls] = useState(true);
   const [isHoveringControls, setIsHoveringControls] = useState(false);
-  const gameSpacing = 50; // Much closer together - reduced from 200 to 50
-  const gameHeight = 321; // Height of each marquee
-  const gameWidth = 1200; // Width of each marquee
+  const gameSpacing = 50;
+  const gameHeight = 321;
+  const singleSetHeight = games.length * (gameHeight + gameSpacing);
 
-  // Create infinite loop of games and initialize centered position
+  // Create infinite loop of games with enough copies for seamless scrolling
   useEffect(() => {
     if (games.length > 0) {
-      const extendedGames = [...games, ...games, ...games]; // Triple the array for seamless loop
+      // Create 5 copies for smoother infinite scrolling
+      const extendedGames = [...games, ...games, ...games, ...games, ...games];
       setVisibleGames(extendedGames);
       
-      // Calculate center position for first game
-      const screenHeight = window.innerHeight;
-      const centerPosition = (screenHeight / 2) - (gameHeight / 2) - 300; // 300 is the padding offset
-      setScrollPositionY(-centerPosition);
+      // Start at the second set so we have room to scroll in both directions
+      setScrollPositionY(singleSetHeight);
       
-      // Start fade-in animation after a brief delay
       setTimeout(() => {
         setIsInitialized(true);
       }, 100);
     }
-  }, [games, gameHeight]);
+  }, [games, gameHeight, singleSetHeight]);
 
-  // Auto-scroll effect with configurable direction and speed - starts after initialization
+  // Auto-scroll effect with seamless infinite loop
   useEffect(() => {
-    if (!isInitialized) return;
+    if (!isInitialized || games.length === 0) return;
     
     const scrollTimer = setInterval(() => {
       setScrollPositionY(prev => {
         const baseSpeed = 1.2;
         const adjustedSpeed = baseSpeed * scrollSpeed;
         const movement = scrollDirection === 'up' ? adjustedSpeed : -adjustedSpeed;
-        const newPosition = prev + movement;
-        const resetPoint = games.length * (gameSpacing + gameHeight); // Game height + spacing
+        let newPosition = prev + movement;
         
+        // Seamless wrap-around: when we've scrolled through one full set,
+        // jump back by exactly one set height (invisible to user)
         if (scrollDirection === 'up') {
-          return newPosition >= resetPoint ? 0 : newPosition;
+          // Scrolling up (content moves up, user sees games scrolling upward)
+          if (newPosition >= singleSetHeight * 3) {
+            newPosition = newPosition - singleSetHeight;
+          }
         } else {
-          return newPosition <= -resetPoint ? 0 : newPosition;
+          // Scrolling down
+          if (newPosition <= singleSetHeight) {
+            newPosition = newPosition + singleSetHeight;
+          }
         }
+        
+        return newPosition;
       });
-    }, 40); // Smooth scrolling
+    }, 40);
 
     return () => clearInterval(scrollTimer);
-  }, [games.length, gameSpacing, scrollDirection, scrollSpeed, isInitialized, gameHeight]);
+  }, [games.length, gameSpacing, scrollDirection, scrollSpeed, isInitialized, gameHeight, singleSetHeight]);
 
   // Timed fade for controls - fade after 10 seconds
   useEffect(() => {
