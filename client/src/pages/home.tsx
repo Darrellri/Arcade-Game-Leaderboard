@@ -767,7 +767,58 @@ function SingleView({ games, animationsEnabled, hideHeader }: {
           }}
         >
           <div className="w-full max-w-[1188px] bg-black/75 backdrop-blur-sm border border-primary/20 rounded-[15px]">
-            <div className="w-full h-full grid grid-cols-3 gap-4 px-6 py-1">
+            {/* Mobile Layout - Stacked vertical, one field per line */}
+            <div className="md:hidden flex flex-col gap-1 px-4 py-3">
+              <div className="text-sm font-bold text-primary uppercase tracking-wide whitespace-nowrap">
+                <AnimatedText 
+                  text={championGame.name} 
+                  animationClass={textAnimations.game} 
+                  baseDelay={0.35} 
+                />
+              </div>
+              {championGame.subtitle && (
+                <div className="text-xs text-gray-400 whitespace-nowrap">
+                  <AnimatedText 
+                    text={championGame.subtitle} 
+                    animationClass={textAnimations.subtitle} 
+                    baseDelay={0.55} 
+                  />
+                </div>
+              )}
+              <div className="text-sm font-bold text-yellow-400 whitespace-nowrap mt-1">
+                <AnimatedText 
+                  text="#1 CHAMPION" 
+                  animationClass={textAnimations.champion} 
+                  baseDelay={0.75} 
+                />
+              </div>
+              <div className="text-lg font-bold text-white whitespace-nowrap">
+                <AnimatedText 
+                  text={championGame.topScorerName || "No Name"} 
+                  animationClass={textAnimations.name} 
+                  baseDelay={0.95} 
+                />
+              </div>
+              <div className="text-xl font-bold text-primary whitespace-nowrap">
+                <AnimatedText 
+                  text={championGame.currentHighScore ? championGame.currentHighScore.toLocaleString() : "0"} 
+                  animationClass={textAnimations.score} 
+                  baseDelay={1.15} 
+                />
+              </div>
+              {championGame.topScoreDate && (
+                <div className="text-xs text-gray-400 whitespace-nowrap">
+                  <AnimatedText 
+                    text={formatDate(new Date(championGame.topScoreDate))} 
+                    animationClass={textAnimations.date} 
+                    baseDelay={1.35} 
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Desktop Layout - 3 column grid */}
+            <div className="hidden md:grid w-full h-full grid-cols-3 gap-4 px-6 py-1">
               {/* Left Column - Champion Name */}
               <div className="flex flex-col justify-center items-start">
                 <div className="text-lg sm:text-xl md:text-2xl font-bold text-yellow-400 mb-2">
